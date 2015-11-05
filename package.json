@@ -1,0 +1,8 @@
+{
+	"name": "vsc-extension-samples",
+	"publisher": "Microsoft",
+	"scripts": {
+		"init": "npm --prefix ./decorator-sample/ install",
+		"compile": "npm --prefix ./decorator-sample/ run compile"
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"name": "decorator-sample",
+	"description": "Sample for the decorator API",
+	"version": "0.0.1",
+	"publisher": "Microsoft",
+	"license": "MIT",
+	"engines": {
+		"vscode": "0.10.0-dev"
+	},
+	"categories": [
+		"Others"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension",
+	"scripts": {
+		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+	},
+	"devDependencies": {
+		"vscode": "next"
+	}
+}
