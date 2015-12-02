@@ -5,7 +5,7 @@
 	"publisher": "Microsoft",
 	"license": "MIT",
 	"engines": {
-		"vscode": "0.10.0-dev"
+		"vscode": "0.10.x"
 	},
 	"categories": [
 		"Others"
@@ -19,6 +19,7 @@
 		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
 	},
 	"devDependencies": {
-		"vscode": "next"
+		"vscode": "0.10.x",
+		"typescript": "^1.6.2"
 	}
 }

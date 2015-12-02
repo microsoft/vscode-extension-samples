@@ -61,8 +61,8 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		var regEx = /\d+/g;
 		var text = activeEditor.document.getText();
-		var smallNumbers : vscode.RangeWithMessage[] = [];
-		var largeNumbers : vscode.RangeWithMessage[] = [];
+		var smallNumbers : vscode.DecorationOptions[] = [];
+		var largeNumbers : vscode.DecorationOptions[] = [];
 		var match;
 		while (match = regEx.exec(text)) {
 			var startPos = activeEditor.document.positionAt(match.index);
