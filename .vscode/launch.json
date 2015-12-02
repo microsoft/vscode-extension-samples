@@ -10,7 +10,7 @@
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}/decorator-sample" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": "out",
+			"outDir": "decorator-sample/out",
 			"preLaunchTask": "compile-decorator"
 		}
 	]
