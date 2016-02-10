@@ -2,7 +2,7 @@
     "name": "vscode-css-properties",
     "displayName": "Preview CSS Propertis Sample",
     "description": "A sample illustrating the of TextContentProviders and the `vscode.previewHtml` command. Introduce in verson 0.10.7.",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "publisher": "eg2",
 	"galleryBanner": {
 		"color": "#5c2d91",
