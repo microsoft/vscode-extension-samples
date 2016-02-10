@@ -11,12 +11,12 @@ The purpose of the extension is to show a preview of the properties in the decla
 - The properties are rendered in the preview
 - Edit the propertis and the preview is updated
 
-![Navigation](https://github.com/Microsoft/vscode-extension-samples/tree/master/textdocumentprovider-sample/images/preview.gif)
+![Navigation](images/preview.gif)
 
 # How it works
 
 - The extension implements and registers a `TextDocumentProvider` for a particular resource URI. 
-- The `TextDocumentProvider` creates a HTML document that contains the declaration block of the selected CSS Rule in the active editor. 
-- The generated HTML document is then opened in an editor in the 2nd Column using the [command](https://code.visualstudio.com/docs/extensionAPI/vscode-api-commands#_commands) `vscode.previewHtml`. 
+- The TextDocumentProvider creates a HTML document that contains the declaration block of the selected CSS Rule in the active editor. 
+- The generated HTML document is then opened in an editor in the 2nd Column using the command `vscode.previewHtml`. 
 
 
