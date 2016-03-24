@@ -2,7 +2,8 @@
 	"name": "vsc-extension-samples",
 	"publisher": "Microsoft",
 	"scripts": {
-		"install-all": "cd decorator-sample && npm install && cd ..",
-		"compile-decorator": "cd decorator-sample && npm run compile"
+		"install-all": "npm --prefix decorator-sample install decorator-sample && npm --prefix textdocumentprovider-sample install textdocumentprovider-sample",
+		"compile-decorator": "cd decorator-sample && npm run compile",
+		"compile-textdocumentprovider": "cd textdocumentprovider-sample && npm run compile"
 	}
 }

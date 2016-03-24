@@ -10,8 +10,19 @@
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}/decorator-sample" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": "decorator-sample/out",
+			"outDir": "${workspaceRoot}/decorator-sample/out",
 			"preLaunchTask": "compile-decorator"
+		},
+		{
+			"name": "Launch Document Provider Sample",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}/textdocumentprovider-sample" ],
+			"stopOnEntry": false,
+			"sourceMaps": true,
+			"outDir": "${workspaceRoot}/textdocumentprovider-sample/out",
+			"preLaunchTask": "compile-textdocumentprovider"
 		}
 	]
 }
