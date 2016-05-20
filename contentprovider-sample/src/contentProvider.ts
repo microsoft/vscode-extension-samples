@@ -61,6 +61,11 @@ export default class ContentProvider implements vscode.TextDocumentContentProvid
         const [target, pos] = decodeLocation(uri);
         return vscode.commands.executeCommand<vscode.Location[]>('vscode.executeReferenceProvider', target, pos).then(locations => {
 
+            // sort by locations and shuffle to begin with target
+            let idx = 0;
+            locations.sort(ContentProvider._compareLocations).find((loc, i) => loc.uri.toString() === target.toString() && (idx = i) && true);
+            locations.push(...locations.splice(0, idx));
+
             let document = new ReferencesDocument(this._onDidChange, uri, locations);
             this._documents.set(uri.toString(), document);
             return document.value;
@@ -76,6 +81,16 @@ export default class ContentProvider implements vscode.TextDocumentContentProvid
         let doc = this._documents.get(editor.document.uri.toString());
         if (doc) {
             doc.join().then(() => editor.setDecorations(this._editorDecoration, doc.ranges));
+        }
+    }
+
+    private static _compareLocations(a: vscode.Location, b: vscode.Location): number {
+        if (a.uri.toString() < b.uri.toString()) {
+            return -1;
+        } else if (a.uri.toString() > b.uri.toString()) {
+            return 1;
+        } else {
+            return a.range.start.compareTo(b.range.start)
         }
     }
 }

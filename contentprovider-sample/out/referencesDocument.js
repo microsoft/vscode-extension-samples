@@ -7,7 +7,7 @@ var ReferencesDocument = (function () {
     function ReferencesDocument(emitter, uri, locations) {
         this._emitter = emitter;
         this._uri = uri;
-        this._locations = locations.sort(ReferencesDocument._compareLocations);
+        this._locations = locations;
         // print header
         this._lines = [("Found " + this._locations.length + " references")];
         this._ranges = [];
@@ -70,48 +70,40 @@ var ReferencesDocument = (function () {
         return vscode.workspace.openTextDocument(uri).then(function (doc) {
             _this._lines.push('', uri.toString());
             for (var i = 0; i < ranges.length; i++) {
-                var range = ranges[i];
-                var line = range.start.line;
-                var prev = ranges[i - 1];
-                _this._appendContext(doc, line, prev ? Math.min(2, line - prev.start.line) : 2, false);
-                _this._appendMatch(doc, range);
-                var next = ranges[i + 1];
-                _this._appendContext(doc, line + 1, next ? Math.min(2, next.start.line - line) : 2, true);
-                if (next) {
-                    _this._lines.push('  ...');
-                }
+                var line = ranges[i].start.line;
+                _this._appendLeading(doc, line, ranges[i - 1]);
+                _this._appendMatch(doc, line, ranges[i]);
+                _this._appendTrailing(doc, line, ranges[i + 1]);
             }
         }, function (err) {
             _this._lines.push('', "Failed to load '" + uri.toString() + "'\n\n" + String(err), '');
         });
     };
-    ReferencesDocument.prototype._appendContext = function (doc, line, offset, down) {
-        var from = down ? line : line - offset;
-        var to = down ? line + offset : line;
-        while (from < to) {
-            if (from >= 0 && from < doc.lineCount) {
-                var text = doc.lineAt(from).text;
-                this._lines.push(("  " + (from + 1)) + (text && "  " + text));
-            }
-            from++;
+    ReferencesDocument.prototype._appendLeading = function (doc, line, previous) {
+        var from = Math.max(0, line - 3, previous && previous.end.line || 0);
+        while (++from < line) {
+            var text = doc.lineAt(from).text;
+            this._lines.push(("  " + (from + 1)) + (text && "  " + text));
         }
     };
-    ReferencesDocument.prototype._appendMatch = function (doc, range) {
-        var line = range.start.line;
+    ReferencesDocument.prototype._appendMatch = function (doc, line, match) {
         var text = doc.lineAt(line).text;
         var preamble = "  " + (line + 1) + ": ";
-        this._ranges.push(new vscode.Range(this._lines.length, preamble.length + range.start.character, this._lines.length, preamble.length + range.end.character));
+        this._ranges.push(new vscode.Range(this._lines.length, preamble.length + match.start.character, this._lines.length, preamble.length + match.end.character));
         this._lines.push(preamble + text);
     };
-    ReferencesDocument._compareLocations = function (a, b) {
-        if (a.uri.toString() < b.uri.toString()) {
-            return -1;
+    ReferencesDocument.prototype._appendTrailing = function (doc, line, next) {
+        var to = Math.min(doc.lineCount, line + 3);
+        if (next && next.start.line - to <= 2) {
+            // next is too close
+            return;
         }
-        else if (a.uri.toString() > b.uri.toString()) {
-            return 1;
+        while (++line < to) {
+            var text = doc.lineAt(line).text;
+            this._lines.push(("  " + (line + 1)) + (text && "  " + text));
         }
-        else {
-            return a.range.start.compareTo(b.range.start);
+        if (next) {
+            this._lines.push("  ...");
         }
     };
     return ReferencesDocument;

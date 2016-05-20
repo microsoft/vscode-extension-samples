@@ -24,6 +24,9 @@
     "languages": [
       {
         "id": "locations",
+        "aliases": [
+          "Locations"
+        ],
         "extensions": [
           ".locations"
         ]
