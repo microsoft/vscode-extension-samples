@@ -8,11 +8,11 @@
     },
     {
       "name": "keyword.locations",
-      "match": "\\d+:"
+      "match": "  \\d+:"
     },
     {
       "name": "keyword.control.locations",
-      "match": "\\d+"
+      "match": "  \\d+"
     }
   ]
 }
