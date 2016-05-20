@@ -1,13 +1,21 @@
-# README
-## This is the README for your extension "references-editor"
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+# References Editor Sample
 
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
+This is a sample extension that shows how an editor-based representation for the _Find References_ feature can be build.
 
-### For more information
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+It is not intended as a product quality extension.
 
-**Enjoy!**
+The purpose of the extension is to show a preview of the properties in the declaration block of a CSS rule. To play with the extension:
+- Select a symbol
+- Select `F1 > Print References`
+- An editor opens to the side and show the references in a textual form
+
+![Print References](preview.gif)
+
+# How it works
+
+- The extension implements and registers a [`TextDocumentContentProvider`](http://code.visualstudio.com/docs/extensionAPI/vscode-api#TextDocumentContentProvider) for a particular URI scheme.
+- The content provider uses the [`vscode.executeReferenceProvider`](http://code.visualstudio.com/docs/extensionAPI/vscode-api-commands)-API command to delegate searching for references to the language extensions, like TypeScript, vscode-go, or C#
+- The generated document initially contains a caption only and incrementally updates as each reference location is resolved.
+- The content provider uses the decoration API to highlight matches inside the generated document
+
+

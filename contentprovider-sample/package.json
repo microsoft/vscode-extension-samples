@@ -18,7 +18,7 @@
     "commands": [
       {
         "command": "references/showAsText",
-        "title": "Show References"
+        "title": "Print References"
       }
     ],
     "languages": [
