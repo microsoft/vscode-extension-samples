@@ -41,9 +41,9 @@ export function activate(context: vscode.ExtensionContext) {
 
             if (propStart === -1 || propEnd === -1) {
                 return this.errorSnippet("Cannot determine the rule's properties.");
+            } else {
+                return this.snippet(editor.document, propStart, propEnd);
             }
-            let properties = text.slice(propStart + 1, propEnd);
-            return this.snippet(properties);
         }
 
         private errorSnippet(error: string): string {
@@ -53,14 +53,15 @@ export function activate(context: vscode.ExtensionContext) {
                 </body>`;
         }
 
-        private snippet(properties): string {
+        private snippet(document: vscode.TextDocument, propStart: number, propEnd: number): string {
+            const properties = document.getText().slice(propStart + 1, propEnd);
             return `<style>
                     #el {
                         ${properties}
                     }
                 </style>
                 <body>
-                    <div>Preview of the CSS properties</dev>
+                    <div>Preview of the <a href="${encodeURI('command:extension.revealCssRule?' + JSON.stringify([document.uri, propStart, propEnd]))}">CSS properties</a></dev>
                     <hr>
                     <div id="el">Lorem ipsum dolor sit amet, mi et mauris nec ac luctus lorem, proin leo nulla integer metus vestibulum lobortis, eget</div>
                 </body>`;
@@ -87,8 +88,23 @@ export function activate(context: vscode.ExtensionContext) {
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
         });
-
     });
+
+    let highlight = vscode.window.createTextEditorDecorationType({ backgroundColor: 'rgba(200,200,200,.35)' });
+
+    vscode.commands.registerCommand('extension.revealCssRule', (uri: vscode.Uri, propStart: number, propEnd: number) => {
+
+        for (let editor of vscode.window.visibleTextEditors) {
+            if (editor.document.uri.toString() === uri.toString()) {
+                let start = editor.document.positionAt(propStart);
+                let end = editor.document.positionAt(propEnd + 1);
+
+                editor.setDecorations(highlight, [new vscode.Range(start, end)]);
+                setTimeout(() => editor.setDecorations(highlight, []), 1500);
+            }
+        }
+    });
+
     context.subscriptions.push(disposable, registration);
 }
 
