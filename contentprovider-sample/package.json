@@ -1,0 +1,50 @@
+{
+  "name": "references-editor",
+  "displayName": "references-editor",
+  "description": "",
+  "version": "0.0.1",
+  "publisher": "jrieken",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:references/showAsText"
+  ],
+  "main": "./out/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "references/showAsText",
+        "title": "Show References"
+      }
+    ],
+    "languages": [
+      {
+        "id": "locations",
+        "extensions": [
+          ".locations"
+        ]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "locations",
+        "path": "./locations-syntax.json",
+        "scopeName": "source.locations"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "tslint": "^3.8.1",
+    "typescript": "^1.8.5",
+    "vscode": "^0.11.0"
+  }
+}

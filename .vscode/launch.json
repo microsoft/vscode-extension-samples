@@ -14,15 +14,26 @@
 			"preLaunchTask": "compile-decorator"
 		},
 		{
-			"name": "Launch Document Provider Sample",
+			"name": "Launch Preview Html Sample",
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}/textdocumentprovider-sample" ],
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}/previewhtml-sample" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": "${workspaceRoot}/textdocumentprovider-sample/out",
-			"preLaunchTask": "compile-textdocumentprovider"
+			"outDir": "${workspaceRoot}/previewhtml-sample/out",
+			"preLaunchTask": "compile-previewhtml"
+		},
+		{
+			"name": "Launch Content Provider Sample",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}/contentprovider-sample" ],
+			"stopOnEntry": false,
+			"sourceMaps": true,
+			"outDir": "${workspaceRoot}/contentprovider-sample/out",
+			"preLaunchTask": "compile-contentprovider"
 		}
 	]
 }
