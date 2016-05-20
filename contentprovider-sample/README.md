@@ -9,7 +9,7 @@ It is not intended as a product quality extension.
 - Select `F1 > Print References`
 - An editor opens to the side and show the references in a textual form
 
-![Print References](preview.gif)
+![Print References](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/contentprovider-sample/preview.gif)
 
 # How it works
 
