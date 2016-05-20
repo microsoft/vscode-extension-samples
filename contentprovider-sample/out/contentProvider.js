@@ -50,11 +50,12 @@ var ContentProvider = (function () {
         // printing, and formatting references
         var _a = decodeLocation(uri), target = _a[0], pos = _a[1];
         return vscode.commands.executeCommand('vscode.executeReferenceProvider', target, pos).then(function (locations) {
-            // sort by locations and shuffle to begin with target
+            // sort by locations and shuffle to begin from target resource
             var idx = 0;
             locations.sort(ContentProvider._compareLocations).find(function (loc, i) { return loc.uri.toString() === target.toString() && (idx = i) && true; });
             locations.push.apply(locations, locations.splice(0, idx));
-            var document = new referencesDocument_1.default(_this._onDidChange, uri, locations);
+            // create document and return its early state
+            var document = new referencesDocument_1.default(uri, locations, _this._onDidChange);
             _this._documents.set(uri.toString(), document);
             return document.value;
         });

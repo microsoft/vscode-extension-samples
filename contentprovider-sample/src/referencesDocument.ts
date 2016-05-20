@@ -15,12 +15,15 @@ export default class ReferencesDocument {
     private _ranges: vscode.Range[];
     private _join: Thenable<this>;
 
-    constructor(emitter: vscode.EventEmitter<vscode.Uri>, uri: vscode.Uri, locations: vscode.Location[]) {
-        this._emitter = emitter;
+    constructor(uri: vscode.Uri, locations: vscode.Location[], emitter: vscode.EventEmitter<vscode.Uri>) {
         this._uri = uri;
         this._locations = locations;
 
-        // print header
+        // The ReferencesDocument has access to the event emitter from
+        // the containg provider. This allows it to signal changes
+        this._emitter = emitter;
+
+        // Start with printing a header and start resolving
         this._lines = [`Found ${this._locations.length} references`];
         this._ranges = [];
         this._join = this._populate();
@@ -40,35 +43,41 @@ export default class ReferencesDocument {
 
     private _populate() {
 
-        let locations = this._locations;
-        if (locations.length === 0) {
+        if (this._locations.length === 0) {
             return;
         }
-
-        // group locations by files
-        let map = new Map<string, vscode.Range[]>();
-        locations.forEach(location => {
-            let ranges = map.get(location.uri.toString());
-            if (ranges) {
-                ranges.push(location.range);
-            } else {
-                map.set(location.uri.toString(), [location.range]);
-            }
-        });
 
         // fetch one by one, update doc asap
         return new Promise<this>(resolve => {
 
-            let iter = map.entries();
+            let index = 0;
+
             let next = () => {
-                let entry = iter.next();
-                if (entry.done) {
+
+                // We have seen all groups
+                if (index >= this._locations.length) {
                     resolve(this);
                     return;
                 }
 
-                let [uri, ranges] = entry.value;
-                this._fetchAndFormatLocation(vscode.Uri.parse(uri), ranges).then(lines => {
+                // We know that this._locations is sorted by uri
+                // such that we can now iterate and collect ranges
+                // until the uri changes
+                let loc = this._locations[index];
+                let uri = loc.uri;
+                let ranges = [loc.range];
+                while (++index < this._locations.length) {
+                    loc = this._locations[index];
+                    if (loc.uri.toString() !== uri.toString()) {
+                        break;
+                    } else {
+                        ranges.push(loc.range);
+                    }
+                }
+
+                // We have all ranges of a resource so that it be
+                // now loaded and formatted
+                this._fetchAndFormatLocations(uri, ranges).then(lines => {
                     this._emitter.fire(this._uri);
                     next();
                 });
@@ -77,8 +86,11 @@ export default class ReferencesDocument {
         });
     }
 
-    private _fetchAndFormatLocation(uri: vscode.Uri, ranges: vscode.Range[]): PromiseLike<void> {
+    private _fetchAndFormatLocations(uri: vscode.Uri, ranges: vscode.Range[]): PromiseLike<void> {
 
+        // Fetch the document denoted by the uri and format the matches
+        // with leading and trailing content form the document. Make sure
+        // to not duplicate lines
         return vscode.workspace.openTextDocument(uri).then(doc => {
 
             this._lines.push('', uri.toString());
@@ -104,20 +116,22 @@ export default class ReferencesDocument {
     }
 
     private _appendMatch(doc: vscode.TextDocument, line:number, match: vscode.Range) {
-        let text = doc.lineAt(line).text;
-        let preamble = `  ${line + 1}: `;
+        const text = doc.lineAt(line).text;
+        const preamble = `  ${line + 1}: `;
+
+        // Append line, use new length of lines-array as line number
+        // for decoration in the document (should really be a link)
+        const len = this._lines.push(preamble + text);
         this._ranges.push(new vscode.Range(
-            this._lines.length, preamble.length + match.start.character,
-            this._lines.length, preamble.length + match.end.character)
+            len - 1, preamble.length + match.start.character,
+            len - 1, preamble.length + match.end.character)
         );
-        this._lines.push(preamble + text);
     }
 
     private _appendTrailing(doc: vscode.TextDocument, line: number, next: vscode.Range): void {
         let to = Math.min(doc.lineCount, line + 3);
         if (next && next.start.line - to <= 2) {
-            // next is too close
-            return;
+            return; // next is too close, _appendLeading does the work
         }
         while (++line < to) {
             const text = doc.lineAt(line).text;
