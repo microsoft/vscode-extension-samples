@@ -15,7 +15,7 @@ export function activate(context: ExtensionContext) {
 
     // register command that crafts an uri with the `references` scheme,
     // open the dynamic document, and shows it in the next editor
-    const commandRegistration = commands.registerTextEditorCommand('references/showAsText', editor => {
+    const commandRegistration = commands.registerTextEditorCommand('editor.printReferences', editor => {
         const uri = encodeLocation(editor.document.uri, editor.selection.active);
         return workspace.openTextDocument(uri).then(doc => window.showTextDocument(doc, editor.viewColumn + 1));
     });

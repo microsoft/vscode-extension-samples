@@ -1,7 +1,7 @@
 {
-  "name": "references-editor",
-  "displayName": "references-editor",
-  "description": "",
+  "name": "print-references",
+  "displayName": "(Sample) Print references",
+  "description": "Show the results of the Find References feature as formatted text in an editor",
   "version": "0.0.1",
   "publisher": "jrieken",
   "engines": {
@@ -11,13 +11,13 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:references/showAsText"
+    "onCommand:editor.printReferences"
   ],
   "main": "./out/extension",
   "contributes": {
     "commands": [
       {
-        "command": "references/showAsText",
+        "command": "editor.printReferences",
         "title": "Print References"
       }
     ],
