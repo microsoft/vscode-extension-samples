@@ -4,7 +4,7 @@ This is a sample extension that shows how an editor-based representation for the
 
 It is not intended as a product quality extension.
 
-The purpose of the extension is to show a preview of the properties in the declaration block of a CSS rule. To play with the extension:
+
 - Select a symbol
 - Select `F1 > Print References`
 - An editor opens to the side and show the references in a textual form
