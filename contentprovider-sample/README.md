@@ -6,7 +6,7 @@ It is not intended as a product quality extension.
 
 
 - Select a symbol
-- Select `F1 > Print References`
+- Select `F1 > Show All References`
 - An editor opens to the side and show the references in a textual form
 
 ![Print References](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/contentprovider-sample/preview.gif)

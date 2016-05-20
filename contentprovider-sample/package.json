@@ -2,7 +2,7 @@
   "name": "references-plusplus",
   "displayName": "References++",
   "description": "Show the results of 'Find References' as formatted text in an editor",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "jrieken",
   "engines": {
     "vscode": "^1.0.0"
