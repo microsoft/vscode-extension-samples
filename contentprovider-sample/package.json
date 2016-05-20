@@ -1,7 +1,7 @@
 {
-  "name": "print-references",
-  "displayName": "(Sample) Print references",
-  "description": "Show the results of the Find References feature as formatted text in an editor",
+  "name": "references-plusplus",
+  "displayName": "References++",
+  "description": "Show the results of 'Find References' as formatted text in an editor",
   "version": "0.0.1",
   "publisher": "jrieken",
   "engines": {
@@ -18,7 +18,7 @@
     "commands": [
       {
         "command": "editor.printReferences",
-        "title": "Print References"
+        "title": "Show All References"
       }
     ],
     "languages": [
