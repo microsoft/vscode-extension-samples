@@ -19,3 +19,7 @@ It is not intended as a product quality extension.
 - The content provider uses the decoration API to highlight matches inside the generated document
 
 
+# How to run locally
+
+* `npm run compile` to start the compiler in watch mode
+* open this folder in VS Code and press `F5`

@@ -20,4 +20,7 @@ The purpose of the extension is to show a preview of the properties in the decla
 - The generated HTML document contains a link that invokes a contributed command to highlight the CSS rule in the source editor
 - The generated HTML document is then opened in an editor in the 2nd Column using the command `vscode.previewHtml`.
 
+# How to run locally
 
+* `npm run compile` to start the compiler in watch mode
+* open this folder in VS Code and press `F5`

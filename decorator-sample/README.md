@@ -9,3 +9,8 @@ demonstrates some of the decorator features such as borders, background colors, 
 and hovers. 
 
 
+
+# How to run locally
+
+* `npm run compile` to start the compiler in watch mode
+* open this folder in VS Code and press `F5`
