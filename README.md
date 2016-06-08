@@ -2,7 +2,7 @@
 
 Sample code illustrating the VS Code extension APIs.
 
-* [Editor Decoration](/decorator-sample/README.me)
+* [Editor Decoration](/decorator-sample/README.md)
 * [Virtual Documents](/contentprovider-sample/README.md)
 * [Preview Html](/previewhtml-sample/README.md)
 
