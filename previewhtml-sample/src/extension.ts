@@ -84,7 +84,7 @@ export function activate(context: vscode.ExtensionContext) {
     })
 
     let disposable = vscode.commands.registerCommand('extension.showCssPropertyPreview', () => {
-        return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
+        return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'CSS Property Preview').then((success) => {
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
         });
