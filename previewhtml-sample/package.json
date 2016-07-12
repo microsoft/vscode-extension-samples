@@ -33,7 +33,15 @@
                 "command": "extension.showCssPropertyPreview",
                 "title": "Show CSS Properties Preview"
             }
-        ]
+        ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "extension.showCssPropertyPreview",
+                    "when": "resourceLangId == css"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
