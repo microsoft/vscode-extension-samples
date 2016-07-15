@@ -31,7 +31,7 @@ function defineMotionCommand(char: string, commandId: string, args?: any): void 
 };
 defineMotionCommand('g0', 'cursorMove', {to: 'lineStart'});
 defineMotionCommand('g^', 'cursorMove', {to: 'lineFirstNonWhitespaceCharacter'});
-defineMotionCommand('gm', 'cursorMove', {to: 'lineCenter'});
+defineMotionCommand('gm', 'cursorMove', {to: 'lineColumnCenter'});
 defineMotionCommand('g$', 'cursorMove', {to: 'lineEnd'});
 
 
