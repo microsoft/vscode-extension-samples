@@ -49,6 +49,10 @@ Motions:
 * `l` - right
 * `G` - go to line
 * `gg` - go to first line
+* `g0` - go to start of screen line
+* `g^` - go to first non whitespace character of screen line
+* `gm` - go to middle of screen line
+* `g$` - go to end of screen line
 
 Commands/Operators:
 * `x` - delete char under cursor
