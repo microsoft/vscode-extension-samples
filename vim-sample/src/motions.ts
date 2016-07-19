@@ -6,6 +6,7 @@
 
 import {Position, TextDocument} from 'vscode';
 import {Words, WordCharacters} from './words';
+import {Command} from './common';
 
 export class MotionState {
 
@@ -18,6 +19,12 @@ export class MotionState {
 		this.wordCharacterClass = null;
 		this.anchor = null;
 	}
+
+}
+
+export abstract class MotionCommand {
+
+	public abstract command(args?: any): Command;
 
 }
 
@@ -243,6 +250,73 @@ class GoToLineDefinedMotion extends GoToLineMotion {
 	}
 }
 
+abstract class CursorMoveCommand extends MotionCommand {
+
+	constructor(private to: string) {
+		super();
+	}
+
+	public command(count?: number): Command {
+		let cursorMoveArgs= { to: this.to }
+		return {
+			commandId: 'cursorMove',
+			args: this.addArgs(cursorMoveArgs, count)
+		};
+	}
+
+	protected addArgs(cursorMoveArgs: any, count?: number): any {
+		return cursorMoveArgs;
+	}
+
+}
+
+class LineStartMotionCommand extends CursorMoveCommand {
+	constructor() {
+		super('lineStart');
+	}
+}
+
+class LineFirstNonWhiteSpaceCharacterMotionCommand extends CursorMoveCommand {
+	constructor() {
+		super('lineFirstNonWhitespaceCharacter');
+	}
+}
+
+class LineColumnCenterMotionCommand extends CursorMoveCommand {
+	constructor() {
+		super('lineColumnCenter');
+	}
+}
+
+class LineEndMotionCommand extends CursorMoveCommand {
+	constructor() {
+		super('lineEnd');
+	}
+}
+
+
+class ViewLineUpMotionCommand extends CursorMoveCommand {
+	constructor() {
+		super('lineUp');
+	}
+
+	protected addArgs(cursorMoveArgs: any, count?: number): any {
+		cursorMoveArgs.noOfLines= count || 1;
+		return super.addArgs(cursorMoveArgs);
+	}
+}
+
+class ViewLineDownMotionCommand extends CursorMoveCommand {
+	constructor() {
+		super('lineDown');
+	}
+
+	protected addArgs(cursorMoveArgs: any, count?: number): any {
+		cursorMoveArgs.noOfLines= count || 1;
+		return super.addArgs(cursorMoveArgs);
+	}
+}
+
 export const Motions = {
 	NextCharacter: new NextCharacterMotion(),
 	Left: new LeftMotion(),
@@ -256,4 +330,11 @@ export const Motions = {
 	GoToLine: new GoToLineUndefinedMotion(),
 	GoToFirstLine: new GoToFirstLineMotion(),
 	GoToLastLine: new GoToLastLineMotion(),
+
+	LineStart: new LineStartMotionCommand(),
+	LineFirstNonWhiteSpaceCharacter: new LineFirstNonWhiteSpaceCharacterMotionCommand(),
+	LineColumnCenter: new LineColumnCenterMotionCommand(),
+	LineEnd: new LineEndMotionCommand(),
+	ViewLineUp: new ViewLineUpMotionCommand(),
+	ViewLineDown: new ViewLineDownMotionCommand(),
 };

@@ -44,8 +44,8 @@ Motions:
 * `$` - end of line
 * `0` - start of line
 * `h` - left
-* `j` - down
-* `k` - up
+* `j` - down by `n` lines
+* `k` - up by `n` lines
 * `l` - right
 * `G` - go to line
 * `gg` - go to first line
@@ -53,6 +53,8 @@ Motions:
 * `g^` - go to first non whitespace character of screen line
 * `gm` - go to middle of screen line
 * `g$` - go to end of screen line
+* `gj` - down by `n` screen lines
+* `gk` - up by `n` screen lines
 
 Commands/Operators:
 * `x` - delete char under cursor

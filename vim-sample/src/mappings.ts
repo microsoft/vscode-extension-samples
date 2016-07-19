@@ -5,7 +5,7 @@
 'use strict';
 
 import {TextEditor} from 'vscode';
-import {Motion, Motions} from './motions';
+import {Motion, Motions, MotionCommand} from './motions';
 import {Operator, Operators} from './operators';
 import {IController, Command} from './common';
 
@@ -14,25 +14,33 @@ const CHAR_TO_MOTION: { [char: string]: Motion; } = {};
 function defineMotion(char: string, motion: Motion): void {
 	CHAR_TO_MOTION[char] = motion;
 };
-defineMotion('w', Motions.NextWordStart);
-defineMotion('e', Motions.NextWordEnd);
-defineMotion('$', Motions.EndOfLine);
-defineMotion('0', Motions.StartOfLine);
+
+const CHAR_TO_MOTION_COMMAND: { [char: string]: MotionCommand; } = {};
+function defineMotionCommand(char: string, motionCommand: MotionCommand): void {
+	CHAR_TO_MOTION_COMMAND[char] = motionCommand;
+};
+
+// Left-right motions
 defineMotion('h', Motions.Left);
+defineMotion('l', Motions.Right);
+defineMotion('0', Motions.StartOfLine);
+defineMotion('$', Motions.EndOfLine);
+defineMotionCommand('g0', Motions.LineStart);
+defineMotionCommand('g^', Motions.LineFirstNonWhiteSpaceCharacter);
+defineMotionCommand('gm', Motions.LineColumnCenter);
+defineMotionCommand('g$', Motions.LineEnd);
+
+// Up-down motions
 defineMotion('j', Motions.Down);
 defineMotion('k', Motions.Up);
-defineMotion('l', Motions.Right);
+defineMotionCommand('gj', Motions.ViewLineDown);
+defineMotionCommand('gk', Motions.ViewLineUp);
 defineMotion('G', Motions.GoToLine);
 defineMotion('gg', Motions.GoToFirstLine);
 
-const CHAR_TO_MOTION_COMMAND: { [char: string]: Command; } = {};
-function defineMotionCommand(char: string, commandId: string, args?: any): void {
-	CHAR_TO_MOTION_COMMAND[char] = {commandId : commandId, args: args};
-};
-defineMotionCommand('g0', 'cursorMove', {to: 'lineStart'});
-defineMotionCommand('g^', 'cursorMove', {to: 'lineFirstNonWhitespaceCharacter'});
-defineMotionCommand('gm', 'cursorMove', {to: 'lineColumnCenter'});
-defineMotionCommand('g$', 'cursorMove', {to: 'lineEnd'});
+// Word motions
+defineMotion('w', Motions.NextWordStart);
+defineMotion('e', Motions.NextWordEnd);
 
 
 const CHAR_TO_OPERATOR: { [char: string]: Operator; } = {};
@@ -82,7 +90,13 @@ export class Mappings {
 		if (!motionCommand) {
 			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(0, 2)];
 		}
-		return motionCommand;
+		if (!motionCommand) {
+			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(1, 2)];
+		}
+		if (!motionCommand) {
+			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(1, 3)];
+		}
+		return motionCommand ? motionCommand.command(parsed.repeatCount) : null;
 	}
 
 	public static findOperator(input: string): IFoundOperator {
@@ -113,7 +127,7 @@ export class Mappings {
 		if (input === 'g') {
 			return true;
 		}
-		return /^[1-9]\d*$/.test(input);
+		return /^[1-9]\d*g?$/.test(input);
 	}
 }
 
