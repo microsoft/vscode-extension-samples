@@ -24,7 +24,7 @@ export class MotionState {
 
 export abstract class MotionCommand {
 
-	public abstract command(args?: any): Command;
+	public abstract command(args: any): Command;
 
 }
 
@@ -250,9 +250,9 @@ class GoToLineDefinedMotion extends GoToLineMotion {
 	}
 }
 
-abstract class CursorMoveCommand extends MotionCommand {
+class CursorMoveCommand extends MotionCommand {
 
-	constructor(private to: string) {
+	constructor(private to: string, private by?: string) {
 		super();
 	}
 
@@ -264,65 +264,35 @@ abstract class CursorMoveCommand extends MotionCommand {
 		};
 	}
 
-	protected addArgs(cursorMoveArgs: any, count?: number): any {
+	protected addArgs(cursorMoveArgs: any, args: any): any {
+		cursorMoveArgs.select = !!args.isVisual;
+		if (this.by) {
+			cursorMoveArgs.by = this.by;
+		}
 		return cursorMoveArgs;
 	}
 
 }
 
-class LineStartMotionCommand extends CursorMoveCommand {
-	constructor() {
-		super('lineStart');
-	}
-}
+class RepeatCursorMoveCommand extends CursorMoveCommand {
 
-class LineFirstNonWhiteSpaceCharacterMotionCommand extends CursorMoveCommand {
-	constructor() {
-		super('lineFirstNonWhitespaceCharacter');
-	}
-}
-
-class LineColumnCenterMotionCommand extends CursorMoveCommand {
-	constructor() {
-		super('lineColumnCenter');
-	}
-}
-
-class LineEndMotionCommand extends CursorMoveCommand {
-	constructor() {
-		super('lineEnd');
-	}
-}
-
-
-class ViewLineUpMotionCommand extends CursorMoveCommand {
-	constructor() {
-		super('lineUp');
+	protected addArgs(cursorMoveArgs: any, args: any): any {
+		cursorMoveArgs.amount = args.repeat || 1;
+		return super.addArgs(cursorMoveArgs, args);
 	}
 
-	protected addArgs(cursorMoveArgs: any, count?: number): any {
-		cursorMoveArgs.noOfLines= count || 1;
-		return super.addArgs(cursorMoveArgs);
-	}
-}
-
-class ViewLineDownMotionCommand extends CursorMoveCommand {
-	constructor() {
-		super('lineDown');
-	}
-
-	protected addArgs(cursorMoveArgs: any, count?: number): any {
-		cursorMoveArgs.noOfLines= count || 1;
-		return super.addArgs(cursorMoveArgs);
-	}
 }
 
 export const Motions = {
+	RightMotion: new RightMotion(),
+
 	NextCharacter: new NextCharacterMotion(),
-	Left: new LeftMotion(),
+
+	Left: new RepeatCursorMoveCommand('left'),
+	Right: new RepeatCursorMoveCommand('right'),
 	Down: new DownMotion(),
 	Up: new UpMotion(),
-	Right: new RightMotion(),
+
 	EndOfLine: new EndOfLineMotion(),
 	StartOfLine: new StartOfLineMotion(),
 	NextWordStart: new NextWordStartMotion(),
@@ -331,10 +301,20 @@ export const Motions = {
 	GoToFirstLine: new GoToFirstLineMotion(),
 	GoToLastLine: new GoToLastLineMotion(),
 
-	LineStart: new LineStartMotionCommand(),
-	LineFirstNonWhiteSpaceCharacter: new LineFirstNonWhiteSpaceCharacterMotionCommand(),
-	LineColumnCenter: new LineColumnCenterMotionCommand(),
-	LineEnd: new LineEndMotionCommand(),
-	ViewLineUp: new ViewLineUpMotionCommand(),
-	ViewLineDown: new ViewLineDownMotionCommand(),
+	ScrollLeft: new RepeatCursorMoveCommand('left'),
+	ScrollRight: new RepeatCursorMoveCommand('right'),
+	ScrollLeftByHalfLine: new RepeatCursorMoveCommand('left', 'halfLine'),
+	ScrollRightByHalfLine: new RepeatCursorMoveCommand('right', 'halfLine'),
+
+	WrappedLineUp: new RepeatCursorMoveCommand('up', 'wrappedLine'),
+	WrappedLineDown: new RepeatCursorMoveCommand('down', 'wrappedLine'),
+
+	WrappedLineStart: new CursorMoveCommand('wrappedLineStart'),
+	WrappedLineFirstNonWhiteSpaceCharacter: new CursorMoveCommand('wrappedLineFirstNonWhitespaceCharacter'),
+	WrappedLineColumnCenter: new CursorMoveCommand('wrappedLineColumnCenter'),
+	WrappedLineEnd: new CursorMoveCommand('wrappedLineEnd'),
+
+	ViewPortTop: new RepeatCursorMoveCommand('viewPortTop'),
+	ViewPortBottom: new RepeatCursorMoveCommand('viewPortBottom'),
+	ViewPortCenter: new CursorMoveCommand('viewPortCenter'),
 };

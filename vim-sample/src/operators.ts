@@ -58,7 +58,7 @@ class InsertOperator extends OperatorWithNoArgs {
 
 class AppendOperator extends OperatorWithNoArgs {
 	protected _run(ctrl: IController, ed:TextEditor): void {
-		let newPos = Motions.Right.run(this.doc(ed), this.pos(ed), ctrl.motionState);
+		let newPos = Motions.RightMotion.run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		this.setPosReveal(ed, newPos.line, newPos.character);
 		ctrl.setMode(Mode.INSERT);
 	}

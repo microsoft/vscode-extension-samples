@@ -203,7 +203,7 @@ export class Controller implements IController {
 			};
 		}
 
-		let motionCommand = Mappings.findMotionCommand(this._currentInput);
+		let motionCommand = Mappings.findMotionCommand(this._currentInput, this._isVisual);
 		if (motionCommand) {
 			this._currentInput = '';
 			return {

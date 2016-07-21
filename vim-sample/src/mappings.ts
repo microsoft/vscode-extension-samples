@@ -21,22 +21,32 @@ function defineMotionCommand(char: string, motionCommand: MotionCommand): void {
 };
 
 // Left-right motions
-defineMotion('h', Motions.Left);
-defineMotion('l', Motions.Right);
+defineMotionCommand('h', Motions.Left);
+defineMotionCommand('l', Motions.Right);
 defineMotion('0', Motions.StartOfLine);
 defineMotion('$', Motions.EndOfLine);
-defineMotionCommand('g0', Motions.LineStart);
-defineMotionCommand('g^', Motions.LineFirstNonWhiteSpaceCharacter);
-defineMotionCommand('gm', Motions.LineColumnCenter);
-defineMotionCommand('g$', Motions.LineEnd);
+defineMotionCommand('g0', Motions.WrappedLineStart);
+defineMotionCommand('g^', Motions.WrappedLineFirstNonWhiteSpaceCharacter);
+defineMotionCommand('gm', Motions.WrappedLineColumnCenter);
+defineMotionCommand('g$', Motions.WrappedLineEnd);
+
+// Scroll motions
+defineMotionCommand('zh', Motions.ScrollLeft);
+defineMotionCommand('zl', Motions.ScrollRight);
+defineMotionCommand('zH', Motions.ScrollLeftByHalfLine);
+defineMotionCommand('zL', Motions.ScrollRightByHalfLine);
 
 // Up-down motions
 defineMotion('j', Motions.Down);
 defineMotion('k', Motions.Up);
-defineMotionCommand('gj', Motions.ViewLineDown);
-defineMotionCommand('gk', Motions.ViewLineUp);
+defineMotionCommand('gj', Motions.WrappedLineDown);
+defineMotionCommand('gk', Motions.WrappedLineUp);
 defineMotion('G', Motions.GoToLine);
 defineMotion('gg', Motions.GoToFirstLine);
+
+defineMotionCommand('H', Motions.ViewPortTop);
+defineMotionCommand('M', Motions.ViewPortCenter);
+defineMotionCommand('L', Motions.ViewPortBottom);
 
 // Word motions
 defineMotion('w', Motions.NextWordStart);
@@ -84,7 +94,7 @@ export class Mappings {
 		return motion.repeat(parsed.hasRepeatCount, parsed.repeatCount);
 	}
 
-	public static findMotionCommand(input: string): Command {
+	public static findMotionCommand(input: string, isVisual: boolean = false): Command {
 		let parsed = _parseNumberAndString(input);
 		let motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(0, 1)];
 		if (!motionCommand) {
@@ -96,7 +106,7 @@ export class Mappings {
 		if (!motionCommand) {
 			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(1, 3)];
 		}
-		return motionCommand ? motionCommand.command(parsed.repeatCount) : null;
+		return motionCommand ? motionCommand.command({ isVisual: isVisual, repeat: parsed.repeatCount }) : null;
 	}
 
 	public static findOperator(input: string): IFoundOperator {
@@ -124,10 +134,10 @@ export class Mappings {
 		if (input.length === 0) {
 			return true;
 		}
-		if (input === 'g') {
+		if (input === 'g' || input === 'v' || input === 'z') {
 			return true;
 		}
-		return /^[1-9]\d*g?$/.test(input);
+		return /^[1-9]\d*v?g?z?$/.test(input);
 	}
 }
 
