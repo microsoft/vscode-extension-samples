@@ -55,6 +55,9 @@ Motions:
 * `g$` - go to end of screen line
 * `gj` - down by `n` screen lines
 * `gk` - up by `n` screen lines
+* `H`  - `nth` line from top of the view
+* `M`  - center line of the view
+* `L`  - `nth` line from bottom of the view
 
 Commands/Operators:
 * `x` - delete char under cursor
