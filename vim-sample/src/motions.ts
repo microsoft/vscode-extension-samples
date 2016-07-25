@@ -6,7 +6,7 @@
 
 import {Position, TextDocument} from 'vscode';
 import {Words, WordCharacters} from './words';
-import {Command} from './common';
+import {Command, AbstractCommandDescriptor} from './common';
 
 export class MotionState {
 
@@ -19,12 +19,6 @@ export class MotionState {
 		this.wordCharacterClass = null;
 		this.anchor = null;
 	}
-
-}
-
-export abstract class MotionCommand {
-
-	public abstract command(args: any): Command;
 
 }
 
@@ -250,37 +244,60 @@ class GoToLineDefinedMotion extends GoToLineMotion {
 	}
 }
 
-class CursorMoveCommand extends MotionCommand {
+class CursorMoveCommand extends AbstractCommandDescriptor {
 
 	constructor(private to: string, private by?: string) {
 		super();
 	}
 
-	public command(count?: number): Command {
-		let cursorMoveArgs= { to: this.to }
+	public createCommand(args?: any): Command {
+		let cursorMoveArgs: any = {
+			to: this.to,
+			by: this.by,
+			value: args.repeat || 1,
+			select: !!args.isVisual
+		}
 		return {
 			commandId: 'cursorMove',
-			args: this.addArgs(cursorMoveArgs, count)
+			args: cursorMoveArgs
 		};
 	}
-
-	protected addArgs(cursorMoveArgs: any, args: any): any {
-		cursorMoveArgs.select = !!args.isVisual;
-		if (this.by) {
-			cursorMoveArgs.by = this.by;
-		}
-		return cursorMoveArgs;
-	}
-
 }
 
-class RepeatCursorMoveCommand extends CursorMoveCommand {
+class MoveActiveEditorCommandByPosition extends AbstractCommandDescriptor {
 
-	protected addArgs(cursorMoveArgs: any, args: any): any {
-		cursorMoveArgs.amount = args.repeat || 1;
-		return super.addArgs(cursorMoveArgs, args);
+	constructor() {
+		super();
 	}
 
+	public createCommand(args?: any): Command {
+		let moveActiveEditorArgs: any = {
+			to: args.repeat === void 0 ? 'last' : 'position',
+			value: args.repeat !== void 0 ? args.repeat + 1 : undefined
+		}
+		return {
+			commandId: 'moveActiveEditor',
+			args: moveActiveEditorArgs
+		};
+	}
+}
+
+class MoveActiveEditorCommand extends AbstractCommandDescriptor {
+
+	constructor(private to: string) {
+		super();
+	}
+
+	public createCommand(args?: any): Command {
+		let moveActiveEditorArgs: any = {
+			to: this.to,
+			value: args.repeat ? args.repeat : 1
+		}
+		return {
+			commandId: 'moveActiveEditor',
+			args: moveActiveEditorArgs
+		};
+	}
 }
 
 export const Motions = {
@@ -288,8 +305,8 @@ export const Motions = {
 
 	NextCharacter: new NextCharacterMotion(),
 
-	Left: new RepeatCursorMoveCommand('left'),
-	Right: new RepeatCursorMoveCommand('right'),
+	Left: new CursorMoveCommand('left'),
+	Right: new CursorMoveCommand('right'),
 	Down: new DownMotion(),
 	Up: new UpMotion(),
 
@@ -301,20 +318,27 @@ export const Motions = {
 	GoToFirstLine: new GoToFirstLineMotion(),
 	GoToLastLine: new GoToLastLineMotion(),
 
-	ScrollLeft: new RepeatCursorMoveCommand('left'),
-	ScrollRight: new RepeatCursorMoveCommand('right'),
-	ScrollLeftByHalfLine: new RepeatCursorMoveCommand('left', 'halfLine'),
-	ScrollRightByHalfLine: new RepeatCursorMoveCommand('right', 'halfLine'),
+	ScrollLeft: new CursorMoveCommand('left'),
+	ScrollRight: new CursorMoveCommand('right'),
+	ScrollLeftByHalfLine: new CursorMoveCommand('left', 'halfLine'),
+	ScrollRightByHalfLine: new CursorMoveCommand('right', 'halfLine'),
 
-	WrappedLineUp: new RepeatCursorMoveCommand('up', 'wrappedLine'),
-	WrappedLineDown: new RepeatCursorMoveCommand('down', 'wrappedLine'),
+	WrappedLineUp: new CursorMoveCommand('up', 'wrappedLine'),
+	WrappedLineDown: new CursorMoveCommand('down', 'wrappedLine'),
 
 	WrappedLineStart: new CursorMoveCommand('wrappedLineStart'),
 	WrappedLineFirstNonWhiteSpaceCharacter: new CursorMoveCommand('wrappedLineFirstNonWhitespaceCharacter'),
 	WrappedLineColumnCenter: new CursorMoveCommand('wrappedLineColumnCenter'),
 	WrappedLineEnd: new CursorMoveCommand('wrappedLineEnd'),
 
-	ViewPortTop: new RepeatCursorMoveCommand('viewPortTop'),
-	ViewPortBottom: new RepeatCursorMoveCommand('viewPortBottom'),
+	ViewPortTop: new CursorMoveCommand('viewPortTop'),
+	ViewPortBottom: new CursorMoveCommand('viewPortBottom'),
 	ViewPortCenter: new CursorMoveCommand('viewPortCenter'),
+
+	MoveActiveEditor: new MoveActiveEditorCommandByPosition(),
+	MoveActiveEditorLeft: new MoveActiveEditorCommand('left'),
+	MoveActiveEditorRight: new MoveActiveEditorCommand('right'),
+	MoveActiveEditorFirst: new MoveActiveEditorCommand('first'),
+	MoveActiveEditorLast: new MoveActiveEditorCommand('last'),
+	MoveActiveEditorCenter: new MoveActiveEditorCommand('center')
 };

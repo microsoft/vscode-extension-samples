@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
+import * as vscode from 'vscode';
 import {MotionState, Motion} from './motions';
 
 export enum Mode {
@@ -34,7 +35,13 @@ export interface IController {
 	getDeleteRegister(): DeleteRegister;
 }
 
+export abstract class AbstractCommandDescriptor {
+
+	public abstract createCommand(args?: any): Command;
+
+}
+
 export interface Command {
 	commandId: string,
-	args?: any
+	args?: any[]
 }

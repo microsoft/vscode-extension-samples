@@ -5,9 +5,9 @@
 'use strict';
 
 import {TextEditor} from 'vscode';
-import {Motion, Motions, MotionCommand} from './motions';
+import {Motion, Motions} from './motions';
 import {Operator, Operators} from './operators';
-import {IController, Command} from './common';
+import {IController, Command, AbstractCommandDescriptor} from './common';
 
 
 const CHAR_TO_MOTION: { [char: string]: Motion; } = {};
@@ -15,8 +15,8 @@ function defineMotion(char: string, motion: Motion): void {
 	CHAR_TO_MOTION[char] = motion;
 };
 
-const CHAR_TO_MOTION_COMMAND: { [char: string]: MotionCommand; } = {};
-function defineMotionCommand(char: string, motionCommand: MotionCommand): void {
+const CHAR_TO_MOTION_COMMAND: { [char: string]: AbstractCommandDescriptor; } = {};
+function defineMotionCommand(char: string, motionCommand: AbstractCommandDescriptor): void {
 	CHAR_TO_MOTION_COMMAND[char] = motionCommand;
 };
 
@@ -52,6 +52,13 @@ defineMotionCommand('L', Motions.ViewPortBottom);
 defineMotion('w', Motions.NextWordStart);
 defineMotion('e', Motions.NextWordEnd);
 
+// Window motions
+defineMotionCommand('tabm', Motions.MoveActiveEditor);
+defineMotionCommand('tabm<', Motions.MoveActiveEditorLeft);
+defineMotionCommand('tabm>', Motions.MoveActiveEditorRight);
+defineMotionCommand('tabm<<', Motions.MoveActiveEditorFirst);
+defineMotionCommand('tabm>>', Motions.MoveActiveEditorLast);
+defineMotionCommand('tabm.', Motions.MoveActiveEditorCenter);
 
 const CHAR_TO_OPERATOR: { [char: string]: Operator; } = {};
 function defineOperator(char: string, operator: Operator): void {
@@ -106,7 +113,10 @@ export class Mappings {
 		if (!motionCommand) {
 			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(1, 3)];
 		}
-		return motionCommand ? motionCommand.command({ isVisual: isVisual, repeat: parsed.repeatCount }) : null;
+		if (!motionCommand) {
+			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input];
+		}
+		return motionCommand ? motionCommand.createCommand({ isVisual: isVisual, repeat: parsed.hasRepeatCount ? parsed.repeatCount : undefined}) : null;
 	}
 
 	public static findOperator(input: string): IFoundOperator {
@@ -117,10 +127,10 @@ export class Mappings {
 		}
 		let operatorArgs = parsed.input.substr(1);
 		return {
-			runNormal: (controller: IController, editor:TextEditor) => {
+			runNormal: (controller: IController, editor: TextEditor) => {
 				return operator.runNormalMode(controller, editor, parsed.repeatCount, operatorArgs);
 			},
-			runVisual: (controller: IController, editor:TextEditor) => {
+			runVisual: (controller: IController, editor: TextEditor) => {
 				return operator.runVisualMode(controller, editor, operatorArgs);
 			}
 		};
@@ -148,6 +158,14 @@ function _parseNumberAndString(input: string): INumberAndString {
 			hasRepeatCount: true,
 			repeatCount: parseInt(repeatCountMatch[0], 10),
 			input: input.substr(repeatCountMatch[0].length)
+		};
+	}
+	repeatCountMatch = input.match(/(\d+)$/);
+	if (repeatCountMatch) {
+		return {
+			hasRepeatCount: true,
+			repeatCount: parseInt(repeatCountMatch[1], 10),
+			input: input.substr(0, input.length - repeatCountMatch[1].length)
 		};
 	}
 	return {

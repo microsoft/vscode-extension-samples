@@ -127,17 +127,22 @@ class VimExt {
 	}
 
 	public type(text: string): void {
-		let r = this._controller.type(vscode.window.activeTextEditor, text);
-		if (r.hasConsumedInput) {
-			this._ensureState();
-			if (r.executeEditorCommand) {
-				vscode.commands.executeCommand(r.executeEditorCommand.commandId, r.executeEditorCommand.args);
+		let r = this._controller.type(vscode.window.activeTextEditor, text).then(
+			(r) => {
+				if (r.hasConsumedInput) {
+					this._ensureState();
+					if (r.executeEditorCommand) {
+						let args = [r.executeEditorCommand.commandId];
+						args = args.concat(r.executeEditorCommand.args);
+						vscode.commands.executeCommand.apply(this, args);
+					}
+					return;
+				}
+				vscode.commands.executeCommand('default:type', {
+					text: text
+				});
 			}
-			return;
-		}
-		vscode.commands.executeCommand('default:type', {
-			text: text
-		});
+		);
 	}
 
 	public replacePrevChar(text: string, replaceCharCnt: number): void {

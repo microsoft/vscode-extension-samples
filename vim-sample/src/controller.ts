@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
+import * as vscode from 'vscode';
 import {
 	TextEditorCursorStyle,
 	Position,
@@ -135,12 +136,12 @@ export class Controller implements IController {
 		return `VIM:> ${label}` + (this._currentInput ? ` >${this._currentInput}` : ``);
 	}
 
-	public type(editor: TextEditor, text: string): ITypeResult {
+	public type(editor: TextEditor, text: string): Thenable<ITypeResult> {
 		if (this._currentMode !== Mode.NORMAL && this._currentMode !== Mode.REPLACE) {
-			return {
+			return Promise.resolve({
 				hasConsumedInput: false,
 				executeEditorCommand: null
-			};
+			});
 		}
 		if (this._currentMode === Mode.REPLACE) {
 			let pos = editor.selection.active;
@@ -150,10 +151,10 @@ export class Controller implements IController {
 				setPositionAndReveal(editor, pos.line, pos.character + 1);
 			});
 
-			return {
+			return Promise.resolve({
 				hasConsumedInput: true,
 				executeEditorCommand: null
-			};
+			});
 		}
 		this._currentInput += text;
 		return this._interpretNormalModeInput(editor);
@@ -175,8 +176,31 @@ export class Controller implements IController {
 		return true;
 	}
 
-	private _interpretNormalModeInput(editor: TextEditor): ITypeResult {
-		let command = Mappings.findCommand(this._currentInput);
+	private _interpretNormalModeInput(editor: TextEditor): Thenable<ITypeResult> {
+		if (this._currentInput.startsWith(':')) {
+			return vscode.window.showInputBox({value: 'tabm'}).then((value) => {
+				let motionCommand = value ? Mappings.findMotionCommand(value) : null;
+				this._currentInput = '';
+				return {
+					hasConsumedInput: true,
+					executeEditorCommand: motionCommand
+				};
+			});
+		}
+		let result = this._findMapping(this._currentInput, editor);
+		if (!result) {
+			// INVALID INPUT - beep!!
+			this._currentInput = '';
+			result = {
+				hasConsumedInput: true,
+				executeEditorCommand: null
+			};
+		}
+		return Promise.resolve(result);
+	}
+
+	private _findMapping(input: string, editor: TextEditor): ITypeResult {
+		let command = Mappings.findCommand(input);
 		if (command) {
 			this._currentInput = '';
 			return {
@@ -185,7 +209,7 @@ export class Controller implements IController {
 			};
 		}
 
-		let operator = Mappings.findOperator(this._currentInput);
+		let operator = Mappings.findOperator(input);
 		if (operator) {
 			if (this._isVisual) {
 				if (operator.runVisual(this, editor)) {
@@ -203,7 +227,7 @@ export class Controller implements IController {
 			};
 		}
 
-		let motionCommand = Mappings.findMotionCommand(this._currentInput, this._isVisual);
+		let motionCommand = Mappings.findMotionCommand(input, this._isVisual);
 		if (motionCommand) {
 			this._currentInput = '';
 			return {
@@ -212,7 +236,7 @@ export class Controller implements IController {
 			};
 		}
 
-		let motion = Mappings.findMotion(this._currentInput);
+		let motion = Mappings.findMotion(input);
 		if (motion) {
 			let newPos = motion.run(editor.document, editor.selection.active, this._motionState);
 			if (this._isVisual) {
@@ -229,20 +253,14 @@ export class Controller implements IController {
 		}
 
 		// is it motion building
-		if (this.isMotionPrefix(this._currentInput)) {
+		if (this.isMotionPrefix(input)) {
 			return {
 				hasConsumedInput: true,
 				executeEditorCommand: null
 			};
 		}
 
-		// INVALID INPUT - beep!!
-		this._currentInput = '';
-
-		return {
-			hasConsumedInput: true,
-			executeEditorCommand: null
-		};
+		return null;
 	}
 }
 
