@@ -179,23 +179,11 @@ export class Controller implements IController {
 	private _interpretNormalModeInput(editor: TextEditor): Thenable<ITypeResult> {
 		if (this._currentInput.startsWith(':')) {
 			return vscode.window.showInputBox({value: 'tabm'}).then((value) => {
-				let motionCommand = value ? Mappings.findMotionCommand(value) : null;
-				this._currentInput = '';
-				return {
-					hasConsumedInput: true,
-					executeEditorCommand: motionCommand
-				};
+				let result = this._findMapping(value, editor);
+				return Promise.resolve(result);
 			});
 		}
 		let result = this._findMapping(this._currentInput, editor);
-		if (!result) {
-			// INVALID INPUT - beep!!
-			this._currentInput = '';
-			result = {
-				hasConsumedInput: true,
-				executeEditorCommand: null
-			};
-		}
 		return Promise.resolve(result);
 	}
 
@@ -260,7 +248,12 @@ export class Controller implements IController {
 			};
 		}
 
-		return null;
+		// INVALID INPUT - beep!!
+		this._currentInput = '';
+		return {
+			hasConsumedInput: true,
+			executeEditorCommand: null
+		};
 	}
 }
 

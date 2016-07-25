@@ -52,7 +52,7 @@ defineMotionCommand('L', Motions.ViewPortBottom);
 defineMotion('w', Motions.NextWordStart);
 defineMotion('e', Motions.NextWordEnd);
 
-// Window motions
+// Tab motions
 defineMotionCommand('tabm', Motions.MoveActiveEditor);
 defineMotionCommand('tabm<', Motions.MoveActiveEditorLeft);
 defineMotionCommand('tabm>', Motions.MoveActiveEditorRight);
@@ -103,20 +103,29 @@ export class Mappings {
 
 	public static findMotionCommand(input: string, isVisual: boolean = false): Command {
 		let parsed = _parseNumberAndString(input);
-		let motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(0, 1)];
+		let command = Mappings.findMotionCommandFromNumberAndString(parsed, isVisual);
+		if (!command) {
+			parsed = _parseNumberAndString(input, false);
+			command= Mappings.findMotionCommandFromNumberAndString(parsed, isVisual);
+		}
+		return command;
+	}
+
+	private static findMotionCommandFromNumberAndString(numberAndString: INumberAndString, isVisual: boolean): Command {
+		let motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(0, 1)];
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(0, 2)];
+			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(0, 2)];
 		}
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(1, 2)];
+			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(1, 2)];
 		}
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input.substr(1, 3)];
+			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(1, 3)];
 		}
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[parsed.input];
+			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input];
 		}
-		return motionCommand ? motionCommand.createCommand({ isVisual: isVisual, repeat: parsed.hasRepeatCount ? parsed.repeatCount : undefined}) : null;
+		return motionCommand ? motionCommand.createCommand({ isVisual: isVisual, repeat: numberAndString.hasRepeatCount ? numberAndString.repeatCount : undefined}) : null;
 	}
 
 	public static findOperator(input: string): IFoundOperator {
@@ -151,22 +160,25 @@ export class Mappings {
 	}
 }
 
-function _parseNumberAndString(input: string): INumberAndString {
-	let repeatCountMatch = input.match(/^([1-9]\d*)/);
-	if (repeatCountMatch) {
-		return {
-			hasRepeatCount: true,
-			repeatCount: parseInt(repeatCountMatch[0], 10),
-			input: input.substr(repeatCountMatch[0].length)
-		};
-	}
-	repeatCountMatch = input.match(/(\d+)$/);
-	if (repeatCountMatch) {
-		return {
-			hasRepeatCount: true,
-			repeatCount: parseInt(repeatCountMatch[1], 10),
-			input: input.substr(0, input.length - repeatCountMatch[1].length)
-		};
+function _parseNumberAndString(input: string, numberAtBeginning: boolean = true): INumberAndString {
+	if (numberAtBeginning) {
+		let repeatCountMatch = input.match(/^([1-9]\d*)/);
+		if (repeatCountMatch) {
+			return {
+				hasRepeatCount: true,
+				repeatCount: parseInt(repeatCountMatch[0], 10),
+				input: input.substr(repeatCountMatch[0].length)
+			};
+		}
+	} else {
+		let repeatCountMatch = input.match(/(\d+)$/);
+		if (repeatCountMatch) {
+			return {
+				hasRepeatCount: true,
+				repeatCount: parseInt(repeatCountMatch[1], 10),
+				input: input.substr(0, input.length - repeatCountMatch[1].length)
+			};
+		}
 	}
 	return {
 		hasRepeatCount: false,
