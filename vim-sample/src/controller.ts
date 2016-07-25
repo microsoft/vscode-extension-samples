@@ -179,7 +179,7 @@ export class Controller implements IController {
 	private _interpretNormalModeInput(editor: TextEditor): Thenable<ITypeResult> {
 		if (this._currentInput.startsWith(':')) {
 			return vscode.window.showInputBox({value: 'tabm'}).then((value) => {
-				let result = this._findMapping(value, editor);
+				let result = this._findMapping(value || '', editor);
 				return Promise.resolve(result);
 			});
 		}
