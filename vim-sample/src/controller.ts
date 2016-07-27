@@ -63,7 +63,11 @@ export class Controller implements IController {
 		}
 		let maxCharacter = lineContent.length - 1;
 		if (pos.character > maxCharacter) {
-			setPositionAndReveal(editor, pos.line, maxCharacter);
+			if (this._isVisual) {
+				setSelectionAndReveal(editor, sel.anchor, pos.line, maxCharacter);
+			} else {
+				setPositionAndReveal(editor, pos.line, maxCharacter);
+			}
 		}
 	}
 
