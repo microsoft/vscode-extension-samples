@@ -330,6 +330,7 @@ export const Motions = {
 	WrappedLineFirstNonWhiteSpaceCharacter: new CursorMoveCommand('wrappedLineFirstNonWhitespaceCharacter'),
 	WrappedLineColumnCenter: new CursorMoveCommand('wrappedLineColumnCenter'),
 	WrappedLineEnd: new CursorMoveCommand('wrappedLineEnd'),
+	WrappedLineLastNonWhiteSpaceCharacter: new CursorMoveCommand('wrappedLineLastNonWhitespaceCharacter'),
 
 	ViewPortTop: new CursorMoveCommand('viewPortTop'),
 	ViewPortBottom: new CursorMoveCommand('viewPortBottom'),

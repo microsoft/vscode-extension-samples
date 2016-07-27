@@ -29,6 +29,7 @@ defineMotionCommand('g0', Motions.WrappedLineStart);
 defineMotionCommand('g^', Motions.WrappedLineFirstNonWhiteSpaceCharacter);
 defineMotionCommand('gm', Motions.WrappedLineColumnCenter);
 defineMotionCommand('g$', Motions.WrappedLineEnd);
+defineMotionCommand('g_', Motions.WrappedLineLastNonWhiteSpaceCharacter);
 
 // Scroll motions
 defineMotionCommand('zh', Motions.ScrollLeft);
