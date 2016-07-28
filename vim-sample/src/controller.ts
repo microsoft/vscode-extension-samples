@@ -54,6 +54,9 @@ export class Controller implements IController {
 		if (this._currentMode !== Mode.NORMAL) {
 			return;
 		}
+		if (this._isVisual) {
+			return;
+		}
 		let sel = editor.selection;
 		let pos = sel.active;
 		let doc = editor.document;
@@ -63,11 +66,7 @@ export class Controller implements IController {
 		}
 		let maxCharacter = lineContent.length - 1;
 		if (pos.character > maxCharacter) {
-			if (this._isVisual) {
-				setSelectionAndReveal(editor, sel.anchor, pos.line, maxCharacter);
-			} else {
-				setPositionAndReveal(editor, pos.line, maxCharacter);
-			}
+			setPositionAndReveal(editor, pos.line, maxCharacter);
 		}
 	}
 
