@@ -28,6 +28,15 @@
         "title": "Show All References"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "editor.printReferences",
+          "when": "editorHasReferenceProvider",
+          "group": "navigation@1.31"
+        }
+      ]
+    },
     "languages": [
       {
         "id": "locations",
