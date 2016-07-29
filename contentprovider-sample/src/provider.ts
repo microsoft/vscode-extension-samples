@@ -6,7 +6,7 @@
 import * as vscode from 'vscode';
 import ReferencesDocument from './referencesDocument';
 
-export default class ContentProvider implements vscode.TextDocumentContentProvider {
+export default class Provider implements vscode.TextDocumentContentProvider, vscode.DocumentLinkProvider {
 
     static scheme = 'references';
 
@@ -19,11 +19,7 @@ export default class ContentProvider implements vscode.TextDocumentContentProvid
 
         // Listen to the following events:
         // * closeTextDocument - which means we must clear the corresponding model object - `ReferencesDocument`
-        // * changeActiveEditor - do decorate with references information
-        this._subscriptions = vscode.Disposable.from(
-            vscode.workspace.onDidCloseTextDocument(doc => this._documents.delete(doc.uri.toString())),
-            vscode.window.onDidChangeActiveTextEditor(this._decorateEditor, this)
-        );
+        this._subscriptions = vscode.workspace.onDidCloseTextDocument(doc => this._documents.delete(doc.uri.toString()));
     }
 
     dispose() {
@@ -63,7 +59,7 @@ export default class ContentProvider implements vscode.TextDocumentContentProvid
 
             // sort by locations and shuffle to begin from target resource
             let idx = 0;
-            locations.sort(ContentProvider._compareLocations).find((loc, i) => loc.uri.toString() === target.toString() && (idx = i) && true);
+            locations.sort(Provider._compareLocations).find((loc, i) => loc.uri.toString() === target.toString() && (idx = i) && true);
             locations.push(...locations.splice(0, idx));
 
             // create document and return its early state
@@ -71,18 +67,6 @@ export default class ContentProvider implements vscode.TextDocumentContentProvid
             this._documents.set(uri.toString(), document);
             return document.value;
         });
-    }
-
-    private _decorateEditor(editor: vscode.TextEditor) {
-        // When an editor opens, check if it shows a `location` document
-        // and decorate the actual references
-        if (!editor || !vscode.languages.match('locations', editor.document)) {
-            return;
-        }
-        let doc = this._documents.get(editor.document.uri.toString());
-        if (doc) {
-            doc.join().then(() => editor.setDecorations(this._editorDecoration, doc.ranges));
-        }
     }
 
     private static _compareLocations(a: vscode.Location, b: vscode.Location): number {
@@ -94,13 +78,23 @@ export default class ContentProvider implements vscode.TextDocumentContentProvid
             return a.range.start.compareTo(b.range.start)
         }
     }
+
+    provideDocumentLinks(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.DocumentLink[] {
+        // While building the virtual document we have already created the links.
+        // Those are composed from the range inside the document and a target uri
+        // to which they point
+        const doc = this._documents.get(document.uri.toString());
+        if (doc) {
+            return doc.links;
+        }
+    }
 }
 
 let seq = 0;
 
 export function encodeLocation(uri: vscode.Uri, pos: vscode.Position): vscode.Uri {
     const query = JSON.stringify([uri.toString(), pos.line, pos.character]);
-    return vscode.Uri.parse(`${ContentProvider.scheme}:References.locations?${query}#${seq++}`);
+    return vscode.Uri.parse(`${Provider.scheme}:References.locations?${query}#${seq++}`);
 }
 
 export function decodeLocation(uri: vscode.Uri): [vscode.Uri, vscode.Position] {

@@ -3,15 +3,19 @@
  *--------------------------------------------------------*/
 'use strict';
 
-import {workspace, window, commands, ExtensionContext} from 'vscode';
-import ContentProvider, {encodeLocation} from './contentProvider';
+import {workspace, languages, window, commands, ExtensionContext, Disposable} from 'vscode';
+import ContentProvider, {encodeLocation} from './provider';
 
 export function activate(context: ExtensionContext) {
 
-    const contentProvider = new ContentProvider();
+    const provider = new ContentProvider();
 
     // register content provider for scheme `references`
-    const providerRegistration = workspace.registerTextDocumentContentProvider(ContentProvider.scheme, contentProvider);
+    // register document link provider for scheme `references`
+    const providerRegistrations = Disposable.from(
+        workspace.registerTextDocumentContentProvider(ContentProvider.scheme, provider),
+        languages.registerDocumentLinkProvider({ scheme: ContentProvider.scheme }, provider)
+    );
 
     // register command that crafts an uri with the `references` scheme,
     // open the dynamic document, and shows it in the next editor
@@ -21,8 +25,8 @@ export function activate(context: ExtensionContext) {
     });
 
     context.subscriptions.push(
-        contentProvider,
+        provider,
         commandRegistration,
-        providerRegistration
+        providerRegistrations
     );
 }

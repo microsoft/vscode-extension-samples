@@ -12,7 +12,7 @@ export default class ReferencesDocument {
     private _locations: vscode.Location[];
 
     private _lines: string[];
-    private _ranges: vscode.Range[];
+    private _links: vscode.DocumentLink[];
     private _join: Thenable<this>;
 
     constructor(uri: vscode.Uri, locations: vscode.Location[], emitter: vscode.EventEmitter<vscode.Uri>) {
@@ -25,7 +25,7 @@ export default class ReferencesDocument {
 
         // Start with printing a header and start resolving
         this._lines = [`Found ${this._locations.length} references`];
-        this._ranges = [];
+        this._links = [];
         this._join = this._populate();
     }
 
@@ -33,8 +33,8 @@ export default class ReferencesDocument {
         return this._lines.join('\n');
     }
 
-    get ranges() {
-        return this._ranges;
+    get links() {
+        return this._links;
     }
 
     join(): Thenable<this> {
@@ -98,7 +98,7 @@ export default class ReferencesDocument {
             for (let i = 0; i < ranges.length; i++) {
                 const {start: {line}} = ranges[i];
                 this._appendLeading(doc, line, ranges[i - 1]);
-                this._appendMatch(doc, line, ranges[i]);
+                this._appendMatch(doc, line, ranges[i], uri);
                 this._appendTrailing(doc, line, ranges[i + 1]);
             }
 
@@ -115,17 +115,18 @@ export default class ReferencesDocument {
         }
     }
 
-    private _appendMatch(doc: vscode.TextDocument, line:number, match: vscode.Range) {
+    private _appendMatch(doc: vscode.TextDocument, line:number, match: vscode.Range, target: vscode.Uri) {
         const text = doc.lineAt(line).text;
         const preamble = `  ${line + 1}: `;
 
         // Append line, use new length of lines-array as line number
-        // for decoration in the document (should really be a link)
+        // for a link that point to the reference
         const len = this._lines.push(preamble + text);
-        this._ranges.push(new vscode.Range(
-            len - 1, preamble.length + match.start.character,
-            len - 1, preamble.length + match.end.character)
-        );
+
+        // Create a document link that will reveal the reference
+        const linkRange = new vscode.Range(len - 1, preamble.length + match.start.character, len - 1, preamble.length + match.end.character);
+        const linkTarget = target.with({ fragment: String(1 + match.start.line) });
+        this._links.push(new vscode.DocumentLink(linkRange, linkTarget));
     }
 
     private _appendTrailing(doc: vscode.TextDocument, line: number, next: vscode.Range): void {
