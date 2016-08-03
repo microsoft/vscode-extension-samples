@@ -38,8 +38,8 @@ defineMotionCommand('zH', Motions.ScrollLeftByHalfLine);
 defineMotionCommand('zL', Motions.ScrollRightByHalfLine);
 
 // Up-down motions
-defineMotion('j', Motions.Down);
-defineMotion('k', Motions.Up);
+defineMotionCommand('j', Motions.Down);
+defineMotionCommand('k', Motions.Up);
 defineMotionCommand('gj', Motions.WrappedLineDown);
 defineMotionCommand('gk', Motions.WrappedLineUp);
 defineMotion('G', Motions.GoToLine);

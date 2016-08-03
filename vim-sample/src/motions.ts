@@ -307,8 +307,8 @@ export const Motions = {
 
 	Left: new CursorMoveCommand('left'),
 	Right: new CursorMoveCommand('right'),
-	Down: new DownMotion(),
-	Up: new UpMotion(),
+	Down: new CursorMoveCommand('down'),
+	Up: new CursorMoveCommand('up'),
 
 	EndOfLine: new EndOfLineMotion(),
 	StartOfLine: new StartOfLineMotion(),
