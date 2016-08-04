@@ -13,6 +13,12 @@ export enum Mode {
 	REPLACE
 }
 
+export interface ModifierKeys {
+	ctrl?: boolean,
+	alt?: boolean,
+	shifit?: boolean
+}
+
 export class DeleteRegister {
 	public isWholeLine:boolean;
 	public content:string;

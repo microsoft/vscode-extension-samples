@@ -9,33 +9,42 @@ import * as vscode from 'vscode';
 import {Words} from './words';
 import {MotionState, Motion, Motions} from './motions';
 import {Operator, Operators} from './operators';
-import {Mode, IController} from './common';
+import {Mode, IController, ModifierKeys} from './common';
 import {Mappings} from './mappings';
 import {Controller} from './controller';
 
 export function activate(context: vscode.ExtensionContext) {
-	function registerCommandNice(commandId:string, run:(...args:any[])=>void): void {
+	function registerCommandNice(commandId: string, run: (...args: any[]) => void): void {
 		context.subscriptions.push(vscode.commands.registerCommand(commandId, run));
+	}
+	function registerCtrlKeyBinding(key: string): void {
+		registerCommandNice(key, function (args) {
+			if (!vscode.window.activeTextEditor) {
+				return;
+			}
+			vimExt.type(key, {ctrl: true});
+		});
 	}
 
 	let vimExt = new VimExt();
 
-	registerCommandNice('type', function(args) {
+	registerCommandNice('type', function (args) {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.type(args.text);
 	});
-	registerCommandNice('replacePreviousChar', function(args) {
+	registerCommandNice('replacePreviousChar', function (args) {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.replacePrevChar(args.text, args.replaceCharCnt);
 	});
-	registerCommandNice('vim.goToNormalMode', function(args) {
+	registerCommandNice('vim.goToNormalMode', function (args) {
 		vimExt.goToNormalMode();
 	});
-	registerCommandNice('vim.clearInput', function(args) {
+	registerCommandNice('vim.clearInput', function (args) {
+		console.log(args);
 		vimExt.clearInput();
 	});
 	// registerCommandNice('paste', function(args) {
@@ -44,6 +53,13 @@ export function activate(context: vscode.ExtensionContext) {
 	// registerCommandNice('cut', function(args) {
 	// 	console.log('cut (no args)');
 	// });
+
+	registerCtrlKeyBinding('e');
+	registerCtrlKeyBinding('d');
+	registerCtrlKeyBinding('f');
+	registerCtrlKeyBinding('y');
+	registerCtrlKeyBinding('u');
+	registerCtrlKeyBinding('b');
 }
 
 export function deactivate() {
@@ -126,8 +142,8 @@ class VimExt {
 		this._ensureState();
 	}
 
-	public type(text: string): void {
-		let r = this._controller.type(vscode.window.activeTextEditor, text).then(
+	public type(text: string, modifierKeys: ModifierKeys = {ctrl: false, shifit: false, alt: false}): void {
+		let r = this._controller.type(vscode.window.activeTextEditor, text, modifierKeys).then(
 			(r) => {
 				if (r.hasConsumedInput) {
 					this._ensureState();
@@ -197,11 +213,11 @@ class ContextKey {
 	private _name: string;
 	private _lastValue: boolean;
 
-	constructor(name:string) {
+	constructor(name: string) {
 		this._name = name;
 	}
 
-	public set(value:boolean): void {
+	public set(value: boolean): void {
 		if (this._lastValue === value) {
 			return;
 		}
@@ -219,7 +235,7 @@ class StatusBar {
 		this._actual.show();
 	}
 
-	public setText(text:string): void {
+	public setText(text: string): void {
 		if (this._lastText === text) {
 			return;
 		}

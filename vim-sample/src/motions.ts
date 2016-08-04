@@ -264,6 +264,25 @@ class CursorMoveCommand extends AbstractCommandDescriptor {
 	}
 }
 
+class EditorScrollCommand extends AbstractCommandDescriptor {
+
+	constructor(private to: string, private by?: string) {
+		super();
+	}
+
+	public createCommand(args?: any): Command {
+		let editorScrollArgs: any = {
+			to: this.to,
+			by: this.by,
+			value: args.repeat || 1,
+		}
+		return {
+			commandId: 'editorScroll',
+			args: editorScrollArgs
+		};
+	}
+}
+
 class MoveActiveEditorCommandByPosition extends AbstractCommandDescriptor {
 
 	constructor() {
@@ -318,10 +337,10 @@ export const Motions = {
 	GoToFirstLine: new GoToFirstLineMotion(),
 	GoToLastLine: new GoToLastLineMotion(),
 
-	ScrollLeft: new CursorMoveCommand('left'),
-	ScrollRight: new CursorMoveCommand('right'),
-	ScrollLeftByHalfLine: new CursorMoveCommand('left', 'halfLine'),
-	ScrollRightByHalfLine: new CursorMoveCommand('right', 'halfLine'),
+	CursorScrollLeft: new CursorMoveCommand('left'),
+	CursorScrollRight: new CursorMoveCommand('right'),
+	CursorScrollLeftByHalfLine: new CursorMoveCommand('left', 'halfLine'),
+	CursorScrollRightByHalfLine: new CursorMoveCommand('right', 'halfLine'),
 
 	WrappedLineUp: new CursorMoveCommand('up', 'wrappedLine'),
 	WrappedLineDown: new CursorMoveCommand('down', 'wrappedLine'),
@@ -341,5 +360,12 @@ export const Motions = {
 	MoveActiveEditorRight: new MoveActiveEditorCommand('right'),
 	MoveActiveEditorFirst: new MoveActiveEditorCommand('first'),
 	MoveActiveEditorLast: new MoveActiveEditorCommand('last'),
-	MoveActiveEditorCenter: new MoveActiveEditorCommand('center')
+	MoveActiveEditorCenter: new MoveActiveEditorCommand('center'),
+
+	ScrollDownByLine: new EditorScrollCommand('down', 'line'),
+	ScrollDownByHalfPage: new EditorScrollCommand('down', 'halfPage'),
+	ScrollDownByPage: new EditorScrollCommand('down', 'page'),
+	ScrollUpByLine: new EditorScrollCommand('up', 'line'),
+	ScrollUpByHalfPage: new EditorScrollCommand('up', 'halfPage'),
+	ScrollUpByPage: new EditorScrollCommand('up', 'page')
 };

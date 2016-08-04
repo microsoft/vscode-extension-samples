@@ -7,18 +7,61 @@
 import {TextEditor} from 'vscode';
 import {Motion, Motions} from './motions';
 import {Operator, Operators} from './operators';
-import {IController, Command, AbstractCommandDescriptor} from './common';
+import {IController, Command, AbstractCommandDescriptor, ModifierKeys} from './common';
 
-
-const CHAR_TO_MOTION: { [char: string]: Motion; } = {};
-function defineMotion(char: string, motion: Motion): void {
-	CHAR_TO_MOTION[char] = motion;
+const CHAR_TO_BINDING: { [char: string]: any; } = {};
+function defineBinding(char: string, value: any, modifierKeys: ModifierKeys): void {
+	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
+	CHAR_TO_BINDING[key] = value;
+};
+function getBinding(char: string, modifierKeys: ModifierKeys): any {
+	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
+	return CHAR_TO_BINDING[key];
 };
 
-const CHAR_TO_MOTION_COMMAND: { [char: string]: AbstractCommandDescriptor; } = {};
-function defineMotionCommand(char: string, motionCommand: AbstractCommandDescriptor): void {
-	CHAR_TO_MOTION_COMMAND[char] = motionCommand;
+function defineOperator(char: string, operator: Operator, modifierKeys: ModifierKeys = {}): void {
+	defineBinding(char + '__operator__', operator, modifierKeys);
 };
+function getOperator(char: string, modifierKeys: ModifierKeys = {}): Operator {
+	return getBinding(char + '__operator__', modifierKeys);
+};
+
+function defineCommand(char: string, commandId: string, modifierKeys: ModifierKeys = {}): void {
+	defineBinding(char + '__command__', {commandId : commandId}, modifierKeys);
+};
+function getCommand(char: string, modifierKeys: ModifierKeys = {}): Command {
+	return getBinding(char + '__command__', modifierKeys);
+};
+
+function defineMotion(char: string, motion: Motion, modifierKeys: ModifierKeys = {}): void {
+	defineBinding(char + '__motion__', motion, modifierKeys);
+};
+function getMotion(char: string, modifierKeys: ModifierKeys = {}): Motion {
+	return getBinding(char + '__motion__', modifierKeys);
+};
+
+function defineMotionCommand(char: string, motionCommand: AbstractCommandDescriptor, modifierKeys: ModifierKeys = {}): void {
+	defineBinding(char + '__motioncommand__', motionCommand, modifierKeys);
+};
+function getMotionCommand(char: string, modifierKeys: ModifierKeys = {}): AbstractCommandDescriptor {
+	return getBinding(char + '__motioncommand__', modifierKeys);
+};
+
+// Operators
+defineOperator('x', Operators.DeleteCharUnderCursor);
+defineOperator('i', Operators.Insert);
+defineOperator('a', Operators.Append);
+defineOperator('A', Operators.AppendEndOfLine);
+defineOperator('d', Operators.DeleteTo);
+defineOperator('p', Operators.Put);
+defineOperator('r', Operators.Replace);
+defineOperator('R', Operators.ReplaceMode);
+defineOperator('c', Operators.Change);
+defineOperator('v', Operators.Visual);
+
+// Commands
+defineCommand('u', 'undo');
+defineCommand('U', 'undo');
 
 // Left-right motions
 defineMotionCommand('h', Motions.Left);
@@ -31,11 +74,11 @@ defineMotionCommand('gm', Motions.WrappedLineColumnCenter);
 defineMotionCommand('g$', Motions.WrappedLineEnd);
 defineMotionCommand('g_', Motions.WrappedLineLastNonWhiteSpaceCharacter);
 
-// Scroll motions
-defineMotionCommand('zh', Motions.ScrollLeft);
-defineMotionCommand('zl', Motions.ScrollRight);
-defineMotionCommand('zH', Motions.ScrollLeftByHalfLine);
-defineMotionCommand('zL', Motions.ScrollRightByHalfLine);
+// Cursor scroll motions
+defineMotionCommand('zh', Motions.CursorScrollLeft);
+defineMotionCommand('zl', Motions.CursorScrollRight);
+defineMotionCommand('zH', Motions.CursorScrollLeftByHalfLine);
+defineMotionCommand('zL', Motions.CursorScrollRightByHalfLine);
 
 // Up-down motions
 defineMotionCommand('j', Motions.Down);
@@ -61,27 +104,13 @@ defineMotionCommand('tabm<<', Motions.MoveActiveEditorFirst);
 defineMotionCommand('tabm>>', Motions.MoveActiveEditorLast);
 defineMotionCommand('tabm.', Motions.MoveActiveEditorCenter);
 
-const CHAR_TO_OPERATOR: { [char: string]: Operator; } = {};
-function defineOperator(char: string, operator: Operator): void {
-	CHAR_TO_OPERATOR[char] = operator;
-};
-defineOperator('x', Operators.DeleteCharUnderCursor);
-defineOperator('i', Operators.Insert);
-defineOperator('a', Operators.Append);
-defineOperator('A', Operators.AppendEndOfLine);
-defineOperator('d', Operators.DeleteTo);
-defineOperator('p', Operators.Put);
-defineOperator('r', Operators.Replace);
-defineOperator('R', Operators.ReplaceMode);
-defineOperator('c', Operators.Change);
-defineOperator('v', Operators.Visual);
-
-const CHAR_TO_COMMAND: { [char: string]: Command; } = {};
-function defineCommand(char: string, commandId: string, args?: any): void {
-	CHAR_TO_COMMAND[char] = {commandId : commandId, args: args};
-};
-defineCommand('u', 'undo');
-defineCommand('U', 'undo');
+// Scroll motions
+defineMotionCommand('e', Motions.ScrollDownByLine, {ctrl: true});
+defineMotionCommand('d', Motions.ScrollDownByHalfPage, {ctrl: true});
+defineMotionCommand('f', Motions.ScrollDownByPage, {ctrl: true});
+defineMotionCommand('y', Motions.ScrollUpByLine, {ctrl: true});
+defineMotionCommand('u', Motions.ScrollUpByHalfPage, {ctrl: true});
+defineMotionCommand('b', Motions.ScrollUpByPage, {ctrl: true});
 
 export interface IFoundOperator {
 	runNormal(controller: IController, editor:TextEditor): boolean;
@@ -92,9 +121,9 @@ export class Mappings {
 
 	public static findMotion(input: string): Motion {
 		let parsed = _parseNumberAndString(input);
-		let motion = CHAR_TO_MOTION[parsed.input.substr(0, 1)];
+		let motion = getMotion(parsed.input.substr(0, 1));
 		if (!motion) {
-			motion = CHAR_TO_MOTION[parsed.input.substr(0, 2)];
+			motion = getMotion(parsed.input.substr(0, 2));
 			if (!motion) {
 				return null;
 			}
@@ -102,36 +131,36 @@ export class Mappings {
 		return motion.repeat(parsed.hasRepeatCount, parsed.repeatCount);
 	}
 
-	public static findMotionCommand(input: string, isVisual: boolean = false): Command {
+	public static findMotionCommand(input: string, isVisual: boolean, modifierKeys: ModifierKeys): Command {
 		let parsed = _parseNumberAndString(input);
-		let command = Mappings.findMotionCommandFromNumberAndString(parsed, isVisual);
+		let command = Mappings.findMotionCommandFromNumberAndString(parsed, isVisual, modifierKeys);
 		if (!command) {
 			parsed = _parseNumberAndString(input, false);
-			command= Mappings.findMotionCommandFromNumberAndString(parsed, isVisual);
+			command= Mappings.findMotionCommandFromNumberAndString(parsed, isVisual, modifierKeys);
 		}
 		return command;
 	}
 
-	private static findMotionCommandFromNumberAndString(numberAndString: INumberAndString, isVisual: boolean): Command {
-		let motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(0, 1)];
+	private static findMotionCommandFromNumberAndString(numberAndString: INumberAndString, isVisual: boolean, modifierKeys: ModifierKeys): Command {
+		let motionCommand = getMotionCommand(numberAndString.input.substr(0, 1), modifierKeys);
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(0, 2)];
+			motionCommand = getMotionCommand(numberAndString.input.substr(0, 2), modifierKeys);
 		}
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(1, 2)];
+			motionCommand = getMotionCommand(numberAndString.input.substr(1, 2), modifierKeys);
 		}
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input.substr(1, 3)];
+			motionCommand = getMotionCommand(numberAndString.input.substr(1, 3), modifierKeys);
 		}
 		if (!motionCommand) {
-			motionCommand = CHAR_TO_MOTION_COMMAND[numberAndString.input];
+			motionCommand = getMotionCommand(numberAndString.input, modifierKeys);
 		}
 		return motionCommand ? motionCommand.createCommand({ isVisual: isVisual, repeat: numberAndString.hasRepeatCount ? numberAndString.repeatCount : undefined}) : null;
 	}
 
-	public static findOperator(input: string): IFoundOperator {
+	public static findOperator(input: string, modifierKeys: ModifierKeys): IFoundOperator {
 		let parsed = _parseNumberAndString(input);
-		let operator = CHAR_TO_OPERATOR[parsed.input.substr(0, 1)];
+		let operator = getOperator(parsed.input.substr(0, 1), modifierKeys);
 		if (!operator) {
 			return null;
 		}
@@ -146,8 +175,8 @@ export class Mappings {
 		};
 	}
 
-	public static findCommand(input: string): Command {
-		return CHAR_TO_COMMAND[input] || null;
+	public static findCommand(input: string, modifierKeys: ModifierKeys): Command {
+		return getCommand(input, modifierKeys) || null;
 	}
 
 	public static isMotionPrefix(input: string): boolean {
