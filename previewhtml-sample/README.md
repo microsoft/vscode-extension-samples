@@ -9,7 +9,7 @@ The purpose of the extension is to show a preview of the properties in the decla
 - Use `Show CSS Properties Preview`
 - Position the cursor inside the declaration block of the rule
 - The properties are rendered in the preview
-- Edit the propertis and the preview is updated
+- Edit the properties and the preview is updated
 
 ![Navigation](images/preview.gif)
 
