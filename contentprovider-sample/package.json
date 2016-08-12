@@ -2,7 +2,7 @@
   "name": "references-plusplus",
   "displayName": "References++",
   "description": "Show the results of 'Find References' as formatted text in an editor",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "publisher": "jrieken",
   "repository": {
     "type": "git",
