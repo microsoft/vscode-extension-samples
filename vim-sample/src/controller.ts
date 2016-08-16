@@ -4,14 +4,14 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import * as vscode from 'vscode';
 import {
 	TextEditorCursorStyle,
 	Position,
 	Range,
 	Selection,
 	TextEditor,
-	TextEditorRevealType
+	TextEditorRevealType,
+	window
 } from 'vscode';
 
 import {Words} from './words';
@@ -139,6 +139,29 @@ export class Controller implements IController {
 		return `VIM:> ${label}` + (this._currentInput ? ` >${this._currentInput}` : ``);
 	}
 
+	private _isInComposition = false;
+	private _composingText = '';
+
+	public compositionStart(editor: TextEditor): void {
+		this._isInComposition = true;
+		this._composingText = '';
+	}
+
+	public compositionEnd(editor: TextEditor): Thenable<ITypeResult> {
+		this._isInComposition = false;
+		let text = this._composingText;
+		this._composingText = '';
+
+		if (text.length === 0) {
+			return Promise.resolve({
+				hasConsumedInput: true,
+				executeEditorCommand: null
+			});
+		}
+
+		return this.type(editor, text, {});
+	}
+
 	public type(editor: TextEditor, text: string, modifierKeys: ModifierKeys): Thenable<ITypeResult> {
 		if (this._currentMode !== Mode.NORMAL && this._currentMode !== Mode.REPLACE) {
 			return Promise.resolve({
@@ -146,6 +169,15 @@ export class Controller implements IController {
 				executeEditorCommand: null
 			});
 		}
+
+		if (this._isInComposition) {
+			this._composingText += text;
+			return Promise.resolve({
+				hasConsumedInput: true,
+				executeEditorCommand: null
+			});
+		}
+
 		if (this._currentMode === Mode.REPLACE) {
 			let pos = editor.selection.active;
 			editor.edit((builder) => {
@@ -167,6 +199,12 @@ export class Controller implements IController {
 		if (this._currentMode !== Mode.NORMAL && this._currentMode !== Mode.REPLACE) {
 			return false;
 		}
+
+		if (this._isInComposition) {
+			this._composingText = this._composingText.substr(0, this._composingText.length - replaceCharCnt) + text;
+			return true;
+		}
+
 		if (this._currentMode === Mode.REPLACE) {
 			let pos = editor.selection.active;
 			editor.edit((builder) => {
@@ -175,13 +213,13 @@ export class Controller implements IController {
 
 			return true;
 		}
-		// Not supporting IME building in NORMAL mode
+
 		return true;
 	}
 
 	private _interpretNormalModeInput(editor: TextEditor, modifierKeys: ModifierKeys): Thenable<ITypeResult> {
 		if (this._currentInput.startsWith(':')) {
-			return vscode.window.showInputBox({value: 'tabm'}).then((value) => {
+			return window.showInputBox({value: 'tabm'}).then((value) => {
 				let result = this._findMapping(value || '', editor, modifierKeys);
 				return Promise.resolve(result);
 			});

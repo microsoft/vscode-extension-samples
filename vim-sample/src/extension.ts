@@ -40,11 +40,22 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		vimExt.replacePrevChar(args.text, args.replaceCharCnt);
 	});
+	registerCommandNice('compositionStart', function (args) {
+		if (!vscode.window.activeTextEditor) {
+			return;
+		}
+		vimExt.compositionStart();
+	});
+	registerCommandNice('compositionEnd', function (args) {
+		if (!vscode.window.activeTextEditor) {
+			return;
+		}
+		vimExt.compositionEnd();
+	});
 	registerCommandNice('vim.goToNormalMode', function (args) {
 		vimExt.goToNormalMode();
 	});
 	registerCommandNice('vim.clearInput', function (args) {
-		console.log(args);
 		vimExt.clearInput();
 	});
 	// registerCommandNice('paste', function(args) {
@@ -143,22 +154,20 @@ class VimExt {
 	}
 
 	public type(text: string, modifierKeys: ModifierKeys = {ctrl: false, shifit: false, alt: false}): void {
-		let r = this._controller.type(vscode.window.activeTextEditor, text, modifierKeys).then(
-			(r) => {
-				if (r.hasConsumedInput) {
-					this._ensureState();
-					if (r.executeEditorCommand) {
-						let args = [r.executeEditorCommand.commandId];
-						args = args.concat(r.executeEditorCommand.args);
-						vscode.commands.executeCommand.apply(this, args);
-					}
-					return;
+		this._controller.type(vscode.window.activeTextEditor, text, modifierKeys).then((r) => {
+			if (r.hasConsumedInput) {
+				this._ensureState();
+				if (r.executeEditorCommand) {
+					let args = [r.executeEditorCommand.commandId];
+					args = args.concat(r.executeEditorCommand.args);
+					vscode.commands.executeCommand.apply(this, args);
 				}
-				vscode.commands.executeCommand('default:type', {
-					text: text
-				});
+				return;
 			}
-		);
+			vscode.commands.executeCommand('default:type', {
+				text: text
+			});
+		});
 	}
 
 	public replacePrevChar(text: string, replaceCharCnt: number): void {
@@ -169,6 +178,23 @@ class VimExt {
 		vscode.commands.executeCommand('default:replacePreviousChar', {
 			text: text,
 			replaceCharCnt: replaceCharCnt
+		});
+	}
+
+	public compositionStart(): void {
+		this._controller.compositionStart(vscode.window.activeTextEditor);
+	}
+
+	public compositionEnd(): void {
+		this._controller.compositionEnd(vscode.window.activeTextEditor).then((r) => {
+			if (r.hasConsumedInput) {
+				this._ensureState();
+				if (r.executeEditorCommand) {
+					let args = [r.executeEditorCommand.commandId];
+					args = args.concat(r.executeEditorCommand.args);
+					vscode.commands.executeCommand.apply(this, args);
+				}
+			}
 		});
 	}
 
