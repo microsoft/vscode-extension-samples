@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import {Position, TextDocument} from 'vscode';
+import {Position, TextDocument, window} from 'vscode';
 import {Words, WordCharacters} from './words';
 import {Command, AbstractCommandDescriptor} from './common';
 
@@ -275,10 +275,30 @@ class EditorScrollCommand extends AbstractCommandDescriptor {
 			to: this.to,
 			by: this.by,
 			value: args.repeat || 1,
+			revealCursor: true
 		}
 		return {
 			commandId: 'editorScroll',
 			args: editorScrollArgs
+		};
+	}
+}
+
+class RevealCurrentLineCommand extends AbstractCommandDescriptor {
+
+	constructor(private at: string) {
+		super();
+	}
+
+	public createCommand(args?: any): Command {
+		const lineNumber = window.activeTextEditor.selection.start.line;
+		const revealLineArgs: any = {
+			lineNumber,
+			at: this.at
+		};
+		return {
+			commandId: 'revealLine',
+			args: revealLineArgs
 		};
 	}
 }
@@ -367,5 +387,9 @@ export const Motions = {
 	ScrollDownByPage: new EditorScrollCommand('down', 'page'),
 	ScrollUpByLine: new EditorScrollCommand('up', 'line'),
 	ScrollUpByHalfPage: new EditorScrollCommand('up', 'halfPage'),
-	ScrollUpByPage: new EditorScrollCommand('up', 'page')
+	ScrollUpByPage: new EditorScrollCommand('up', 'page'),
+
+	RevealCurrentLineAtTop: new RevealCurrentLineCommand('top'),
+	RevealCurrentLineAtCenter: new RevealCurrentLineCommand('center'),
+	RevealCurrentLineAtBottom: new RevealCurrentLineCommand('bottom')
 };

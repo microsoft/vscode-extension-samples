@@ -110,7 +110,11 @@ defineMotionCommand('d', Motions.ScrollDownByHalfPage, {ctrl: true});
 defineMotionCommand('f', Motions.ScrollDownByPage, {ctrl: true});
 defineMotionCommand('y', Motions.ScrollUpByLine, {ctrl: true});
 defineMotionCommand('u', Motions.ScrollUpByHalfPage, {ctrl: true});
-defineMotionCommand('b', Motions.ScrollUpByPage, {ctrl: true});
+defineMotionCommand('b', Motions.ScrollUpByPage, { ctrl: true });
+
+defineMotionCommand('zt', Motions.RevealCurrentLineAtTop);
+defineMotionCommand('zz', Motions.RevealCurrentLineAtCenter);
+defineMotionCommand('zb', Motions.RevealCurrentLineAtBottom);
 
 export interface IFoundOperator {
 	runNormal(controller: IController, editor:TextEditor): boolean;
