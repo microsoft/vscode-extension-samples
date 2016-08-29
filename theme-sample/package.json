@@ -1,0 +1,15 @@
+{
+	"name": "theme-sample",
+	"version": "0.1.0",
+	"publisher": "vscode",
+	"engines": { "vscode": "*" },
+	"contributes": {
+		"themes": [
+			{
+				"label": "Sample",
+				"uiTheme": "vs-dark",
+				"path": "./Sample.tmTheme"
+			}
+		]
+	}
+}
