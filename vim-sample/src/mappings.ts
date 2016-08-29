@@ -116,6 +116,11 @@ defineMotionCommand('zt', Motions.RevealCurrentLineAtTop);
 defineMotionCommand('zz', Motions.RevealCurrentLineAtCenter);
 defineMotionCommand('zb', Motions.RevealCurrentLineAtBottom);
 
+// Folding
+defineMotionCommand('zc', Motions.FoldUnder);
+defineMotionCommand('zo', Motions.UnfoldUnder);
+
+
 export interface IFoundOperator {
 	runNormal(controller: IController, editor:TextEditor): boolean;
 	runVisual(controller: IController, editor:TextEditor): boolean;

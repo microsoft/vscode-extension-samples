@@ -338,6 +338,41 @@ class MoveActiveEditorCommand extends AbstractCommandDescriptor {
 		};
 	}
 }
+class FoldCommand extends AbstractCommandDescriptor {
+
+	constructor() {
+		super();
+	}
+
+	public createCommand(args?: any): Command {
+		let foldEditorArgs: any = {
+			levels: args.repeat ? args.repeat : 1,
+			direction: 'up'
+		}
+		return {
+			commandId: 'editor.fold',
+			args: foldEditorArgs
+		};
+	}
+}
+
+class UnfoldCommand extends AbstractCommandDescriptor {
+
+	constructor() {
+		super();
+	}
+
+	public createCommand(args?: any): Command {
+		let foldEditorArgs: any = {
+			levels: args.repeat ? args.repeat : 1,
+			direction: 'up'
+		}
+		return {
+			commandId: 'editor.unfold',
+			args: foldEditorArgs
+		};
+	}
+}
 
 export const Motions = {
 	RightMotion: new RightMotion(),
@@ -391,5 +426,8 @@ export const Motions = {
 
 	RevealCurrentLineAtTop: new RevealCurrentLineCommand('top'),
 	RevealCurrentLineAtCenter: new RevealCurrentLineCommand('center'),
-	RevealCurrentLineAtBottom: new RevealCurrentLineCommand('bottom')
+	RevealCurrentLineAtBottom: new RevealCurrentLineCommand('bottom'),
+
+	FoldUnder: new FoldCommand(),
+	UnfoldUnder: new UnfoldCommand()
 };
