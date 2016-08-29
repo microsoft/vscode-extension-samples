@@ -21,6 +21,18 @@
 				<string>#082050</string>
 				<key>selection</key>
 				<string>#770811</string>
+				<key>rangeHighlight</key>
+				<string>#f3f0f5</string>
+				<key>selectionHighlight</key>
+				<string>#add6ff</string>
+				<key>findMatch</key>
+				<string>#ea5c00</string>
+				<key>currentFindMatch</key>
+				<string>#515C6A</string>
+				<key>wordHighlight</key>
+				<string>#575757</string>
+				<key>wordHighlightStrong</key>
+				<string>#004972</string>
 			</dict>
 		</dict>
 		<dict>

@@ -6,9 +6,14 @@
 	"contributes": {
 		"themes": [
 			{
-				"label": "Sample",
+				"label": "Sample Light",
+				"uiTheme": "vs",
+				"path": "./Sample_Light.tmTheme"
+			},
+			{
+				"label": "Sample Dark",
 				"uiTheme": "vs-dark",
-				"path": "./Sample.tmTheme"
+				"path": "./Sample_Dark.tmTheme"
 			}
 		]
 	}
