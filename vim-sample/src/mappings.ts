@@ -106,8 +106,8 @@ defineMotionCommand('tabm.', Motions.MoveActiveEditorCenter);
 
 // Scroll motions
 defineMotionCommand('e', Motions.ScrollDownByLine, {ctrl: true});
-defineMotionCommand('d', Motions.ScrollDownByHalfPage, {ctrl: true});
-defineMotionCommand('f', Motions.ScrollDownByPage, {ctrl: true});
+defineMotionCommand('f', Motions.ScrollDownByHalfPage, {ctrl: true});
+// defineMotionCommand('f', Motions.ScrollDownByPage, {ctrl: true});
 defineMotionCommand('y', Motions.ScrollUpByLine, {ctrl: true});
 defineMotionCommand('u', Motions.ScrollUpByHalfPage, {ctrl: true});
 defineMotionCommand('b', Motions.ScrollUpByPage, { ctrl: true });
