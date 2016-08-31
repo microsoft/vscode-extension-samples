@@ -22,6 +22,12 @@
 				<key>guide</key>
 				<string>#002040</string>
 
+				<key>hoverHighlight</key>
+				<string>#264F78</string>
+
+				<key>referenceHighlight</key>
+				<string>#FF8F00</string>
+
 				<key>lineHighlight</key>
 				<string>#FF0000</string>
 				<key>rangeHighlight</key>
@@ -45,6 +51,11 @@
 				<string>#575757</string>
 				<key>wordHighlightStrong</key>
 				<string>#004972</string>
+
+				<key>activeLinkForeground</key>
+				<string>#4E94CE</string>
+				<key>gotoDefinitionLinkForeground</key>
+				<string>#4E94CE</string>
 			</dict>
 		</dict>
 		<dict>

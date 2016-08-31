@@ -31,6 +31,12 @@
 				<key>rangeHighlight</key>
 				<string>#FDFF00</string>
 
+				<key>hoverHighlight</key>
+				<string>#ADD6FF</string>
+
+				<key>referenceHighlight</key>
+				<string>#F5D802</string>
+
 				<key>selection</key>
 				<string>#C9D0D9</string>
 				<key>inactiveSelection</key>
@@ -49,6 +55,11 @@
 				<string>#575757</string>
 				<key>wordHighlightStrong</key>
 				<string>#0E639C</string>
+
+				<key>activeLinkForeground</key>
+				<string>#0000FF</string>
+				<key>gotoDefinitionLinkForeground</key>
+				<string>#0000FF</string>
 			</dict>
 		</dict>
 		<dict>
