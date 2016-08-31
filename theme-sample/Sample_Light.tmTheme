@@ -15,28 +15,40 @@
 			<dict>
 				<key>background</key>
 				<string>#F5F5F5</string>
-				<key>caret</key>
-				<string>#000000</string>
 				<key>foreground</key>
 				<string>#333333</string>
+
+				<key>caret</key>
+				<string>#000000</string>
+
 				<key>invisibles</key>
 				<string>#AAAAAA</string>
+				<key>guide</key>
+				<string>#AAAAAA</string>
+
 				<key>lineHighlight</key>
 				<string>#E4F6D4</string>
+				<key>rangeHighlight</key>
+				<string>#FDFF00</string>
+
 				<key>selection</key>
 				<string>#C9D0D9</string>
-				<key>rangeHighlight</key>
-				<string>#fdff00</string>
+				<key>inactiveSelection</key>
+				<string>#E1E5EA</string>
 				<key>selectionHighlight</key>
-				<string>#add6ff</string>
-				<key>findMatch</key>
-				<string>#ea5c00</string>
-				<key>currentFindMatch</key>
+				<string>#ADD6FF</string>
+
+				<key>findRangeHighlight</key>
+				<string>#B4B4B4</string>
+				<key>findMatchHighlight</key>
+				<string>#EA5C00</string>
+				<key>currentFindMatchHighlight</key>
 				<string>#A8AC94</string>
+
 				<key>wordHighlight</key>
 				<string>#575757</string>
 				<key>wordHighlightStrong</key>
-				<string>#0e639c</string>
+				<string>#0E639C</string>
 			</dict>
 		</dict>
 		<dict>
