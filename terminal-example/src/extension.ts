@@ -3,10 +3,10 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-    let terminalStack = [];
+    let terminalStack: vscode.Terminal[] = [];
 
     context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createTerminal', () => {
-        terminalStack.push((<any>vscode.window).createTerminal(`Ext Terminal #${terminalStack.length + 1}`));
+        terminalStack.push(vscode.window.createTerminal(`Ext Terminal #${terminalStack.length + 1}`));
     }));
     context.subscriptions.push(vscode.commands.registerCommand('terminalTest.hide', () => {
         if (terminalStack.length === 0) {
@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
         terminalStack.pop();
     }));
     context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createAndSend', () => {
-        terminalStack.push((<any>vscode.window).createTerminal(`Ext Terminal #${terminalStack.length + 1}`));
+        terminalStack.push(vscode.window.createTerminal(`Ext Terminal #${terminalStack.length + 1}`));
         getLatestTerminal().sendText("echo 'Sent text immediately after creating'");
     }));
 
