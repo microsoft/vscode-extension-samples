@@ -6,6 +6,7 @@ Sample code illustrating the VS Code extension APIs.
 * [Virtual Documents](/contentprovider-sample/README.md)
 * [Preview Html](/previewhtml-sample/README.md)
 * [Vim](/vim-sample/README.md)
+* [Integrated Terminal](/terminal-example/README.md)
 
 # How to run locally
 
