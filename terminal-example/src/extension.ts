@@ -49,6 +49,9 @@ export function activate(context: vscode.ExtensionContext) {
         terminalStack.push(vscode.window.createTerminal(`Ext Terminal #${terminalStack.length + 1}`));
         getLatestTerminal().sendText("echo 'Sent text immediately after creating'");
     }));
+    context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createZshLoginShell', () => {
+        terminalStack.push((<any>vscode.window).createTerminal(`Ext Terminal #${terminalStack.length + 1}`, '/bin/zsh', ['-l']));
+    }));
 
     function getLatestTerminal() {
         return terminalStack[terminalStack.length - 1];

@@ -5,14 +5,15 @@
     "version": "0.0.1",
     "publisher": "Tyriar",
     "engines": {
-        "vscode": "^1.0.0"
+        "vscode": "^1.5.0"
     },
     "categories": [
         "Other"
     ],
     "activationEvents": [
         "onCommand:terminalTest.createTerminal",
-        "onCommand:terminalTest.createAndSend"
+        "onCommand:terminalTest.createAndSend",
+        "onCommand:terminalTest.createZshLoginShell"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -40,6 +41,9 @@
         }, {
             "command": "terminalTest.createAndSend",
             "title": "Terminal API: Create Terminal and Immediately Send"
+        }, {
+            "command": "terminalTest.createZshLoginShell",
+            "title": "Terminal API: Create Terminal (zsh login shell) [v1.6+]"
         }]
     },
     "scripts": {
