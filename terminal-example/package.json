@@ -44,6 +44,9 @@
         }, {
             "command": "terminalTest.createZshLoginShell",
             "title": "Terminal API: Create Terminal (zsh login shell) [v1.6+]"
+        }, {
+            "command": "terminalTest.processId",
+            "title": "Terminal API: Write process ID to console [v1.6+]"
         }]
     },
     "scripts": {
