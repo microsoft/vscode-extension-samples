@@ -1,8 +1,8 @@
 {
-    "name": "test-extension-pack-1",
-    "displayName": "test-extension-pack-1",
-    "description": "Test extension pack",
-    "version": "1.1.0",
+    "name": "test-extension-pack-3",
+    "displayName": "test-extension-pack-3",
+    "description": "Test extension pack 3",
+    "version": "0.1.0",
     "publisher": "sandy081",
     "engines": {
         "vscode": "^1.0.0"
@@ -25,11 +25,9 @@
         "url": "https://github.com/Microsoft/vscode-extension-samples"
     },
     "extensionDependencies": [
-        "lukehoban.Go",
-        "msjsdiag.debugger-for-chrome",
-        "vsmobile.vscode-react-native",
-        "be5invis.vscode-icontheme-nomo-dark",
-        "eg2.tslint",
-        "sandy081.test-extension-pack-3"
+        "sandy081.test-extension-pack-2",
+        "dbaeumer.vscode-eslint",
+        "sandy081.todotasks",
+        "be5invis.vscode-icontheme-nomo-dark"
     ]
 }
