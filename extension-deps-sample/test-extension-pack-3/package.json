@@ -2,7 +2,7 @@
     "name": "test-extension-pack-3",
     "displayName": "test-extension-pack-3",
     "description": "Test extension pack 3",
-    "version": "0.1.0",
+    "version": "0.6.0",
     "publisher": "sandy081",
     "engines": {
         "vscode": "^1.0.0"
@@ -25,9 +25,11 @@
         "url": "https://github.com/Microsoft/vscode-extension-samples"
     },
     "extensionDependencies": [
-        "sandy081.test-extension-pack-2",
-        "dbaeumer.vscode-eslint",
-        "sandy081.todotasks",
-        "be5invis.vscode-icontheme-nomo-dark"
+        "sandy081.test-extension-pack-1",
+        "eg2.tslint",
+        "be5invis.vscode-icontheme-nomo-dark",
+        "jirkafajfr.vscode-kitchen",
+        "iZDT.javascript-unit-test-snippet",
+        "MarinhoBrandao.Angular2Tests"
     ]
 }

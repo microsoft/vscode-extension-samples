@@ -2,7 +2,7 @@
     "name": "test-extension-pack-2",
     "displayName": "test-extension-pack-2",
     "description": "Test extension pack 2",
-    "version": "0.1.0",
+    "version": "0.3.0",
     "publisher": "sandy081",
     "engines": {
         "vscode": "^1.0.0"
@@ -27,6 +27,7 @@
     "extensionDependencies": [
         "sandy081.test-extension-pack-1",
         "dbaeumer.vscode-eslint",
-        "sandy081.todotasks"
+        "sandy081.todotasks",
+        "designbright.theme-suicidesquad"
     ]
 }
