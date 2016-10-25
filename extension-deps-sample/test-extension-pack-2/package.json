@@ -1,8 +1,8 @@
 {
-    "name": "test-extension-pack-2",
-    "displayName": "test-extension-pack-2",
+    "name": "999-pack2",
+    "displayName": "999-pack2",
     "description": "Test extension pack 2",
-    "version": "0.3.0",
+    "version": "0.9.0",
     "publisher": "sandy081",
     "engines": {
         "vscode": "^1.0.0"
@@ -25,9 +25,9 @@
         "url": "https://github.com/Microsoft/vscode-extension-samples"
     },
     "extensionDependencies": [
-        "sandy081.test-extension-pack-1",
+        "sandy081.999-pack3",
+        "lukehoban.Go",
         "dbaeumer.vscode-eslint",
-        "sandy081.todotasks",
-        "designbright.theme-suicidesquad"
+        "eg2.tslint"
     ]
 }
