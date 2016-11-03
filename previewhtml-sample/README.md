@@ -22,5 +22,6 @@ The purpose of the extension is to show a preview of the properties in the decla
 
 # How to run locally
 
+* `npm install`
 * `npm run compile` to start the compiler in watch mode
 * open this folder in VS Code and press `F5`
