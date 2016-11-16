@@ -10,7 +10,7 @@ The Tree Explorer API allows you to create customized Tree Explorers, similar to
 
 From a high level, extension defines an `explorer` contribution, where it specifies a View label, an icon and a provider id. During the activation, extension calls `vscode.window.registerTreeExplorerNodeProvider` with the specified provider id. VS Code then asks the registered provider to provide necessary information for rendering the Tree Explorer View.
 
-The remaining document assumes that you are familiar with normal [extension development](/docs/extensions/overview.md) for VS Code.
+The remaining document assumes that you are familiar with normal [extension development](https://code.visualstudio.com/docs/extensions/overview) for VS Code.
 
 ## Example - Dependency Tree Explorer
 
@@ -21,11 +21,11 @@ We'll show you an example of a Dependency Tree Explorer:
 To get it running, do the following:
 
 - Clone this repository
-- Go to `tree-explorer-sample`
+- `cd tree-explorer-sample`
 - Install dependencies with `npm install`
-- Run `Launch Extension` in the Debug View.
+- Run `Launch Extension` in the Debug View
 
-By default the Explorer wouldn't be displayed on Activity Bar. Find "View: Toggle Custom Explorer" in Command Palette and choose your Explorer to enable it.
+By default the Explorer wouldn't be displayed on Activity Bar. Find `View: Toggle Custom Explorer` in Command Palette and choose your Explorer to enable it.
 
 ### The Structure of Tree Explorer extension
 
@@ -44,7 +44,11 @@ First, let's take a look at `package.json`. There are a few interesting bits:
 }
 ```
 
-As this API is still in preview, `enableProposedApi` tells VS Code we acknowledge its experimental nature and would like to play with it. `contributes.explorer` specifies a label that will appear at the top of the View, the path to a svg icon that will appear at the Activity Bar, and a provider id which we'll use in `vscode.window.registerTreeExplorerNodeProvider`.
+- `enableProposedApi` tells VS Code we acknowledge its experimental nature and would like to play with it.
+- `contributes.explorer` specifies
+    - A label that will appear at the top of the View
+    - The path to a svg icon that will appear at the Activity Bar
+    - A provider id which we'll use in `vscode.window.registerTreeExplorerNodeProvider`
 
 `typings/vscode.proposed.d.ts` defines the preview API, and is pulled from VS Code's GitHub repository: https://github.com/Microsoft/vscode/blob/master/src/vs/vscode.proposed.d.ts
 
@@ -115,25 +119,30 @@ resolveChildren(node: DepNode): Thenable<DepNode[]> {
 
 `provideRootNode` simply provides a `Root` node. `resolveChildren` behaves differently accordingly to the type of the node to resolves children for:
 
-- `Root`: read `package.json` in workspace root, and return its `dependencies` and `devDependencies`.
+- `Root`: read `package.json` in `${workspaceRoot}`, and return its `dependencies` and `devDependencies`.
 - `Node`: read `package.json` in `${workspaceRoot}/node_modules/${node.moduleName}`, and return its `dependencies` and `devDependencies`.
 - `Leaf`: `Leaf` isn't expandable and this case shouldn't happen. We return an empty array.
 
 We also implement `getLabel`, `getHasChildren`, `getClickCommand` to:
 
 - Let each `Node` and `Leaf` display its `moduleName` as the label on the tree.
+
   ```ts
     getLabel(node: DepNode): string {
       return node.kind === 'root' ? '' : node.moduleName;
     }
   ```
+
 - Make `Leaf` unexpandable.
+
   ```ts
   getHasChildren(node: DepNode): boolean {
     return node.kind !== 'leaf';
   }
   ```
+
 - Invoke `extension.openPackageOnNpm` when a `Leaf` is clicked.
+
   ```ts
   getClickCommand(node: DepNode): string {
     return node.kind === 'leaf' ? 'extension.openPackageOnNpm' : null;
