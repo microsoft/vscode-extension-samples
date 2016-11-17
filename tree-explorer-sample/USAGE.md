@@ -100,7 +100,7 @@ resolveChildren(node: DepNode): Thenable<DepNode[]> {
     switch(node.kind) {
       case 'root':
         const packageJsonPath = path.join(this.workspaceRoot, 'package.json');
-        if (this.fileExists(packageJsonPath)) {
+        if (this.pathExists(packageJsonPath)) {
           resolve(this.getDepsInPackageJson(packageJsonPath));
         } else {
           vscode.window.showInformationMessage('Workspace has no package.json');
