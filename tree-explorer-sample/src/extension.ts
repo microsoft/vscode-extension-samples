@@ -55,7 +55,7 @@ class DepNodeProvider implements TreeExplorerNodeProvider<DepNode> {
       switch(node.kind) {
         case 'root':
           const packageJsonPath = path.join(this.workspaceRoot, 'package.json');
-          if (this.fileExists(packageJsonPath)) {
+          if (this.pathExists(packageJsonPath)) {
             resolve(this.getDepsInPackageJson(packageJsonPath));
           } else {
             vscode.window.showInformationMessage('Workspace has no package.json');
@@ -78,28 +78,32 @@ class DepNodeProvider implements TreeExplorerNodeProvider<DepNode> {
    * Given the path to package.json, read all its dependencies and devDependencies.
    */
   private getDepsInPackageJson(packageJsonPath: string): DepNode[] {
-    if (this.fileExists(packageJsonPath)) {
+    if (this.pathExists(packageJsonPath)) {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
     
       const toDep = (moduleName: string): DepNode => {
-        if (this.fileExists(path.join(this.workspaceRoot, 'node_modules', moduleName))) {
+        if (this.pathExists(path.join(this.workspaceRoot, 'node_modules', moduleName))) {
           return new Node(moduleName);
         } else {
           return new Leaf(moduleName);
         }
       }
 
-      const deps = Object.keys(packageJson.dependencies).map(toDep);
-      const devDeps = Object.keys(packageJson.devDependencies).map(toDep);
+      const deps = packageJson.dependencies
+                 ? Object.keys(packageJson.dependencies).map(toDep)
+                 : [];
+      const devDeps = packageJson.devDependencies
+                    ? Object.keys(packageJson.devDependencies).map(toDep)
+                    : [];
       return deps.concat(devDeps);
     } else {
       return [];
     }
   }
 
-  private fileExists(filePath: string): boolean {
+  private pathExists(p: string): boolean {
     try {
-      fs.accessSync(filePath);
+      fs.accessSync(p);
     } catch (err) {
       return false;
     }
