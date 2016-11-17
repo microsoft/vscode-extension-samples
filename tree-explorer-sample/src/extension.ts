@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 class DepNodeProvider implements TreeExplorerNodeProvider<DepNode> {
   constructor(private workspaceRoot: string) {
-    
+
   }
   
   /**
@@ -51,6 +51,11 @@ class DepNodeProvider implements TreeExplorerNodeProvider<DepNode> {
   }
   
   resolveChildren(node: DepNode): Thenable<DepNode[]> {
+    if (!this.workspaceRoot) {
+      vscode.window.showInformationMessage('No dependency in empty workspace');
+      return Promise.resolve([]);
+    }
+
     return new Promise((resolve) => {
       switch(node.kind) {
         case 'root':

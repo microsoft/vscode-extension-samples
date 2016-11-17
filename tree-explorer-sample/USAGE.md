@@ -96,6 +96,11 @@ provideRootNode(): DepNode {
 }
 
 resolveChildren(node: DepNode): Thenable<DepNode[]> {
+  if (!this.workspaceRoot) {
+    vscode.window.showInformationMessage('No dependency in empty workspace');
+    return Promise.resolve([]);
+  }
+
   return new Promise((resolve) => {
     switch(node.kind) {
       case 'root':
@@ -125,7 +130,7 @@ resolveChildren(node: DepNode): Thenable<DepNode[]> {
 
 We also implement `getLabel`, `getHasChildren`, `getClickCommand` to:
 
-- Let each `Node` and `Leaf` display its `moduleName` as the label on the tree.
+- Let each `Node` and `Leaf` display its `moduleName` as the label on the tree node.
 
   ```ts
     getLabel(node: DepNode): string {
@@ -161,7 +166,7 @@ If `resolveChildren` could take very long, you should let it return a promise, a
 
 #### Error handling
 
-We suggest that you handle errors promptly and notify the user using `vscode.window.showInformationMessage` if needed. In our Dependency example, we check for package.json in the root of the workspace. If it doesn't exist, we'll show an information message `Workspace has no package.json`.
+We suggest that you handle errors promptly and notify the user using `vscode.window.showInformationMessage` if needed. In our Dependency example, we check for package.json in the root of the workspace. If it doesn't exist, we'll show an information message `Workspace has no package.json`. In empty workspace, we show a message `No dependency in empty workspace`.
 
 ## Common Questions
 
