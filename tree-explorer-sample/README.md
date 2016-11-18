@@ -12,3 +12,4 @@ Currently, this API is only available in [Insiders](https://code.visualstudio.co
 - `npm install`
 - `npm run compile`
 - `F5` to start debugging
+- **Command Palette -> `View: Toggle Custom Explorer` -> Choose your Explorer**
