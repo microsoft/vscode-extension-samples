@@ -25,7 +25,7 @@ To get it running, do the following:
 - Install dependencies with `npm install`
 - Run `Launch Extension` in the Debug View
 
-By default the Explorer wouldn't be displayed on Activity Bar. Find `View: Toggle Custom Explorer` in Command Palette and choose your Explorer to enable it.
+**By default the Explorer wouldn't be displayed on Activity Bar. Find `View: Toggle Custom Explorer` in Command Palette and choose your Explorer to enable it.**
 
 ### The Structure of Tree Explorer extension
 
