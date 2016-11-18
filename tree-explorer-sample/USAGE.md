@@ -170,9 +170,9 @@ We suggest that you handle errors promptly and notify the user using `vscode.win
 
 ## Common Questions
 
-**Q: Will it be possible to access the DOM and add an arbitrary UI using this API?**
+**Q: Will it be possible to access the DOM to add arbitrary UI using this API?**
 
-**A:** No.
+**A:** No, you can read about [our approach to extensibility here](https://code.visualstudio.com/docs/extensions/our-approach).
 
 **Q: Can I add an Outline View/Symbol Tree View using this API?**
 
