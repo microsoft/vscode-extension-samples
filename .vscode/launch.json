@@ -10,7 +10,7 @@
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}/decorator-sample" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": "${workspaceRoot}/decorator-sample/out",
+			"outFiles": ["${workspaceRoot}/decorator-sample/out/**/*.js"],
 			"preLaunchTask": "compile-decorator"
 		},
 		{
@@ -21,7 +21,7 @@
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}/previewhtml-sample" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": "${workspaceRoot}/previewhtml-sample/out",
+			"outFiles": ["${workspaceRoot}/previewhtml-sample/out/**/*.js"],
 			"preLaunchTask": "compile-previewhtml"
 		},
 		{
@@ -32,7 +32,7 @@
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}/contentprovider-sample" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outDir": "${workspaceRoot}/contentprovider-sample/out",
+			"outFiles": ["${workspaceRoot}/contentprovider-sample/out/**/*.js"],
 			"preLaunchTask": "compile-contentprovider"
 		}
 	]
