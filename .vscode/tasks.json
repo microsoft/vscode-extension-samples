@@ -58,6 +58,19 @@
 
 			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
 			"problemMatcher": "$tsc-watch"
+		},
+		{
+			// in package.json we have a compile task for each example
+			"taskName": "compile-languageprovider",
+
+			// show the output window only if unrecognized errors occur.
+			"showOutput": "silent",
+
+			// The tsc compiler is started in watching mode
+			"isWatching": true,
+
+			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
+			"problemMatcher": "$tsc-watch"
 		}
 	]
 }

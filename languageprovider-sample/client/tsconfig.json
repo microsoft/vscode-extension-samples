@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"outDir": "./out",
+		"skipLibCheck": true,
+		"sourceMap": true,
+		"lib": [
+			"es5", "es2015.promise"
+		]
+	}
+}

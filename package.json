@@ -2,9 +2,10 @@
 	"name": "vsc-extension-samples",
 	"publisher": "Microsoft",
 	"scripts": {
-		"install-all": "npm --prefix decorator-sample i decorator-sample && npm --prefix previewhtml-sample i previewhtml-sample && npm --prefix contentprovider-sample i contentprovider-sample && npm --prefix vim-sample i vim-sample",
+		"postinstall": "node build/postinstall.js",
 		"compile-decorator": "cd decorator-sample && npm run compile",
 		"compile-previewhtml": "cd previewhtml-sample && npm run compile",
-		"compile-contentprovider": "cd contentprovider-sample && npm run compile"
+		"compile-contentprovider": "cd contentprovider-sample && npm run compile",
+		"compile-languageprovider": "cd languageprovider-sample && npm run compile && cd .."
 	}
 }
