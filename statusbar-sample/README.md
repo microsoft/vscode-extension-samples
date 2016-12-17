@@ -1,4 +1,4 @@
-# References Editor Sample
+# Status Bar Sample
 
 This is a sample extension that adds a status bar entry showing the current number of selected lines.
 
@@ -8,7 +8,7 @@ It is not intended as a product quality extension.
 - Select some lines
 - See the number of selected lines in the status bar
 
-![Print References](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/statusbar-sample/preview.gif)
+![Show number of selected lines](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/statusbar-sample/preview.gif)
 
 # How it works, what it shows?
 
