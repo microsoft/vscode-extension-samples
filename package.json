@@ -6,6 +6,7 @@
 		"compile-decorator": "cd decorator-sample && npm run compile",
 		"compile-previewhtml": "cd previewhtml-sample && npm run compile",
 		"compile-contentprovider": "cd contentprovider-sample && npm run compile",
-		"compile-languageprovider": "cd languageprovider-sample && npm run compile && cd .."
+		"compile-languageprovider": "cd languageprovider-sample && npm run compile && cd ..",
+		"compile-statusbar": "cd statusbar-sample && npm run compile && cd .."
 	}
 }

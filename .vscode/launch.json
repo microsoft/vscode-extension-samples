@@ -36,6 +36,17 @@
 			"preLaunchTask": "compile-contentprovider"
 		},
 		{
+			"name": "Launch Status Bar Sample",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}/statusbar-sample" ],
+			"stopOnEntry": false,
+			"sourceMaps": true,
+			"outFiles": ["${workspaceRoot}/statusbar-sample/out/**/*.js"],
+			"preLaunchTask": "compile-statusbar"
+		},
+		{
 			"name": "Launch Language Provider Sample",
 			"type": "extensionHost",
 			"request": "launch",

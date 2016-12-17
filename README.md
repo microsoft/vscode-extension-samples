@@ -8,6 +8,7 @@ Sample code illustrating the VS Code extension APIs.
 * [Preview Html](/previewhtml-sample/README.md)
 * [Vim](/vim-sample/README.md)
 * [Integrated Terminal](/terminal-example/README.md)
+* [Status Bar](/statusbar-sample/README.md)
 * Experimental: [Tree Explorer](/tree-explorer/README.md)
 
 # How to run locally
@@ -19,4 +20,5 @@ Sample code illustrating the VS Code extension APIs.
   * `npm run compile-previewhtml`
   * `npm run compile-contentprovider`
   * `npm run compile-languageprovider`
+  * `npm run compile-statusbar`
 * launch the sample from the debug viewlet
