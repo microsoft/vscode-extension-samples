@@ -17,7 +17,7 @@
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./",
 		"compile": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install && tsc -p ./"
+		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"devDependencies": {
 		"vscode": "^1.0.0",
