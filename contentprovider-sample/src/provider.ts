@@ -17,8 +17,8 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 
 	constructor() {
 
-		// Listen to the following events:
-		// * closeTextDocument - which means we must clear the corresponding model object - `ReferencesDocument`
+		// Listen to the `closeTextDocument`-event which means we must
+		// clear the corresponding model object - `ReferencesDocument`
 		this._subscriptions = vscode.workspace.onDidCloseTextDocument(doc => this._documents.delete(doc.uri.toString()));
 	}
 
@@ -29,19 +29,15 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 		this._onDidChange.dispose();
 	}
 
-	/**
-	 * Expose an event to signal changes of _virtual_ documents
-	 * to the editor
-	 */
+	// Expose an event to signal changes of _virtual_ documents
+	// to the editor
 	get onDidChange() {
 		return this._onDidChange.event;
 	}
 
-	/**
-	 * Provider method that takes an uri of the `references`-scheme and
-	 * resolves its content by (1) running the reference search command
-	 * and (2) formatting the results
-	 */
+	// Provider method that takes an uri of the `references`-scheme and
+	// resolves its content by (1) running the reference search command
+	// and (2) formatting the results
 	provideTextDocumentContent(uri: vscode.Uri): string | Thenable<string> {
 
 		// already loaded?
