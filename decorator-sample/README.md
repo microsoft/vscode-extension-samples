@@ -8,7 +8,7 @@ The sample creates a decoration for each number that appears in the active edito
 demonstrates some of the decorator features such as borders, background colors, cursors
 and hovers. 
 
-
+![sample](preview.png)
 
 # How to run locally
 
