@@ -16,10 +16,12 @@
 	"main": "./out/extension",
 	"scripts": {
 		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"devDependencies": {
-		"vscode": "0.10.x",
-		"typescript": "^1.6.2"
+		"vscode": "^1.0.0",
+		"typescript": "^1.6.2",
+		"@types/node": "*"
 	}
 }
