@@ -1,5 +1,5 @@
 .DS_Store
 npm-debug.log
 Thumbs.db
-vim-sample/node_modules
-vim-sample/out
+*/node_modules/
+*/out/

@@ -3,14 +3,33 @@
 	"version": "0.1.0",
 	"configurations": [
 		{
+			"name": "Launch Completions Sample",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}/completions-sample"
+			],
+			"stopOnEntry": false,
+			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceRoot}/completions-sample/out/**/*.js"
+			],
+			"preLaunchTask": "compile-completions"
+		},
+		{
 			"name": "Launch Decorator Sample",
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}/decorator-sample" ],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}/decorator-sample"
+			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/decorator-sample/out/**/*.js"],
+			"outFiles": [
+				"${workspaceRoot}/decorator-sample/out/**/*.js"
+			],
 			"preLaunchTask": "compile-decorator"
 		},
 		{
@@ -18,10 +37,14 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}/previewhtml-sample" ],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}/previewhtml-sample"
+			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/previewhtml-sample/out/**/*.js"],
+			"outFiles": [
+				"${workspaceRoot}/previewhtml-sample/out/**/*.js"
+			],
 			"preLaunchTask": "compile-previewhtml"
 		},
 		{
@@ -29,10 +52,14 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}/contentprovider-sample" ],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}/contentprovider-sample"
+			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/contentprovider-sample/out/**/*.js"],
+			"outFiles": [
+				"${workspaceRoot}/contentprovider-sample/out/**/*.js"
+			],
 			"preLaunchTask": "compile-contentprovider"
 		},
 		{
@@ -40,10 +67,14 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}/statusbar-sample" ],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}/statusbar-sample"
+			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/statusbar-sample/out/**/*.js"],
+			"outFiles": [
+				"${workspaceRoot}/statusbar-sample/out/**/*.js"
+			],
 			"preLaunchTask": "compile-statusbar"
 		},
 		{
@@ -51,10 +82,14 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}/languageprovider-sample" ],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}/languageprovider-sample"
+			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/languageprovider-sample/client/out/**/*.js"]
+			"outFiles": [
+				"${workspaceRoot}/languageprovider-sample/client/out/**/*.js"
+			]
 		},
 		{
 			"name": "Attach Language Provider Sample Server",
@@ -62,13 +97,18 @@
 			"request": "attach",
 			"port": 6004,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/languageprovider-sample/server/out/**/*.js"]
+			"outFiles": [
+				"${workspaceRoot}/languageprovider-sample/server/out/**/*.js"
+			]
 		}
 	],
 	"compounds": [
-        {
-            "name": "Launch Language Provider Sample & Attach to Server",
-            "configurations": ["Launch Language Provider Sample", "Attach Language Provider Sample Server"]
-        }
-    ]
+		{
+			"name": "Launch Language Provider Sample & Attach to Server",
+			"configurations": [
+				"Launch Language Provider Sample",
+				"Attach Language Provider Sample Server"
+			]
+		}
+	]
 }

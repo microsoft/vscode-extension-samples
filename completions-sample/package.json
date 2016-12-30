@@ -1,0 +1,28 @@
+{
+	"name": "completions-sample",
+	"displayName": "Completion Item Provider Sample",
+	"version": "0.0.1",
+	"publisher": "jrieken",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
+	},
+	"engines": {
+		"vscode": "^1.5.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension",
+	"devDependencies": {
+		"typescript": "^2.1.4",
+		"vscode": "^1.0.0",
+		"@types/node": "^6.0.40"
+	}
+}

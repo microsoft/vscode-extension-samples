@@ -4,6 +4,7 @@
 	"version": "0.0.1",
 	"scripts": {
 		"postinstall": "node .build/postinstall.js",
+		"compile-completions": "cd completions-sample && tsc",
 		"compile-decorator": "cd decorator-sample && npm run compile",
 		"compile-previewhtml": "cd previewhtml-sample && npm run compile",
 		"compile-contentprovider": "cd contentprovider-sample && npm run compile",
