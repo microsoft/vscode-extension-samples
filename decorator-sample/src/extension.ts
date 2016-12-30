@@ -1,5 +1,3 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
 // this method is called when vs code is activated
@@ -8,7 +6,7 @@ export function activate(context: vscode.ExtensionContext) {
 	console.log('decorator sample is activated');
 
 	// create a decorator type that we use to decorate small numbers
-	var smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
+	const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
 		borderWidth: '1px',
 		borderStyle: 'solid',
 		overviewRulerColor: 'blue',
@@ -24,12 +22,12 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// create a decorator type that we use to decorate large numbers
-	var largeNumberDecorationType = vscode.window.createTextEditorDecorationType({
+	const largeNumberDecorationType = vscode.window.createTextEditorDecorationType({
 		cursor: 'crosshair',
 		backgroundColor: 'rgba(255,0,0,0.3)'
 	});
 
-	var activeEditor = vscode.window.activeTextEditor;
+	let activeEditor = vscode.window.activeTextEditor;
 	if (activeEditor) {
 		triggerUpdateDecorations();
 	}
@@ -59,22 +57,20 @@ export function activate(context: vscode.ExtensionContext) {
 		if (!activeEditor) {
 			return;
 		}
-		var regEx = /\d+/g;
-		var text = activeEditor.document.getText();
-		var smallNumbers: vscode.DecorationOptions[] = [];
-		var largeNumbers: vscode.DecorationOptions[] = [];
-		var match;
+		const regEx = /\d+/g;
+		const text = activeEditor.document.getText();
+		const smallNumbers: vscode.DecorationOptions[] = [];
+		const largeNumbers: vscode.DecorationOptions[] = [];
+		let match;
 		while (match = regEx.exec(text)) {
-			var startPos = activeEditor.document.positionAt(match.index);
-			var endPos = activeEditor.document.positionAt(match.index + match[0].length);
-			var decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Number **' + match[0] + '**' };
+			const startPos = activeEditor.document.positionAt(match.index);
+			const endPos = activeEditor.document.positionAt(match.index + match[0].length);
+			const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Number **' + match[0] + '**' };
 			if (match[0].length < 3) {
 				smallNumbers.push(decoration);
 			} else {
 				largeNumbers.push(decoration);
 			}
-
-
 		}
 		activeEditor.setDecorations(smallNumberDecorationType, smallNumbers);
 		activeEditor.setDecorations(largeNumberDecorationType, largeNumbers);

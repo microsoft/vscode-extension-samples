@@ -69,6 +69,3 @@ export function activate(context: vscode.ExtensionContext) {
 		return terminalStack[terminalStack.length - 1];
 	}
 }
-
-export function deactivate() {
-}
