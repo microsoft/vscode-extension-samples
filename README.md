@@ -1,24 +1,21 @@
-# vscode-extension-samples
+# Extension Samples
 
-Sample code illustrating the VS Code extension APIs.
+This repository contains sample code illustrating the VS Code extension API. The following is a 
+list of self-contained, running extensions that show one or multiple concepts of the API:
 
-* [Editor Decoration](/decorator-sample/README.md)
 * [Virtual Documents](/contentprovider-sample/README.md)
+* [Editor Decoration](/decorator-sample/README.md)
 * [Language Provider](/languageprovider-sample/README.md)
 * [Preview Html](/previewhtml-sample/README.md)
-* [Vim](/vim-sample/README.md)
-* [Integrated Terminal](/terminal-example/README.md)
 * [Status Bar](/statusbar-sample/README.md)
+* [Theme](/theme-sample)
+* [Integrated Terminal](/terminal-example/README.md)
+* [Vim](/vim-sample/README.md)
 * Experimental: [Tree Explorer](/tree-explorer/README.md)
 
 # How to run locally
 
 * `git clone`
+* `cd vscode-extension-samples`
 * `npm install`
-* run one of
-  * `npm run compile-decorator`,
-  * `npm run compile-previewhtml`
-  * `npm run compile-contentprovider`
-  * `npm run compile-languageprovider`
-  * `npm run compile-statusbar`
-* launch the sample from the debug viewlet
+* open VS Code and start a sample from the debug viewlet
