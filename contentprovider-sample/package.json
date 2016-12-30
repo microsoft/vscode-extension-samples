@@ -1,70 +1,70 @@
 {
-  "name": "references-plusplus",
-  "displayName": "References++",
-  "description": "Show the results of 'Find References' as formatted text in an editor",
-  "version": "0.0.5",
-  "publisher": "jrieken",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/vscode-extension-samples"
-  },
-  "bugs": {
-    "url": "https://github.com/Microsoft/vscode-extension-samples/issues"
-  },
-  "engines": {
-    "vscode": "^1.4.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:editor.printReferences"
-  ],
-  "main": "./out/extension",
-  "contributes": {
-    "commands": [
-      {
-        "command": "editor.printReferences",
-        "title": "Show All References"
-      }
-    ],
-    "menus": {
-      "editor/context": [
-        {
-          "command": "editor.printReferences",
-          "when": "editorHasReferenceProvider",
-          "group": "navigation@1.31"
-        }
-      ]
-    },
-    "languages": [
-      {
-        "id": "locations",
-        "aliases": [
-          "Locations"
-        ],
-        "extensions": [
-          ".locations"
-        ]
-      }
-    ],
-    "grammars": [
-      {
-        "language": "locations",
-        "path": "./locations-syntax.json",
-        "scopeName": "source.locations"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
-  },
-  "devDependencies": {
-    "tslint": "^3.8.1",
-    "typescript": "^1.8.5",
-    "vscode": "^1.0.0",
-    "@types/node": "^6.0.40"
-  }
+	"name": "references-plusplus",
+	"displayName": "References++",
+	"description": "Show the results of 'Find References' as formatted text in an editor",
+	"version": "0.0.5",
+	"publisher": "jrieken",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
+	},
+	"engines": {
+		"vscode": "^1.4.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:editor.printReferences"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "editor.printReferences",
+				"title": "Show All References"
+			}
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "editor.printReferences",
+					"when": "editorHasReferenceProvider",
+					"group": "navigation@1.31"
+				}
+			]
+		},
+		"languages": [
+			{
+				"id": "locations",
+				"aliases": [
+					"Locations"
+				],
+				"extensions": [
+					".locations"
+				]
+			}
+		],
+		"grammars": [
+			{
+				"language": "locations",
+				"path": "./locations-syntax.json",
+				"scopeName": "source.locations"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"tslint": "^3.8.1",
+		"typescript": "^2.1.4",
+		"vscode": "^1.0.0",
+		"@types/node": "^6.0.40"
+	}
 }

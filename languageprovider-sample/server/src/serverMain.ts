@@ -79,7 +79,7 @@ function validateTextDocument(textDocument: TextDocument): void {
 			diagnostics.push({
 				severity: DiagnosticSeverity.Warning,
 				range: {
-					start: { line: i, character: index},
+					start: { line: i, character: index },
 					end: { line: i, character: index + 10 }
 				},
 				message: `${line.substr(index, 10)} should be spelled TypeScript`,
@@ -121,10 +121,10 @@ connection.onCompletion((textDocumentPosition: TextDocumentPositionParams): Comp
 connection.onCompletionResolve((item: CompletionItem): CompletionItem => {
 	if (item.data === 1) {
 		item.detail = 'TypeScript details',
-		item.documentation = 'TypeScript documentation'
+			item.documentation = 'TypeScript documentation'
 	} else if (item.data === 2) {
 		item.detail = 'JavaScript details',
-		item.documentation = 'JavaScript documentation'
+			item.documentation = 'JavaScript documentation'
 	}
 	return item;
 });

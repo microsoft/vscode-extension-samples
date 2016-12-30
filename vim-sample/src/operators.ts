@@ -4,33 +4,33 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import {Position, Selection, Range, TextDocument, TextEditor, TextEditorRevealType} from 'vscode';
-import {MotionState, Motion, Motions} from './motions';
-import {Mode, IController, DeleteRegister} from './common';
+import { Position, Selection, Range, TextDocument, TextEditor, TextEditorRevealType } from 'vscode';
+import { MotionState, Motion, Motions } from './motions';
+import { Mode, IController, DeleteRegister } from './common';
 
 export abstract class Operator {
 
-	public abstract runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean;
-	public abstract runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean;
+	public abstract runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean;
+	public abstract runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean;
 
-	protected doc(ed:TextEditor): TextDocument {
+	protected doc(ed: TextEditor): TextDocument {
 		return ed.document;
 	}
 
-	protected pos(ed:TextEditor): Position {
+	protected pos(ed: TextEditor): Position {
 		return ed.selection.active;
 	}
 
-	protected sel(ed:TextEditor): Selection {
+	protected sel(ed: TextEditor): Selection {
 		return ed.selection;
 	}
 
-	protected setPosReveal(ed:TextEditor, line: number, char: number): void {
+	protected setPosReveal(ed: TextEditor, line: number, char: number): void {
 		ed.selection = new Selection(new Position(line, char), new Position(line, char));
 		ed.revealRange(ed.selection, TextEditorRevealType.Default);
 	}
 
-	protected delete(ctrl:IController, ed:TextEditor, isWholeLine:boolean, range:Range): void {
+	protected delete(ctrl: IController, ed: TextEditor, isWholeLine: boolean, range: Range): void {
 		ctrl.setDeleteRegister(new DeleteRegister(isWholeLine, ed.document.getText(range)));
 		ed.edit((builder) => {
 			builder.delete(range);
@@ -39,25 +39,25 @@ export abstract class Operator {
 }
 
 abstract class OperatorWithNoArgs extends Operator {
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		this._run(ctrl, ed);
 		return true;
 	}
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		this._run(ctrl, ed);
 		return true;
 	}
-	protected abstract _run(ctrl: IController, ed:TextEditor): void;
+	protected abstract _run(ctrl: IController, ed: TextEditor): void;
 }
 
 class InsertOperator extends OperatorWithNoArgs {
-	protected _run(ctrl: IController, ed:TextEditor): void {
+	protected _run(ctrl: IController, ed: TextEditor): void {
 		ctrl.setMode(Mode.INSERT);
 	}
 }
 
 class AppendOperator extends OperatorWithNoArgs {
-	protected _run(ctrl: IController, ed:TextEditor): void {
+	protected _run(ctrl: IController, ed: TextEditor): void {
 		let newPos = Motions.RightMotion.run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		this.setPosReveal(ed, newPos.line, newPos.character);
 		ctrl.setMode(Mode.INSERT);
@@ -65,7 +65,7 @@ class AppendOperator extends OperatorWithNoArgs {
 }
 
 class AppendEndOfLineOperator extends OperatorWithNoArgs {
-	protected _run(ctrl: IController, ed:TextEditor): void {
+	protected _run(ctrl: IController, ed: TextEditor): void {
 		let newPos = Motions.EndOfLine.run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		this.setPosReveal(ed, newPos.line, newPos.character);
 		ctrl.setMode(Mode.INSERT);
@@ -73,14 +73,14 @@ class AppendEndOfLineOperator extends OperatorWithNoArgs {
 }
 
 class VisualOperator extends OperatorWithNoArgs {
-	protected _run(ctrl: IController, ed:TextEditor): void {
+	protected _run(ctrl: IController, ed: TextEditor): void {
 		ctrl.motionState.anchor = this.pos(ed);
 		ctrl.setVisual(true);
 	}
 }
 
 class DeleteCharUnderCursorOperator extends Operator {
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		let to = Motions.NextCharacter.repeat(repeatCount > 1, repeatCount).run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		let from = this.pos(ed);
 
@@ -89,7 +89,7 @@ class DeleteCharUnderCursorOperator extends Operator {
 		return true;
 	}
 
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		let sel = this.sel(ed);
 		this.delete(ctrl, ed, false, sel);
 		return true;
@@ -97,7 +97,7 @@ class DeleteCharUnderCursorOperator extends Operator {
 }
 
 class DeleteLineOperator extends Operator {
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		let pos = this.pos(ed);
 		let doc = this.doc(ed);
 
@@ -123,7 +123,7 @@ class DeleteLineOperator extends Operator {
 		return true;
 	}
 
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		let sel = this.sel(ed);
 		this.delete(ctrl, ed, false, sel);
 		return true;
@@ -131,7 +131,7 @@ class DeleteLineOperator extends Operator {
 }
 
 abstract class OperatorWithMotion extends Operator {
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		let motion = ctrl.findMotion(args);
 		if (!motion) {
 
@@ -147,12 +147,12 @@ abstract class OperatorWithMotion extends Operator {
 		return this._runNormalMode(ctrl, ed, motion.repeat(repeatCount > 1, repeatCount));
 	}
 
-	protected abstract _runNormalMode(ctrl: IController, ed:TextEditor, motion: Motion): boolean;
+	protected abstract _runNormalMode(ctrl: IController, ed: TextEditor, motion: Motion): boolean;
 }
 
 class DeleteToOperator extends OperatorWithMotion {
 
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		if (args === 'd') {
 			// dd
 			return Operators.DeleteLine.runNormalMode(ctrl, ed, repeatCount, args);
@@ -160,7 +160,7 @@ class DeleteToOperator extends OperatorWithMotion {
 		return super.runNormalMode(ctrl, ed, repeatCount, args);
 	}
 
-	protected _runNormalMode(ctrl: IController, ed:TextEditor, motion: Motion): boolean {
+	protected _runNormalMode(ctrl: IController, ed: TextEditor, motion: Motion): boolean {
 		let to = motion.run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		let from = this.pos(ed);
 
@@ -169,7 +169,7 @@ class DeleteToOperator extends OperatorWithMotion {
 		return true;
 	}
 
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		let sel = this.sel(ed);
 		this.delete(ctrl, ed, false, sel);
 		return true;
@@ -178,7 +178,7 @@ class DeleteToOperator extends OperatorWithMotion {
 
 class PutOperator extends Operator {
 
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		let register = ctrl.getDeleteRegister();
 		if (!register) {
 			// No delete register - beep!!
@@ -199,7 +199,7 @@ class PutOperator extends Operator {
 		let insertLine = pos.line + 1;
 		let insertCharacter = 0;
 
-		if (insertLine >=  doc.lineCount) {
+		if (insertLine >= doc.lineCount) {
 			// on last line
 			insertLine = doc.lineCount - 1;
 			insertCharacter = doc.lineAt(insertLine).text.length;
@@ -213,7 +213,7 @@ class PutOperator extends Operator {
 		return true;
 	}
 
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		let register = ctrl.getDeleteRegister();
 		if (!register) {
 			// No delete register - beep!!
@@ -233,7 +233,7 @@ class PutOperator extends Operator {
 
 class ReplaceOperator extends Operator {
 
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		if (args.length === 0) {
 			// input not ready
 			return false;
@@ -254,7 +254,7 @@ class ReplaceOperator extends Operator {
 		return true;
 	}
 
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		if (args.length === 0) {
 			// input not ready
 			return false;
@@ -284,12 +284,12 @@ class ReplaceOperator extends Operator {
 
 class ReplaceModeOperator extends Operator {
 
-	public runNormalMode(ctrl: IController, ed:TextEditor, repeatCount: number, args: string): boolean {
+	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		ctrl.setMode(Mode.REPLACE);
 		return true;
 	}
 
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		this.delete(ctrl, ed, false, this.sel(ed));
 		ctrl.setMode(Mode.INSERT);
 		return true;
@@ -299,7 +299,7 @@ class ReplaceModeOperator extends Operator {
 
 class ChangeOperator extends OperatorWithMotion {
 
-	protected _runNormalMode(ctrl: IController, ed:TextEditor, motion: Motion): boolean {
+	protected _runNormalMode(ctrl: IController, ed: TextEditor, motion: Motion): boolean {
 		let to = motion.run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		let from = this.pos(ed);
 
@@ -310,7 +310,7 @@ class ChangeOperator extends OperatorWithMotion {
 		return true;
 	}
 
-	public runVisualMode(ctrl: IController, ed:TextEditor, args: string): boolean {
+	public runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean {
 		let sel = this.sel(ed);
 
 		this.delete(ctrl, ed, false, sel);
@@ -321,7 +321,7 @@ class ChangeOperator extends OperatorWithMotion {
 	}
 }
 
-function repeatString(str:string, repeatCount:number): string {
+function repeatString(str: string, repeatCount: number): string {
 	let result = '';
 	for (let i = 0; i < repeatCount; i++) {
 		result += str;

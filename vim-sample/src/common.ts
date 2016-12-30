@@ -5,7 +5,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import {MotionState, Motion} from './motions';
+import { MotionState, Motion } from './motions';
 
 export enum Mode {
 	INSERT,
@@ -20,10 +20,10 @@ export interface ModifierKeys {
 }
 
 export class DeleteRegister {
-	public isWholeLine:boolean;
-	public content:string;
+	public isWholeLine: boolean;
+	public content: string;
 
-	constructor(isWholeLine:boolean, content:string) {
+	constructor(isWholeLine: boolean, content: string) {
 		this.isWholeLine = isWholeLine;
 		this.content = content;
 	}
@@ -33,11 +33,11 @@ export interface IController {
 	motionState: MotionState;
 
 	setMode(mode: Mode): void;
-	setVisual(newVisual:boolean): void;
+	setVisual(newVisual: boolean): void;
 	findMotion(input: string): Motion;
 	isMotionPrefix(input: string): boolean;
 
-	setDeleteRegister(register:DeleteRegister): void;
+	setDeleteRegister(register: DeleteRegister): void;
 	getDeleteRegister(): DeleteRegister;
 }
 

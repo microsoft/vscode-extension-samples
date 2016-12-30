@@ -4,10 +4,10 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import {TextEditor} from 'vscode';
-import {Motion, Motions} from './motions';
-import {Operator, Operators} from './operators';
-import {IController, Command, AbstractCommandDescriptor, ModifierKeys} from './common';
+import { TextEditor } from 'vscode';
+import { Motion, Motions } from './motions';
+import { Operator, Operators } from './operators';
+import { IController, Command, AbstractCommandDescriptor, ModifierKeys } from './common';
 
 const CHAR_TO_BINDING: { [char: string]: any; } = {};
 function defineBinding(char: string, value: any, modifierKeys: ModifierKeys): void {
@@ -27,7 +27,7 @@ function getOperator(char: string, modifierKeys: ModifierKeys = {}): Operator {
 };
 
 function defineCommand(char: string, commandId: string, modifierKeys: ModifierKeys = {}): void {
-	defineBinding(char + '__command__', {commandId : commandId}, modifierKeys);
+	defineBinding(char + '__command__', { commandId: commandId }, modifierKeys);
 };
 function getCommand(char: string, modifierKeys: ModifierKeys = {}): Command {
 	return getBinding(char + '__command__', modifierKeys);
@@ -105,11 +105,11 @@ defineMotionCommand('tabm>>', Motions.MoveActiveEditorLast);
 defineMotionCommand('tabm.', Motions.MoveActiveEditorCenter);
 
 // Scroll motions
-defineMotionCommand('e', Motions.ScrollDownByLine, {ctrl: true});
-defineMotionCommand('d', Motions.ScrollDownByHalfPage, {ctrl: true});
-defineMotionCommand('f', Motions.ScrollDownByPage, {ctrl: true});
-defineMotionCommand('y', Motions.ScrollUpByLine, {ctrl: true});
-defineMotionCommand('u', Motions.ScrollUpByHalfPage, {ctrl: true});
+defineMotionCommand('e', Motions.ScrollDownByLine, { ctrl: true });
+defineMotionCommand('d', Motions.ScrollDownByHalfPage, { ctrl: true });
+defineMotionCommand('f', Motions.ScrollDownByPage, { ctrl: true });
+defineMotionCommand('y', Motions.ScrollUpByLine, { ctrl: true });
+defineMotionCommand('u', Motions.ScrollUpByHalfPage, { ctrl: true });
 defineMotionCommand('b', Motions.ScrollUpByPage, { ctrl: true });
 
 defineMotionCommand('zt', Motions.RevealCurrentLineAtTop);
@@ -122,8 +122,8 @@ defineMotionCommand('zo', Motions.UnfoldUnder);
 
 
 export interface IFoundOperator {
-	runNormal(controller: IController, editor:TextEditor): boolean;
-	runVisual(controller: IController, editor:TextEditor): boolean;
+	runNormal(controller: IController, editor: TextEditor): boolean;
+	runVisual(controller: IController, editor: TextEditor): boolean;
 }
 
 export class Mappings {
@@ -145,7 +145,7 @@ export class Mappings {
 		let command = Mappings.findMotionCommandFromNumberAndString(parsed, isVisual, modifierKeys);
 		if (!command) {
 			parsed = _parseNumberAndString(input, false);
-			command= Mappings.findMotionCommandFromNumberAndString(parsed, isVisual, modifierKeys);
+			command = Mappings.findMotionCommandFromNumberAndString(parsed, isVisual, modifierKeys);
 		}
 		return command;
 	}
@@ -164,7 +164,7 @@ export class Mappings {
 		if (!motionCommand) {
 			motionCommand = getMotionCommand(numberAndString.input, modifierKeys);
 		}
-		return motionCommand ? motionCommand.createCommand({ isVisual: isVisual, repeat: numberAndString.hasRepeatCount ? numberAndString.repeatCount : undefined}) : null;
+		return motionCommand ? motionCommand.createCommand({ isVisual: isVisual, repeat: numberAndString.hasRepeatCount ? numberAndString.repeatCount : undefined }) : null;
 	}
 
 	public static findOperator(input: string, modifierKeys: ModifierKeys): IFoundOperator {

@@ -6,12 +6,12 @@
 
 import * as vscode from 'vscode';
 
-import {Words} from './words';
-import {MotionState, Motion, Motions} from './motions';
-import {Operator, Operators} from './operators';
-import {Mode, IController, ModifierKeys} from './common';
-import {Mappings} from './mappings';
-import {Controller} from './controller';
+import { Words } from './words';
+import { MotionState, Motion, Motions } from './motions';
+import { Operator, Operators } from './operators';
+import { Mode, IController, ModifierKeys } from './common';
+import { Mappings } from './mappings';
+import { Controller } from './controller';
 
 export function activate(context: vscode.ExtensionContext) {
 	function registerCommandNice(commandId: string, run: (...args: any[]) => void): void {
@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 			if (!vscode.window.activeTextEditor) {
 				return;
 			}
-			vimExt.type(key, {ctrl: true});
+			vimExt.type(key, { ctrl: true });
 		});
 	}
 
@@ -153,7 +153,7 @@ class VimExt {
 		this._ensureState();
 	}
 
-	public type(text: string, modifierKeys: ModifierKeys = {ctrl: false, shifit: false, alt: false}): void {
+	public type(text: string, modifierKeys: ModifierKeys = { ctrl: false, shifit: false, alt: false }): void {
 		this._controller.type(vscode.window.activeTextEditor, text, modifierKeys).then((r) => {
 			if (r.hasConsumedInput) {
 				this._ensureState();

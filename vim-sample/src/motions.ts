@@ -4,9 +4,9 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import {Position, TextDocument, window} from 'vscode';
-import {Words, WordCharacters} from './words';
-import {Command, AbstractCommandDescriptor} from './common';
+import { Position, TextDocument, window } from 'vscode';
+import { Words, WordCharacters } from './words';
+import { Command, AbstractCommandDescriptor } from './common';
 
 export class MotionState {
 
@@ -25,7 +25,7 @@ export class MotionState {
 export abstract class Motion {
 	public abstract run(doc: TextDocument, pos: Position, state: MotionState): Position;
 
-	public repeat(hasRepeatCount:boolean, count: number): Motion {
+	public repeat(hasRepeatCount: boolean, count: number): Motion {
 		if (!hasRepeatCount) {
 			return this;
 		}
@@ -192,7 +192,7 @@ class GoToLineUndefinedMotion extends Motion {
 		return pos;
 	}
 
-	public repeat(hasRepeatCount:boolean, count: number): Motion {
+	public repeat(hasRepeatCount: boolean, count: number): Motion {
 		if (!hasRepeatCount) {
 			return Motions.GoToLastLine;
 		}
@@ -202,7 +202,7 @@ class GoToLineUndefinedMotion extends Motion {
 
 abstract class GoToLineMotion extends Motion {
 
-	protected firstNonWhitespaceChar(doc: TextDocument, line:number): number {
+	protected firstNonWhitespaceChar(doc: TextDocument, line: number): number {
 		let lineContent = doc.lineAt(line).text;
 		let character = 0;
 		while (character < lineContent.length) {
@@ -231,9 +231,9 @@ class GoToLastLineMotion extends GoToLineMotion {
 }
 
 class GoToLineDefinedMotion extends GoToLineMotion {
-	private _lineNumber:number;
+	private _lineNumber: number;
 
-	constructor(lineNumber:number) {
+	constructor(lineNumber: number) {
 		super();
 		this._lineNumber = lineNumber;
 	}

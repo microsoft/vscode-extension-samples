@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import {Position, TextDocument} from 'vscode';
+import { Position, TextDocument } from 'vscode';
 
 export enum CharacterClass {
 	REGULAR = 0,

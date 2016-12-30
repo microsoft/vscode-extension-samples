@@ -14,10 +14,10 @@ import {
 	window
 } from 'vscode';
 
-import {Words} from './words';
-import {MotionState, Motion} from './motions';
-import {Mode, IController, DeleteRegister, Command, ModifierKeys} from './common';
-import {Mappings} from './mappings';
+import { Words } from './words';
+import { MotionState, Motion } from './motions';
+import { Mode, IController, DeleteRegister, Command, ModifierKeys } from './common';
+import { Mappings } from './mappings';
 
 export interface ITypeResult {
 	hasConsumedInput: boolean;
@@ -35,8 +35,8 @@ export class Controller implements IController {
 	public findMotion(input: string): Motion { return Mappings.findMotion(input); }
 	public isMotionPrefix(input: string): boolean { return Mappings.isMotionPrefix(input); }
 
-	private _deleteRegister:DeleteRegister;
-	public setDeleteRegister(register:DeleteRegister): void { this._deleteRegister = register; }
+	private _deleteRegister: DeleteRegister;
+	public setDeleteRegister(register: DeleteRegister): void { this._deleteRegister = register; }
 	public getDeleteRegister(): DeleteRegister { return this._deleteRegister; }
 
 	constructor() {
@@ -219,7 +219,7 @@ export class Controller implements IController {
 
 	private _interpretNormalModeInput(editor: TextEditor, modifierKeys: ModifierKeys): Thenable<ITypeResult> {
 		if (this._currentInput.startsWith(':')) {
-			return window.showInputBox({value: 'tabm'}).then((value) => {
+			return window.showInputBox({ value: 'tabm' }).then((value) => {
 				let result = this._findMapping(value || '', editor, modifierKeys);
 				return Promise.resolve(result);
 			});
@@ -298,7 +298,7 @@ export class Controller implements IController {
 	}
 }
 
-function setSelectionAndReveal(editor:TextEditor, anchor:Position, line: number, char: number): void {
+function setSelectionAndReveal(editor: TextEditor, anchor: Position, line: number, char: number): void {
 	editor.selection = new Selection(anchor, new Position(line, char));
 	revealPosition(editor, line, char);
 }
