@@ -115,7 +115,7 @@ export default class ReferencesDocument {
         }
     }
 
-    private _appendMatch(doc: vscode.TextDocument, line:number, match: vscode.Range, target: vscode.Uri) {
+    private _appendMatch(doc: vscode.TextDocument, line: number, match: vscode.Range, target: vscode.Uri) {
         const text = doc.lineAt(line).text;
         const preamble = `  ${line + 1}: `;
 

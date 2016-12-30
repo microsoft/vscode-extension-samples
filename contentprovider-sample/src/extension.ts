@@ -3,8 +3,8 @@
  *--------------------------------------------------------*/
 'use strict';
 
-import {workspace, languages, window, commands, ExtensionContext, Disposable} from 'vscode';
-import ContentProvider, {encodeLocation} from './provider';
+import { workspace, languages, window, commands, ExtensionContext, Disposable } from 'vscode';
+import ContentProvider, { encodeLocation } from './provider';
 
 export function activate(context: ExtensionContext) {
 
