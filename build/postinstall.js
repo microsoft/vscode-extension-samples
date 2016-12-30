@@ -3,12 +3,14 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+const fs = require('fs');
+const path = require('path');
 const cp = require('child_process');
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 function npmInstall(location) {
 	const result = cp.spawnSync(npm, ['install'], {
-		cwd: location ,
+		cwd: location,
 		stdio: 'inherit'
 	});
 
@@ -17,13 +19,11 @@ function npmInstall(location) {
 	}
 }
 
-const samples = [
-	'contentprovider-sample',
-	'decorator-sample',
-	'languageprovider-sample',
-	'vim-sample',
-	'terminal-example',
-	'tree-explorer-sample'
-];
 
-samples.forEach(npmInstall);
+const cwd = process.cwd();
+for (const element of fs.readdirSync(cwd)) {
+	const fullpath = path.join(cwd, element, 'package.json');
+	if (fs.existsSync(fullpath)) {
+		npmInstall(path.join(cwd, element));
+	}
+}
