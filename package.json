@@ -1,6 +1,7 @@
 {
 	"name": "vsc-extension-samples",
 	"publisher": "Microsoft",
+	"version": "0.0.1",
 	"scripts": {
 		"postinstall": "node build/postinstall.js",
 		"compile-decorator": "cd decorator-sample && npm run compile",
