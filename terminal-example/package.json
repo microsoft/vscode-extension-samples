@@ -1,61 +1,73 @@
 {
-    "name": "vscode-terminal-api-example",
-    "displayName": "vscode-terminal-api-example",
-    "description": "abc",
-    "version": "0.0.1",
-    "publisher": "Tyriar",
-    "engines": {
-        "vscode": "^1.5.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onCommand:terminalTest.createTerminal",
-        "onCommand:terminalTest.createAndSend",
-        "onCommand:terminalTest.createZshLoginShell"
-    ],
-    "main": "./out/src/extension",
-    "contributes": {
-        "commands": [{
-            "command": "terminalTest.createTerminal",
-            "title": "Terminal API: Create Terminal"
-        }, {
-            "command": "terminalTest.hide",
-            "title": "Terminal API: Hide"
-        }, {
-            "command": "terminalTest.show",
-            "title": "Terminal API: Show"
-        }, {
-            "command": "terminalTest.showPreserveFocus",
-            "title": "Terminal API: Show (preserving focus)"
-        }, {
-            "command": "terminalTest.sendText",
-            "title": "Terminal API: Send Text"
-        }, {
-            "command": "terminalTest.sendTextNoNewLine",
-            "title": "Terminal API: Send Text (no implied \\n)"
-        }, {
-            "command": "terminalTest.dispose",
-            "title": "Terminal API: Dispose"
-        }, {
-            "command": "terminalTest.createAndSend",
-            "title": "Terminal API: Create Terminal and Immediately Send"
-        }, {
-            "command": "terminalTest.createZshLoginShell",
-            "title": "Terminal API: Create Terminal (zsh login shell) [v1.6+]"
-        }, {
-            "command": "terminalTest.processId",
-            "title": "Terminal API: Write process ID to console [v1.6+]"
-        }]
-    },
-    "scripts": {
-        "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-        "compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "typescript": "^1.8.5",
-        "vscode": "^0.11.0"
-    }
+	"name": "vscode-terminal-api-example",
+	"displayName": "vscode-terminal-api-example",
+	"description": "abc",
+	"version": "0.0.1",
+	"publisher": "Tyriar",
+	"engines": {
+		"vscode": "^1.5.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:terminalTest.createTerminal",
+		"onCommand:terminalTest.createAndSend",
+		"onCommand:terminalTest.createZshLoginShell"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "terminalTest.createTerminal",
+				"title": "Terminal API: Create Terminal"
+			},
+			{
+				"command": "terminalTest.hide",
+				"title": "Terminal API: Hide"
+			},
+			{
+				"command": "terminalTest.show",
+				"title": "Terminal API: Show"
+			},
+			{
+				"command": "terminalTest.showPreserveFocus",
+				"title": "Terminal API: Show (preserving focus)"
+			},
+			{
+				"command": "terminalTest.sendText",
+				"title": "Terminal API: Send Text"
+			},
+			{
+				"command": "terminalTest.sendTextNoNewLine",
+				"title": "Terminal API: Send Text (no implied \\n)"
+			},
+			{
+				"command": "terminalTest.dispose",
+				"title": "Terminal API: Dispose"
+			},
+			{
+				"command": "terminalTest.createAndSend",
+				"title": "Terminal API: Create Terminal and Immediately Send"
+			},
+			{
+				"command": "terminalTest.createZshLoginShell",
+				"title": "Terminal API: Create Terminal (zsh login shell) [v1.6+]"
+			},
+			{
+				"command": "terminalTest.processId",
+				"title": "Terminal API: Write process ID to console [v1.6+]"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+		"compile": "node ./node_modules/vscode/bin/compile -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"typescript": "^1.8.5",
+		"vscode": "^1.0.0",
+		"@types/node": "*"
+	}
 }
