@@ -15,44 +15,54 @@
 	],
 	"main": "./out/src/extension",
 	"contributes": {
-		"keybindings": [{
-			"command": "vim.goToNormalMode",
-			"key": "escape",
-			"when": "editorTextFocus && !vim.inNormalMode"
-		},{
-			"command": "vim.clearInput",
-			"key": "escape",
-			"when": "editorTextFocus && vim.hasInput"
-		},{
-			"command": "redo",
-			"key": "ctrl+r",
-			"mac": "cmd+r",
-			"when": "editorTextFocus"
-		},{
-			"command": "e",
-			"key": "ctrl+e",
-			"when": "editorTextFocus && vim.inNormalMode"
-		},{
-			"command": "d",
-			"key": "ctrl+d",
-			"when": "editorTextFocus && vim.inNormalMode"
-		},{
-			"command": "f",
-			"key": "ctrl+f",
-			"when": "editorTextFocus && vim.inNormalMode"
-		},{
-			"command": "y",
-			"key": "ctrl+y",
-			"when": "editorTextFocus && vim.inNormalMode"
-		},{
-			"command": "u",
-			"key": "ctrl+u",
-			"when": "editorTextFocus && vim.inNormalMode"
-		},{
-			"command": "b",
-			"key": "ctrl+b",
-			"when": "editorTextFocus && vim.inNormalMode"
-		}]
+		"keybindings": [
+			{
+				"command": "vim.goToNormalMode",
+				"key": "escape",
+				"when": "editorTextFocus && !vim.inNormalMode"
+			},
+			{
+				"command": "vim.clearInput",
+				"key": "escape",
+				"when": "editorTextFocus && vim.hasInput"
+			},
+			{
+				"command": "redo",
+				"key": "ctrl+r",
+				"mac": "cmd+r",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "e",
+				"key": "ctrl+e",
+				"when": "editorTextFocus && vim.inNormalMode"
+			},
+			{
+				"command": "d",
+				"key": "ctrl+d",
+				"when": "editorTextFocus && vim.inNormalMode"
+			},
+			{
+				"command": "f",
+				"key": "ctrl+f",
+				"when": "editorTextFocus && vim.inNormalMode"
+			},
+			{
+				"command": "y",
+				"key": "ctrl+y",
+				"when": "editorTextFocus && vim.inNormalMode"
+			},
+			{
+				"command": "u",
+				"key": "ctrl+u",
+				"when": "editorTextFocus && vim.inNormalMode"
+			},
+			{
+				"command": "b",
+				"key": "ctrl+b",
+				"when": "editorTextFocus && vim.inNormalMode"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
@@ -61,6 +71,7 @@
 	},
 	"devDependencies": {
 		"typescript": "^1.8.5",
-		"vscode": "^0.11.0"
+		"vscode": "^1.0.0",
+		"@types/node": "*"
 	}
 }
