@@ -38,23 +38,23 @@
 				<string>#F5D802</string>
 
 				<key>selection</key>
-				<string>#C9D0D9</string>
+				<string>#A9D0D980</string>
 				<key>inactiveSelection</key>
-				<string>#E1E5EA</string>
+				<string>#E1E5EA80</string>
 				<key>selectionHighlight</key>
-				<string>#ADD6FF</string>
+				<string>#ADD6FF80</string>
 
 				<key>findRangeHighlight</key>
-				<string>#B4B4B4</string>
+				<string>#B4B4B480</string>
 				<key>findMatchHighlight</key>
-				<string>#EA5C00</string>
+				<string>#EA5C0080</string>
 				<key>currentFindMatchHighlight</key>
-				<string>#A8AC94</string>
+				<string>#A8AC9480</string>
 
 				<key>wordHighlight</key>
-				<string>#575757</string>
+				<string>#57575740</string>
 				<key>wordHighlightStrong</key>
-				<string>#0E639C</string>
+				<string>#0E639C40</string>
 
 				<key>activeLinkForeground</key>
 				<string>#0000FF</string>
