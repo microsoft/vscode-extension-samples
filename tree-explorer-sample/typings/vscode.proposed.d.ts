@@ -13,76 +13,158 @@ declare module 'vscode' {
 	}
 
 	export namespace window {
-
 		/**
-		 * Register a [TreeExplorerNodeProvider](#TreeExplorerNodeProvider).
-		 *
-		 * @param providerId A unique id that identifies the provider.
-		 * @param provider A [TreeExplorerNodeProvider](#TreeExplorerNodeProvider).
-		 * @return A [disposable](#Disposable) that unregisters this provider when being disposed.
+		 * Register a [TreeDataProvider](#TreeDataProvider) for the registered view `id`.
+		 * @param id View id.
+		 * @param treeDataProvider A [TreeDataProvider](#TreeDataProvider) that provides tree data for the view
 		 */
-		export function registerTreeExplorerNodeProvider(providerId: string, provider: TreeExplorerNodeProvider<any>): Disposable;
+		export function registerTreeDataProvider<T>(id: string, treeDataProvider: TreeDataProvider<T>): Disposable;
 	}
 
 	/**
-	 * A node provider for a tree explorer contribution.
-	 *
-	 * Providers are registered through (#workspace.registerTreeExplorerNodeProvider) with a
-	 * `providerId` that corresponds to the `treeExplorerNodeProviderId` in the extension's
-	 * `contributes.explorer` section.
-	 *
-	 * The contributed tree explorer will ask the corresponding provider to provide the root
-	 * node and resolve children for each node. In addition, the provider could **optionally**
-	 * provide the following information for each node:
-	 * - label: A human-readable label used for rendering the node.
-	 * - hasChildren: Whether the node has children and is expandable.
-	 * - clickCommand: A command to execute when the node is clicked.
+	 * A data provider that provides tree data for a view
 	 */
-	export interface TreeExplorerNodeProvider<T> {
+	export interface TreeDataProvider<T> {
+		/**
+		 * An optional event to signal that an element or root has changed.
+		 */
+		onDidChange?: Event<T | undefined | null>;
 
 		/**
-		 * Provide the root node. This function will be called when the tree explorer is activated
-		 * for the first time. The root node is hidden and its direct children will be displayed on the first level of
-		 * the tree explorer.
+		 * get [TreeItem](#TreeItem) representation of the `element`
 		 *
-		 * @return The root node.
+		 * @param element The element for which [TreeItem](#TreeItem) representation is asked for.
+		 * @return [TreeItem](#TreeItem) representation of the element
 		 */
-		provideRootNode(): T | Thenable<T>;
+		getTreeItem(element: T): TreeItem;
 
 		/**
-		 * Resolve the children of `node`.
+		 * get the children of `element` or root.
 		 *
-		 * @param node The node from which the provider resolves children.
-		 * @return Children of `node`.
+		 * @param element The element from which the provider gets children for.
+		 * @return Children of `element` or root.
 		 */
-		resolveChildren(node: T): T[] | Thenable<T[]>;
+		getChildren(element?: T): T[] | Thenable<T[]>;
+	}
+
+	export interface TreeItem {
+		/**
+		 * Label of the tree item
+		 */
+		label: string;
 
 		/**
-		 * Provide a human-readable string that will be used for rendering the node. Default to use
-		 * `node.toString()` if not provided.
-		 *
-		 * @param node The node from which the provider computes label.
-		 * @return A human-readable label.
+		 * The icon path for the tree item
 		 */
-		getLabel?(node: T): string;
+		iconPath?: string | Uri | { light: string | Uri; dark: string | Uri };
 
 		/**
-		 * Determine if `node` has children and is expandable. Default to `true` if not provided.
-		 *
-		 * @param node The node to determine if it has children and is expandable.
-		 * @return A boolean that determines if `node` has children and is expandable.
+		 * The [command](#Command) which should be run when the tree item
+		 * is open in the Source Control viewlet.
 		 */
-		getHasChildren?(node: T): boolean;
+		command?: Command;
 
 		/**
-		 * Get the command to execute when `node` is clicked.
-		 *
-		 * Commands can be registered through [registerCommand](#commands.registerCommand). `node` will be provided
-		 * as the first argument to the command's callback function.
-		 *
-		 * @param node The node that the command is associated with.
-		 * @return The command to execute when `node` is clicked.
+		 * Context value of the tree node
 		 */
-		getClickCommand?(node: T): string;
+		contextValue?: string;
+
+		/**
+		 * Collapsible state of the tree item.
+		 * Required only when item has children.
+		 */
+		collapsibleState?: TreeItemCollapsibleState;
+	}
+
+	/**
+	 * Collapsible state of the tree item
+	 */
+	export enum TreeItemCollapsibleState {
+		/**
+		 * Determines an item is collapsed
+		 */
+		Collapsed = 1,
+		/**
+		 * Determines an item is expanded
+		 */
+		Expanded = 2
+	}
+
+	/**
+	 * The contiguous set of modified lines in a diff.
+	 */
+	export interface LineChange {
+		readonly originalStartLineNumber: number;
+		readonly originalEndLineNumber: number;
+		readonly modifiedStartLineNumber: number;
+		readonly modifiedEndLineNumber: number;
+	}
+
+	export namespace commands {
+
+		/**
+		 * Registers a diff information command that can be invoked via a keyboard shortcut,
+		 * a menu item, an action, or directly.
+		 *
+		 * Diff information commands are different from ordinary [commands](#commands.registerCommand) as
+		 * they only execute when there is an active diff editor when the command is called, and the diff
+		 * information has been computed. Also, the command handler of an editor command has access to
+		 * the diff information.
+		 *
+		 * @param command A unique identifier for the command.
+		 * @param callback A command handler function with access to the [diff information](#LineChange).
+		 * @param thisArg The `this` context used when invoking the handler function.
+		 * @return Disposable which unregisters this command on disposal.
+		 */
+		export function registerDiffInformationCommand(command: string, callback: (diff: LineChange[], ...args: any[]) => any, thisArg?: any): Disposable;
+	}
+
+	export interface Terminal {
+
+		/**
+		 * The name of the terminal.
+		 */
+		readonly name: string;
+
+		/**
+		 * The process ID of the shell process.
+		 */
+		readonly processId: Thenable<number>;
+
+		/**
+		 * Send text to the terminal. The text is written to the stdin of the underlying pty process
+		 * (shell) of the terminal.
+		 *
+		 * @param text The text to send.
+		 * @param addNewLine Whether to add a new line to the text being sent, this is normally
+		 * required to run a command in the terminal. The character(s) added are \n or \r\n
+		 * depending on the platform. This defaults to `true`.
+		 */
+		sendText(text: string, addNewLine?: boolean): void;
+
+		/**
+		 * Show the terminal panel and reveal this terminal in the UI.
+		 *
+		 * @param preserveFocus When `true` the terminal will not take focus.
+		 */
+		show(preserveFocus?: boolean): void;
+
+		/**
+		 * Hide the terminal panel if this terminal is currently showing.
+		 */
+		hide(): void;
+
+		/**
+		 * Dispose and free associated resources.
+		 */
+		dispose(): void;
+
+		/**
+		 * Experimental API that allows listening to the raw data stream coming from the terminal's
+		 * pty process (including ANSI escape sequences).
+		 *
+		 * @param callback The callback that is triggered when data is sent to the terminal.
+		 */
+		onData(callback: (data: string) => any): void;
 	}
 }
