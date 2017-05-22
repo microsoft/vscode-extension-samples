@@ -50,10 +50,10 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 		return <vscode.TreeItem> {
 			label: this.getLabel(node),
 			collapsibleState: hasChildren ? vscode.TreeItemCollapsibleState.Collapsed : null,
-			command: !hasChildren ? {
+			command: {
 				command: 'extension.openJsonSelection',
 				title: '',
-			} : null,
+			},
 			iconPath: this.getIcon(node)
 		};
 	}
