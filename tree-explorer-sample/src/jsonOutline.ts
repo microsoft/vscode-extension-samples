@@ -4,8 +4,8 @@ import * as path from 'path';
 
 export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 
-	private _onDidChange: vscode.EventEmitter<json.Node | null> = new vscode.EventEmitter<json.Node | null>();
-	readonly onDidChange: vscode.Event<json.Node | null> = this._onDidChange.event;
+	private _onDidChangeTreeData: vscode.EventEmitter<json.Node | null> = new vscode.EventEmitter<json.Node | null>();
+	readonly onDidChangeTreeData: vscode.Event<json.Node | null> = this._onDidChangeTreeData.event;
 
 	private tree: json.Node;
 	private editor: vscode.TextEditor;
@@ -13,7 +13,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 	constructor(private context: vscode.ExtensionContext) {
 		vscode.window.onDidChangeActiveTextEditor(editor => {
 			this.parseTree();
-			this._onDidChange.fire();
+			this._onDidChangeTreeData.fire();
 		});
 		this.parseTree();
 	}

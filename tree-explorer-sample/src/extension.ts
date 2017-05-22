@@ -10,8 +10,8 @@ export function activate(context: vscode.ExtensionContext) {
 	const jsonOutlineProvider = new JsonOutlineProvider(context);
 
 	// The `providerId` here must be identical to `contributes.explorer.treeExplorerNodeProviderId` in package.json.
-	vscode.window.registerTreeDataProvider('nodeDependencies', new DepNodeProvider(rootPath));
-	vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
+	vscode.window.registerTreeDataProviderForView('nodeDependencies', new DepNodeProvider(rootPath));
+	vscode.window.registerTreeDataProviderForView('jsonOutline', jsonOutlineProvider);
 
 	vscode.commands.registerCommand('extension.openPackageOnNpm', (node: vscode.TreeItem) => {
 		vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${node.label}`));
