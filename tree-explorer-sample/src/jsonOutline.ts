@@ -4,35 +4,33 @@ import * as path from 'path';
 
 export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 
-	private _onDidChange : vscode.EventEmitter<json.Node | null> = new vscode.EventEmitter<json.Node | null>();
-	readonly onDidChange : vscode.Event<json.Node | null> = this._onDidChange.event;
+	private _onDidChange: vscode.EventEmitter<json.Node | null> = new vscode.EventEmitter<json.Node | null>();
+	readonly onDidChange: vscode.Event<json.Node | null> = this._onDidChange.event;
 
 	private tree: json.Node;
 	private editor: vscode.TextEditor;
 
 	constructor(private context: vscode.ExtensionContext) {
 		vscode.window.onDidChangeActiveTextEditor(editor => {
-			if (this.parseTree()) {
-				this._onDidChange.fire();
-			}
+			this.parseTree();
+			this._onDidChange.fire();
 		});
 		this.parseTree();
 	}
 
-	private parseTree() : boolean {
+	private parseTree(): void {
+		this.tree = null;
 		this.editor = vscode.window.activeTextEditor;
-		if (this.editor && this.editor.document.languageId === 'json') {
+		if (this.editor && this.editor.document && this.editor.document.languageId === 'json') {
 			this.tree = json.parseTree(this.editor.document.getText());
-			return true;
 		}
-		return false;
 	}
 
 	getChildren(node?: json.Node): Thenable<json.Node[]> {
 		if (node) {
 			return Promise.resolve(node.parent.type === 'array' ? this.toArrayValueNode(node) : (node.type === 'array' ? node.children[0].children : node.children[1].children));
 		} else {
-			return Promise.resolve(this.tree.children);
+			return Promise.resolve(this.tree ? this.tree.children : []);
 		}
 	}
 
@@ -47,7 +45,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 	getTreeItem(node: json.Node): vscode.TreeItem {
 		let valueNode = node.parent.type === 'array' ? node : node.children[1];
 		let hasChildren = (node.parent.type === 'array' && !node['arrayValue']) || valueNode.type === 'object' || valueNode.type === 'array';
-		return <vscode.TreeItem> {
+		return <vscode.TreeItem>{
 			label: this.getLabel(node),
 			collapsibleState: hasChildren ? vscode.TreeItemCollapsibleState.Collapsed : null,
 			command: {
