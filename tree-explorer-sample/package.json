@@ -27,6 +27,10 @@
 				{
 					"id": "jsonOutline",
 					"name": "Json Outline"
+				},
+				{
+					"id": "ftpExplorer",
+					"name": "FTP Explorer"
 				}
 			]
 		},
@@ -46,6 +50,10 @@
 			{
 				"command": "jsonOutline.deleteEntry",
 				"title": "Delete"
+			},
+			{
+				"command": "openFtpResource",
+				"title": "Open FTP Resource"
 			}
 		],
 		"menus": {
@@ -83,6 +91,7 @@
 		"@types/node": "*"
 	},
 	"dependencies": {
-		"jsonc-parser": "^0.4.2"
+		"jsonc-parser": "^0.4.2",
+		"ftp": "^0.3.10"
 	}
 }

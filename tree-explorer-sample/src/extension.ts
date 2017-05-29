@@ -4,6 +4,7 @@ import * as vscode from 'vscode';
 
 import { DepNodeProvider } from './nodeDependencies'
 import { JsonOutlineProvider } from './jsonOutline'
+import { FtpTreeDataProvider, FtpNode } from './ftpExplorer'
 
 export function activate(context: vscode.ExtensionContext) {
 	const rootPath = vscode.workspace.rootPath;
@@ -24,4 +25,13 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('jsonOutline.refreshEntry', () => vscode.window.showInformationMessage('Successfully called refresh'));
 	vscode.commands.registerCommand('jsonOutline.addEntry', node => vscode.window.showInformationMessage('Successfully called add entry'));
 	vscode.commands.registerCommand('jsonOutline.deleteEntry', node => vscode.window.showInformationMessage('Successfully called delete entry'));
+
+	const provider = new FtpTreeDataProvider();
+
+	vscode.window.registerTreeDataProviderForView('ftpExplorer', provider);
+	vscode.commands.registerCommand('openFtpResource', (node: FtpNode) => {
+		vscode.workspace.openTextDocument(node.resource).then(document => {
+			vscode.window.showTextDocument(document);
+		});
+	});
 }
