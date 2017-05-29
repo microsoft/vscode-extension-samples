@@ -29,6 +29,47 @@
 					"name": "Json Outline"
 				}
 			]
+		},
+		"commands": [
+			{
+				"command": "jsonOutline.addEntry",
+				"title": "Add"
+			},
+			{
+				"command": "jsonOutline.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "jsonOutline.deleteEntry",
+				"title": "Delete"
+			}
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "jsonOutline.refreshEntry",
+					"when": "view == jsonOutline",
+					"group": "navigation"
+				},
+				{
+					"command": "jsonOutline.addEntry",
+					"when": "view == jsonOutline"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "jsonOutline.deleteEntry",
+					"when": "view == jsonOutline && viewItem == array"
+				},
+				{
+					"command": "jsonOutline.deleteEntry",
+					"when": "view == jsonOutline && viewItem == object"
+				}
+			]
 		}
 	},
 	"scripts": {

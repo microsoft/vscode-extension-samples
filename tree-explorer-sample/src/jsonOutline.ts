@@ -15,7 +15,16 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 			this.parseTree();
 			this._onDidChangeTreeData.fire();
 		});
+		vscode.workspace.onDidChangeTextDocument(e => {
+		})
 		this.parseTree();
+	}
+
+	private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
+		if (changeEvent.document.uri.toString() === this.editor.document.uri.toString()) {
+			for (const change of changeEvent.contentChanges) {
+			}
+		}
 	}
 
 	private parseTree(): void {
@@ -28,10 +37,14 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 
 	getChildren(node?: json.Node): Thenable<json.Node[]> {
 		if (node) {
-			return Promise.resolve(node.parent.type === 'array' ? this.toArrayValueNode(node) : (node.type === 'array' ? node.children[0].children : node.children[1].children));
+			return Promise.resolve(this._getChildren(node));
 		} else {
 			return Promise.resolve(this.tree ? this.tree.children : []);
 		}
+	}
+
+	private _getChildren(node: json.Node): json.Node[] {
+		return node.parent.type === 'array' ? this.toArrayValueNode(node) : (node.type === 'array' ? node.children[0].children : node.children[1].children);
 	}
 
 	private toArrayValueNode(node: json.Node): json.Node[] {
@@ -52,7 +65,8 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 				command: 'extension.openJsonSelection',
 				title: '',
 			},
-			iconPath: this.getIcon(node)
+			iconPath: this.getIcon(node),
+			contextValue: this.getNodeType(node)
 		};
 	}
 

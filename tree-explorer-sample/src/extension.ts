@@ -20,4 +20,8 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('extension.openJsonSelection', node => {
 		jsonOutlineProvider.select(node);
 	});
+
+	vscode.commands.registerCommand('jsonOutline.refreshEntry', () => vscode.window.showInformationMessage('Successfully called refresh'));
+	vscode.commands.registerCommand('jsonOutline.addEntry', node => vscode.window.showInformationMessage('Successfully called add entry'));
+	vscode.commands.registerCommand('jsonOutline.deleteEntry', node => vscode.window.showInformationMessage('Successfully called delete entry'));
 }
