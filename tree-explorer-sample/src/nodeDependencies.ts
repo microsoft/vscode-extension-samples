@@ -41,11 +41,12 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 
 			const toDep = (moduleName: string): Dependency => {
 				if (this.pathExists(path.join(this.workspaceRoot, 'node_modules', moduleName))) {
-					return new Node(moduleName);
+					return new Node(moduleName, vscode.TreeItemCollapsibleState.Collapsed);
 				} else {
-					return new Dependency(moduleName, {
+					return new Dependency(moduleName, vscode.TreeItemCollapsibleState.None, {
 						command: 'extension.openPackageOnNpm',
-						title: ''
+						title: '',
+						arguments: [moduleName]
 					});
 				}
 			}
@@ -73,12 +74,14 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 	}
 }
 
-class Dependency implements vscode.TreeItem {
+class Dependency extends vscode.TreeItem {
 
 	constructor(
 		public readonly label: string,
+		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly command?: vscode.Command
 	) {
+		super(label, collapsibleState);
 	}
 
 }

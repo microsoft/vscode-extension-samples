@@ -58,20 +58,19 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 	getTreeItem(node: json.Node): vscode.TreeItem {
 		let valueNode = node.parent.type === 'array' ? node : node.children[1];
 		let hasChildren = (node.parent.type === 'array' && !node['arrayValue']) || valueNode.type === 'object' || valueNode.type === 'array';
-		return <vscode.TreeItem>{
-			label: this.getLabel(node),
-			collapsibleState: hasChildren ? vscode.TreeItemCollapsibleState.Collapsed : null,
-			command: {
-				command: 'extension.openJsonSelection',
-				title: '',
-			},
-			iconPath: this.getIcon(node),
-			contextValue: this.getNodeType(node)
+		let treeItem: vscode.TreeItem = new vscode.TreeItem(this.getLabel(node), hasChildren ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+		treeItem.command = {
+			command: 'extension.openJsonSelection',
+			title: '',
+			arguments: [new vscode.Range(this.editor.document.positionAt(node.offset), this.editor.document.positionAt(node.offset + node.length))]
 		};
+		treeItem.iconPath = this.getIcon(node);
+		treeItem.contextValue = this.getNodeType(node);
+		return treeItem;
 	}
 
-	select(node: json.Node) {
-		this.editor.selection = new vscode.Selection(this.editor.document.positionAt(node.offset), this.editor.document.positionAt(node.offset + node.length));
+	select(range: vscode.Range) {
+		this.editor.selection = new vscode.Selection(range.start, range.end);
 	}
 
 	private getIcon(node: json.Node): any {
