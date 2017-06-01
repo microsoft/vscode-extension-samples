@@ -14,24 +14,25 @@ declare module 'vscode' {
 
 	export namespace window {
 		/**
-		 * Register a [TreeDataProvider](#TreeDataProvider) for the registered view `id`.
-		 * @param viewId View id.
+		 * Register a [TreeDataProvider](#TreeDataProvider) for the view contributed using the extension point `views`.
+		 * @param viewId Id of the view contributed using the extension point `views`.
 		 * @param treeDataProvider A [TreeDataProvider](#TreeDataProvider) that provides tree data for the view
 		 */
 		export function registerTreeDataProvider<T>(viewId: string, treeDataProvider: TreeDataProvider<T>): Disposable;
 	}
 
 	/**
-	 * A data provider that provides tree data for a view
+	 * A data provider that provides tree data
 	 */
 	export interface TreeDataProvider<T> {
 		/**
 		 * An optional event to signal that an element or root has changed.
+		 * To signal that root has changed, do not pass any argument or pass `undefined` or `null`.
 		 */
 		onDidChangeTreeData?: Event<T | undefined | null>;
 
 		/**
-		 * get [TreeItem](#TreeItem) representation of the `element`
+		 * Get [TreeItem](#TreeItem) representation of the `element`
 		 *
 		 * @param element The element for which [TreeItem](#TreeItem) representation is asked for.
 		 * @return [TreeItem](#TreeItem) representation of the element
@@ -39,12 +40,12 @@ declare module 'vscode' {
 		getTreeItem(element: T): TreeItem | Thenable<TreeItem>;
 
 		/**
-		 * get the children of `element` or root.
+		 * Get the children of `element` or root if no element is passed.
 		 *
-		 * @param element The element from which the provider gets children for.
-		 * @return Children of `element` or root.
+		 * @param element The element from which the provider gets children. Can be `undefined`.
+		 * @return Children of `element` or root if no element is passed.
 		 */
-		getChildren(element?: T): T[] | Thenable<T[]>;
+		getChildren(element?: T): ProviderResult<T[]>;
 	}
 
 	export class TreeItem {
