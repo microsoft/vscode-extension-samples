@@ -1,9 +1,9 @@
 {
-	"name": "dep",
-	"displayName": "Dependency Example",
-	"description": "Dependency example for VSCode's explorer API",
+	"name": "custom-view-samples",
+	"displayName": "Custom view Samples",
+	"description": "Samples for VSCode's view API",
 	"version": "0.0.1",
-	"publisher": "octref",
+	"publisher": "ms-vscode",
 	"engines": {
 		"vscode": "^1.13.0"
 	},
