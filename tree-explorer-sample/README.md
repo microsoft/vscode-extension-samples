@@ -1,14 +1,12 @@
-# Dependency Tree Explorer
+# Custom tree view samples
 
-A sample for the Tree Explorer API showing dependencies in a node project. 
-
-![tree-explorer](tree-explorer.png)
+- Node dependencies view
+- Json Outline view
+- Ftp file explorer view
 
 ## Running the example
 
-Currently, this API is only available in [Insiders](https://code.visualstudio.com/insiders).
-
-- Download Insiders version of VS Code and open this sample
+- Open this example in VS Code
 - `npm install`
 - `npm run compile`
 - `F5` to start debugging

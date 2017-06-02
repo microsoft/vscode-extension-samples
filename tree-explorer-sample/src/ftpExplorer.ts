@@ -32,10 +32,8 @@ export class FtpNode {
 }
 
 export class FtpModel {
-	private connection: Thenable<FtpNode[]>;
 
 	constructor(private host: string, private user: string, private password: string) {
-		this.connection = this.connect();
 	}
 
 	public connect(): Thenable<Client> {
@@ -44,6 +42,10 @@ export class FtpModel {
 			client.on('ready', () => {
 				c(client);
 			});
+
+			client.on('error', error => {
+				e('Error while connecting: ' + error.message);
+			})
 
 			client.connect({
 				host: this.host,
@@ -142,8 +144,8 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocum
 				title: 'Open FTP Resource'
 			},
 			iconPath: {
-				light: element.isFolder ? path.join(__filename, '..', '..', '..', 'resources', 'Folder_16x.svg') : path.join(__filename, '..', '..', '..', 'resources', 'Document_16x.svg'),
-				dark: element.isFolder ? path.join(__filename, '..', '..', '..', 'resources', 'Folder_inverse_16x.svg') : path.join(__filename, '..', '..', '..', 'resources', 'Document_inverse_16x.svg')
+				light: element.isFolder ? path.join(__filename, '..', '..', '..', 'resources', 'light', 'folder.svg') : path.join(__filename, '..', '..', '..', 'resources', 'light', 'document.svg'),
+				dark: element.isFolder ? path.join(__filename, '..', '..', '..', 'resources', 'dark', 'folder.svg') : path.join(__filename, '..', '..', '..', 'resources', 'dark', 'document.svg')
 			}
 		};
 	}

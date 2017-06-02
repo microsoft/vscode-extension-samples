@@ -11,7 +11,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const jsonOutlineProvider = new JsonOutlineProvider(context);
 	const provider = new FtpTreeDataProvider();
 
-	// The `providerId` here must be identical to `contributes.explorer.treeExplorerNodeProviderId` in package.json.
 	vscode.window.registerTreeDataProvider('nodeDependencies', new DepNodeProvider(rootPath));
 	vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
 	vscode.window.registerTreeDataProvider('ftpExplorer', provider);
@@ -23,7 +22,6 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('extension.openJsonSelection', range => {
 		jsonOutlineProvider.select(range);
 	});
-
 	vscode.commands.registerCommand('jsonOutline.refreshEntry', () => vscode.window.showInformationMessage('Successfully called refresh'));
 	vscode.commands.registerCommand('jsonOutline.addEntry', node => vscode.window.showInformationMessage('Successfully called add entry'));
 	vscode.commands.registerCommand('jsonOutline.deleteEntry', node => {
