@@ -8,24 +8,24 @@ import { FtpTreeDataProvider, FtpNode } from './ftpExplorer'
 
 export function activate(context: vscode.ExtensionContext) {
 	const rootPath = vscode.workspace.rootPath;
-	const jsonOutlineProvider = new JsonOutlineProvider(context);
-	const provider = new FtpTreeDataProvider();
 
-	vscode.window.registerTreeDataProvider('nodeDependencies', new DepNodeProvider(rootPath));
+	const nodeDependenciesProvider = new DepNodeProvider(rootPath);
+	const jsonOutlineProvider = new JsonOutlineProvider(context);
+	const ftpExplorerProvider = new FtpTreeDataProvider();
+
+	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
 	vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
-	vscode.window.registerTreeDataProvider('ftpExplorer', provider);
+	vscode.window.registerTreeDataProvider('ftpExplorer', ftpExplorerProvider);
 
 	vscode.commands.registerCommand('extension.openPackageOnNpm', moduleName => {
 		vscode.commands.executeCommand('vscode.open', vscode.Uri.parse(`https://www.npmjs.com/package/${moduleName}`));
 	});
+	vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
+	vscode.commands.registerCommand('nodeDependencies.addEntry', node => vscode.window.showInformationMessage('Successfully called add entry'));
+	vscode.commands.registerCommand('nodeDependencies.deleteEntry', node => vscode.window.showInformationMessage('Successfully called delete entry'));
 
 	vscode.commands.registerCommand('extension.openJsonSelection', range => {
 		jsonOutlineProvider.select(range);
-	});
-	vscode.commands.registerCommand('jsonOutline.refreshEntry', () => vscode.window.showInformationMessage('Successfully called refresh'));
-	vscode.commands.registerCommand('jsonOutline.addEntry', node => vscode.window.showInformationMessage('Successfully called add entry'));
-	vscode.commands.registerCommand('jsonOutline.deleteEntry', node => {
-		vscode.window.showInformationMessage('Successfully called delete entry');
 	});
 
 	vscode.commands.registerCommand('openFtpResource', (node: FtpNode) => {

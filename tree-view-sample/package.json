@@ -35,11 +35,11 @@
 		},
 		"commands": [
 			{
-				"command": "jsonOutline.addEntry",
+				"command": "nodeDependencies.addEntry",
 				"title": "Add"
 			},
 			{
-				"command": "jsonOutline.refreshEntry",
+				"command": "nodeDependencies.refreshEntry",
 				"title": "Refresh",
 				"icon": {
 					"light": "resources/light/refresh.svg",
@@ -47,7 +47,7 @@
 				}
 			},
 			{
-				"command": "jsonOutline.deleteEntry",
+				"command": "nodeDependencies.deleteEntry",
 				"title": "Delete"
 			},
 			{
@@ -58,23 +58,19 @@
 		"menus": {
 			"view/title": [
 				{
-					"command": "jsonOutline.refreshEntry",
-					"when": "view == jsonOutline",
+					"command": "nodeDependencies.refreshEntry",
+					"when": "view == nodeDependencies",
 					"group": "navigation"
 				},
 				{
-					"command": "jsonOutline.addEntry",
-					"when": "view == jsonOutline"
+					"command": "nodeDependencies.addEntry",
+					"when": "view == nodeDependencies"
 				}
 			],
 			"view/item/context": [
 				{
-					"command": "jsonOutline.deleteEntry",
-					"when": "view == jsonOutline && viewItem == array"
-				},
-				{
-					"command": "jsonOutline.deleteEntry",
-					"when": "view == jsonOutline && viewItem == object"
+					"command": "nodeDependencies.deleteEntry",
+					"when": "view == nodeDependencies && viewItem == dependency"
 				}
 			]
 		}

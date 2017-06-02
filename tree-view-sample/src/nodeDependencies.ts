@@ -4,7 +4,14 @@ import * as path from 'path';
 
 export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 
+	private _onDidChangeTreeData: vscode.EventEmitter<Dependency | undefined> = new vscode.EventEmitter<Dependency | undefined>();
+	readonly onDidChangeTreeData: vscode.Event<Dependency | undefined> = this._onDidChangeTreeData.event;
+
 	constructor(private workspaceRoot: string) {
+	}
+
+	refresh(): void {
+		this._onDidChangeTreeData.fire();
 	}
 
 	getTreeItem(element: Dependency): vscode.TreeItem {
@@ -41,12 +48,12 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 
 			const toDep = (moduleName: string): Dependency => {
 				if (this.pathExists(path.join(this.workspaceRoot, 'node_modules', moduleName))) {
-					return new Node(moduleName, vscode.TreeItemCollapsibleState.Collapsed);
+					return new Dependency(moduleName, vscode.TreeItemCollapsibleState.Collapsed);
 				} else {
 					return new Dependency(moduleName, vscode.TreeItemCollapsibleState.None, {
 						command: 'extension.openPackageOnNpm',
 						title: '',
-						arguments: [moduleName]
+						arguments: [moduleName],
 					});
 				}
 			}
@@ -84,10 +91,11 @@ class Dependency extends vscode.TreeItem {
 		super(label, collapsibleState);
 	}
 
-}
+	iconPath = {
+		light: path.join(__filename, '..', '..', '..', 'resources', 'light', 'dependency.svg'),
+		dark: path.join(__filename, '..', '..', '..', 'resources', 'dark', 'dependency.svg')
+	};
 
-class Node extends Dependency {
-
-	readonly collapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+	contextValue = 'dependency';
 
 }
