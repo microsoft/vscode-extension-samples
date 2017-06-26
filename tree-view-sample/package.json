@@ -12,6 +12,7 @@
 	],
 	"activationEvents": [
 		"onView:nodeDependencies",
+		"onView:ftpExplorer",
 		"onView:jsonOutline"
 	],
 	"main": "./out/src/extension",
@@ -25,7 +26,8 @@
 				},
 				{
 					"id": "jsonOutline",
-					"name": "Json Outline"
+					"name": "Json Outline",
+					"when": "resourceLangId == 'json'"
 				},
 				{
 					"id": "ftpExplorer",
