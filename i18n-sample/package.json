@@ -1,0 +1,46 @@
+{
+  "name": "i18n-sample",
+  "displayName": "i18n-sample",
+  "description": "Sample that shows how to localize an extension",
+  "version": "0.0.1",
+  "publisher": "vazexqi",
+  "engines": {
+    "vscode": "^1.13.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.sayHello",
+    "onCommand:extension.sayBye"
+  ],
+  "main": "./out/src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.sayHello",
+        "title": "%extension.sayHello.title%"
+      },
+      {
+        "command": "extension.sayBye",
+        "title": "%extension.sayBye.title%"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./ && mkdir -p out/src/command && cp src/*.json out/src && cp src/command/*.json out/src/command/",
+    "compile": "mkdir -p out/src/command && cp src/*.json out/src && cp src/command/*.json out/src/command/ && tsc -watch -p ./",
+    "clean": "rm -rf out",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "typescript": "^2.0.3",
+    "vscode": "^1.0.0",
+    "mocha": "^2.3.3",
+    "@types/node": "^6.0.40",
+    "@types/mocha": "^2.2.32"
+  },
+  "dependencies": {
+    "vscode-nls": "^2.0.2"
+  }
+}
