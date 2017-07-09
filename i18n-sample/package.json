@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@types/node": "^6.0.40",
+    "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
     "gulp-filter": "^5.0.0",
     "gulp-tsb": "^2.0.3",

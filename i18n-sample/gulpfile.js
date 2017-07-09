@@ -1,6 +1,7 @@
 // This is based off https://github.com/Microsoft/vscode/blob/master/build/gulpfile.extensions.js
 // but simplified for the single extension use-case
 
+"use strict";
 const es = require('event-stream');
 const filter = require('gulp-filter');
 const fs = require('fs');
