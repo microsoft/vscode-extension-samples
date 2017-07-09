@@ -3,21 +3,30 @@
 -------------------
 
 This folder contains a sample VS code extension that shows how to use the
-package.nls.json and vscode-nls library for localization. For this sample, it
-shows two commands: Hello and Bye.
+package.nls.json and the vscode-nls library for localization. For this sample,
+it shows two commands: Hello and Bye in English and Japanese.
 
-The text for the commands are defined in the top-level package.nls.json (for
-English) and package.nls.ja.json (for Japanese). This is how you would localize
-your text in the package.json file.
+**Assumptions**
 
-The actual text that is shown by the invocation of the commands are in
-`src/extension.ts` and `src/command/sayBye.ts`. It shows how to use `nls.config`
-and `nls.loadMessageBundle`.
+* All localization files are under the i18n folder.
+* You could have created this folder by hand, or you could have used the
+  `vscode-nls-dev` tool to extract it.
+* Under the i18n folder, you have sub-folders that represent the language you
+  want to localize. These names follow the ISO 639-3 convention.
+* Under the language names folder you will create json files that mirror the
+  structure of the source code for your extension (e.g., out/src). The json
+  files are key:value pairs of the text that you want to localize. The naming
+  convention is `<file_name>.i18n.json`.
+* If you have a top-level package.nls.json file in your extension, you should
+  have one for each language following the naming convention of
+  `package.i18n.json`.
 
 # How to run locally
 
 Localization values are only applied in the VSIX package.
 
+1. Ensure that you have `gulp-cli` installed globally using `npm install
+   --global gulp-cli`.
 1. Run `npm install` to bring in the dependencies.
 1. Follow the steps at
    https://code.visualstudio.com/docs/extensions/publish-extension to ensure
@@ -27,7 +36,82 @@ Localization values are only applied in the VSIX package.
    https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix
 1. Change your locale to Japanese by invoking "Configure Language" from the Command Palette.
 
+See the demo.gif file in this repository for a screencast.
+
+# What happens behind the scenes
+
+1. The `vscode-nls-dev` module is used to rewrite the generated JavaScript.
+1. Calls of the form `localize('some_key', 'Hello')` are transformed to
+   `localize(0, null)` where the first parameter (0, in this example) is the
+   position of the key in your messages file.
+1. The contents of the i18n folder are transformed from key:value pairs into
+   positional arrays.
+
+# Considerations
+
+It is possible to use your own localization pipeline.
+
+1. Localizations in your package.json can be done by wrapping the localized text
+   in the form %some.key%.
+
+```
+// [Before] package.json
+
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.sayHello",
+        "title": "Hello"
+      }
+    ]
+
+// [After] package.json
+
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.sayHello",
+        "title": "%extension.sayHello.title%"
+      }
+    ]
+
+// [After] new package.nls.json
+
+{
+    "extension.sayHello.title": "Hello",
+}
+
+```
+
+Then, create the corresponding package.nls.{your_language}.json files for each language to localize.
+
+2. It is also possible to use your own library for localizing text in your
+   source file. You would use the value of `process.env.VSCODE_NLS_CONFIG`
+   environment variable. At runtime, this environment variable is a JSON string
+   that contains the locale that VS Code is run with. For instance, this is the
+   value for Japanese: `"{"locale":"ja","availableLanguages":{"*":"ja"}}"`
+
+```JavaScript
+
+function localize(config) {
+  const messages = {
+    en: 'Hello',
+    ja: 'こんにちは'
+  };
+  return messages[config['locale']];
+}
+
+const config = JSON.parse(process.env.VSCODE_NLS_CONFIG);
+localize(config);
+
+```
+
 # History
+
+## 0.0.2
+
+Hook up the vscode-nls-dev functions to gulp so that you can just run `vsce
+package` without manual transformations.
 
 ## 0.0.1:
 

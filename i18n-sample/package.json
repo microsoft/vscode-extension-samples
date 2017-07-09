@@ -2,7 +2,7 @@
   "name": "i18n-sample",
   "displayName": "i18n-sample",
   "description": "Sample that shows how to localize an extension",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "vazexqi",
   "engines": {
     "vscode": "^1.13.0"
@@ -28,17 +28,21 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "tsc -p ./ && mkdir -p out/src/command && cp src/*.json out/src && cp src/command/*.json out/src/command/",
-    "compile": "mkdir -p out/src/command && cp src/*.json out/src && cp src/command/*.json out/src/command/ && tsc -watch -p ./",
-    "clean": "rm -rf out",
+    "vscode:prepublish": "gulp build-extension",
+    "compile": "tsc -watch -p ./",
+    "clean": "gulp clean-extension",
     "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
-    "typescript": "^2.0.3",
-    "vscode": "^1.0.0",
-    "mocha": "^2.3.3",
     "@types/node": "^6.0.40",
-    "@types/mocha": "^2.2.32"
+    "gulp": "^3.9.1",
+    "gulp-filter": "^5.0.0",
+    "gulp-tsb": "^2.0.3",
+    "rimraf": "^2.6.1",
+    "shelljs": "^0.7.8",
+    "typescript": "^2.4.1",
+    "vscode": "^1.1.2",
+    "vscode-nls-dev": "^2.1.3"
   },
   "dependencies": {
     "vscode-nls": "^2.0.2"

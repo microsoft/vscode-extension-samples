@@ -1,15 +1,9 @@
 import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
 
-// This file shows how you would load the messageBundle from a separate file.
-
-// const localize = nls.loadMessageBundle();
-// becomes...
-const localize: any = nls.loadMessageBundle(__filename);
+const localize = nls.loadMessageBundle();
 
 export function sayByeCommand() {
-  // const message = localize('sayByetext', 'Bye')
-  // becomes...
-  const message = localize(0, null);
+  const message = localize('sayBye.text', 'Bye')
   vscode.window.showInformationMessage(message);
 }
