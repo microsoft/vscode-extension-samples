@@ -1,3 +1,4 @@
 out
 node_modules
-package.nls.*.json
+// These files will be generated from the i18n folder
+*nls.*.json
