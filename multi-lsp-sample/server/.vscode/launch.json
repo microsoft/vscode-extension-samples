@@ -1,0 +1,18 @@
+{
+	"version": "0.1.0",
+	// List of configurations. Add new configurations or edit existing ones.
+	"configurations": [
+		{
+			"name": "Attach",
+			"type": "node",
+			"request": "attach",
+			// TCP/IP address. Default is "localhost".
+			"address": "localhost",
+			// Port to attach to.
+			"port": 6012,
+			"protocol": "inspector",
+			"sourceMaps": false,
+			"outDir": "${workspaceRoot}/../testbed/server"
+		}
+	]
+}
