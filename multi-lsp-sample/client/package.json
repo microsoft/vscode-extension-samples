@@ -1,0 +1,46 @@
+{
+	"name": "multi-lsp",
+	"description": "Example showing multiple LSP servers running",
+	"version": "0.0.1",
+	"publisher": "vscode",
+	"engines": {
+		"vscode": "^1.15.0"
+	},
+	"activationEvents": [
+		"onLanguage:plaintext"
+	],
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Multi LSP configuration",
+			"properties": {
+				"multi-lsp.enable": {
+					"scope": "resource",
+					"type": "boolean",
+					"default": true,
+					"description": "Controls the enablement."
+				},
+				"multi-lsp.options": {
+					"scope": "resource",
+					"type": "object",
+					"default": {},
+					"description": "Additional options."
+				}
+			}
+		}
+	},
+	"main": "./out/extension",
+	"scripts": {
+		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+		"watch": "tsc -watch -p ./",
+		"update-vscode": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"vscode": "^1.1.5",
+		"typescript": "^2.4.2",
+		"@types/node": "^6.0.87"
+	},
+	"dependencies": {
+		"vscode-languageclient": "next"
+	}
+}

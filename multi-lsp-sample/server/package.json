@@ -1,0 +1,21 @@
+{
+	"name": "multi-lsp-server",
+	"version": "0.1.0",
+	"description": "Multi server example",
+	"engines": {
+		"node": "*"
+	},
+	"private": true,
+	"main": "./lib/server.js",
+	"dependencies": {
+		"vscode-languageserver": "next"
+	},
+	"devDependencies": {
+		"typescript": "^2.4.2",
+		"@types/node": "^6.0.87"
+	},
+	"scripts": {
+		"compile": "installServerIntoExtension ../client ./package.json ./src/tsconfig.json && tsc -p ./src",
+		"watch": "installServerIntoExtension ../client ./package.json ./src/tsconfig.json && tsc --watch -p ./src"
+	}
+}
