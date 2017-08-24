@@ -43,6 +43,7 @@ export function activate(_context: ExtensionContext) {
 			defaultClient = new LanguageClient('multi-lsp', 'Multi-LSP', serverOptions, clientOptions);
 			defaultClient.registerFeatures(ProposedProtocol(defaultClient));
 			defaultClient.start();
+			return;
 		}
 		let folder = Workspace.getWorkspaceFolder(uri);
 		// Files outside a folder can't be handled. This might depend on the language
