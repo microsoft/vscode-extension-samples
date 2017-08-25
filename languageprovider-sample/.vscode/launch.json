@@ -11,7 +11,9 @@
 			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/client/out/**/*.js"],
+			"outFiles": [
+				"${workspaceRoot}/client/out/**/*.js"
+			],
 			"preLaunchTask": "npm"
 		},
 		{
@@ -19,10 +21,15 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}", "--extensionTestsPath=${workspaceRoot}/client/out/test" ],
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}",
+				"--extensionTestsPath=${workspaceRoot}/client/out/test"
+			],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/client/out/test/**/*.js"],
+			"outFiles": [
+				"${workspaceRoot}/client/out/test/**/*.js"
+			],
 			"preLaunchTask": "npm"
 		},
 		{
@@ -31,14 +38,18 @@
 			"request": "attach",
 			"port": 6004,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
+			"outFiles": [
+				"${workspaceRoot}/server/out/**/*.js"
+			]
 		}
-
 	],
 	"compounds": [
-        {
-            "name": "Launch Client & Server",
-            "configurations": ["Launch Client", "Attach Language Server"]
-        }
-    ]
+		{
+			"name": "Launch Client & Server",
+			"configurations": [
+				"Launch Extension",
+				"Attach Language Server"
+			]
+		}
+	]
 }
