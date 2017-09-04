@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { 
-	workspace as Workspace, window as Window, ExtensionContext, TextDocument, OutputChannel
+	workspace as Workspace, window as Window, ExtensionContext, TextDocument, OutputChannel, WorkspaceFolder
 } from 'vscode'; 
 
 import { 
@@ -10,11 +10,19 @@ import {
 let defaultClient: LanguageClient;
 let clients: Map<string, LanguageClient> = new Map();
 
+function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
+	let result = folder;
+	let candidate: WorkspaceFolder;
+	while((candidate = Workspace.getWorkspaceFolder(folder.uri)) !== void 0) {
+		result = candidate;
+	}
+	return result;
+}
+
 export function activate(_context: ExtensionContext) {
 
-
 	let module = path.join(__dirname, '..', 'server', 'server.js');
-	let outputChannel: OutputChannel = Window.createOutputChannel('Multi-LSP-Example');
+	let outputChannel: OutputChannel = Window.createOutputChannel('lsp-multi-server-example');
 	
 	function didOpenTextDocument(document: TextDocument): void {
 		// We are only interested in language mode text
@@ -34,13 +42,10 @@ export function activate(_context: ExtensionContext) {
 				documentSelector: [
 					{ scheme: 'untitled', language: 'plaintext' }
 				],
-				synchronize: {
-					configurationSection: 'multi-lsp'
-				},
 				diagnosticCollectionName: 'multi-lsp',
 				outputChannel: outputChannel
 			}
-			defaultClient = new LanguageClient('multi-lsp', 'Multi-LSP', serverOptions, clientOptions);
+			defaultClient = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			defaultClient.registerFeatures(ProposedProtocol(defaultClient));
 			defaultClient.start();
 			return;
@@ -51,6 +56,9 @@ export function activate(_context: ExtensionContext) {
 		if (!folder) {
 			return;
 		}
+		// If we have nested workspace folders we only start a server on the outer most workspace folder.
+		folder = getOuterMostWorkspaceFolder(folder);
+		
 		if (!clients.has(folder.uri.toString())) {
 			let debugOptions = { execArgv: ["--nolazy", `--inspect=${6011 + clients.size}`] };
 			let serverOptions = {
@@ -61,18 +69,14 @@ export function activate(_context: ExtensionContext) {
 				documentSelector: [
 					{ scheme: 'file', language: 'plaintext', pattern: `${folder.uri.fsPath}/**/*` }
 				],
-				synchronize: {
-					configurationSection: 'multi-lsp'
-				},
-				diagnosticCollectionName: 'multi-lsp',
+				diagnosticCollectionName: 'lsp-multi-server-example',
 				workspaceFolder: folder,
 				outputChannel: outputChannel
 			}
-			let client = new LanguageClient('multi-lsp', 'Multi-LSP', serverOptions, clientOptions);
+			let client = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			client.registerFeatures(ProposedProtocol(client));
 			client.start();
 			clients.set(folder.uri.toString(), client);
-
 		}
 	}
 
