@@ -5,13 +5,8 @@
 'use strict';
 
 import {
-	IPCMessageReader, IPCMessageWriter,
-	createConnection, IConnection, TextDocumentSyncKind,
-	TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
-	InitializeParams, InitializeResult, TextDocumentPositionParams,
-	DidChangeConfigurationNotification, ClientCapabilities,
-	CompletionItem, CompletionItemKind, StreamMessageReader, StreamMessageWriter, ProposedProtocol,
-	ConfigurationItem
+	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity, 
+	InitializeResult, DidChangeConfigurationNotification, ProposedProtocol, ConfigurationItem
 } from 'vscode-languageserver';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport
@@ -21,7 +16,7 @@ let connection = createConnection(ProposedProtocol);
 // supports full document sync only
 let documents: TextDocuments = new TextDocuments();
 
-connection.onInitialize((params): InitializeResult => {
+connection.onInitialize((_params): InitializeResult => {
 	return {
 		capabilities: {
 			// Tell the client that the server works in FULL text document sync mode
