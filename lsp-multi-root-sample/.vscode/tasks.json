@@ -1,0 +1,80 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"taskName": "Compile",
+			"dependsOn": [
+				"Client Compile",
+				"Server Compile"
+			],
+			"problemMatcher": []
+		},
+		{
+			"taskName": "Client Compile",
+			"type": "shell",
+			"command": "npm run client-compile",
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "never"
+
+			},
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"taskName": "Server Compile",
+			"type": "shell",
+			"command": "npm run server-compile",
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "never"
+			},
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"taskName": "Watch",
+			"dependsOn": [
+				"Client Watch",
+				"Server Watch"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		},
+		{
+			"taskName": "Client Watch",
+			"type": "shell",
+			"command": "npm run client-watch",
+			"isBackground": true,
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "never"
+			},
+			"problemMatcher": [
+				"$tsc-watch"
+			]
+		},
+		{
+			"taskName": "Server Watch",
+			"type": "shell",
+			"command": "npm run server-watch",
+			"isBackground": true,
+			"group": "build",
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "never"
+			},
+			"problemMatcher": [
+				"$tsc-watch"
+			]
+		}
+	]
+}
