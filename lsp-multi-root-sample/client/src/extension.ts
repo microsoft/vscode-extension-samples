@@ -6,9 +6,9 @@
 
 import * as path from 'path';
 
-import { workspace, Disposable, ExtensionContext, WorkspaceConfiguration } from 'vscode';
+import { workspace, ExtensionContext, WorkspaceConfiguration } from 'vscode';
 import { 
-	LanguageClient, LanguageClientOptions, SettingMonitor, ServerOptions, TransportKind, ProposedProtocol, Middleware, CancellationToken,
+	LanguageClient, LanguageClientOptions, ServerOptions, TransportKind, ProposedProtocol, CancellationToken,
 	ConfigurationMiddleware, GetConfigurationParams
 } from 'vscode-languageclient';
 
