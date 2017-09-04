@@ -13,4 +13,3 @@ The example uses proposed Language Server protocol. So the code demoed here migh
 - Select `Launch Client` from the drop down
 - Run the lauch config
 - If you want to debug the server as well use the launch configuration `Attach to Server`
-
