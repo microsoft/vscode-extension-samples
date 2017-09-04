@@ -1,6 +1,6 @@
 {
-	"name": "multi-lsp",
-	"description": "Example showing multiple LSP servers running",
+	"name": "lsp-multi-server-example-client-part",
+	"description": "A language server example demoing servers per workspace folder",
 	"version": "0.0.1",
 	"publisher": "vscode",
 	"engines": {
@@ -14,13 +14,13 @@
 			"type": "object",
 			"title": "Multi LSP configuration",
 			"properties": {
-				"multi-lsp.enable": {
+				"lsp-multi-server-example.enable": {
 					"scope": "resource",
 					"type": "boolean",
 					"default": true,
 					"description": "Controls the enablement."
 				},
-				"multi-lsp.options": {
+				"lsp-multi-server-example.options": {
 					"scope": "resource",
 					"type": "object",
 					"default": {},
@@ -31,16 +31,14 @@
 	},
 	"main": "./out/extension",
 	"scripts": {
-		"vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-		"watch": "tsc -watch -p ./",
-		"update-vscode": "node ./node_modules/vscode/bin/install"
-	},
-	"devDependencies": {
-		"vscode": "^1.1.5",
-		"typescript": "^2.4.2",
-		"@types/node": "^6.0.87"
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -p ./",
+		"watch": "tsc -w -p ./",
+		"update-vscode": "node ./node_modules/vscode/bin/install",
+		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"dependencies": {
+		"vscode": "^1.1.5",
 		"vscode-languageclient": "next"
 	}
 }
