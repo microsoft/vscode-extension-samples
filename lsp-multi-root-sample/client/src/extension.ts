@@ -49,9 +49,9 @@ export function activate(context: ExtensionContext) {
 				}
 				let config: WorkspaceConfiguration;
 				if (item.scopeUri) {
-					config = workspace.getConfiguration('lsp-multi-root-sample', client.protocol2CodeConverter.asUri(item.scopeUri));
+					config = workspace.getConfiguration('lspMultiRootSample', client.protocol2CodeConverter.asUri(item.scopeUri));
 				} else {
-					config = workspace.getConfiguration('lsp-multi-root-sample');
+					config = workspace.getConfiguration('lspMultiRootSample');
 				}
 				result.push({
 					maxNumberOfProblems: config.get('maxNumberOfProblems')
