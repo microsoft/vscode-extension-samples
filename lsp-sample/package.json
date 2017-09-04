@@ -1,0 +1,25 @@
+{
+	"name": "lsp--sample",
+	"description": "A language server example",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"version": "0.0.1",
+	"publisher": "vscode",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"scripts": {
+		"postinstall": "cd server && npm install && cd ../client && npm install && cd ..",
+		"compile": "tsc -p client/tsconfig.json && cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
+		"client-compile": "tsc -p client/tsconfig.json",
+		"client-watch": "tsc -w -p client/tsconfig.json",
+		"server-compile": "cd server && npm run installServer && cd .. && tsc -p server/tsconfig.json",
+		"server-watch": "cd server && npm run installServer && cd .. && tsc -w -p server/tsconfig.json"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.42",
+		"@types/node": "^6.0.88",
+		"typescript": "^2.5.2"
+	}
+}

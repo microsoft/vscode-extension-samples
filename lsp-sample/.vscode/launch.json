@@ -1,0 +1,33 @@
+{
+	"version": "0.2.0",
+	// List of configurations. Add new configurations or edit existing ones.
+	"configurations": [
+		{
+			"name": "Launch Client",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}/client"
+			],
+			"stopOnEntry": false,
+			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceRoot}/client/out/**/*.js"
+			],
+			"preLaunchTask": "Client Watch"
+		},
+		{
+			"name": "Attach to Server",
+			"type": "node",
+			"request": "attach",
+			"port": 6009,
+			"sourceMaps": true,
+			"outFiles": [
+				"${workspaceRoot}/client/server/**/*.js"
+			],
+			"protocol": "legacy",
+			"preLaunchTask": "Server Watch"
+		}
+	]
+}
