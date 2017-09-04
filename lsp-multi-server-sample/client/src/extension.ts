@@ -19,9 +19,9 @@ function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
 	return result;
 }
 
-export function activate(_context: ExtensionContext) {
+export function activate(context: ExtensionContext) {
 
-	let module = path.join(__dirname, '..', 'server', 'server.js');
+	let module = context.asAbsolutePath(path.join('server', 'server.js'));
 	let outputChannel: OutputChannel = Window.createOutputChannel('lsp-multi-server-example');
 	
 	function didOpenTextDocument(document: TextDocument): void {

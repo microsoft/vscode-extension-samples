@@ -9,27 +9,38 @@
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
+	"main": "./out/src/extension",
 	"contributes": {
 		"configuration": {
 			"type": "object",
 			"title": "Multi LSP configuration",
 			"properties": {
-				"lsp-multi-server-example.enable": {
+				"lspMultiServerSample.enable": {
 					"scope": "resource",
 					"type": "boolean",
 					"default": true,
 					"description": "Controls the enablement."
 				},
-				"lsp-multi-server-example.options": {
+				"lspMultiServerSample.options": {
 					"scope": "resource",
 					"type": "object",
 					"default": {},
 					"description": "Additional options."
+				},
+				"lspMultiServerSample.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VSCode and the language server."
 				}
 			}
 		}
 	},
-	"main": "./out/extension",
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./",
 		"compile": "tsc -p ./",
