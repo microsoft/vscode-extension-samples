@@ -62,9 +62,9 @@ function getEditorInfo(): { text: string; tooltip: string; color: string; } {
         if (!folder) {
             text = `$(alert) <outside workspace> → ${basename(resource.fsPath)}`;
         } else {
-            text = `$(file-submodule) ${basename(folder.uri.fsPath)} → $(file-code) ${basename(resource.fsPath)}`;
+            text = `$(file-submodule) ${basename(folder.uri.fsPath)} (${folder.index + 1} of ${workspace.workspaceFolders.length}) → $(file-code) ${basename(resource.fsPath)}`;
             tooltip = resource.fsPath;
-    
+
             const multiRootConfigForResource = workspace.getConfiguration('multiRootSample', resource);
             color = multiRootConfigForResource.get('statusColor');
         }
