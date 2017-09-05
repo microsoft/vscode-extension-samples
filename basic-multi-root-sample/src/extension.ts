@@ -61,13 +61,13 @@ function getEditorInfo(): { text: string; tooltip: string; color: string; } {
         const folder = workspace.getWorkspaceFolder(resource);
         if (!folder) {
             text = `$(alert) <outside workspace> → ${basename(resource.fsPath)}`;
+        } else {
+            text = `$(file-submodule) ${basename(folder.uri.fsPath)} → $(file-code) ${basename(resource.fsPath)}`;
+            tooltip = resource.fsPath;
+    
+            const multiRootConfigForResource = workspace.getConfiguration('multiRootSample', resource);
+            color = multiRootConfigForResource.get('statusColor');
         }
-
-        text = `$(file-submodule) ${basename(folder.uri.fsPath)} → $(file-code) ${basename(resource.fsPath)}`;
-        tooltip = resource.fsPath;
-
-        const multiRootConfigForResource = workspace.getConfiguration('multiRootSample', resource);
-        color = multiRootConfigForResource.get('statusColor');
     }
 
     return { text, tooltip, color };
