@@ -8,8 +8,7 @@ import * as path from 'path';
 
 import { workspace, ExtensionContext, WorkspaceConfiguration } from 'vscode';
 import { 
-	LanguageClient, LanguageClientOptions, ServerOptions, TransportKind, ProposedProtocol, CancellationToken,
-	ConfigurationMiddleware, GetConfigurationParams
+	LanguageClient, LanguageClientOptions, ServerOptions, TransportKind, CancellationToken, Middleware, Proposed, ProposedFeatures
 } from 'vscode-languageclient';
 
 // The example settings
@@ -33,32 +32,33 @@ export function activate(context: ExtensionContext) {
 
 	// Convert VS Code specific settings to a format acceptable by the server. Since
 	// both client and server do use JSON the conversion is trivial. 
-	let configurationMiddleware: ConfigurationMiddleware = {
-		configuration: (params: GetConfigurationParams, _token: CancellationToken, _next: Function): any[] => {
-			if (!params.items) {
-				return null;
-			}
-			let result: (MultiRootExampleSettings | null)[] = [];
-			for (let item of params.items) {
-				// The server asks the client for configuration settings without a section
-				// If a section is present we return null to indicate that the configuration
-				// is not supported.
-				if (item.section) {
-					result.push(null);
-					continue;
+	let middleware: ProposedFeatures.ConfigurationMiddleware | Middleware = {
+		workspace: {
+			configuration: (params: Proposed.ConfigurationParams, _token: CancellationToken, _next: Function): any[] => {
+				if (!params.items) {
+					return null;
 				}
-				let config: WorkspaceConfiguration;
-				if (item.scopeUri) {
-					config = workspace.getConfiguration('lspMultiRootSample', client.protocol2CodeConverter.asUri(item.scopeUri));
-				} else {
-					config = workspace.getConfiguration('lspMultiRootSample');
+				let result: (MultiRootExampleSettings | null)[] = [];
+				for (let item of params.items) {
+					// The server asks the client for configuration settings without a section
+					// If a section is present we return null to indicate that the configuration
+					// is not supported.
+					if (item.section) {
+						result.push(null);
+						continue;
+					}
+					let config: WorkspaceConfiguration;
+					if (item.scopeUri) {
+						config = workspace.getConfiguration('lspMultiRootSample', client.protocol2CodeConverter.asUri(item.scopeUri));
+					} else {
+						config = workspace.getConfiguration('lspMultiRootSample');
+					}
+					result.push({
+						maxNumberOfProblems: config.get('maxNumberOfProblems')
+					});
 				}
-				result.push({
-					maxNumberOfProblems: config.get('maxNumberOfProblems')
-				});
+				return result;
 			}
-			return result;
-
 		}
 	};
 
@@ -70,15 +70,13 @@ export function activate(context: ExtensionContext) {
 			// Notify the server about file changes to '.clientrc files contain in the workspace
 			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
 		},
-		middleware: {
-			workspace: configurationMiddleware as any // cast to any due to proposed API
-		}
+		middleware: middleware as Middleware
 	}
 	
 	// Create the language client and start the client.
 	let client = new LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
 	// Register new propose protocol if available.
-	client.registerFeatures(ProposedProtocol(client));
+	client.registerProposedFeatures();
 	
 	// Start the client. This will also launch the server
 	let disposable = client.start();

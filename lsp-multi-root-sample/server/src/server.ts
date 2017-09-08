@@ -6,11 +6,11 @@
 
 import {
 	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity, 
-	InitializeResult, DidChangeConfigurationNotification, ProposedProtocol, ConfigurationItem
+	InitializeResult, DidChangeConfigurationNotification, Proposed, ProposedFeatures, 
 } from 'vscode-languageserver';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport
-let connection = createConnection(ProposedProtocol);
+let connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager. The text document manager
 // supports full document sync only
@@ -48,7 +48,7 @@ connection.onInitialized(() => {
 
 
 connection.onNotification(DidChangeConfigurationNotification.type, () => {
-	let toRequest: ConfigurationItem[] = [];
+	let toRequest: Proposed.ConfigurationItem[] = [];
 	for (let resource of settings.keys()) {
 		toRequest.push({ section: '', scopeUri: resource});
 	}
