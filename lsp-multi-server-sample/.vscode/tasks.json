@@ -2,17 +2,17 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"taskName": "Compile",
+			"taskName": "compile",
 			"dependsOn": [
-				"Client Compile",
-				"Server Compile"
+				"compile:client",
+				"compile:server"
 			],
 			"problemMatcher": []
 		},
 		{
-			"taskName": "Client Compile",
+			"taskName": "compile:client",
 			"type": "shell",
-			"command": "npm run client-compile",
+			"command": "npm run compile:client",
 			"group": "build",
 			"presentation": {
 				"panel": "dedicated",
@@ -24,9 +24,9 @@
 			]
 		},
 		{
-			"taskName": "Server Compile",
+			"taskName": "compile:server",
 			"type": "shell",
-			"command": "npm run server-compile",
+			"command": "npm run compile:server",
 			"group": "build",
 			"presentation": {
 				"panel": "dedicated",
@@ -37,10 +37,10 @@
 			]
 		},
 		{
-			"taskName": "Watch",
+			"taskName": "watch",
 			"dependsOn": [
-				"Client Watch",
-				"Server Watch"
+				"watch:client",
+				"watch:server"
 			],
 			"group": {
 				"kind": "build",
@@ -49,9 +49,9 @@
 			"problemMatcher": []
 		},
 		{
-			"taskName": "Client Watch",
+			"taskName": "watch:client",
 			"type": "shell",
-			"command": "npm run client-watch",
+			"command": "npm run watch:client",
 			"isBackground": true,
 			"group": "build",
 			"presentation": {
@@ -63,9 +63,9 @@
 			]
 		},
 		{
-			"taskName": "Server Watch",
+			"taskName": "watch:server",
 			"type": "shell",
-			"command": "npm run server-watch",
+			"command": "npm run watch:server",
 			"isBackground": true,
 			"group": "build",
 			"presentation": {

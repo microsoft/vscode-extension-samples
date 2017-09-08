@@ -4,10 +4,10 @@
 'use strict';
 
 import {
-	createConnection, TextDocuments, ProposedProtocol, TextDocumentSyncKind
+	createConnection, TextDocuments, ProposedFeatures, TextDocumentSyncKind
 } from 'vscode-languageserver';
 
-let connection = createConnection(ProposedProtocol);
+let connection = createConnection(ProposedFeatures.all);
 let documents = new TextDocuments();
 let rootUri: string;
 
