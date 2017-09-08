@@ -4,7 +4,7 @@ import {
 } from 'vscode'; 
 
 import { 
-	LanguageClient, LanguageClientOptions, TransportKind, ProposedProtocol
+	LanguageClient, LanguageClientOptions, TransportKind
 } from 'vscode-languageclient';
 
 let defaultClient: LanguageClient;
@@ -46,7 +46,7 @@ export function activate(context: ExtensionContext) {
 				outputChannel: outputChannel
 			}
 			defaultClient = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
-			defaultClient.registerFeatures(ProposedProtocol(defaultClient));
+			defaultClient.registerProposedFeatures();
 			defaultClient.start();
 			return;
 		}
@@ -74,7 +74,7 @@ export function activate(context: ExtensionContext) {
 				outputChannel: outputChannel
 			}
 			let client = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
-			client.registerFeatures(ProposedProtocol(client));
+			client.registerProposedFeatures();
 			client.start();
 			clients.set(folder.uri.toString(), client);
 		}
