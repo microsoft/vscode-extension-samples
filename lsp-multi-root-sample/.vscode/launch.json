@@ -11,7 +11,7 @@
 			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": [ "${workspaceRoot}/client/out/src/**/*.js" ],
-			"preLaunchTask": "Client Watch"
+			"preLaunchTask": "watch:client"
 		},
 		{
 			"name": "Attach to Server",
@@ -20,7 +20,7 @@
 			"port": 6009,
 			"sourceMaps": true,
 			"outFiles": [ "${workspaceRoot}/client/server/**/*.js" ],
-			"preLaunchTask": "Server Watch"
+			"preLaunchTask": "watch:server"
 		}
 	]
 }
