@@ -30,7 +30,7 @@ When the user opens the view, VS Code will then emit an activationEvent `onView:
 
 # TreeDataProvider
 
-Extension writers should register a [provider](/docs/extensionAPI/vscode-api.md#TreeDataProvider) programmatically to populate data in the view. Refer to examples [here](https://github.com/Microsoft/vscode-extension-samples/tree/master/tree-view-sample).
+Extension writers should register a [provider](/docs/extensionAPI/vscode-api.md#TreeDataProvider) programmatically to populate data in the view.
 
 ```typescript
 vscode.window.registerTreeDataProvider('nodeDependencies', new DepNodeProvider());
