@@ -1,6 +1,6 @@
 # LSP Multi Root Example
 
-A language server example that demonstrates how to handle configuration settings in a workspace that uses multi root folders. Since settings in VS Code in this setupare typically scoped to a resource the example reads the resource settings from the client using the new proposed API getConfiguration. This is analogous to a reading settings in a multi root folder setup directly in the extension host.
+A language server example that demonstrates how to handle configuration settings in a workspace that uses multi root folders. Since settings in VS Code in this setup are typically scoped to a resource, the example reads the resource settings from the client using the new proposed API getConfiguration. This is analogous to reading settings in a multi-root folder setup directly in the extension host.
 
 The example uses proposed Language Server protocol. So the code demoed here might change when the final version of the configuration and workspace folder protocol is released.
 
