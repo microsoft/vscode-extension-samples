@@ -14,3 +14,5 @@ The example uses proposed Language Server protocol. So the code demoed here migh
 - Run the lauch config
 - If you want to debug the server as well use the launch configuration `Attach to Server`
 
+- In the [Extension Development Host] instance of VSCOde, open a document in 'plain text' laguage mode and write some words. The extension will emit diagnostics for words in all-uppercase (e.g. 'TEST').
+

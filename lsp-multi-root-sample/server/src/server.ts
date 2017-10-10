@@ -5,112 +5,112 @@
 'use strict';
 
 import {
-	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity, 
-	InitializeResult, DidChangeConfigurationNotification, Proposed, ProposedFeatures, 
+	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
+	ProposedFeatures, InitializeParams,
 } from 'vscode-languageserver';
 
-// Create a connection for the server. The connection uses Node's IPC as a transport
+// create a connection for the server. The connection uses Node's IPC as a transport
 let connection = createConnection(ProposedFeatures.all);
 
-// Create a simple text document manager. The text document manager
+// create a simple text document manager. The text document manager
 // supports full document sync only
 let documents: TextDocuments = new TextDocuments();
 
-connection.onInitialize((_params): InitializeResult => {
+let hasConfigurationCapability = false;
+
+connection.onInitialize((params: InitializeParams) => {
+	function hasClientCapability(...keys: string[]) {
+		let c = <any>params.capabilities;
+		for (let i = 0; c && i < keys.length; i++) {
+			c = c[keys[i]];
+		}
+		return !!c;
+	}
+	// does the client support the `workspace/configuration` request? 
+	// if not, we will fall back using global settings
+	hasConfigurationCapability = hasClientCapability('workspace', 'configuration');
 	return {
 		capabilities: {
-			// Tell the client that the server works in FULL text document sync mode
 			textDocumentSync: documents.syncKind
 		}
 	}
 });
 
-// The example settings
+// the example settings
 interface MultiRootExampleSettings {
 	maxNumberOfProblems: number;
 }
 
-let settings: Map<string, Thenable<MultiRootExampleSettings>> = new Map();
+// the global settings, used when the `workspace/configuration` request is not supported by the client
+let globalSettings: MultiRootExampleSettings = { maxNumberOfProblems: 1000 };
 
-function getConfiguration(resource: string): Thenable<MultiRootExampleSettings> {
-	let result = settings.get(resource);
+// cache the settings of all open documents
+let documentSettings: Map<string, Thenable<MultiRootExampleSettings>> = new Map();
+
+connection.onDidChangeConfiguration(change => {
+	globalSettings = <MultiRootExampleSettings>(change.settings.lspMultiRootSample || {});
+
+	// reset all document settings
+	documentSettings.clear();
+
+	// revalidate all open text documents
+	documents.all().forEach(validateTextDocument);
+});
+
+function getDocumentSettings(resource: string): Thenable<MultiRootExampleSettings> {
+	if (!hasConfigurationCapability) {
+		return Promise.resolve(globalSettings);
+	}
+	let result = documentSettings.get(resource);
 	if (!result) {
-		result = connection.workspace.getConfiguration({ section: '', scopeUri: resource });
-		settings.set(resource, result);
+		result = connection.workspace.getConfiguration({ scopeUri: resource });
+		documentSettings.set(resource, result);
 	}
 	return result;
 }
 
-connection.onInitialized(() => {
-	// Register to configuration change events.
-	connection.client.register(DidChangeConfigurationNotification.type);
+// only keep settings for open documents
+documents.onDidClose(e => {
+	documentSettings.delete(e.document.uri);
 });
 
-
-connection.onNotification(DidChangeConfigurationNotification.type, () => {
-	let toRequest: Proposed.ConfigurationItem[] = [];
-	for (let resource of settings.keys()) {
-		toRequest.push({ section: '', scopeUri: resource});
-	}
-	settings.clear();
-	// Reread all cached configuration
-	connection.workspace.getConfiguration(toRequest).then((values: MultiRootExampleSettings[]) => {
-		let toRevalidate: string[] = [];
-		for (let i = 0; i < values.length; i++) {
-			let resource = toRequest[i].scopeUri;
-			let value = values[i];
-			// If the value got already added to the settings cache then a change has
-			// occurred before the configuration request got return. Ignore the value
-			// in this case.
-			if (value && !settings.has(resource)) {
-				settings.set(resource, Promise.resolve(value));
-				toRevalidate.push(resource);
-			}
-		}
-		for (let resource of toRevalidate) {
-			validateTextDocument(documents.get(resource));
-		}
-	});
-});
-
-
-// The content of a text document has changed. This event is emitted
+// the content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent((change) => {
 	validateTextDocument(change.document);
 });
 
+async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+	// in this simple example we get the settings for every validate run.
+	let settings = await getDocumentSettings(textDocument.uri);
 
-function validateTextDocument(textDocument: TextDocument): void {
-	// In this simple example we get the settings for every validate run.
-	getConfiguration(textDocument.uri).then((settings: MultiRootExampleSettings) => {
-		let diagnostics: Diagnostic[] = [];
-		let lines = textDocument.getText().split(/\r?\n/g);
-		let problems = 0;
-		for (var i = 0; i < lines.length && problems < settings.maxNumberOfProblems; i++) {
-			let line = lines[i];
-			let index = line.indexOf('typescript');
-			if (index >= 0) {
-				problems++;
-				diagnostics.push({
-					severity: DiagnosticSeverity.Warning,
-					range: {
-						start: { line: i, character: index},
-						end: { line: i, character: index + 10 }
-					},
-					message: `${line.substr(index, 10)} should be spelled TypeScript`,
-					source: 'ex'
-				});
-			}
-		}
-		// Send the computed diagnostics to VSCode.
-		connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
-	});
+	// the validator creates diagnostics for all uppercase words length 2 and more
+	let text = textDocument.getText();
+	let pattern = /\b[A-Z]{2,}\b/g; 
+	let m: RegExpExecArray;
+
+	let problems = 0;
+	let diagnostics: Diagnostic[] = [];
+	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
+		problems++;
+		diagnostics.push({
+			severity: DiagnosticSeverity.Warning,
+			range: {
+				start: textDocument.positionAt(m.index),
+				end: textDocument.positionAt(m.index + m[0].length)
+			},
+			message: `${m[0].length} is all uppercase.`,
+			source: 'ex'
+		});
+	}
+
+	// send the computed diagnostics to VSCode.
+	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
-// Make the text document manager listen on the connection
+// make the text document manager listen on the connection
 // for open, change and close text document events
 documents.listen(connection);
 
-// Listen on the connection
+// listen on the connection
 connection.listen();

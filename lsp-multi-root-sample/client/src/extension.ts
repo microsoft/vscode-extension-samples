@@ -68,14 +68,15 @@ export function activate(context: ExtensionContext) {
 		documentSelector: [{scheme: 'file', language: 'plaintext'}],
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contain in the workspace
-			fileEvents: workspace.createFileSystemWatcher('**/.clientrc')
+			fileEvents: workspace.createFileSystemWatcher('**/.clientrc'),
+			configurationSection: [ 'lspMultiRootSample' ]
 		},
 		middleware: middleware as Middleware
 	}
 	
 	// Create the language client and start the client.
 	let client = new LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
-	// Register new propose protocol if available.
+	// Register new proposed protocol if available.
 	client.registerProposedFeatures();
 	
 	// Start the client. This will also launch the server
