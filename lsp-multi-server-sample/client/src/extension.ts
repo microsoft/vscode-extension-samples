@@ -10,13 +10,27 @@ import {
 let defaultClient: LanguageClient;
 let clients: Map<string, LanguageClient> = new Map();
 
-function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
-	let result = folder;
-	let candidate: WorkspaceFolder;
-	while((candidate = Workspace.getWorkspaceFolder(folder.uri)) !== folder) {
-		result = candidate;
+let _sortedWorkspaceFolders: string[];
+function sortedWorkspaceFolders(): string[] {
+	if (_sortedWorkspaceFolders === void 0) {
+		_sortedWorkspaceFolders = Workspace.workspaceFolders.map(folder => folder.uri.toString()).sort(
+			(a, b) => {
+				return a.length - b.length;
+			}
+		);
 	}
-	return result;
+	return _sortedWorkspaceFolders;
+}
+Workspace.onDidChangeWorkspaceFolders(() => _sortedWorkspaceFolders = undefined);
+
+function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
+	let sorted = sortedWorkspaceFolders();
+	for (let element of sorted) {
+		if (folder.uri.toString().startsWith(element)) {
+			return folder;
+		}
+	}
+	return folder;
 }
 
 export function activate(context: ExtensionContext) {
