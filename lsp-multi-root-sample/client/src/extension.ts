@@ -16,6 +16,7 @@ interface MultiRootExampleSettings {
 	maxNumberOfProblems: number;
 }
 
+let client: LanguageClient;
 export function activate(context: ExtensionContext) {
 
 	// The server is implemented in node
@@ -69,20 +70,26 @@ export function activate(context: ExtensionContext) {
 		synchronize: {
 			// Notify the server about file changes to '.clientrc files contain in the workspace
 			fileEvents: workspace.createFileSystemWatcher('**/.clientrc'),
-			configurationSection: [ 'lspMultiRootSample' ]
+			// In the past this told the client to actively synchronize settings. Since the
+			// client now supports 'getConfiguration' requests this active synchronization is not
+			// necessary anymore. 
+			// configurationSection: [ 'lspMultiRootSample' ]
 		},
 		middleware: middleware as Middleware
 	}
 	
 	// Create the language client and start the client.
-	let client = new LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
+	client = new LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
 	// Register new proposed protocol if available.
 	client.registerProposedFeatures();
 	
 	// Start the client. This will also launch the server
-	let disposable = client.start();
-	
-	// Push the disposable to the context's subscriptions so that the 
-	// client can be deactivated on extension deactivation
-	context.subscriptions.push(disposable);
+	client.start();	
+}
+
+export function deactivate(): Thenable<void> {
+	if (!client) {
+		return undefined;
+	}
+	return client.stop();
 }

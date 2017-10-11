@@ -6,13 +6,13 @@
 
 import {
 	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
-	ProposedFeatures, InitializeParams,
+	ProposedFeatures, InitializeParams, DidChangeConfigurationNotification
 } from 'vscode-languageserver';
 
-// create a connection for the server. The connection uses Node's IPC as a transport
+// Create a connection for the server. The connection uses Node's IPC as a transport
 let connection = createConnection(ProposedFeatures.all);
 
-// create a simple text document manager. The text document manager
+// Create a simple text document manager. The text document manager
 // supports full document sync only
 let documents: TextDocuments = new TextDocuments();
 
@@ -26,8 +26,8 @@ connection.onInitialize((params: InitializeParams) => {
 		}
 		return !!c;
 	}
-	// does the client support the `workspace/configuration` request? 
-	// if not, we will fall back using global settings
+	// Does the client support the `workspace/configuration` request? 
+	// If not, we will fall back using global settings
 	hasConfigurationCapability = hasClientCapability('workspace', 'configuration');
 	return {
 		capabilities: {
@@ -36,24 +36,37 @@ connection.onInitialize((params: InitializeParams) => {
 	}
 });
 
-// the example settings
+connection.onInitialized(() => {
+	if (hasConfigurationCapability) {
+		// Register for configuration change events if the client has
+		// support for the configuration capability
+		connection.client.register(DidChangeConfigurationNotification.type);		
+	}
+});
+
+// The example settings
 interface MultiRootExampleSettings {
 	maxNumberOfProblems: number;
 }
 
-// the global settings, used when the `workspace/configuration` request is not supported by the client
-let globalSettings: MultiRootExampleSettings = { maxNumberOfProblems: 1000 };
+// The global settings, used when the `workspace/configuration` request is not supported by the client.
+// Please note that this is not the case when using this server with the client provided in this example
+// but could happen with other clients.
+const defaultSettings: MultiRootExampleSettings = { maxNumberOfProblems: 1000 };
+let globalSettings: MultiRootExampleSettings = defaultSettings;
 
-// cache the settings of all open documents
+// Cache the settings of all open documents
 let documentSettings: Map<string, Thenable<MultiRootExampleSettings>> = new Map();
 
 connection.onDidChangeConfiguration(change => {
-	globalSettings = <MultiRootExampleSettings>(change.settings.lspMultiRootSample || {});
+	if (hasConfigurationCapability) {
+		// Reset all cached document settings
+		documentSettings.clear();
+	} else {
+		globalSettings = <MultiRootExampleSettings>(change.settings.lspMultiRootSample || defaultSettings);
+	}
 
-	// reset all document settings
-	documentSettings.clear();
-
-	// revalidate all open text documents
+	// Revalidate all open text documents
 	documents.all().forEach(validateTextDocument);
 });
 
@@ -69,22 +82,22 @@ function getDocumentSettings(resource: string): Thenable<MultiRootExampleSetting
 	return result;
 }
 
-// only keep settings for open documents
+// Only keep settings for open documents
 documents.onDidClose(e => {
 	documentSettings.delete(e.document.uri);
 });
 
-// the content of a text document has changed. This event is emitted
+// The content of a text document has changed. This event is emitted
 // when the text document first opened or when its content has changed.
 documents.onDidChangeContent((change) => {
 	validateTextDocument(change.document);
 });
 
 async function validateTextDocument(textDocument: TextDocument): Promise<void> {
-	// in this simple example we get the settings for every validate run.
+	// In this simple example we get the settings for every validate run.
 	let settings = await getDocumentSettings(textDocument.uri);
 
-	// the validator creates diagnostics for all uppercase words length 2 and more
+	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
 	let pattern = /\b[A-Z]{2,}\b/g; 
 	let m: RegExpExecArray;
@@ -104,13 +117,13 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 		});
 	}
 
-	// send the computed diagnostics to VSCode.
+	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 
-// make the text document manager listen on the connection
+// Make the text document manager listen on the connection
 // for open, change and close text document events
 documents.listen(connection);
 
-// listen on the connection
+// Listen on the connection
 connection.listen();
