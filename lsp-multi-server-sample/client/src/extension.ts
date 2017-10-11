@@ -13,7 +13,7 @@ let clients: Map<string, LanguageClient> = new Map();
 function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
 	let result = folder;
 	let candidate: WorkspaceFolder;
-	while((candidate = Workspace.getWorkspaceFolder(folder.uri)) !== void 0) {
+	while((candidate = Workspace.getWorkspaceFolder(folder.uri)) !== folder) {
 		result = candidate;
 	}
 	return result;
@@ -51,7 +51,7 @@ export function activate(context: ExtensionContext) {
 			return;
 		}
 		let folder = Workspace.getWorkspaceFolder(uri);
-		// Files outside a folder can't be handled. This might depend on the language
+		// Files outside a folder can't be handled. This might depend on the language.
 		// Single file languages like JSON might handle files outside the workspace folders.
 		if (!folder) {
 			return;
