@@ -6,9 +6,10 @@
 
 import * as path from 'path';
 
-import { workspace, ExtensionContext, WorkspaceConfiguration } from 'vscode';
+import { workspace, ExtensionContext, WorkspaceConfiguration, Disposable } from 'vscode';
 import { 
-	LanguageClient, LanguageClientOptions, ServerOptions, TransportKind, CancellationToken, Middleware, Proposed, ProposedFeatures
+	LanguageClient, LanguageClientOptions, ServerOptions, TransportKind, CancellationToken, Middleware, 
+	DidChangeConfigurationNotification, Proposed, ProposedFeatures
 } from 'vscode-languageclient';
 
 // The example settings
@@ -17,6 +18,55 @@ interface MultiRootExampleSettings {
 }
 
 let client: LanguageClient;
+
+namespace Configuration {
+
+	let configurationListener: Disposable;
+
+	// Convert VS Code specific settings to a format acceptable by the server. Since
+	// both client and server do use JSON the conversion is trivial. 
+	export function computeConfiguration(params: Proposed.ConfigurationParams, _token: CancellationToken, _next: Function): any[] {
+		if (!params.items) {
+			return null;
+		}
+		let result: (MultiRootExampleSettings | null)[] = [];
+		for (let item of params.items) {
+			// The server asks the client for configuration settings without a section
+			// If a section is present we return null to indicate that the configuration
+			// is not supported.
+			if (item.section) {
+				result.push(null);
+				continue;
+			}
+			let config: WorkspaceConfiguration;
+			if (item.scopeUri) {
+				config = workspace.getConfiguration('lspMultiRootSample', client.protocol2CodeConverter.asUri(item.scopeUri));
+			} else {
+				config = workspace.getConfiguration('lspMultiRootSample');
+			}
+			result.push({
+				maxNumberOfProblems: config.get('maxNumberOfProblems')
+			});
+		}
+		return result;
+	}
+	
+	export function initialize() {
+		// VS Code currently doesn't sent fine grained configuration changes. So we 
+		// listen to any change. However this will change in the near future.
+		configurationListener = workspace.onDidChangeConfiguration(() => {
+			client.sendNotification(DidChangeConfigurationNotification.type, { settings: null });
+		});
+	}
+
+	export function dispose() {
+		if (configurationListener) {
+			configurationListener.dispose();
+		}
+	}
+}
+
+
 export function activate(context: ExtensionContext) {
 
 	// The server is implemented in node
@@ -31,35 +81,9 @@ export function activate(context: ExtensionContext) {
 		debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
 	}
 
-	// Convert VS Code specific settings to a format acceptable by the server. Since
-	// both client and server do use JSON the conversion is trivial. 
 	let middleware: ProposedFeatures.ConfigurationMiddleware | Middleware = {
 		workspace: {
-			configuration: (params: Proposed.ConfigurationParams, _token: CancellationToken, _next: Function): any[] => {
-				if (!params.items) {
-					return null;
-				}
-				let result: (MultiRootExampleSettings | null)[] = [];
-				for (let item of params.items) {
-					// The server asks the client for configuration settings without a section
-					// If a section is present we return null to indicate that the configuration
-					// is not supported.
-					if (item.section) {
-						result.push(null);
-						continue;
-					}
-					let config: WorkspaceConfiguration;
-					if (item.scopeUri) {
-						config = workspace.getConfiguration('lspMultiRootSample', client.protocol2CodeConverter.asUri(item.scopeUri));
-					} else {
-						config = workspace.getConfiguration('lspMultiRootSample');
-					}
-					result.push({
-						maxNumberOfProblems: config.get('maxNumberOfProblems')
-					});
-				}
-				return result;
-			}
+			configuration: Configuration.computeConfiguration
 		}
 	};
 
@@ -82,14 +106,18 @@ export function activate(context: ExtensionContext) {
 	client = new LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
 	// Register new proposed protocol if available.
 	client.registerProposedFeatures();
+	client.onReady().then(() => {
+		Configuration.initialize();
+	});
 	
 	// Start the client. This will also launch the server
-	client.start();	
+	client.start();
 }
 
 export function deactivate(): Thenable<void> {
 	if (!client) {
 		return undefined;
 	}
+	Configuration.dispose();
 	return client.stop();
 }

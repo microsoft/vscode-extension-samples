@@ -6,7 +6,7 @@
 
 import {
 	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
-	ProposedFeatures, InitializeParams, DidChangeConfigurationNotification
+	ProposedFeatures, InitializeParams
 } from 'vscode-languageserver';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport
@@ -33,14 +33,6 @@ connection.onInitialize((params: InitializeParams) => {
 		capabilities: {
 			textDocumentSync: documents.syncKind
 		}
-	}
-});
-
-connection.onInitialized(() => {
-	if (hasConfigurationCapability) {
-		// Register for configuration change events if the client has
-		// support for the configuration capability
-		connection.client.register(DidChangeConfigurationNotification.type);		
 	}
 });
 
