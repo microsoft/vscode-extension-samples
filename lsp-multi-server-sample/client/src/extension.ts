@@ -1,6 +1,6 @@
 import * as path from 'path';
 import { 
-	workspace as Workspace, window as Window, ExtensionContext, TextDocument, OutputChannel, WorkspaceFolder
+	workspace as Workspace, window as Window, ExtensionContext, TextDocument, OutputChannel, WorkspaceFolder, Uri
 } from 'vscode'; 
 
 import { 
@@ -13,7 +13,13 @@ let clients: Map<string, LanguageClient> = new Map();
 let _sortedWorkspaceFolders: string[];
 function sortedWorkspaceFolders(): string[] {
 	if (_sortedWorkspaceFolders === void 0) {
-		_sortedWorkspaceFolders = Workspace.workspaceFolders.map(folder => folder.uri.toString()).sort(
+		_sortedWorkspaceFolders = Workspace.workspaceFolders.map(folder => {
+			let result = folder.uri.toString();
+			if (result.charAt(result.length - 1) !== '/') {
+				result = result + '/';
+			}
+			return result;
+		}).sort(
 			(a, b) => {
 				return a.length - b.length;
 			}
@@ -26,8 +32,12 @@ Workspace.onDidChangeWorkspaceFolders(() => _sortedWorkspaceFolders = undefined)
 function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
 	let sorted = sortedWorkspaceFolders();
 	for (let element of sorted) {
-		if (folder.uri.toString().startsWith(element)) {
-			return folder;
+		let uri = folder.uri.toString();
+		if (uri.charAt(uri.length - 1) !== '/') {
+			uri = uri + '/';
+		}
+		if (uri.startsWith(element)) {
+			return Workspace.getWorkspaceFolder(Uri.parse(element));
 		}
 	}
 	return folder;
