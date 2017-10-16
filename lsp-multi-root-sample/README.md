@@ -14,5 +14,6 @@ The example uses proposed Language Server protocol. So the code demoed here migh
 - Run the lauch config
 - If you want to debug the server as well use the launch configuration `Attach to Server`
 
-- In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode type content such as 'AAA aaa BBB'. The extension will emit diagnostics for words in all-uppercase.
+- In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode.
+  Enter text content such as `AAA aaa BBB`. The extension will emit diagnostics for all words in all-uppercase.
 
