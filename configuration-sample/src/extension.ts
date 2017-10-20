@@ -28,24 +28,33 @@ export function activate(context: vscode.ExtensionContext) {
 		// 1) Getting the value
 		const value = await vscode.window.showQuickPick(['explorer', 'search', 'scm', 'debug', 'extensions'], { placeHolder: 'Select the view to show when opening a window.' });
 
-		// 2) Getting the Configuration target
-		const target = await vscode.window.showQuickPick(
-			[
-				{ label: 'User', description: 'User Settings', target: vscode.ConfigurationTarget.Global },
-				{ label: 'Workspace', description: 'Workspace Settings', target: vscode.ConfigurationTarget.Workspace }
-			],
-			{ placeHolder: 'Select the view to show when opening a window.' });
+		if (vscode.workspace.workspaceFolders) {
 
-		if (value && target) {
+			// 2) Getting the Configuration target
+			const target = await vscode.window.showQuickPick(
+				[
+					{ label: 'User', description: 'User Settings', target: vscode.ConfigurationTarget.Global },
+					{ label: 'Workspace', description: 'Workspace Settings', target: vscode.ConfigurationTarget.Workspace }
+				],
+				{ placeHolder: 'Select the view to show when opening a window.' });
 
-			// 3) Update the configuration value in the target
-			await vscode.workspace.getConfiguration().update('conf.view.showOnWindowOpen', value, target.target);
+			if (value && target) {
 
-			/*
-			// Default is to update in Workspace
-			await vscode.workspace.getConfiguration().update('conf.view.showOnWindowOpen', value);
-			*/
+				// 3) Update the configuration value in the target
+				await vscode.workspace.getConfiguration().update('conf.view.showOnWindowOpen', value, target.target);
+
+				/*
+				// Default is to update in Workspace
+				await vscode.workspace.getConfiguration().update('conf.view.showOnWindowOpen', value);
+				*/
+			}
+		} else {
+
+			// 2) Update the configuration value in User Setting in case of no workspace folders
+			await vscode.workspace.getConfiguration().update('conf.view.showOnWindowOpen', value, vscode.ConfigurationTarget.Global);
 		}
+
+
 	});
 
 	// Example 3: Reading Resource scoped configuration for a file
@@ -79,8 +88,10 @@ export function activate(context: vscode.ExtensionContext) {
 			// 3) Choose target to Global when there are no workspace folders
 			const target = vscode.workspace.workspaceFolders ? vscode.ConfigurationTarget.WorkspaceFolder : vscode.ConfigurationTarget.Global;
 
+			const value = { ...currentValue, ...{ [currentDocument.fileName]: true } };
+
 			// 4) Update the configuration
-			await configuration.update('conf.resource.insertEmptyLastLine', { ...currentValue, ...{ [currentDocument.fileName]: true } }, target)
+			await configuration.update('conf.resource.insertEmptyLastLine', value, target)
 		}
 
 	});
@@ -91,43 +102,62 @@ export function activate(context: vscode.ExtensionContext) {
 		// 1) Getting the value
 		const value = await vscode.window.showInputBox({ prompt: 'Provide glob pattern of files to have empty last line.' });
 
-		// 2) Getting the target
-		const target = await vscode.window.showQuickPick(
-			[
-				{ label: 'Application', description: 'User Settings', target: vscode.ConfigurationTarget.Global },
-				{ label: 'Workspace', description: 'Workspace Settings', target: vscode.ConfigurationTarget.Workspace },
-				{ label: 'Workspace Folder', description: 'Workspace Folder Settings', target: vscode.ConfigurationTarget.WorkspaceFolder }
-			],
-			{ placeHolder: 'Select the target to which this setting should be applied' });
+		if (vscode.workspace.workspaceFolders) {
 
-		if (value && target) {
+			// 2) Getting the target
+			const target = await vscode.window.showQuickPick(
+				[
+					{ label: 'Application', description: 'User Settings', target: vscode.ConfigurationTarget.Global },
+					{ label: 'Workspace', description: 'Workspace Settings', target: vscode.ConfigurationTarget.Workspace },
+					{ label: 'Workspace Folder', description: 'Workspace Folder Settings', target: vscode.ConfigurationTarget.WorkspaceFolder }
+				],
+				{ placeHolder: 'Select the target to which this setting should be applied' });
 
-			if (target.target === vscode.ConfigurationTarget.WorkspaceFolder) {
+			if (value && target) {
 
-				// 3) Getting the workspace folder
-				let workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' })
-				if (workspaceFolder) {
+				if (target.target === vscode.ConfigurationTarget.WorkspaceFolder) {
 
-					// 4) Get the configuration for the workspace folder
-					const configuration = vscode.workspace.getConfiguration('', workspaceFolder.uri);
+					// 3) Getting the workspace folder
+					let workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' })
+					if (workspaceFolder) {
 
-					// 5) Get the current value
+						// 4) Get the configuration for the workspace folder
+						const configuration = vscode.workspace.getConfiguration('', workspaceFolder.uri);
+
+						// 5) Get the current value
+						const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
+
+						const newValue = { ...currentValue, ...{ [value]: true } };
+
+						// 6) Update the configuration value
+						await configuration.update('conf.resource.insertEmptyLastLine', newValue, target.target);
+					}
+				} else {
+
+					// 3) Get the configuration
+					const configuration = vscode.workspace.getConfiguration();
+
+					// 4) Get the current value
 					const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
 
-					// 6) Update the configuration value
-					await configuration.update('conf.resource.insertEmptyLastLine', { ...currentValue, ...{ [value]: true } }, target.target);
+					const newValue = { ...currentValue, ...{ [value]: true } };
+
+					// 3) Update the value in the target
+					await vscode.workspace.getConfiguration().update('conf.resource.insertEmptyLastLine', newValue, target.target);
 				}
-			} else {
-
-				// 3) Get the configuration
-				const configuration = vscode.workspace.getConfiguration();
-
-				// 4) Get the current value
-				const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
-
-				// 3) Update the value in the target
-				await vscode.workspace.getConfiguration().update('conf.resource.insertEmptyLastLine', { ...currentValue, ...{ [value]: true } }, target.target);
 			}
+		} else {
+
+			// 2) Get the configuration
+			const configuration = vscode.workspace.getConfiguration();
+
+			// 3) Get the current value
+			const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
+
+			const newValue = { ...currentValue, ...{ [value]: true } };
+
+			// 4) Update the value in the User Settings
+			await vscode.workspace.getConfiguration().update('conf.resource.insertEmptyLastLine', newValue, vscode.ConfigurationTarget.Global);
 		}
 	});
 
