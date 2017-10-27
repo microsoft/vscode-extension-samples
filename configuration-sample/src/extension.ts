@@ -162,22 +162,26 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// Example 6: Listening to configuration changes
-	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
-		if (vscode.window.activeTextEditor) {
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
 
-			const currentDocument = vscode.window.activeTextEditor.document;
+		if (e.affectsConfiguration('conf.resource.insertEmptyLastLine')) {
+			if (vscode.window.activeTextEditor) {
 
-			// 1) Get the configured glob pattern value for the current file
-			const value = vscode.workspace.getConfiguration('', currentDocument.uri).get('conf.resource.insertEmptyLastLine');
+				const currentDocument = vscode.window.activeTextEditor.document;
 
-			// 2) Check if the current resource matches the glob pattern
-			const matches = value[currentDocument.fileName];
+				// 1) Get the configured glob pattern value for the current file
+				const value = vscode.workspace.getConfiguration('', currentDocument.uri).get('conf.resource.insertEmptyLastLine');
 
-			// 3) If matches, insert empty last line
-			if (matches) {
-				vscode.window.showInformationMessage('An empty line will be added to the document ' + currentDocument.fileName);
+				// 2) Check if the current resource matches the glob pattern
+				const matches = value[currentDocument.fileName];
+
+				// 3) If matches, insert empty last line
+				if (matches) {
+					vscode.window.showInformationMessage('An empty line will be added to the document ' + currentDocument.fileName);
+				}
 			}
 		}
+
 	}));
 
 }
