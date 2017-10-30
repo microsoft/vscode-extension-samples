@@ -17,6 +17,7 @@ let connection = createConnection(ProposedFeatures.all);
 let documents: TextDocuments = new TextDocuments();
 
 let hasConfigurationCapability = false;
+let hasWorkspaceFolderCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
 	function hasClientCapability(...keys: string[]) {
@@ -29,10 +30,19 @@ connection.onInitialize((params: InitializeParams) => {
 	// Does the client support the `workspace/configuration` request? 
 	// If not, we will fall back using global settings
 	hasConfigurationCapability = hasClientCapability('workspace', 'configuration');
+	hasWorkspaceFolderCapability = hasClientCapability('workspace', 'workspaceFolders');
 	return {
 		capabilities: {
 			textDocumentSync: documents.syncKind
 		}
+	}
+});
+
+connection.onInitialized(() => {
+	if (hasWorkspaceFolderCapability) {
+		connection.workspace.onDidChangeWorkspaceFolders((_event) => {
+			connection.console.log('Workspace folder change event received');
+		});
 	}
 });
 
