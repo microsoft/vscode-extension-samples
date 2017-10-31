@@ -14,13 +14,22 @@
 			"preLaunchTask": "watch:client"
 		},
 		{
-			"name": "Attach to Server",
+			"name": "Attach to Server 11",
 			"type": "node",
 			"request": "attach",
-			"port": 6010,
+			"port": 6011,
 			"sourceMaps": true,
 			"outFiles": [ "${workspaceRoot}/client/server/**/*.js" ],
 			"preLaunchTask": "watch:server"
-		}
+		},
+		{
+			"name": "Attach to Server 12",
+			"type": "node",
+			"request": "attach",
+			"port": 6012,
+			"sourceMaps": true,
+			"outFiles": [ "${workspaceRoot}/client/server/**/*.js" ],
+			"preLaunchTask": "watch:server"
+		}		
 	]
 }
