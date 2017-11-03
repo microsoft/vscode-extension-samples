@@ -1,51 +1,51 @@
 {
-  "name": "i18n-sample",
-  "displayName": "i18n-sample",
-  "description": "Sample that shows how to localize an extension",
-  "version": "0.0.2",
-  "publisher": "vazexqi",
-  "engines": {
-    "vscode": "^1.13.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:extension.sayHello",
-    "onCommand:extension.sayBye"
-  ],
-  "main": "./out/src/extension",
-  "contributes": {
-    "commands": [
-      {
-        "command": "extension.sayHello",
-        "title": "%extension.sayHello.title%"
-      },
-      {
-        "command": "extension.sayBye",
-        "title": "%extension.sayBye.title%"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "gulp build-extension",
-    "compile": "tsc -watch -p ./",
-    "clean": "gulp clean-extension",
-    "postinstall": "node ./node_modules/vscode/bin/install"
-  },
-  "devDependencies": {
-    "@types/node": "^6.0.40",
-    "event-stream": "^3.3.4",
-    "gulp": "^3.9.1",
-    "gulp-filter": "^5.0.0",
-    "gulp-tsb": "^2.0.3",
-    "rimraf": "^2.6.1",
-    "shelljs": "^0.7.8",
-    "typescript": "^2.4.1",
-    "vscode": "^1.1.2",
-    "vscode-nls-dev": "^2.1.3"
-  },
-  "dependencies": {
-    "vscode-nls": "^2.0.2"
-  }
+	"name": "i18n-sample",
+	"displayName": "i18n-sample",
+	"description": "Sample that shows how to localize an extension",
+	"version": "0.1.0",
+	"publisher": "vazexqi",
+	"engines": {
+		"vscode": "^1.13.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extension.sayHello",
+		"onCommand:extension.sayBye"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.sayHello",
+				"title": "%extension.sayHello.title%"
+			},
+			{
+				"command": "extension.sayBye",
+				"title": "%extension.sayBye.title%"
+			}
+		]
+	},
+	"scripts": {
+		"watch": "tsc -watch -p ./",
+		"clean": "gulp clean",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"@types/node": "^6.0.40",
+		"del": "^3.0.0",
+		"event-stream": "^3.3.4",
+		"gulp": "^3.9.1",
+		"gulp-filter": "^5.0.1",
+		"run-sequence": "^2.2.0",
+		"typescript": "2.5.3",
+		"gulp-typescript": "3.2.2",
+		"vsce": "^1.32.0",
+		"vscode": "^1.1.2",
+		"vscode-nls-dev": "^2.1.3"
+	},
+	"dependencies": {
+		"vscode-nls": "^2.0.2"
+	}
 }

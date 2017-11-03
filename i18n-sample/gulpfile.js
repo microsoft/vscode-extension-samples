@@ -1,116 +1,93 @@
-// This is based off https://github.com/Microsoft/vscode/blob/master/build/gulpfile.extensions.js
-// but simplified for the single extension use-case
-
-"use strict";
-const es = require('event-stream');
-const filter = require('gulp-filter');
-const fs = require('fs');
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 const gulp = require('gulp');
-const glob = require('glob');
-const nlsDev = require('vscode-nls-dev');
 const path = require('path');
-const rimraf = require('rimraf');
-const shell = require('shelljs');
-const tsb = require('gulp-tsb');
 
-const srcBase = path.join(__dirname, 'src');
-const src = path.join(srcBase, '**');
-const typeDefinitions = path.join(__dirname, 'node_modules/**/*.d.ts');
-const out = path.join('./', 'out');
-const i18n = path.join('./', 'i18n');
-const allErrors = [];
-let startTimer = null;
-let count = 0;
+const ts = require('gulp-typescript');
+const typescript = require('typescript');
+const sourcemaps = require('gulp-sourcemaps');
+const del = require('del');
+const runSequence = require('run-sequence');
+const es = require('event-stream');
+const vsce = require('vsce');
+const nls = require('vscode-nls-dev');
 
-// TASK: Add your supported languages here
-const languages = ['jpn'];
+const tsProject = ts.createProject('./tsconfig.json', { typescript });
 
-function stripSourceMappingURL() {
-  const input = es.through();
+const inlineMap = true;
+const inlineSource = false;
+const outDest = 'out';
 
-  const output = input.pipe(
-    es.mapSync(f => {
-      const contents = f.contents.toString('utf8');
-      f.contents = new Buffer(
-        contents.replace(/\n\/\/# sourceMappingURL=(.*)$/gm, ''),
-        'utf8'
-      );
-      return f;
-    })
-  );
+// If all VS Code langaues are support you can use nls.coreLanguages
+const languages = ['jpn']; 
 
-  return es.duplex(input, output);
-}
-
-function createPipeline(build) {
-  const tsOptions = require(path.join(__dirname, 'tsconfig.json'))
-    .compilerOptions;
-  tsOptions.verbose = false;
-  tsOptions.sourceMap = true;
-
-  tsOptions.inlineSources = !!build;
-  const compilation = tsb.create(tsOptions);
-
-  return function() {
-    const input = es.through();
-    const tsFilter = filter(['**/*.ts', '!**/vscode-nls-dev/lib/**'], {
-      restore: true
-    });
-
-    const output = input
-      .pipe(tsFilter)
-      .pipe(compilation())
-      .pipe(build ? nlsDev.rewriteLocalizeCalls() : es.through())
-      .pipe(build ? stripSourceMappingURL() : es.through())
-      .pipe(
-        build
-          ? nlsDev.createAdditionalLanguageFiles(languages, i18n, out)
-          : es.through()
-      );
-
-    return es.duplex(input, output);
-  };
-}
-
-gulp.task('clean-extension', cb => rimraf(out, cb));
-
-const iso639_3_to_2 = {
-  chs: 'zh-cn',
-  cht: 'zh-tw',
-  csy: 'cs-cz',
-  deu: 'de',
-  enu: 'en',
-  esn: 'es',
-  fra: 'fr',
-  hun: 'hu',
-  ita: 'it',
-  jpn: 'ja',
-  kor: 'ko',
-  nld: 'nl',
-  plk: 'pl',
-  ptb: 'pt-br',
-  ptg: 'pt',
-  rus: 'ru',
-  sve: 'sv-se',
-  trk: 'tr'
-};
-
-gulp.task('prepare-package-nls-json', () => {
-  languages.map(language => {
-    const packageJson = path.join(i18n, language, 'package.i18n.json');
-    console.log(packageJson);
-    if (fs.existsSync(packageJson)) {
-      shell.cp(packageJson, `package.nls.${iso639_3_to_2[language]}.json`);
-    }
-  });
+gulp.task('default', function(callback) {
+	runSequence('build', callback);
 });
 
-gulp.task(
-  'build-extension',
-  ['clean-extension', 'prepare-package-nls-json'],
-  () => {
-    const pipeline = createPipeline(true);
-    const input = gulp.src([src, typeDefinitions]);
-    return input.pipe(pipeline()).pipe(gulp.dest(out));
-  }
-);
+gulp.task('compile', function(callback) {
+	runSequence('clean', 'internal-compile', callback);
+});
+
+gulp.task('build', function(callback) {
+	runSequence('clean', 'internal-nls-compile', 'add-i18n', callback);
+});
+
+gulp.task('publish', function(callback) {
+	runSequence('build', 'vsce:publish', callback);
+});
+
+gulp.task('package', function(callback) {
+	runSequence('build', 'vsce:package', callback);
+});
+
+gulp.task('clean', function() {
+	return del(['out/**', 'package.nls.*.json', 'i18n-sample*.vsix']);
+})
+
+//---- internal
+
+function compile(buildNls) {
+	var r = tsProject.src()
+		.pipe(sourcemaps.init())
+		.pipe(tsProject()).js
+		.pipe(buildNls ? nls.rewriteLocalizeCalls() : es.through())
+		.pipe(buildNls ? nls.createAdditionalLanguageFiles(languages, 'i18n', 'out') : es.through());
+
+	if (inlineMap && inlineSource) {
+		r = r.pipe(sourcemaps.write());
+	} else {
+		r = r.pipe(sourcemaps.write("../out", {
+			// no inlined source
+			includeContent: inlineSource,
+			// Return relative source map root directories per file.
+			sourceRoot: "../src"
+		}));
+	}
+
+	return r.pipe(gulp.dest(outDest));
+}
+
+gulp.task('internal-compile', function() {
+	return compile(false);
+});
+
+gulp.task('internal-nls-compile', function() {
+	return compile(true);
+});
+
+gulp.task('add-i18n', function() {
+	return gulp.src(['package.nls.json'])
+		.pipe(nls.createAdditionalLanguageFiles(languages, 'i18n'))
+		.pipe(gulp.dest('.'));
+});
+
+gulp.task('vsce:publish', function() {
+	return vsce.publish();
+});
+
+gulp.task('vsce:package', function() {
+	return vsce.createVSIX();
+});
