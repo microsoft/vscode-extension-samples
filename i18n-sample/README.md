@@ -21,11 +21,15 @@ Localization values are only applied when running the gulp `build` task. During 
 1. Ensure that you have `gulp-cli` installed globally using `npm install --global gulp-cli`.
 1. Run `npm install` to bring in the dependencies.
 1. Follow the steps at https://code.visualstudio.com/docs/extensions/publish-extension to ensure that you have installed vsce and have a publisher account. 
-1. Run `vsce package` to produce a .vsix file.
+1. Run `gulp package` to produce a .vsix file.
 1. Install the .vsix file following the instructions at https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix
 1. Change your locale to Japanese by invoking "Configure Language" from the Command Palette.
 
 See the demo.gif file in this repository for a screencast.
+
+# How to translate our extension
+
+VS Code itself uses [Transifex](https://www.transifex.com/) to manage its translations. This might be an option for your extension as well, however none of the nls tooling provided by `vscode-nls` or `vscode-nls-dev` requires Transifex as its translation platform. So you are free to choose a different one.
 
 # What happens behind the scenes
 
