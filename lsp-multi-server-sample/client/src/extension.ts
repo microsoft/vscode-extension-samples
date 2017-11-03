@@ -55,34 +55,61 @@ export function activate(context: ExtensionContext) {
 		}
 
 		let uri = document.uri;
-		// Untitled files go to a default client.
-		if (uri.scheme === 'untitled' && !defaultClient) {
+		let folder = Workspace.getWorkspaceFolder(uri);
+		// Files outside a folder go to the default client
+		if (!folder && !defaultClient) {
 			let debugOptions = { execArgv: ["--nolazy", "--inspect=6010"] };
 			let serverOptions = {
 				run: { module, transport: TransportKind.ipc },
 				debug: { module, transport: TransportKind.ipc, options: debugOptions}
 			};
+			let syncedDocuments: Set<string> = new Set(); 
 			let clientOptions: LanguageClientOptions = {
 				documentSelector: [
-					{ scheme: 'untitled', language: 'plaintext' }
+					{ scheme: 'untitled', language: 'plaintext' },
+					{ scheme: 'file', language: 'plaintext' }
 				],
 				diagnosticCollectionName: 'multi-lsp',
-				outputChannel: outputChannel
+				outputChannel: outputChannel,
+				initializationOptions: {
+					genericServer: true
+				},
+				middleware: {
+					didOpen: (document, next) => {
+						let uri: Uri = document.uri;
+						// The file is part of a know workspace folder.
+						if (Workspace.getWorkspaceFolder(uri)) {
+							return;
+						}
+						syncedDocuments.add(uri.toString());
+						next(document);
+					},
+					didChange: (event, next) => {
+						if (syncedDocuments.has(event.document.uri.toString())) {
+							next(event);
+						}
+					},
+					didSave: (document, next) => {
+						if (syncedDocuments.has(document.uri.toString())) {
+							next(document);
+						}
+					},
+					didClose: (document, next) => {
+						if (syncedDocuments.has(document.uri.toString())) {
+							syncedDocuments.delete(document.uri.toString());
+							next(document);
+						}
+					}
+				}
 			}
 			defaultClient = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			defaultClient.registerProposedFeatures();
 			defaultClient.start();
 			return;
 		}
-		let folder = Workspace.getWorkspaceFolder(uri);
-		// Files outside a folder can't be handled. This might depend on the language.
-		// Single file languages like JSON might handle files outside the workspace folders.
-		if (!folder) {
-			return;
-		}
+
 		// If we have nested workspace folders we only start a server on the outer most workspace folder.
 		folder = getOuterMostWorkspaceFolder(folder);
-		
 		if (!clients.has(folder.uri.toString())) {
 			let debugOptions = { execArgv: ["--nolazy", `--inspect=${6011 + clients.size}`] };
 			let serverOptions = {
@@ -95,7 +122,25 @@ export function activate(context: ExtensionContext) {
 				],
 				diagnosticCollectionName: 'lsp-multi-server-example',
 				workspaceFolder: folder,
-				outputChannel: outputChannel
+				outputChannel: outputChannel,
+				middleware: {
+					didOpen: (document, next) => {
+						console.log(`didOpen middleware called for server serving: ${folder.uri.toString()}`);
+						next(document);
+					},
+					didChange: (event, next) => {
+						console.log(`didChange middleware called for server serving: ${folder.uri.toString()}`);
+						next(event);
+					},
+					didSave: (document, next) => {
+						console.log(`didSave middleware called for server serving: ${folder.uri.toString()}`);
+						next(document);
+					},
+					didClose: (document, next) => {
+						console.log(`didClose middleware called for server serving: ${folder.uri.toString()}`);
+						next(document);
+					}
+				}
 			}
 			let client = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			client.registerProposedFeatures();

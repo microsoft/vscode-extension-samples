@@ -17,13 +17,17 @@ let documents = new TextDocuments();
 let workspaceFolder: string;
 
 documents.onDidOpen((event) => {
-	connection.console.log(`[Server(${process.pid}) ${workspaceFolder}] Document opened: ${event.document.uri}`);
+	connection.console.log(`[Server(${process.pid}) ${workspaceFolder ? workspaceFolder : 'generic'}] Document opened: ${event.document.uri}`);
 })
 documents.listen(connection);
 
 connection.onInitialize((params) => {
-	workspaceFolder = params.rootUri;
-	connection.console.log(`[Server(${process.pid}) ${workspaceFolder}] Started and initialize received`);
+	if (params.initializationOptions && params.initializationOptions.genericServer) {
+		connection.console.log(`[Server(${process.pid}) generic] Started and initialize received`);
+	} else {
+		workspaceFolder = params.rootUri;
+		connection.console.log(`[Server(${process.pid}) ${workspaceFolder}] Started and initialize received`);
+	}
 	return {
 		capabilities: {
 			textDocumentSync: {
