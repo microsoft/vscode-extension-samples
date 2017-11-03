@@ -21,7 +21,11 @@ Localization values are only applied when running the gulp `build` task. During 
 1. Ensure that you have `gulp-cli` installed globally using `npm install --global gulp-cli`.
 1. Run `npm install` to bring in the dependencies.
 1. Follow the steps at https://code.visualstudio.com/docs/extensions/publish-extension to ensure that you have installed vsce and have a publisher account. 
+<<<<<<< HEAD
 1. Run `gulp package` to produce a .vsix file.
+=======
+1. Run `vsce package` to produce a .vsix file.
+>>>>>>> Restructure the code to fit to latest nls tooling
 1. Install the .vsix file following the instructions at https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix
 1. Change your locale to Japanese by invoking "Configure Language" from the Command Palette.
 
