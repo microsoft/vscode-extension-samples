@@ -24,8 +24,8 @@ connection.onInitialize((params: InitializeParams) => {
 
 	// Does the client support the `workspace/configuration` request? 
 	// If not, we will fall back using global settings
-	hasWorkspaceFolderCapability = (capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace && (capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace.workspaceFolders;
-	hasConfigurationCapability = (capabilities as Proposed.ConfigurationClientCapabilities).workspace && (capabilities as Proposed.ConfigurationClientCapabilities).workspace.configuration;
+	hasWorkspaceFolderCapability = (capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace && !!(capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace.workspaceFolders;
+	hasConfigurationCapability = (capabilities as Proposed.ConfigurationClientCapabilities).workspace && !!(capabilities as Proposed.ConfigurationClientCapabilities).workspace.configuration;
 
 	return {
 		capabilities: {
