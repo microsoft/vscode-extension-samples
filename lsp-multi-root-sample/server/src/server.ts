@@ -6,7 +6,7 @@
 
 import {
 	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
-	ProposedFeatures, InitializeParams
+	ProposedFeatures, InitializeParams, Proposed
 } from 'vscode-languageserver';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport
@@ -20,17 +20,13 @@ let hasConfigurationCapability = false;
 let hasWorkspaceFolderCapability = false;
 
 connection.onInitialize((params: InitializeParams) => {
-	function hasClientCapability(...keys: string[]) {
-		let c = <any>params.capabilities;
-		for (let i = 0; c && i < keys.length; i++) {
-			c = c[keys[i]];
-		}
-		return !!c;
-	}
+	let capabilities = params.capabilities;
+
 	// Does the client support the `workspace/configuration` request? 
 	// If not, we will fall back using global settings
-	hasConfigurationCapability = hasClientCapability('workspace', 'configuration');
-	hasWorkspaceFolderCapability = hasClientCapability('workspace', 'workspaceFolders');
+	hasWorkspaceFolderCapability = (capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace && (capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace.workspaceFolders;
+	hasConfigurationCapability = (capabilities as Proposed.ConfigurationClientCapabilities).workspace && (capabilities as Proposed.ConfigurationClientCapabilities).workspace.configuration;
+
 	return {
 		capabilities: {
 			textDocumentSync: documents.syncKind
