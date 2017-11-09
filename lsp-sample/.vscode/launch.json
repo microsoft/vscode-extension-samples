@@ -26,7 +26,6 @@
 			"outFiles": [
 				"${workspaceRoot}/client/server/**/*.js"
 			],
-			"protocol": "legacy",
 			"preLaunchTask": "watch:server"
 		}
 	]
