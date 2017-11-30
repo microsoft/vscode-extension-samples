@@ -14,6 +14,9 @@
 		"*"
 	],
 	"main": "./out/src/extension",
+	"keywords": [
+		"multi-root ready"
+	],
 	"contributes": {
 		"configuration": [
 			{
