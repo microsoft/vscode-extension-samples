@@ -8,6 +8,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 	readonly onDidChangeTreeData: vscode.Event<json.Node | null> = this._onDidChangeTreeData.event;
 
 	private tree: json.Node;
+	private text: string;
 	private editor: vscode.TextEditor;
 
 	constructor(private context: vscode.ExtensionContext) {
@@ -15,23 +16,28 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<json.Node> {
 			this.parseTree();
 			this._onDidChangeTreeData.fire();
 		});
-		vscode.workspace.onDidChangeTextDocument(e => {
-		})
+		vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 		this.parseTree();
 	}
 
 	private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
 		if (changeEvent.document.uri.toString() === this.editor.document.uri.toString()) {
 			for (const change of changeEvent.contentChanges) {
+				const location = json.getLocation(this.text, this.editor.document.offsetAt(change.range.start));
+				const node = json.findNodeAtLocation(this.tree, location.path);
+				this.parseTree();
+				this._onDidChangeTreeData.fire(node);
 			}
 		}
 	}
 
 	private parseTree(): void {
+		this.text = '';
 		this.tree = null;
 		this.editor = vscode.window.activeTextEditor;
 		if (this.editor && this.editor.document && this.editor.document.languageId === 'json') {
-			this.tree = json.parseTree(this.editor.document.getText());
+			this.text = this.editor.document.getText();
+			this.tree = json.parseTree(this.text);
 		}
 	}
 
