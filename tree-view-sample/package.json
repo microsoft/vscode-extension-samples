@@ -111,7 +111,7 @@
 				"properties": {
 					"jsonOutline.autorefresh": {
 						"type": "boolean",
-						"default": true
+						"default": false
 					}
 				}
 			}
