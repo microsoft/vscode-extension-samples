@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
 import * as path from 'path';
+import { isNumber } from 'util';
 
 export class JsonOutlineProvider implements vscode.TreeDataProvider<string> {
 
@@ -10,6 +11,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<string> {
 	private tree: json.Node;
 	private text: string;
 	private editor: vscode.TextEditor;
+	private autoRefresh: boolean = true;
 
 	constructor(private context: vscode.ExtensionContext) {
 		vscode.window.onDidChangeActiveTextEditor(editor => {
@@ -17,15 +19,42 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<string> {
 		});
 		vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 		this.parseTree();
+		this.autoRefresh = vscode.workspace.getConfiguration('jsonOutline').get('autorefresh');
+		vscode.workspace.onDidChangeConfiguration(() => {
+			this.autoRefresh = vscode.workspace.getConfiguration('jsonOutline').get('autorefresh');
+		});
 	}
 
-	refresh(): void {
-		this.parseTree();
-		this._onDidChangeTreeData.fire();
+	refresh(offset?: string): void {
+		if (isNumber(offset)) {
+			this._onDidChangeTreeData.fire(offset);
+		} else {
+			this.parseTree();
+			this._onDidChangeTreeData.fire();
+		}
+	}
+
+	rename(offset: string): void {
+		vscode.window.showInputBox({ placeHolder: 'Enter the new label' })
+			.then(value => {
+				if (value !== null && value !== undefined) {
+					this.editor.edit(editBuilder => {
+						const path = json.getLocation(this.text, parseInt(offset)).path
+						let propertyNode = json.findNodeAtLocation(this.tree, path);
+						if (propertyNode.parent.type !== 'array') {
+							propertyNode = propertyNode.parent.children[0];
+						}
+						const range = new vscode.Range(this.editor.document.positionAt(propertyNode.offset), this.editor.document.positionAt(propertyNode.offset + propertyNode.length));
+						editBuilder.replace(range, `"${value}"`);
+						this.parseTree();
+						this.refresh(offset);
+					});
+				}
+			});
 	}
 
 	private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
-		if (changeEvent.document.uri.toString() === this.editor.document.uri.toString()) {
+		if (this.autoRefresh && changeEvent.document.uri.toString() === this.editor.document.uri.toString()) {
 			for (const change of changeEvent.contentChanges) {
 				const path = json.getLocation(this.text, this.editor.document.offsetAt(change.range.start)).path;
 				path.pop();

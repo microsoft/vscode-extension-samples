@@ -63,6 +63,14 @@
 					"light": "resources/light/refresh.svg",
 					"dark": "resources/dark/refresh.svg"
 				}
+			},
+			{
+				"command": "jsonOutline.refreshNode",
+				"title": "Refresh"
+			},
+			{
+				"command": "jsonOutline.renameNode",
+				"title": "Rename"
 			}
 		],
 		"menus": {
@@ -86,9 +94,28 @@
 				{
 					"command": "nodeDependencies.deleteEntry",
 					"when": "view == nodeDependencies && viewItem == dependency"
+				},
+				{
+					"command": "jsonOutline.renameNode",
+					"when": "view == jsonOutline"
+				},
+				{
+					"command": "jsonOutline.refreshNode",
+					"when": "view == jsonOutline"
 				}
 			]
-		}
+		},
+		"configuration": [
+			{
+				"title": "JSON Outline",
+				"properties": {
+					"jsonOutline.autorefresh": {
+						"type": "boolean",
+						"default": true
+					}
+				}
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./",
