@@ -55,10 +55,23 @@
 			{
 				"command": "openFtpResource",
 				"title": "Open FTP Resource"
+			},
+			{
+				"command": "jsonOutline.refresh",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
 			}
 		],
 		"menus": {
 			"view/title": [
+				{
+					"command": "jsonOutline.refresh",
+					"when": "view == jsonOutline",
+					"group": "navigation"
+				},
 				{
 					"command": "nodeDependencies.refreshEntry",
 					"when": "view == nodeDependencies",

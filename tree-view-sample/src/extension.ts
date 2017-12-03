@@ -14,6 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 	const ftpExplorerProvider = new FtpTreeDataProvider();
 
 	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
+	vscode.commands.registerCommand('jsonOutline.refresh', () => jsonOutlineProvider.refresh());
 	vscode.window.registerTreeDataProvider('jsonOutline', jsonOutlineProvider);
 	vscode.window.registerTreeDataProvider('ftpExplorer', ftpExplorerProvider);
 
