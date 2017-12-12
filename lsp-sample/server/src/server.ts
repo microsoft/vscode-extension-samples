@@ -20,8 +20,8 @@ let documents: TextDocuments = new TextDocuments();
 // for open, change and close text document events
 documents.listen(connection);
 
-// After the server has started the client sends an initilize request. The server receives
-// in the passed params the rootPath of the workspace plus the client capabilites. 
+// After the server has started the client sends an initialize request. The server receives
+// in the passed params the rootPath of the workspace plus the client capabilities. 
 let workspaceRoot: string;
 connection.onInitialize((params): InitializeResult => {
 	workspaceRoot = params.rootPath;
@@ -91,7 +91,7 @@ function validateTextDocument(textDocument: TextDocument): void {
 
 connection.onDidChangeWatchedFiles((_change) => {
 	// Monitored files have change in VSCode
-	connection.console.log('We recevied an file change event');
+	connection.console.log('We received an file change event');
 });
 
 

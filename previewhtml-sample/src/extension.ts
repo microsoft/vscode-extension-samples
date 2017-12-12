@@ -61,7 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				</style>
 				<body>
-					<div>Preview of the <a href="${encodeURI('command:extension.revealCssRule?' + JSON.stringify([document.uri, propStart, propEnd]))}">CSS properties</a></dev>
+					<div>Preview of the <a href="${encodeURI('command:extension.revealCssRule?' + JSON.stringify([document.uri, propStart, propEnd]))}">CSS properties</a></div>
 					<hr>
 					<div id="el">Lorem ipsum dolor sit amet, mi et mauris nec ac luctus lorem, proin leo nulla integer metus vestibulum lobortis, eget</div>
 				</body>`;
