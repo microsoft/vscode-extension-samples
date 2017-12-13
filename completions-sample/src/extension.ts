@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// * return the 'Hello World' and 
 	//   a snippet-based completion item.
 	vscode.languages.registerCompletionItemProvider('plaintext', {
-		provideCompletionItems() {
+		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 			return [
 				new vscode.CompletionItem('Hello World!'),
 				createSnippetItem()
@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 		// https://code.visualstudio.com/docs/editor/userdefinedsnippets#_creating-your-own-snippets
 
 		let item = new vscode.CompletionItem('Good part of the day', vscode.CompletionItemKind.Snippet);
-		item.insertText = new vscode.SnippetString("Good ${1|morning,afternoon,evening|}.");
+		item.insertText = new vscode.SnippetString("Good ${1|morning,afternoon,evening|}. It is ${1}, right?");
 		item.documentation = new vscode.MarkdownString("Inserts a snippet that lets you select the _appropriate_ part of the day for your greeting.");
 
 		return item;
