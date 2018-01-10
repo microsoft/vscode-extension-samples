@@ -14,15 +14,14 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<string> {
 	private autoRefresh: boolean = true;
 
 	constructor(private context: vscode.ExtensionContext) {
-		vscode.window.onDidChangeActiveTextEditor(editor => {
-			this.refresh();
-		});
+		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 		this.parseTree();
 		this.autoRefresh = vscode.workspace.getConfiguration('jsonOutline').get('autorefresh');
 		vscode.workspace.onDidChangeConfiguration(() => {
 			this.autoRefresh = vscode.workspace.getConfiguration('jsonOutline').get('autorefresh');
 		});
+		this.onActiveEditorChanged();
 	}
 
 	refresh(offset?: string): void {
@@ -46,11 +45,27 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<string> {
 						}
 						const range = new vscode.Range(this.editor.document.positionAt(propertyNode.offset), this.editor.document.positionAt(propertyNode.offset + propertyNode.length));
 						editBuilder.replace(range, `"${value}"`);
-						this.parseTree();
-						this.refresh(offset);
+						setTimeout(() => {
+							this.parseTree();
+							this.refresh(offset);
+						}, 100)
 					});
 				}
 			});
+	}
+
+	private onActiveEditorChanged(): void {
+		if (vscode.window.activeTextEditor) {
+			if (vscode.window.activeTextEditor.document.uri.scheme === 'file') {
+				const enabled = vscode.window.activeTextEditor.document.languageId === 'json' || vscode.window.activeTextEditor.document.languageId === 'jsonc';
+				vscode.commands.executeCommand('setContext', 'jsonOutlineEnabled', enabled);
+				if (enabled) {
+					this.refresh();
+				}
+			}
+		} else {
+			vscode.commands.executeCommand('setContext', 'jsonOutlineEnabled', false);
+		}
 	}
 
 	private onDocumentChanged(changeEvent: vscode.TextDocumentChangeEvent): void {
