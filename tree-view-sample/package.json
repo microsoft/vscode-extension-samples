@@ -68,7 +68,11 @@
 			},
 			{
 				"command": "jsonOutline.refreshNode",
-				"title": "Refresh"
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
 			},
 			{
 				"command": "jsonOutline.renameNode",
@@ -103,7 +107,8 @@
 				},
 				{
 					"command": "jsonOutline.refreshNode",
-					"when": "view == jsonOutline"
+					"when": "view == jsonOutline",
+					"group": "inline"
 				}
 			]
 		},
