@@ -84,7 +84,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 		this.text = '';
 		this.tree = null;
 		this.editor = vscode.window.activeTextEditor;
-		if (this.editor && this.editor.document && this.editor.document.languageId === 'json') {
+		if (this.editor && this.editor.document) {
 			this.text = this.editor.document.getText();
 			this.tree = json.parseTree(this.text);
 		}
