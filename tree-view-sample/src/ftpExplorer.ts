@@ -136,16 +136,12 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocum
 
 	public getTreeItem(element: FtpNode): TreeItem {
 		return {
-			label: element.name,
-			collapsibleState: element.isFolder ? TreeItemCollapsibleState.Collapsed : void 0,
+			resourceUri: element.resource,
+			collapsibleState: element.isFolder ? TreeItemCollapsibleState.Collapsed : TreeItemCollapsibleState.None,
 			command: element.isFolder ? void 0 : {
 				command: 'openFtpResource',
 				arguments: [element.resource],
 				title: 'Open FTP Resource'
-			},
-			iconPath: {
-				light: element.isFolder ? path.join(__filename, '..', '..', '..', 'resources', 'light', 'folder.svg') : path.join(__filename, '..', '..', '..', 'resources', 'light', 'document.svg'),
-				dark: element.isFolder ? path.join(__filename, '..', '..', '..', 'resources', 'dark', 'folder.svg') : path.join(__filename, '..', '..', '..', 'resources', 'dark', 'document.svg')
 			}
 		};
 	}
