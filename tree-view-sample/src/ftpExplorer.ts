@@ -134,6 +134,10 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocum
 
 	private model: FtpModel;
 
+	refresh(): any {
+		this._onDidChangeTreeData.fire();
+	}
+
 	public getTreeItem(element: FtpNode): TreeItem {
 		return {
 			resourceUri: element.resource,

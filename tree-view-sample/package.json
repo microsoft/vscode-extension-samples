@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "ms-vscode",
 	"engines": {
-		"vscode": "^1.13.0"
+		"vscode": "^1.20.0"
 	},
 	"categories": [
 		"Other"
@@ -55,6 +55,14 @@
 				"title": "Delete"
 			},
 			{
+				"command": "ftpExplorer.refresh",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
 				"command": "openFtpResource",
 				"title": "Open FTP Resource"
 			},
@@ -94,6 +102,11 @@
 				{
 					"command": "nodeDependencies.addEntry",
 					"when": "view == nodeDependencies"
+				},
+				{
+					"command": "ftpExplorer.refresh",
+					"when": "view == ftpExplorer",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
