@@ -9,7 +9,8 @@ import {
 	ProposedFeatures, InitializeParams, Proposed
 } from 'vscode-languageserver';
 
-// Create a connection for the server. The connection uses Node's IPC as a transport
+// Create a connection for the server. The connection uses Node's IPC as a transport.
+// Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager. The text document manager
@@ -22,7 +23,7 @@ let hasWorkspaceFolderCapability = false;
 connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
 
-	// Does the client support the `workspace/configuration` request? 
+	// Does the client support the `workspace/configuration` request?
 	// If not, we will fall back using global settings
 	hasWorkspaceFolderCapability = (capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace && !!(capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace.workspaceFolders;
 	hasConfigurationCapability = (capabilities as Proposed.ConfigurationClientCapabilities).workspace && !!(capabilities as Proposed.ConfigurationClientCapabilities).workspace.configuration;
@@ -97,7 +98,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 	// The validator creates diagnostics for all uppercase words length 2 and more
 	let text = textDocument.getText();
-	let pattern = /\b[A-Z]{2,}\b/g; 
+	let pattern = /\b[A-Z]{2,}\b/g;
 	let m: RegExpExecArray;
 
 	let problems = 0;
