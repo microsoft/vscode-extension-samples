@@ -53,6 +53,6 @@
 	},
 	"dependencies": {
 		"vscode": "^1.1.5",
-		"vscode-languageclient": "^3.4.2"
+		"vscode-languageclient": "^3.5.0"
 	}
 }
