@@ -9,8 +9,8 @@ import {
 
 // Creates the LSP connection
 let connection = createConnection(ProposedFeatures.all);
-// Create a manager for open text documents
 
+// Create a manager for open text documents
 let documents = new TextDocuments();
 
 // The workspace folder this server is operating on
