@@ -4,14 +4,13 @@ import * as vscode from 'vscode';
 
 import { DepNodeProvider } from './nodeDependencies'
 import { JsonOutlineProvider } from './jsonOutline'
-import { FtpTreeDataProvider, FtpNode } from './ftpExplorer'
+import { FtpTreeDataProvider, FtpNode, FtpExplorer } from './ftpExplorer'
 
 export function activate(context: vscode.ExtensionContext) {
 	const rootPath = vscode.workspace.rootPath;
 
 	const nodeDependenciesProvider = new DepNodeProvider(rootPath);
 	const jsonOutlineProvider = new JsonOutlineProvider(context);
-	const ftpExplorerProvider = new FtpTreeDataProvider();
 
 	vscode.window.registerTreeDataProvider('nodeDependencies', nodeDependenciesProvider);
 	vscode.commands.registerCommand('nodeDependencies.refreshEntry', () => nodeDependenciesProvider.refresh());
@@ -25,13 +24,5 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('jsonOutline.renameNode', offset => jsonOutlineProvider.rename(offset));
 	vscode.commands.registerCommand('extension.openJsonSelection', range => jsonOutlineProvider.select(range));
 
-	vscode.window.registerTreeDataProvider('ftpExplorer', ftpExplorerProvider);
-	vscode.commands.registerCommand('ftpExplorer.refresh', () => ftpExplorerProvider.refresh());
-		vscode.commands.registerCommand('openFtpResource', (node: FtpNode) => {
-			vscode.workspace.openTextDocument(node.resource).then(document => {
-				vscode.window.showTextDocument(document);
-			});
-		});
-
-
+	new FtpExplorer(context);
 }
