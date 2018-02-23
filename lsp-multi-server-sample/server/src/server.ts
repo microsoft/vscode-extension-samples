@@ -4,7 +4,7 @@
 'use strict';
 
 import {
-	createConnection, TextDocuments, ProposedFeatures, TextDocumentSyncKind
+	createConnection, TextDocuments, ProposedFeatures, TextDocumentSyncKind, TextEdit, Position
 } from 'vscode-languageserver';
 
 // Creates the LSP connection
@@ -26,11 +26,17 @@ connection.onInitialize((params) => {
 	connection.console.log(`[Server(${process.pid}) ${workspaceFolder}] Started and initialize received`);
 	return {
 		capabilities: {
+			documentFormattingProvider: true,
 			textDocumentSync: {
 				openClose: true,
-				change: TextDocumentSyncKind.None
+				change: TextDocumentSyncKind.Full
 			}
 		}
 	}
 });
+
+connection.onDocumentFormatting(() => {
+	return [TextEdit.insert(Position.create(0, 0), "Hello")];
+});
+
 connection.listen();
