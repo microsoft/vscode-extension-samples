@@ -15,8 +15,7 @@
 		"vscode-languageserver": "^3.5.0"
 	},
 	"scripts": {
-		"installServer": "installServerIntoExtension ../client ./package.json ./tsconfig.json",
-		"compile": "installServerIntoExtension ../client ./package.json ./tsconfig.json && tsc -p .",
-		"watch": "installServerIntoExtension ../client ./package.json ./tsconfig.json && tsc -w -p ."
+		"compile": "../node_modules/.bin/tsc -p .",
+		"watch": "../node_modules/.bin/tsc -w -p ."
 	}
 }
