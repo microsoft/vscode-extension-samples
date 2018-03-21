@@ -7,7 +7,7 @@ This sample generates diagnostics with related information which can be seen in 
 - Clone this extension
 - `npm install`
 - Launch the extension
-- Open the file `sample-demo.rs` that exists in this extension
+- Open the file [sample-demo.rs](sample-demo.rs) that exists in this extension
 - `Problems view` shows an error with related information
 - Typing `F8` in the editor also shows the error with related information
 
