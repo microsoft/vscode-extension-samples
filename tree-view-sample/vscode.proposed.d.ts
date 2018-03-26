@@ -639,3 +639,4 @@ declare module 'vscode' {
 		getParent?(element: T): ProviderResult<T>;
 
 	}
+}
