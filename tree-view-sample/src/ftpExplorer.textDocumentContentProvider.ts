@@ -164,7 +164,7 @@ export class FtpExplorer {
 		const treeDataProvider = new FtpTreeDataProvider(ftpModel);
 		context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('ftp', treeDataProvider));
 
-		this.ftpViewer = vscode.window.registerTreeDataProvider('ftpExplorer', treeDataProvider);
+		this.ftpViewer = vscode.window.createTreeView('ftpExplorer', { treeDataProvider });
 
 		vscode.commands.registerCommand('ftpExplorer.refresh', () => treeDataProvider.refresh());
 		vscode.commands.registerCommand('ftpExplorer.openFtpResource', resource => this.openResource(resource));
