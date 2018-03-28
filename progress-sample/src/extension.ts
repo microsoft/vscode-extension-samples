@@ -22,11 +22,11 @@ export function activate(context: ExtensionContext) {
 			}, 1000);
 
 			setTimeout(() => {
-				progress.report({ percentage: 50, message: "I am long running! - still going even more..." });
+				progress.report({ percentage: 40, message: "I am long running! - still going even more..." });
 			}, 2000);
 
 			setTimeout(() => {
-				progress.report({ percentage: 90, message: "I am long running! - almost there..." });
+				progress.report({ percentage: 50, message: "I am long running! - almost there..." });
 			}, 3000);
 
 			var p = new Promise(resolve => {
