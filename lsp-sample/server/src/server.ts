@@ -26,7 +26,7 @@ let shouldSendDiagnosticRelatedInformation: boolean = false;
 // After the server has started the client sends an initialize request. The server receives
 // in the passed params the rootPath of the workspace plus the client capabilities.
 connection.onInitialize((_params): InitializeResult => {
-	shouldSendDiagnosticRelatedInformation = _params.capabilities && _params.capabilities.diagnosticRelatedInformation;
+	shouldSendDiagnosticRelatedInformation = _params.capabilities && _params.capabilities.textDocument && _params.capabilities.textDocument.publishDiagnostics && _params.capabilities.textDocument.publishDiagnostics.relatedInformation;
 	return {
 		capabilities: {
 			// Tell the client that the server works in FULL text document sync mode
