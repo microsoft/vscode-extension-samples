@@ -17,6 +17,8 @@ export function activate(context: ExtensionContext) {
 				console.log("User canceled the long running operation")
 			});
 
+			progress.report({ increment: 0 });
+
 			setTimeout(() => {
 				progress.report({ increment: 10, message: "I am long running! - still going..." });
 			}, 1000);
