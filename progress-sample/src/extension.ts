@@ -18,15 +18,15 @@ export function activate(context: ExtensionContext) {
 			});
 
 			setTimeout(() => {
-				progress.report({ percentage: 10, message: "I am long running! - still going..." });
+				progress.report({ increment: 10, message: "I am long running! - still going..." });
 			}, 1000);
 
 			setTimeout(() => {
-				progress.report({ percentage: 40, message: "I am long running! - still going even more..." });
+				progress.report({ increment: 40, message: "I am long running! - still going even more..." });
 			}, 2000);
 
 			setTimeout(() => {
-				progress.report({ percentage: 50, message: "I am long running! - almost there..." });
+				progress.report({ increment: 50, message: "I am long running! - almost there..." });
 			}, 3000);
 
 			var p = new Promise(resolve => {
