@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 
 import { DepNodeProvider } from './nodeDependencies'
 import { JsonOutlineProvider } from './jsonOutline'
-import { FtpTreeDataProvider, FtpNode, FtpExplorer } from './ftpExplorer.fileSystemProvider'
+import { FtpExplorer } from './ftpExplorer.fileSystemProvider'
 
 export function activate(context: vscode.ExtensionContext) {
 	const rootPath = vscode.workspace.rootPath;
