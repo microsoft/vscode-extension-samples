@@ -130,7 +130,6 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocum
 
 	public getTreeItem(element: FtpNode): TreeItem {
 		return {
-			id: element.resource.fsPath,
 			resourceUri: element.resource,
 			collapsibleState: element.isDirectory ? TreeItemCollapsibleState.Collapsed : void 0,
 			command: element.isDirectory ? void 0 : {

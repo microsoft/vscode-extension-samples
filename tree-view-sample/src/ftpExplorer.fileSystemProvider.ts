@@ -205,7 +205,6 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode> {
 
 	public getTreeItem(element: FtpNode): TreeItem {
 		return {
-			id: element.resource.fsPath,
 			resourceUri: element.resource,
 			collapsibleState: element.isDirectory ? TreeItemCollapsibleState.Collapsed : void 0,
 			command: element.isDirectory ? void 0 : {
@@ -275,6 +274,6 @@ export class FtpExplorer {
 				return { resource: vscode.window.activeTextEditor.document.uri, isDirectory: false };
 			}
 		}
-		return null;
+		return { resource: vscode.Uri.parse('ftp://mirror.switch.ch/doc/standard/README.txt'), isDirectory: false };
 	}
 }
