@@ -62,9 +62,15 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	// Proposed APIs
-	(<any>vscode.window).onDidOpenTerminal((terminal: vscode.Terminal) => {
-		vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
-	});
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminals', () => {
+		const terminals = (<vscode.Terminal[]>(<any>vscode.window).terminals);
+		vscode.window.showQuickPick(terminals.map(t => t.name));
+	}));
+	if ('onDidOpenTerminal' in vscode.window) {
+		(<any>vscode.window).onDidOpenTerminal((terminal: vscode.Terminal) => {
+			vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
+		});
+	}
 
 	function getLatestTerminal() {
 		return terminalStack[terminalStack.length - 1];
