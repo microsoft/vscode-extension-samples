@@ -57,7 +57,14 @@ export function activate(context: vscode.ExtensionContext) {
 			console.log(`Shell process ID: ${processId}`);
 		});
 	}));
-	vscode.window.onDidCloseTerminal((terminal) => console.log('Terminal closed', terminal));
+	vscode.window.onDidCloseTerminal((terminal) => {
+		vscode.window.showInformationMessage(`onDidCloseTerminal, name: ${terminal.name}`);
+	});
+
+	// Proposed APIs
+	(<any>vscode.window).onDidOpenTerminal((terminal: vscode.Terminal) => {
+		vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
+	});
 
 	function getLatestTerminal() {
 		return terminalStack[terminalStack.length - 1];
