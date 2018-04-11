@@ -3,76 +3,117 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-	let terminalStack: vscode.Terminal[] = [];
+	let NEXT_TERM_ID = 1;
 
+	// vscode.window.createTerminal
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createTerminal', () => {
-		terminalStack.push(vscode.window.createTerminal(`Ext Terminal #${terminalStack.length + 1}`));
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.hide', () => {
-		if (terminalStack.length === 0) {
-			vscode.window.showErrorMessage('No active terminals');
-		}
-		getLatestTerminal().hide();
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.show', () => {
-		if (terminalStack.length === 0) {
-			vscode.window.showErrorMessage('No active terminals');
-		}
-		getLatestTerminal().show();
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.showPreserveFocus', () => {
-		if (terminalStack.length === 0) {
-			vscode.window.showErrorMessage('No active terminals');
-		}
-		getLatestTerminal().show(true);
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.sendText', () => {
-		if (terminalStack.length === 0) {
-			vscode.window.showErrorMessage('No active terminals');
-		}
-		getLatestTerminal().sendText("echo 'Hello world!'");
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.sendTextNoNewLine', () => {
-		if (terminalStack.length === 0) {
-			vscode.window.showErrorMessage('No active terminals');
-		}
-		getLatestTerminal().sendText("echo 'Hello world!'", false);
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.dispose', () => {
-		if (terminalStack.length === 0) {
-			vscode.window.showErrorMessage('No active terminals');
-		}
-		getLatestTerminal().dispose();
-		terminalStack.pop();
+		vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createAndSend', () => {
-		terminalStack.push(vscode.window.createTerminal(`Ext Terminal #${terminalStack.length + 1}`));
-		getLatestTerminal().sendText("echo 'Sent text immediately after creating'");
+		const terminal = vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
+		terminal.sendText("echo 'Sent text immediately after creating'");
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createZshLoginShell', () => {
-		terminalStack.push(vscode.window.createTerminal(`Ext Terminal #${terminalStack.length + 1}`, '/bin/zsh', ['-l']));
+		vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`, '/bin/zsh', ['-l']);
 	}));
+
+	// Terminal.hide
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.hide', () => {
+		if (ensureTerminalExists()) {
+			selectTerminal().then(terminal => terminal.hide());
+		}
+	}));
+
+	// Terminal.show
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.show', () => {
+		if (ensureTerminalExists()) {
+			selectTerminal().then(terminal => terminal.show());
+		}
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.showPreserveFocus', () => {
+		if (ensureTerminalExists()) {
+			selectTerminal().then(terminal => terminal.show(true));
+		}
+	}));
+
+	// Terminal.sendText
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.sendText', () => {
+		if (ensureTerminalExists()) {
+			selectTerminal().then(terminal => terminal.sendText("echo 'Hello world!'"));
+		}
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.sendTextNoNewLine', () => {
+		if (ensureTerminalExists()) {
+			selectTerminal().then(terminal => terminal.sendText("echo 'Hello world!'", false));
+		}
+	}));
+
+	// Terminal.dispose
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.dispose', () => {
+		if (ensureTerminalExists()) {
+			selectTerminal().then(terminal => {
+				if (terminal) {
+					terminal.dispose();
+				}
+			});
+		}
+	}));
+
+	// Terminal.processId
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.processId', () => {
-		getLatestTerminal().processId.then((processId) => {
-			console.log(`Shell process ID: ${processId}`);
+		selectTerminal().then(terminal => {
+			terminal.processId.then((processId) => {
+				if (processId) {
+					vscode.window.showInformationMessage(`Terminal.processId: ${processId}`);
+				} else {
+					vscode.window.showInformationMessage('Terminal does not have a process ID');
+				}
+			});
 		});
 	}));
+
+	// vscode.window.onDidCloseTerminal
 	vscode.window.onDidCloseTerminal((terminal) => {
 		vscode.window.showInformationMessage(`onDidCloseTerminal, name: ${terminal.name}`);
 	});
 
-	// Proposed APIs
+
+	// vvv Proposed APIs in 1.23 below vvv
+
+
+	// vscode.window.terminals
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminals', () => {
-		const terminals = (<vscode.Terminal[]>(<any>vscode.window).terminals);
-		vscode.window.showQuickPick(terminals.map(t => t.name));
+		selectTerminal();
 	}));
+
+	// vscode.window.onDidOpenTerminal
 	if ('onDidOpenTerminal' in vscode.window) {
 		(<any>vscode.window).onDidOpenTerminal((terminal: vscode.Terminal) => {
 			vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
 		});
 	}
+}
 
-	function getLatestTerminal() {
-		return terminalStack[terminalStack.length - 1];
+function selectTerminal(): Thenable<vscode.Terminal> {
+	interface TerminalQuickPickItem extends vscode.QuickPickItem {
+		terminal: vscode.Terminal;
 	}
+	const terminals = <vscode.Terminal[]>(<any>vscode.window).terminals;
+	const items: TerminalQuickPickItem[] = terminals.map(t => {
+		return {
+			label: `name: ${t.name}`,
+			terminal: t
+		};
+	})
+	return vscode.window.showQuickPick(items).then(item => {
+		return item.terminal;
+	});
+}
+
+function ensureTerminalExists(): boolean {
+	if ((<any>vscode.window).terminals.length === 0) {
+		vscode.window.showErrorMessage('No active terminals');
+		return false;
+	}
+	return true;
 }
