@@ -11,28 +11,44 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:terminalTest.createTerminal",
 		"onCommand:terminalTest.createAndSend",
-		"onCommand:terminalTest.createZshLoginShell"
+		"onCommand:terminalTest.createTerminal",
+		"onCommand:terminalTest.createZshLoginShell",
+		"onCommand:terminalTest.dispose",
+		"onCommand:terminalTest.hide",
+		"onCommand:terminalTest.processId",
+		"onCommand:terminalTest.sendText",
+		"onCommand:terminalTest.sendTextNoNewLine",
+		"onCommand:terminalTest.show",
+		"onCommand:terminalTest.showPreserveFocus",
+		"onCommand:terminalTest.terminals"
 	],
 	"main": "./out/extension",
 	"contributes": {
 		"commands": [
 			{
+				"command": "terminalTest.createAndSend",
+				"title": "Terminal API: Create Terminal and Immediately Send"
+			},
+			{
 				"command": "terminalTest.createTerminal",
 				"title": "Terminal API: Create Terminal"
+			},
+			{
+				"command": "terminalTest.createZshLoginShell",
+				"title": "Terminal API: Create Terminal (zsh login shell)"
+			},
+			{
+				"command": "terminalTest.dispose",
+				"title": "Terminal API: Dispose"
 			},
 			{
 				"command": "terminalTest.hide",
 				"title": "Terminal API: Hide"
 			},
 			{
-				"command": "terminalTest.show",
-				"title": "Terminal API: Show"
-			},
-			{
-				"command": "terminalTest.showPreserveFocus",
-				"title": "Terminal API: Show (preserving focus)"
+				"command": "terminalTest.processId",
+				"title": "Terminal API: Get process ID"
 			},
 			{
 				"command": "terminalTest.sendText",
@@ -43,20 +59,12 @@
 				"title": "Terminal API: Send Text (no implied \\n)"
 			},
 			{
-				"command": "terminalTest.dispose",
-				"title": "Terminal API: Dispose"
+				"command": "terminalTest.show",
+				"title": "Terminal API: Show"
 			},
 			{
-				"command": "terminalTest.createAndSend",
-				"title": "Terminal API: Create Terminal and Immediately Send"
-			},
-			{
-				"command": "terminalTest.createZshLoginShell",
-				"title": "Terminal API: Create Terminal (zsh login shell) [v1.6+]"
-			},
-			{
-				"command": "terminalTest.processId",
-				"title": "Terminal API: Write process ID to console [v1.6+]"
+				"command": "terminalTest.showPreserveFocus",
+				"title": "Terminal API: Show (preserving focus)"
 			},
 			{
 				"command": "terminalTest.terminals",
