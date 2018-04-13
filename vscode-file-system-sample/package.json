@@ -1,0 +1,37 @@
+{
+    "name": "vscode-file-system-sample",
+    "displayName": "vscode-file-system-sample",
+    "description": "Showcase for the FileSystemProvider-api",
+    "version": "0.0.1",
+    "publisher": "jrieken",
+    "enableProposedApi": true,
+    "engines": {
+        "vscode": "^1.22.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "memfs.init",
+                "title": "Initialize MemFS"
+            }
+        ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5",
+        "@types/node": "^7.0.43"
+    }
+}
