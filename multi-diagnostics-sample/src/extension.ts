@@ -21,10 +21,7 @@ function updateDiagnostics(document: vscode.TextDocument, collection: vscode.Dia
             severity: vscode.DiagnosticSeverity.Error,
             source: '',
             relatedInformation: [
-                {
-                    location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(1, 8), new vscode.Position(1, 9))),
-                    message: 'first assignment to `x`'
-                }
+                new vscode.DiagnosticRelatedInformation(new vscode.Location(document.uri, new vscode.Range(new vscode.Position(1, 8), new vscode.Position(1, 9))), 'first assignment to `x`')
             ]
         }]);
     } else {
