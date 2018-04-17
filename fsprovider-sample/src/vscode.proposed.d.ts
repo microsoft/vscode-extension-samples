@@ -232,7 +232,7 @@ declare module 'vscode' {
 	// todo@joh add open/close calls?
 	export interface FileSystemProvider2 {
 
-		_version: 5;
+		_version: 6;
 
 		/**
 		 * An event to signal that a resource has been created, changed, or deleted.
@@ -293,8 +293,13 @@ declare module 'vscode' {
 		// ? useTrash, expose trash
 		delete(uri: Uri, token: CancellationToken): void | Thenable<void>;
 
-		// todo@remote
-		create(uri: Uri, options: { type: FileType2 }, token: CancellationToken): FileStat2 | Thenable<FileStat2>;
+		/**
+		 * Create a new directory. *Note* that new files are created via `write`-calls.
+		 * 
+		 * @param uri 
+		 * @param token 
+		 */
+		createDirectory(uri: Uri, token: CancellationToken): FileStat2 | Thenable<FileStat2>;
 	}
 
 	export namespace workspace {

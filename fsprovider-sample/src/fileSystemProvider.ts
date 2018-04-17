@@ -46,7 +46,7 @@ type Entry = File | Directory;
 
 export class MemFS implements vscode.FileSystemProvider2 {
 
-    _version: 5 = 5;
+    _version: 6 = 6;
 
     private _root = new Directory('');
     private _data = new WeakMap<Entry, Uint8Array>();
@@ -118,16 +118,12 @@ export class MemFS implements vscode.FileSystemProvider2 {
         this._fireSoon({ type: vscode.FileChangeType2.Changed, uri: dirname }, { uri, type: vscode.FileChangeType2.Deleted });
     }
 
-    create(uri: vscode.Uri, options: { type: vscode.FileType2; }): vscode.FileStat2 {
-        let dirname = uri.with({ path: path.posix.dirname(uri.path) });
+    createDirectory(uri: vscode.Uri): vscode.FileStat2 {
         let basename = path.posix.basename(uri.path);
+        let dirname = uri.with({ path: path.posix.dirname(uri.path) });
         let parent = this._lookupDir(dirname);
-        let entry: Entry;
-        if (options.type === vscode.FileType2.Directory) {
-            entry = new Directory(basename);
-        } else {
-            entry = new File(basename);
-        }
+
+        let entry = new Directory(basename);
         parent.entries.set(entry.name, entry);
         parent.mtime = Date.now();
         parent.size += 1;

@@ -13,17 +13,17 @@ export function activate(context: vscode.ExtensionContext) {
         if (!initialzied) {
             initialzied = true;
 
-            memFs.create(vscode.Uri.parse(`memfs:/empty.txt`), { type: vscode.FileType2.File });
-            memFs.create(vscode.Uri.parse(`memfs:/folder/`), { type: vscode.FileType2.Directory });
-            memFs.create(vscode.Uri.parse(`memfs:/xyz/`), { type: vscode.FileType2.Directory });
-            memFs.create(vscode.Uri.parse(`memfs:/xyz/abc`), { type: vscode.FileType2.Directory });
-            memFs.create(vscode.Uri.parse(`memfs:/xyz/def`), { type: vscode.FileType2.Directory });
-            memFs.create(vscode.Uri.parse(`memfs:/folder/empty.foo`), { type: vscode.FileType2.File });
+            memFs.createDirectory(vscode.Uri.parse(`memfs:/folder/`));
+            memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/`));
+            memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/abc`));
+            memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/def`));
 
+            memFs.writeFile(vscode.Uri.parse(`memfs:/empty.txt`), new Uint8Array(0));
             memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'));
             memFs.writeFile(vscode.Uri.parse(`memfs:/file.css`), Buffer.from('* { color: green; }'));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/large-rnd.foo`), randomData(10000));
+            memFs.writeFile(vscode.Uri.parse(`memfs:/large-rnd.foo`), randomData(50000));
+            memFs.writeFile(vscode.Uri.parse(`memfs:/folder/empty.foo`), new Uint8Array(0));
+            memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'));
             memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'));
             memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.bin`), Buffer.from([0, 0, 0, 1, 7, 0, 0, 1, 1]));
         }
