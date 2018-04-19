@@ -11,7 +11,7 @@ declare module 'vscode' {
 		export function sampleFunction(): Thenable<any>;
 	}
 
-	//#region Joh: file system provider
+	//#region Joh: file system provider (OLD)
 
 	export enum FileChangeType {
 		Updated = 0,
@@ -84,15 +84,29 @@ declare module 'vscode' {
 		// create(resource: Uri): Thenable<FileStat>;
 	}
 
-	/**
-	 * 
-	 */
-	export class FileError extends Error {
+	export type DeprecatedFileChangeType = FileChangeType;
+	export type DeprecatedFileType = FileType;
+	export type DeprecatedFileChange = FileChange;
+	export type DeprecatedFileStat = FileStat;
+	export type DeprecatedFileSystemProvider = FileSystemProvider;
 
-		static EntryExists(message?: string): FileError;
-		static EntryNotFound(message?: string): FileError;
-		static EntryNotADirectory(message?: string): FileError;
-		static EntryIsADirectory(message?: string): FileError;
+	export namespace workspace {
+		export function registerDeprecatedFileSystemProvider(scheme: string, provider: DeprecatedFileSystemProvider): Disposable;
+	}
+
+	//#endregion
+
+	//#region Joh: file system provider (new)
+
+	/**
+	 *
+	 */
+	export class FileSystemError extends Error {
+
+		static EntryExists(message?: string): FileSystemError;
+		static EntryNotFound(message?: string): FileSystemError;
+		static EntryNotADirectory(message?: string): FileSystemError;
+		static EntryIsADirectory(message?: string): FileSystemError;
 
 		constructor(message?: string);
 	}
@@ -194,8 +208,8 @@ declare module 'vscode' {
 		writeFile(uri: Uri, content: Uint8Array, options: { flags: FileOpenFlags }, token: CancellationToken): void | Thenable<void>;
 
 		/**
-		 * Delete a file or folder from the underlying storage. 
-		 * 
+		 * Delete a file or folder from the underlying storage.
+		 *
 		 * @param uri The resource that is to be deleted
 		 * @param options Options bag for future use
 		 * @param token A cancellation token.
@@ -224,7 +238,6 @@ declare module 'vscode' {
 
 	export namespace workspace {
 		export function registerFileSystemProvider(scheme: string, provider: FileSystemProvider, newProvider?: FileSystemProvider2): Disposable;
-		export function registerDeprecatedFileSystemProvider(scheme: string, provider: FileSystemProvider): Disposable;
 	}
 
 	//#endregion
