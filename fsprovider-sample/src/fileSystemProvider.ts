@@ -46,13 +46,18 @@ type Entry = File | Directory;
 
 export class MemFS implements vscode.FileSystemProvider2 {
 
-    _version: 6 = 6;
+    _version: 7 = 7;
 
     private _root = new Directory('');
     private _data = new WeakMap<Entry, Uint8Array>();
     private _emitter = new vscode.EventEmitter<vscode.FileChange2[]>();
 
-    readonly onDidChange: vscode.Event<vscode.FileChange2[]> = this._emitter.event;
+    readonly onDidChangeFile: vscode.Event<vscode.FileChange2[]> = this._emitter.event;
+
+    watch(resource: vscode.Uri, opts): vscode.Disposable {
+        // ignore, fires for all changes...
+        return new vscode.Disposable(() => { });
+    }
 
     stat(uri: vscode.Uri): vscode.FileStat2 {
         return this._lookup(uri);
@@ -110,7 +115,7 @@ export class MemFS implements vscode.FileSystemProvider2 {
         let basename = path.posix.basename(uri.path);
         let parent = this._lookupDir(dirname);
         if (!parent.entries.has(basename)) {
-            throw vscode.FileError.ENOENT;
+            throw new Error();
         }
         parent.entries.delete(basename);
         parent.mtime = Date.now();
@@ -145,7 +150,7 @@ export class MemFS implements vscode.FileSystemProvider2 {
                 child = entry.entries.get(part);
             }
             if (!child) {
-                throw vscode.FileError.ENOENT;
+                throw new Error();
             }
             entry = child;
         }
@@ -155,7 +160,7 @@ export class MemFS implements vscode.FileSystemProvider2 {
     private _lookupDir(uri: vscode.Uri): Directory {
         let entry = this._lookup(uri);
         if (!(entry instanceof Directory)) {
-            throw vscode.FileError.ENOTDIR;
+            throw new Error();
         }
         return entry;
     }
