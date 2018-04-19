@@ -11,94 +11,6 @@ declare module 'vscode' {
 		export function sampleFunction(): Thenable<any>;
 	}
 
-	//#region Aeschli: folding
-
-	export class FoldingRangeList {
-
-		/**
-		 * The folding ranges.
-		 */
-		ranges: FoldingRange[];
-
-		/**
-		 * Creates new folding range list.
-		 *
-		 * @param ranges The folding ranges
-		 */
-		constructor(ranges: FoldingRange[]);
-	}
-
-
-	export class FoldingRange {
-
-		/**
-		 * The start line number (zero-based) of the range to fold. The hidden area starts after the last character of that line.
-		 */
-		startLine: number;
-
-		/**
-		 * The end line number (0-based) of the range to fold. The hidden area ends at the last character of that line.
-		 */
-		endLine: number;
-
-		/**
-		 * The actual color value for this color range.
-		 */
-		type?: FoldingRangeType | string;
-
-		/**
-		 * Creates a new folding range.
-		 *
-		 * @param startLineNumber The first line of the fold
-		 * @param type The last line of the fold
-		 */
-		constructor(startLineNumber: number, endLineNumber: number, type?: FoldingRangeType | string);
-	}
-
-	export enum FoldingRangeType {
-		/**
-		 * Folding range for a comment
-		 */
-		Comment = 'comment',
-		/**
-		 * Folding range for a imports or includes
-		 */
-		Imports = 'imports',
-		/**
-		 * Folding range for a region (e.g. `#region`)
-		 */
-		Region = 'region'
-	}
-
-	export namespace languages {
-
-		/**
-		 * Register a folding provider.
-		 *
-		 * Multiple folding can be registered for a language. In that case providers are sorted
-		 * by their [score](#languages.match) and the best-matching provider is used. Failure
-		 * of the selected provider will cause a failure of the whole operation.
-		 *
-		 * @param selector A selector that defines the documents this provider is applicable to.
-		 * @param provider A folding provider.
-		 * @return A [disposable](#Disposable) that unregisters this provider when being disposed.
-		 */
-		export function registerFoldingProvider(selector: DocumentSelector, provider: FoldingProvider): Disposable;
-	}
-
-	export interface FoldingContext {
-		maxRanges?: number;
-	}
-
-	export interface FoldingProvider {
-		/**
-		 * Returns a list of folding ranges or null if the provider does not want to participate or was cancelled.
-		 */
-		provideFoldingRanges(document: TextDocument, context: FoldingContext, token: CancellationToken): ProviderResult<FoldingRangeList>;
-	}
-
-	//#endregion
-
 	//#region Joh: file system provider
 
 	export enum FileChangeType {
@@ -172,32 +84,17 @@ declare module 'vscode' {
 		// create(resource: Uri): Thenable<FileStat>;
 	}
 
-	// export class FileError extends Error {
+	export class FileError extends Error {
 
-	// 	/**
-	// 	 * Entry already exists, e.g. when creating a file or folder.
-	// 	 */
-	// 	static readonly EntryExists: FileError;
+		static EntryExists(message?: string): FileError;
+		static EntryNotFound(message?: string): FileError;
+		static EntryNotADirectory(message?: string): FileError;
+		static EntryIsADirectory(message?: string): FileError;
 
-	// 	/**
-	// 	 * Entry does not exist.
-	// 	 */
-	// 	static readonly EntryNotFound: FileError;
+		readonly code: string;
 
-	// 	/**
-	// 	 * Entry is not a directory.
-	// 	 */
-	// 	static readonly EntryNotADirectory: FileError;
-
-	// 	/**
-	// 	 * Entry is a directory.
-	// 	 */
-	// 	static readonly EntryIsADirectory: FileError;
-
-	// 	readonly code: string;
-
-	// 	constructor(code: string, message?: string);
-	// }
+		constructor(message?: string, code?: string);
+	}
 
 	export enum FileChangeType2 {
 		Changed = 1,
