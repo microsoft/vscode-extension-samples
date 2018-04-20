@@ -92,6 +92,14 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
 		});
 	}
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onData', () => {
+		selectTerminal().then(terminal => {
+			vscode.window.showInformationMessage(`onData listener attached for terminal: ${terminal.name}, check the devtools console to see events`);
+			(<any>terminal).onData((data: string) => {
+				console.log('onData: ' + data);
+			});
+		});
+	}));
 }
 
 function selectTerminal(): Thenable<vscode.Terminal> {

@@ -16,6 +16,7 @@
 		"onCommand:terminalTest.createZshLoginShell",
 		"onCommand:terminalTest.dispose",
 		"onCommand:terminalTest.hide",
+		"onCommand:terminalTest.onData",
 		"onCommand:terminalTest.processId",
 		"onCommand:terminalTest.sendText",
 		"onCommand:terminalTest.sendTextNoNewLine",
@@ -45,6 +46,10 @@
 			{
 				"command": "terminalTest.hide",
 				"title": "Terminal API: Hide"
+			},
+			{
+				"command": "terminalTest.onData",
+				"title": "Terminal API: Attach data listener"
 			},
 			{
 				"command": "terminalTest.processId",
