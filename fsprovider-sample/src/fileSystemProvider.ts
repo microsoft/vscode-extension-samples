@@ -12,13 +12,15 @@ import { workspace } from 'vscode';
 
 class File {
 
-    type: vscode.FileType2;
+    isFile: boolean;
+    isDirectory: boolean;
+    isSymbolicLink: boolean;
     mtime: number;
     size: number;
     name: string;
 
     constructor(name: string) {
-        this.type = vscode.FileType2.File;
+        this.isFile = true;
         this.mtime = Date.now();
         this.size = 0;
         this.name = name;
@@ -27,14 +29,16 @@ class File {
 
 class Directory {
 
-    type: vscode.FileType2;
+    isFile: boolean;
+    isDirectory: boolean;
+    isSymbolicLink: boolean;
     mtime: number;
     size: number;
     name: string;
     entries: Map<string, Entry>;
 
     constructor(name: string) {
-        this.type = vscode.FileType2.Directory;
+        this.isDirectory = true;
         this.mtime = Date.now();
         this.size = 0;
         this.name = name;
@@ -77,10 +81,16 @@ export class MemFS implements vscode.FileSystemProvider2 {
         return this._data.get(entry) || new Uint8Array(0);
     }
 
-    writeFile(uri: vscode.Uri, content: Uint8Array): void {
+    writeFile(uri: vscode.Uri, content: Uint8Array, options: vscode.FileOptions): void {
         let basename = path.posix.basename(uri.path);
         let parent = this._lookupContainer(uri);
         let entry = parent.entries.get(basename);
+        if (!entry && !options.create) {
+            throw vscode.FileSystemError.EntryNotFound(uri.toString(true));
+        }
+        if (entry && options.create && options.exclusive) {
+            throw vscode.FileSystemError.EntryExists(uri.toString(true));
+        }
         if (!entry) {
             entry = new File(basename);
             parent.entries.set(basename, entry);
@@ -115,7 +125,7 @@ export class MemFS implements vscode.FileSystemProvider2 {
         let basename = path.posix.basename(uri.path);
         let parent = this._lookupDir(dirname);
         if (!parent.entries.has(basename)) {
-            throw vscode.FileSystemError.EntryNotFound();
+            throw vscode.FileSystemError.EntryNotFound(uri.toString(true));
         }
         parent.entries.delete(basename);
         parent.mtime = Date.now();
@@ -150,7 +160,7 @@ export class MemFS implements vscode.FileSystemProvider2 {
                 child = entry.entries.get(part);
             }
             if (!child) {
-                throw vscode.FileSystemError.EntryNotFound();
+                throw vscode.FileSystemError.EntryNotFound(uri.toString(true));
             }
             entry = child;
         }
@@ -160,7 +170,7 @@ export class MemFS implements vscode.FileSystemProvider2 {
     private _lookupDir(uri: vscode.Uri): Directory {
         let entry = this._lookup(uri);
         if (!(entry instanceof Directory)) {
-            throw vscode.FileSystemError.EntryNotADirectory();
+            throw vscode.FileSystemError.EntryNotADirectory(uri.toString(true));
         }
         return entry;
     }

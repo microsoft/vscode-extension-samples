@@ -18,17 +18,17 @@ export function activate(context: vscode.ExtensionContext) {
             memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/abc`));
             memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/def`));
 
-            memFs.writeFile(vscode.Uri.parse(`memfs:/empty.txt`), new Uint8Array(0));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/file.css`), Buffer.from('* { color: green; }'));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/large-rnd.foo`), randomData(50000));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/folder/empty.foo`), new Uint8Array(0));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.bin`), Buffer.from([0, 0, 0, 1, 7, 0, 0, 1, 1]));
+            memFs.writeFile(vscode.Uri.parse(`memfs:/empty.txt`), new Uint8Array(0), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/file.css`), Buffer.from('* { color: green; }'), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/large-rnd.foo`), randomData(50000), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/folder/empty.foo`), new Uint8Array(0), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.bin`), Buffer.from([0, 0, 0, 1, 7, 0, 0, 1, 1]), { create: true });
 
-            memFs.writeFile(vscode.Uri.parse(`memfs:/UPPER.txt`), Buffer.from('UPPER'));
-            memFs.writeFile(vscode.Uri.parse(`memfs:/upper.txt`), Buffer.from('upper'));
+            memFs.writeFile(vscode.Uri.parse(`memfs:/UPPER.txt`), Buffer.from('UPPER'), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/upper.txt`), Buffer.from('upper'), { create: true });
         }
     });
 
