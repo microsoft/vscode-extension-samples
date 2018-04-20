@@ -46,7 +46,7 @@ type Entry = File | Directory;
 
 export class MemFS implements vscode.FileSystemProvider2 {
 
-    _version: 8 = 8;
+    _version: 9 = 9;
 
     private _root = new Directory('');
     private _data = new WeakMap<Entry, Uint8Array>();

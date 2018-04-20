@@ -6,7 +6,7 @@ import { MemFS } from './fileSystemProvider';
 export function activate(context: vscode.ExtensionContext) {
 
     const memFs = new MemFS();
-    const registration = vscode.workspace.registerFileSystemProvider('memfs', null, memFs);
+    const registration = vscode.workspace.registerFileSystemProvider2('memfs', memFs, { isCaseSensitive: true });
 
     let initialzied = false;
     vscode.commands.registerCommand('memfs.init', _ => {
@@ -26,6 +26,9 @@ export function activate(context: vscode.ExtensionContext) {
             memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'));
             memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'));
             memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.bin`), Buffer.from([0, 0, 0, 1, 7, 0, 0, 1, 1]));
+
+            memFs.writeFile(vscode.Uri.parse(`memfs:/UPPER.txt`), Buffer.from('UPPER'));
+            memFs.writeFile(vscode.Uri.parse(`memfs:/upper.txt`), Buffer.from('upper'));
         }
     });
 
