@@ -14,6 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
             initialzied = true;
 
             memFs.createDirectory(vscode.Uri.parse(`memfs:/folder/`));
+            memFs.createDirectory(vscode.Uri.parse(`memfs:/large/`));
             memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/`));
             memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/abc`));
             memFs.createDirectory(vscode.Uri.parse(`memfs:/xyz/def`));
@@ -21,7 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
             memFs.writeFile(vscode.Uri.parse(`memfs:/empty.txt`), new Uint8Array(0), { create: true });
             memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'), { create: true });
             memFs.writeFile(vscode.Uri.parse(`memfs:/file.css`), Buffer.from('* { color: green; }'), { create: true });
-            memFs.writeFile(vscode.Uri.parse(`memfs:/large-rnd.foo`), randomData(50000), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/large/rnd.foo`), randomData(30000), { create: true });
+            memFs.writeFile(vscode.Uri.parse(`memfs:/large/too_large.foo`), randomData(50000), { create: true });
             memFs.writeFile(vscode.Uri.parse(`memfs:/folder/empty.foo`), new Uint8Array(0), { create: true });
             memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'), { create: true });
             memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'), { create: true });

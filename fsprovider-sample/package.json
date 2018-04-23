@@ -12,7 +12,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onFileSystemAccess:memfs"
+        "onFileSystem:memfs"
     ],
     "main": "./out/src/extension",
     "contributes": {
