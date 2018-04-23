@@ -1,10 +1,9 @@
 {
-    "name": "vscode-file-system-sample",
-    "displayName": "vscode-file-system-sample",
-    "description": "Showcase for the FileSystemProvider-api",
+    "name": "vscode-memfs",
+    "displayName": "MemFS - a file system provider sample",
+    "description": "Showcase for the file system provider API",
     "version": "0.0.1",
     "publisher": "jrieken",
-    "enableProposedApi": true,
     "engines": {
         "vscode": "^1.23.0"
     },

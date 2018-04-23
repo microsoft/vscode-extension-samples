@@ -86,10 +86,10 @@ export class MemFS implements vscode.FileSystemProvider {
         let parent = this._lookupContainer(uri);
         let entry = parent.entries.get(basename);
         if (!entry && !options.create) {
-            throw vscode.FileSystemError.EntryNotFound(uri.toString(true));
+            throw vscode.FileSystemError.FileNotFound(uri);
         }
         if (entry && options.create && options.exclusive) {
-            throw vscode.FileSystemError.EntryExists(uri.toString(true));
+            throw vscode.FileSystemError.FileExists(uri);
         }
         if (!entry) {
             entry = new File(basename);
@@ -125,7 +125,7 @@ export class MemFS implements vscode.FileSystemProvider {
         let basename = path.posix.basename(uri.path);
         let parent = this._lookupDir(dirname);
         if (!parent.entries.has(basename)) {
-            throw vscode.FileSystemError.EntryNotFound(uri.toString(true));
+            throw vscode.FileSystemError.FileNotFound(uri);
         }
         parent.entries.delete(basename);
         parent.mtime = Date.now();
@@ -160,7 +160,7 @@ export class MemFS implements vscode.FileSystemProvider {
                 child = entry.entries.get(part);
             }
             if (!child) {
-                throw vscode.FileSystemError.EntryNotFound(uri.toString(true));
+                throw vscode.FileSystemError.FileNotFound(uri);
             }
             entry = child;
         }
@@ -170,7 +170,7 @@ export class MemFS implements vscode.FileSystemProvider {
     private _lookupDir(uri: vscode.Uri): Directory {
         let entry = this._lookup(uri);
         if (!(entry instanceof Directory)) {
-            throw vscode.FileSystemError.EntryNotADirectory(uri.toString(true));
+            throw vscode.FileSystemError.FileNotADirectory(uri);
         }
         return entry;
     }
