@@ -20,6 +20,10 @@
             {
                 "command": "memfs.init",
                 "title": "Initialize MemFS"
+            },
+            {
+                "command": "memfs.reset",
+                "title": "Reset MemFS"
             }
         ]
     },
