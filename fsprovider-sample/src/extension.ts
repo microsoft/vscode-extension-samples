@@ -6,7 +6,7 @@ import { MemFS } from './fileSystemProvider';
 export function activate(context: vscode.ExtensionContext) {
 
     const memFs = new MemFS();
-    const registration = vscode.workspace.registerFileSystemProvider2('memfs', memFs, { isCaseSensitive: true });
+    const registration = vscode.workspace.registerFileSystemProvider('memfs', memFs, { isCaseSensitive: true });
     let initialized = false;
 
     vscode.commands.registerCommand('memfs.reset', _ => {

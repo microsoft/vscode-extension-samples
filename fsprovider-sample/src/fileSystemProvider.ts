@@ -48,28 +48,28 @@ class Directory {
 
 type Entry = File | Directory;
 
-export class MemFS implements vscode.FileSystemProvider2 {
+export class MemFS implements vscode.FileSystemProvider {
 
     _version: 9 = 9;
 
     private _root = new Directory('');
     private _data = new WeakMap<Entry, Uint8Array>();
-    private _emitter = new vscode.EventEmitter<vscode.FileChange2[]>();
+    private _emitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
 
-    readonly onDidChangeFile: vscode.Event<vscode.FileChange2[]> = this._emitter.event;
+    readonly onDidChangeFile: vscode.Event<vscode.FileChangeEvent[]> = this._emitter.event;
 
     watch(resource: vscode.Uri, opts): vscode.Disposable {
         // ignore, fires for all changes...
         return new vscode.Disposable(() => { });
     }
 
-    stat(uri: vscode.Uri): vscode.FileStat2 {
+    stat(uri: vscode.Uri): vscode.FileStat {
         return this._lookup(uri);
     }
 
-    readDirectory(uri: vscode.Uri): [string, vscode.FileStat2][] {
+    readDirectory(uri: vscode.Uri): [string, vscode.FileStat][] {
         const entry = this._lookupDir(uri);
-        let result: [string, vscode.FileStat2][] = [];
+        let result: [string, vscode.FileStat][] = [];
         for (const [name, child] of entry.entries) {
             result.push([name, child]);
         }
@@ -94,15 +94,15 @@ export class MemFS implements vscode.FileSystemProvider2 {
         if (!entry) {
             entry = new File(basename);
             parent.entries.set(basename, entry);
-            this._fireSoon({ type: vscode.FileChangeType2.Created, uri });
+            this._fireSoon({ type: vscode.FileChangeType.Created, uri });
         }
         entry.mtime = Date.now();
         entry.size = content.byteLength;
         this._data.set(entry, content);
-        this._fireSoon({ type: vscode.FileChangeType2.Changed, uri });
+        this._fireSoon({ type: vscode.FileChangeType.Changed, uri });
     }
 
-    rename(oldUri: vscode.Uri, newUri: vscode.Uri): vscode.FileStat2 {
+    rename(oldUri: vscode.Uri, newUri: vscode.Uri): vscode.FileStat {
         let entry = this._lookup(oldUri);
         let oldParent = this._lookupContainer(oldUri);
 
@@ -114,8 +114,8 @@ export class MemFS implements vscode.FileSystemProvider2 {
         newParent.entries.set(newName, entry);
 
         this._fireSoon(
-            { type: vscode.FileChangeType2.Deleted, uri: oldUri },
-            { type: vscode.FileChangeType2.Created, uri: newUri }
+            { type: vscode.FileChangeType.Deleted, uri: oldUri },
+            { type: vscode.FileChangeType.Created, uri: newUri }
         );
         return entry;
     }
@@ -130,10 +130,10 @@ export class MemFS implements vscode.FileSystemProvider2 {
         parent.entries.delete(basename);
         parent.mtime = Date.now();
         parent.size -= 1;
-        this._fireSoon({ type: vscode.FileChangeType2.Changed, uri: dirname }, { uri, type: vscode.FileChangeType2.Deleted });
+        this._fireSoon({ type: vscode.FileChangeType.Changed, uri: dirname }, { uri, type: vscode.FileChangeType.Deleted });
     }
 
-    createDirectory(uri: vscode.Uri): vscode.FileStat2 {
+    createDirectory(uri: vscode.Uri): vscode.FileStat {
         let basename = path.posix.basename(uri.path);
         let dirname = uri.with({ path: path.posix.dirname(uri.path) });
         let parent = this._lookupDir(dirname);
@@ -142,7 +142,7 @@ export class MemFS implements vscode.FileSystemProvider2 {
         parent.entries.set(entry.name, entry);
         parent.mtime = Date.now();
         parent.size += 1;
-        this._fireSoon({ type: vscode.FileChangeType2.Changed, uri: dirname }, { type: vscode.FileChangeType2.Created, uri });
+        this._fireSoon({ type: vscode.FileChangeType.Changed, uri: dirname }, { type: vscode.FileChangeType.Created, uri });
         return entry;
     }
 
@@ -182,15 +182,15 @@ export class MemFS implements vscode.FileSystemProvider2 {
 
     // --- events
 
-    private _bufferedEvents: vscode.FileChange2[] = [];
+    private _bufferedEvents: vscode.FileChangeEvent[] = [];
     private _fireSoonHandle: NodeJS.Timer;
 
-    private _fireSoon(...events: vscode.FileChange2[]): void {
+    private _fireSoon(...events: vscode.FileChangeEvent[]): void {
         this._bufferedEvents.push(...events);
         clearTimeout(this._fireSoonHandle);
         this._fireSoonHandle = setTimeout(() => {
             this._emitter.fire(this._bufferedEvents);
             this._bufferedEvents.length = 0;
-        }, 25);
+        }, 5);
     }
 }
