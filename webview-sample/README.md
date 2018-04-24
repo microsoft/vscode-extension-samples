@@ -8,7 +8,8 @@ Demonstrates VS Code's [webview API](https://code.visualstudio.com/docs/extensio
 - Running scripts in a webview.
 - Sending message from an extension to a webview.
 - Sending messages from a webview to an extension.
-- Webview life cycle and handling dipose.
+- Using a basic content security policy.
+- Webview lifecycle and handling dispose.
 
 ## Running the example
 
