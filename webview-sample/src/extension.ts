@@ -8,6 +8,7 @@ const cats = {
 };
 
 export function activate(context: vscode.ExtensionContext) {
+
     context.subscriptions.push(vscode.commands.registerCommand('catCoding.start', () => {
         CatCodingPanel.createOrShow(context.extensionPath);
     }));
@@ -129,9 +130,10 @@ class CatCodingPanel {
 
     private _getHtmlForWebview(catGif: string) {
 
-        // The main script use
+        // Local path to main script run in the webview
         const scriptPathOnDisk = vscode.Uri.file(path.join(this._extensionPath, 'media', 'main.js'));
 
+        // And the uri we use to load this script in the webview
         const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
 
         return `<!DOCTYPE html>
