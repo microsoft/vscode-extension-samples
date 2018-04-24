@@ -1,0 +1,70 @@
+{
+	"folders": [
+		{
+			"path": "fsprovider-sample"
+		},
+		{
+			"path": "lsp-sample"
+		},
+		{
+			"path": "multi-diagnostics-sample"
+		},
+		{
+			"path": "terminal-sample"
+		},
+		{
+			"path": "completions-sample"
+		},
+		{
+			"path": "configuration-sample"
+		},
+		{
+			"path": "decorator-sample"
+		},
+		{
+			"path": "i18n-sample"
+		},
+		{
+			"path": "lsp-multi-root-sample"
+		},
+		{
+			"path": "lsp-multi-server-sample"
+		},
+		{
+			"path": "progress-sample"
+		},
+		{
+			"path": "tree-view-sample"
+		},
+		{
+			"path": "basic-multi-root-sample"
+		},
+		{
+			"path": "contentprovider-sample"
+		},
+		{
+			"path": "previewhtml-sample"
+		},
+		{
+			"path": "smart-template-strings-sample"
+		},
+		{
+			"path": "statusbar-sample"
+		},
+		{
+			"path": "task-provider-sample"
+		},
+		{
+			"path": "theme-sample"
+		},
+		{
+			"path": "tree-explorer-sample"
+		},
+		{
+			"path": "vim-sample"
+		},
+		{
+			"path": "extension-deps-sample"
+		}
+	]
+}
