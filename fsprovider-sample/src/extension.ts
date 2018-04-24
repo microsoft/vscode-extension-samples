@@ -1,22 +1,23 @@
 'use strict';
 
 import * as vscode from 'vscode';
+import * as fs from 'fs';
 import { MemFS } from './fileSystemProvider';
 
 export function activate(context: vscode.ExtensionContext) {
 
     const memFs = new MemFS();
-    const registration = vscode.workspace.registerFileSystemProvider('memfs', memFs, { isCaseSensitive: true });
+    context.subscriptions.push(vscode.workspace.registerFileSystemProvider('memfs', memFs, { isCaseSensitive: true }));
     let initialized = false;
 
-    vscode.commands.registerCommand('memfs.reset', _ => {
+    context.subscriptions.push(vscode.commands.registerCommand('memfs.reset', _ => {
         for (const [name] of memFs.readDirectory(vscode.Uri.parse('memfs:/'))) {
             memFs.delete(vscode.Uri.parse(`memfs:/${name}`));
         }
         initialized = false;
-    });
+    }));
 
-    vscode.commands.registerCommand('memfs.init', _ => {
+    context.subscriptions.push(vscode.commands.registerCommand('memfs.init', _ => {
         if (initialized) {
             return;
         }
@@ -31,8 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
         memFs.writeFile(vscode.Uri.parse(`memfs:/empty.txt`), new Uint8Array(0), { create: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'), { create: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/file.css`), Buffer.from('* { color: green; }'), { create: true });
-        memFs.writeFile(vscode.Uri.parse(`memfs:/large/rnd.foo`), randomData(30000), { create: true });
-        memFs.writeFile(vscode.Uri.parse(`memfs:/large/too_large.foo`), randomData(50000), { create: true });
+        memFs.writeFile(vscode.Uri.parse(`memfs:/large_rnd.foo`), randomData(50000), { create: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/folder/empty.foo`), new Uint8Array(0), { create: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'), { create: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'), { create: true });
@@ -40,19 +40,17 @@ export function activate(context: vscode.ExtensionContext) {
 
         memFs.writeFile(vscode.Uri.parse(`memfs:/UPPER.txt`), Buffer.from('UPPER'), { create: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/upper.txt`), Buffer.from('upper'), { create: true });
-    });
+    }));
+}
 
-    function randomData(lineCnt: number, lineLen = 155): Buffer {
-        let lines: string[] = [];
-        for (let i = 0; i < lineCnt; i++) {
-            let line = '';
-            while (line.length < lineLen) {
-                line += Math.random().toString(2 + (i % 34)).substr(2);
-            }
-            lines.push(line.substr(0, lineLen));
+function randomData(lineCnt: number, lineLen = 155): Buffer {
+    let lines: string[] = [];
+    for (let i = 0; i < lineCnt; i++) {
+        let line = '';
+        while (line.length < lineLen) {
+            line += Math.random().toString(2 + (i % 34)).substr(2);
         }
-        return Buffer.from(lines.join('\n'), 'utf8');
+        lines.push(line.substr(0, lineLen));
     }
-
-    context.subscriptions.push(registration);
+    return Buffer.from(lines.join('\n'), 'utf8');
 }
