@@ -15,7 +15,7 @@ Demonstrates VS Code's [webview API](https://code.visualstudio.com/docs/extensio
 
 - Open this example in VS Code 1.23+
 - `npm install`
-- `npm run compile`
+- `npm run watch` or `npm run compile`
 - `F5` to start debugging
 
 Run the `Cat Coding: Start cat coding session` to create the webview.
