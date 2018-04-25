@@ -12,7 +12,8 @@ import { workspace } from 'vscode';
 
 export class File implements vscode.FileStat {
 
-    isFile: boolean = true;
+    type: vscode.FileType;
+    ctime: number;
     mtime: number;
     size: number;
 
@@ -20,7 +21,8 @@ export class File implements vscode.FileStat {
     data: Uint8Array;
 
     constructor(name: string) {
-        this.isFile = true;
+        this.type = vscode.FileType.File;
+        this.ctime = Date.now();
         this.mtime = Date.now();
         this.size = 0;
         this.name = name;
@@ -29,7 +31,8 @@ export class File implements vscode.FileStat {
 
 export class Directory implements vscode.FileStat {
 
-    isDirectory: boolean = true;
+    type: vscode.FileType;
+    ctime: number;
     mtime: number;
     size: number;
 
@@ -37,6 +40,8 @@ export class Directory implements vscode.FileStat {
     entries: Map<string, File | Directory>;
 
     constructor(name: string) {
+        this.type = vscode.FileType.Directory;
+        this.ctime = Date.now();
         this.mtime = Date.now();
         this.size = 0;
         this.name = name;
@@ -56,11 +61,11 @@ export class MemFS implements vscode.FileSystemProvider {
         return this._lookup(uri, false);
     }
 
-    readDirectory(uri: vscode.Uri): [string, vscode.FileStat][] {
+    readDirectory(uri: vscode.Uri): [string, vscode.FileType][] {
         const entry = this._lookupAsDirectory(uri, false);
-        let result: [string, vscode.FileStat][] = [];
+        let result: [string, vscode.FileType][] = [];
         for (const [name, child] of entry.entries) {
-            result.push([name, child]);
+            result.push([name, child.type]);
         }
         return result;
     }
