@@ -62,6 +62,9 @@
 		},
 		{
 			"path": "extension-deps-sample"
+		},
+		{
+			"path": "nodefs-provider-sample"
 		}
 	]
 }
