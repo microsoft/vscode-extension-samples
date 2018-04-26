@@ -152,14 +152,16 @@ export class MemFS implements vscode.FileSystemProvider {
 
     // --- lookup
 
-    private _lookup(uri: vscode.Uri, silent: boolean): Entry {
+    private _lookup(uri: vscode.Uri, silent: false): Entry;
+    private _lookup(uri: vscode.Uri, silent: boolean): Entry | undefined;
+    private _lookup(uri: vscode.Uri, silent: boolean): Entry | undefined {
         let parts = uri.path.split('/');
         let entry: Entry = this.root;
         for (const part of parts) {
             if (!part) {
                 continue;
             }
-            let child: Entry;
+            let child: Entry | undefined;
             if (entry instanceof Directory) {
                 child = entry.entries.get(part);
             }
