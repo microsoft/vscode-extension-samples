@@ -22,12 +22,12 @@
         "commands": [
             {
                 "command": "memfs.init",
-                "title": "Create files",
+                "title": "Create Files",
                 "category": "MemFS"
             },
             {
                 "command": "memfs.reset",
-                "title": "Delete all files",
+                "title": "Delete Files",
                 "category": "MemFS"
             }
         ]
