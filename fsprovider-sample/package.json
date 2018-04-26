@@ -15,11 +15,19 @@
         "Other"
     ],
     "activationEvents": [
-        "onFileSystem:memfs"
+        "onFileSystem:memfs",
+        "onCommand:memfs.workspaceInit",
+        "onCommand:memfs.init",
+        "onCommand:memfs.reset"
     ],
     "main": "./out/src/extension",
     "contributes": {
         "commands": [
+            {
+                "command": "memfs.workspaceInit",
+                "title": "Setup Workspace",
+                "category": "MemFS"
+            },
             {
                 "command": "memfs.init",
                 "title": "Create Files",
@@ -30,7 +38,23 @@
                 "title": "Delete Files",
                 "category": "MemFS"
             }
-        ]
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "memfs.init",
+                    "when": "workbenchState == workspace"
+                },
+                {
+                    "command": "memfs.reset",
+                    "when": "workbenchState == workspace"
+                },
+                {
+                    "command": "memfs.workspaceInit",
+                    "when": "workbenchState != workspace"
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",

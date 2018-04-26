@@ -6,6 +6,8 @@ import { MemFS } from './fileSystemProvider';
 
 export function activate(context: vscode.ExtensionContext) {
 
+    console.log('MemFS says "Hello"')
+
     const memFs = new MemFS();
     context.subscriptions.push(vscode.workspace.registerFileSystemProvider('memfs', memFs, { isCaseSensitive: true }));
     let initialized = false;
@@ -51,6 +53,10 @@ export function activate(context: vscode.ExtensionContext) {
         memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/upper.txt`), Buffer.from('upper'), { create: true, overwrite: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'), { create: true, overwrite: true });
         memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.bin`), Buffer.from([0, 0, 0, 1, 7, 0, 0, 1, 1]), { create: true, overwrite: true });
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('memfs.workspaceInit', _ => {
+        vscode.workspace.updateWorkspaceFolders(0, 0, { uri: vscode.Uri.parse('memfs:/'), name: "MemFS - Sample" });
     }));
 }
 

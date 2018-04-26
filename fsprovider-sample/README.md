@@ -9,16 +9,9 @@ This extension implements an in-memory file system to show-case the [filesytem p
 To *get started* you need this:
 
 * install this extension
-* have a workspace-file as shown below and open it via 'File > Open Workspace'
+* when *not* having a workspace opened, select 'F1 > [MemFS] Setup Workspace' (optionally save the workspace now)
 * select 'F1 > [MemFs] Create Files' and notice how the explorer is now populated
 * ... try things out, e.g. IntelliSense in memfs-files, create new files, save them, etc
 * select 'F1 > [MemFs] Delete Files' or reload to restart
 
-A sample workspace file, saved as `Test.code-workspace`, is this:
-
-```json
-{
-  "uri": "memfs:/",
-  "name": "MemFS"
-}
-```
+![](./sample.png)
