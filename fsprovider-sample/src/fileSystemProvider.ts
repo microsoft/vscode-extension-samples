@@ -72,19 +72,11 @@ export class MemFS implements vscode.FileSystemProvider {
 
     // --- manage file contents
 
-    readFile(uri: vscode.Uri, options: vscode.FileOptions): Uint8Array {
-        const entry = this._lookupAsFile(uri, true);
-        if (!entry && options.create) {
-            this.writeFile(uri, new Uint8Array(0), options);
-            return this.readFile(uri, { ...options, create: false });
-        } else if (!entry) {
-            throw vscode.FileSystemError.FileNotFound(uri);
-        } else {
-            return entry.data;
-        }
+    readFile(uri: vscode.Uri): Uint8Array {
+        return this._lookupAsFile(uri, false).data;
     }
 
-    writeFile(uri: vscode.Uri, content: Uint8Array, options: vscode.FileOptions): void {
+    writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean, overwrite: boolean }): void {
         let basename = path.posix.basename(uri.path);
         let parent = this._lookupParentDirectory(uri);
         let entry = parent.entries.get(basename);
@@ -94,7 +86,7 @@ export class MemFS implements vscode.FileSystemProvider {
         if (!entry && !options.create) {
             throw vscode.FileSystemError.FileNotFound(uri);
         }
-        if (entry && options.create && options.exclusive) {
+        if (entry && options.create && !options.overwrite) {
             throw vscode.FileSystemError.FileExists(uri);
         }
         if (!entry) {
@@ -111,7 +103,12 @@ export class MemFS implements vscode.FileSystemProvider {
 
     // --- manage files/folders
 
-    rename(oldUri: vscode.Uri, newUri: vscode.Uri): vscode.FileStat {
+    rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }): vscode.FileStat {
+
+        if (!options.overwrite && this._lookup(newUri, true)) {
+            throw vscode.FileSystemError.FileExists(newUri);
+        }
+
         let entry = this._lookup(oldUri, false);
         let oldParent = this._lookupParentDirectory(oldUri);
 
