@@ -4,7 +4,6 @@
     const vscode = acquireVsCodeApi();
 
     const counter = document.getElementById('lines-of-code-counter');
-
     let currentCount = 0;
 
     setInterval(() => {
@@ -20,9 +19,9 @@
         }
     }, 100);
 
-    // Handle messages sent from the extension to the webview inside the webview
+    // Handle messages sent from the extension to the webview
     window.addEventListener('message', event => {
-        const message = event.data; // The json data the extension sent
+        const message = event.data; // The json data that the extension sent
         switch (message.command) {
             case 'refactor':
                 currentCount = Math.ceil(currentCount * 0.5);

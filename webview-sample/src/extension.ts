@@ -145,7 +145,7 @@ class CatCodingPanel {
                 <meta charset="UTF-8">
 
                 <!--
-                Use a content security policy to allow loading images from https or from our extension directory,
+                Use a content security policy to only allow loading images from https or from our extension directory,
                 and only allow scripts that have a specific nonce.
                 -->
                 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';">
