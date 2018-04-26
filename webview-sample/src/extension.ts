@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
+import * as vscode from 'vscode';
 
 const cats = {
     'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
@@ -136,13 +136,19 @@ class CatCodingPanel {
         // And the uri we use to load this script in the webview
         const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
 
+        // Use a nonce to whitelist which scripts can be run
+        const nonce = getNonce();
+
         return `<!DOCTYPE html>
             <html lang="en">
             <head>
                 <meta charset="UTF-8">
 
-                <!-- Use a content security policy to only allow -->
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src vscode-resource:; style-src vscode-resource:;">
+                <!--
+                Use a content security policy to allow loading images from https or from our extension directory,
+                and only allow scripts that have a specific nonce.
+                -->
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';">
 
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Cat Coding</title>
@@ -151,8 +157,17 @@ class CatCodingPanel {
                 <img src="${catGif}" width="300" />
                 <h1 id="lines-of-code-counter">0</h1>
 
-                <script src="${scriptUri}"></script>
+                <script nonce="${nonce}" src="${scriptUri}"></script>
             </body>
             </html>`;
     }
+}
+
+function getNonce() {
+    let text = "";
+    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (let i = 0; i < 32; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
 }
