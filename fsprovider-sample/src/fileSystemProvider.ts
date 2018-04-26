@@ -103,7 +103,7 @@ export class MemFS implements vscode.FileSystemProvider {
 
     // --- manage files/folders
 
-    rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }): vscode.FileStat {
+    rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }): void {
 
         if (!options.overwrite && this._lookup(newUri, true)) {
             throw vscode.FileSystemError.FileExists(newUri);
@@ -123,7 +123,6 @@ export class MemFS implements vscode.FileSystemProvider {
             { type: vscode.FileChangeType.Deleted, uri: oldUri },
             { type: vscode.FileChangeType.Created, uri: newUri }
         );
-        return entry;
     }
 
     delete(uri: vscode.Uri): void {
@@ -139,7 +138,7 @@ export class MemFS implements vscode.FileSystemProvider {
         this._fireSoon({ type: vscode.FileChangeType.Changed, uri: dirname }, { uri, type: vscode.FileChangeType.Deleted });
     }
 
-    createDirectory(uri: vscode.Uri): vscode.FileStat {
+    createDirectory(uri: vscode.Uri): void {
         let basename = path.posix.basename(uri.path);
         let dirname = uri.with({ path: path.posix.dirname(uri.path) });
         let parent = this._lookupAsDirectory(dirname, false);
@@ -149,7 +148,6 @@ export class MemFS implements vscode.FileSystemProvider {
         parent.mtime = Date.now();
         parent.size += 1;
         this._fireSoon({ type: vscode.FileChangeType.Changed, uri: dirname }, { type: vscode.FileChangeType.Created, uri });
-        return entry;
     }
 
     // --- lookup
