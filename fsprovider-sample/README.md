@@ -14,4 +14,4 @@ To *get started* you need this:
 * ... try things out, e.g. IntelliSense in memfs-files, create new files, save them, etc
 * select 'F1 > [MemFs] Delete Files' or reload to restart
 
-![](./sample.png)
+![sample screenshot](https://github.com/Microsoft/vscode-extension-samples/raw/master/fsprovider-sample/sample.png)
