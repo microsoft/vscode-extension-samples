@@ -2,7 +2,7 @@
     "name": "vscode-memfs",
     "displayName": "MemFS - a file system provider sample",
     "description": "Showcase for the file system provider API, also useful for testing again document that are not on disk.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "jrieken",
     "repository": {
         "url": "https://github.com/Microsoft/vscode-extension-samples.git",
