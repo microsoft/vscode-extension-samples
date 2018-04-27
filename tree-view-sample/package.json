@@ -21,8 +21,17 @@
 	"main": "./out/src/extension",
 	"icon": "media/dep.png",
 	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "tree-view",
+					"title": "Tree View",
+					"icon": "media/dep.svg"
+				}
+			]
+		},
 		"views": {
-			"explorer": [
+			"tree-view": [
 				{
 					"id": "nodeDependencies",
 					"name": "Node Dependencies"

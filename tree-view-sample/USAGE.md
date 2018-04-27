@@ -37,3 +37,38 @@ vscode.window.registerTreeDataProvider('nodeDependencies', new DepNodeProvider()
 ```
 
 See [nodeDependencies.ts](src/nodeDependencies.ts) for the implementation.
+
+# contributes.viewsContainers extension point
+
+As of Visual Studio Code v1.23.0, you can move custom views into your own view container which will show up in the activity bar.
+
+To do such, extension writers can add a `viewContainers` object in the contributes section. each object will require three things:
+
+- `id`: The name of the new view you're creating
+- `title`: The name which will show up at the top of the view
+- `icon`: an image which will be displayed for the view container in the activity bar
+
+Following, in the views object, you can then add a field with the same string as the `id` in the `viewContainers`.
+
+```json
+"contributes": {
+    "viewContainers": {
+        "activitybar": [
+            {
+                "id": "tree-view",
+                "title": "Tree View",
+                "icon": "media/dep.svg"
+            }
+        ]
+    },
+    "views": {
+        "tree-view": [
+            {
+                "id": "nodeDependencies",
+                "name": "Node Dependencies",
+                "when": "workspaceHasPackageJSON"
+            }
+        ]
+    }
+}
+```
