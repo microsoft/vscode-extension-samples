@@ -28,115 +28,7 @@ class DateiFileSystemProvider implements vscode.FileSystemProvider {
         return this._onDidChangeFile.event;
     }
 
-    stat(uri: vscode.Uri, options: {}, token: vscode.CancellationToken): vscode.FileStat | Thenable<vscode.FileStat> {
-        return this._stat(uri.fsPath);
-    }
-
-    async _stat(path: string): Promise<vscode.FileStat> {
-        return new FileStat(await _.stat(path));
-    }
-
-    readFile(uri: vscode.Uri, options: vscode.FileOptions, token: vscode.CancellationToken): Uint8Array | Thenable<Uint8Array> {
-        return _.readfile(uri.fsPath);
-    }
-
-    readDirectory(uri: vscode.Uri, options: {}, token: vscode.CancellationToken): Thenable<[string, vscode.FileStat][]> {
-        return this._readDirectory(uri, token);
-    }
-
-    async _readDirectory(uri: vscode.Uri, token: vscode.CancellationToken): Promise<[string, vscode.FileStat][]> {
-        const children = await _.readdir(uri.fsPath);
-
-        const stats: [string, vscode.FileStat][] = [];
-        for (let i = 0; i < children.length; i++) {
-            _.checkCancellation(token);
-
-            const child = children[i];
-            const stat = await this._stat(path.join(uri.fsPath, child));
-            stats.push([child, stat]);
-        }
-
-        return Promise.resolve(stats);
-    }
-
-    createDirectory(uri: vscode.Uri, options: {}, token: vscode.CancellationToken): vscode.FileStat | Thenable<vscode.FileStat> {
-        return this._createDirectory(uri, token);
-    }
-
-    async _createDirectory(uri: vscode.Uri, token: vscode.CancellationToken): Promise<vscode.FileStat> {
-        await _.mkdir(uri.fsPath); // TODO support cancellation
-
-        _.checkCancellation(token);
-
-        return this._stat(uri.fsPath);
-    }
-
-    writeFile(uri: vscode.Uri, content: Uint8Array, options: vscode.FileOptions, token: vscode.CancellationToken): void | Thenable<void> {
-        return this._writeFile(uri, content, options, token);
-    }
-
-    async _writeFile(uri: vscode.Uri, content: Uint8Array, options: vscode.FileOptions, token: vscode.CancellationToken): Promise<void> {
-        const exists = await _.exists(uri.fsPath);
-        if (!exists) {
-            _.checkCancellation(token);
-
-            if (!options.create) {
-                throw vscode.FileSystemError.FileNotFound();
-            }
-
-            await _.mkdir(path.dirname(uri.fsPath));
-        } else {
-            if (options.exclusive) {
-                throw vscode.FileSystemError.FileExists();
-            }
-        }
-
-        _.checkCancellation(token);
-
-        return _.writefile(uri.fsPath, content as Buffer);
-    }
-
-    delete(uri: vscode.Uri, options: {}, token: vscode.CancellationToken): void | Thenable<void> {
-        return _.rmrf(uri.fsPath); // TODO support cancellation
-    }
-
-    rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: vscode.FileOptions, token: vscode.CancellationToken): vscode.FileStat | Thenable<vscode.FileStat> {
-        return this._rename(oldUri, newUri, options, token);
-    }
-
-    async _rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: vscode.FileOptions, token: vscode.CancellationToken): Promise<vscode.FileStat> {
-        const exists = await _.exists(newUri.fsPath);
-        if (exists) {
-            if (options.exclusive) {
-                throw vscode.FileSystemError.FileExists();
-            } else {
-                await _.rmrf(newUri.fsPath);
-            }
-        }
-
-        _.checkCancellation(token);
-
-        const parentExists = await _.exists(path.dirname(newUri.fsPath));
-        if (!parentExists && !options.create) {
-            throw vscode.FileSystemError.FileNotFound();
-        }
-
-        _.checkCancellation(token);
-
-        if (!parentExists) {
-            await _.mkdir(path.dirname(newUri.fsPath));
-        }
-
-        _.checkCancellation(token);
-
-        await _.rename(oldUri.fsPath, newUri.fsPath);
-
-        _.checkCancellation(token);
-
-        return this._stat(newUri.fsPath);
-    }
-
-    watch(uri: vscode.Uri, options: { recursive?: boolean | undefined; excludes?: string[] | undefined; }): vscode.Disposable {
+    watch(uri: vscode.Uri, options: { recursive: boolean; excludes: string[]; }): vscode.Disposable {
         const watcher = fs.watch(uri.fsPath, { recursive: options.recursive }, async (event: string, filename: string | Buffer) => {
             const filepath = path.join(uri.fsPath, _.normalizeNFC(filename.toString()));
 
@@ -149,6 +41,90 @@ class DateiFileSystemProvider implements vscode.FileSystemProvider {
         });
 
         return { dispose: () => watcher.close() };
+    }
+
+    stat(uri: vscode.Uri): vscode.FileStat | Thenable<vscode.FileStat> {
+        return this._stat(uri.fsPath);
+    }
+
+    async _stat(path: string): Promise<vscode.FileStat> {
+        return new FileStat(await _.stat(path));
+    }
+
+    readDirectory(uri: vscode.Uri): [string, vscode.FileType][] | Thenable<[string, vscode.FileType][]> {
+        return this._readDirectory(uri);
+    }
+
+    async _readDirectory(uri: vscode.Uri): Promise<[string, vscode.FileType][]> {
+        const children = await _.readdir(uri.fsPath);
+
+        const result: [string, vscode.FileType][] = [];
+        for (let i = 0; i < children.length; i++) {
+            const child = children[i];
+            const stat = await this._stat(path.join(uri.fsPath, child));
+            result.push([child, stat.type]);
+        }
+
+        return Promise.resolve(result);
+    }
+
+    createDirectory(uri: vscode.Uri): void | Thenable<void> {
+        return _.mkdir(uri.fsPath);
+    }
+
+    readFile(uri: vscode.Uri): Uint8Array | Thenable<Uint8Array> {
+        return _.readfile(uri.fsPath);
+    }
+
+    writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean; }): void | Thenable<void> {
+        return this._writeFile(uri, content, options);
+    }
+
+    async _writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean; }): Promise<void> {
+        const exists = await _.exists(uri.fsPath);
+        if (!exists) {
+            if (!options.create) {
+                throw vscode.FileSystemError.FileNotFound();
+            }
+
+            await _.mkdir(path.dirname(uri.fsPath));
+        } else {
+            if (!options.overwrite) {
+                throw vscode.FileSystemError.FileExists();
+            }
+        }
+
+        return _.writefile(uri.fsPath, content as Buffer);
+    }
+
+    delete(uri: vscode.Uri, options: { recursive: boolean; }): void | Thenable<void> {
+        if (options.recursive) {
+            return _.rmrf(uri.fsPath);
+        }
+
+        return _.unlink(uri.fsPath);
+    }
+
+    rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean; }): void | Thenable<void> {
+        return this._rename(oldUri, newUri, options);
+    }
+
+    async _rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean; }): Promise<void> {
+        const exists = await _.exists(newUri.fsPath);
+        if (exists) {
+            if (!options.overwrite) {
+                throw vscode.FileSystemError.FileExists();
+            } else {
+                await _.rmrf(newUri.fsPath);
+            }
+        }
+
+        const parentExists = await _.exists(path.dirname(newUri.fsPath));
+        if (!parentExists) {
+            await _.mkdir(path.dirname(newUri.fsPath));
+        }
+
+        return _.rename(oldUri.fsPath, newUri.fsPath);
     }
 
     // TODO can implement a fast copy() method with node.js 8.x new fs.copy method
@@ -179,6 +155,10 @@ namespace _ {
 
         if (error.code === 'EEXIST') {
             return vscode.FileSystemError.FileExists();
+        }
+
+        if (error.code === 'EPERM' || error.code === 'EACCESS') {
+            return vscode.FileSystemError.NoPermissions();
         }
 
         return error;
@@ -251,11 +231,21 @@ namespace _ {
             fs.rename(oldPath, newPath, error => handleResult(resolve, reject, error, void 0));
         });
     }
+
+    export function unlink(path: string): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            fs.unlink(path, error => handleResult(resolve, reject, error, void 0));
+        });
+    }
 }
 
 export class FileStat implements vscode.FileStat {
 
     constructor(private fsStat: fs.Stats) { }
+
+    get type(): vscode.FileType {
+        return this.fsStat.isFile() ? vscode.FileType.File : this.fsStat.isDirectory() ? vscode.FileType.Directory : this.fsStat.isSymbolicLink() ? vscode.FileType.SymbolicLink : vscode.FileType.Unknown;
+    }
 
     get isFile(): boolean | undefined {
         return this.fsStat.isFile();
@@ -271,6 +261,10 @@ export class FileStat implements vscode.FileStat {
 
     get size(): number {
         return this.fsStat.size;
+    }
+
+    get ctime(): number {
+        return this.fsStat.ctime.getTime();
     }
 
     get mtime(): number {
