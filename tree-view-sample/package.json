@@ -21,8 +21,17 @@
 	"main": "./out/src/extension",
 	"icon": "media/dep.png",
 	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "package-explorer",
+					"title": "Package Explorer",
+					"icon": "media/dep.svg"
+				}
+			]
+		},
 		"views": {
-			"explorer": [
+			"package-explorer": [
 				{
 					"id": "nodeDependencies",
 					"name": "Node Dependencies"
