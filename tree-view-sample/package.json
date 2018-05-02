@@ -24,14 +24,14 @@
 		"viewsContainers": {
 			"activitybar": [
 				{
-					"id": "tree-view",
-					"title": "Tree View",
+					"id": "package-explorer",
+					"title": "Package Explorer",
 					"icon": "media/dep.svg"
 				}
 			]
 		},
 		"views": {
-			"tree-view": [
+			"package-explorer": [
 				{
 					"id": "nodeDependencies",
 					"name": "Node Dependencies"
