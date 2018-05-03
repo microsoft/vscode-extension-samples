@@ -5,7 +5,7 @@
 extensions.
 
 ## Get up and running straight away 
-* Launch `npm run install-all` in terminal in the root folder to initialize all samples
+* Launch `npm install` in terminal in the root folder to initialize all samples
 * Open the debug view and select the sample to launch
 * set breakpoints in your code inside the samples extension.ts to debug an extension
 * find output from your extension in the debug console
