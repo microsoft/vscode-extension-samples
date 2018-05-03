@@ -1,17 +1,16 @@
-# Welcome to the decorator sample
+# Welcome to the extension samples
 
-## What's in the folder
-* This folder contains a sample VS code extensions that demonstrates various API avaiable to VS code
-extensions.
+## What's here
+* These folders contain sample [VS Code extensions](https://code.visualstudio.com/docs/extensions/overview) that demonstrate various extension APIs.
 
 ## Get up and running straight away 
 * Launch `npm install` in terminal in the root folder to initialize all samples
 * Open the debug view and select the sample to launch
-* set breakpoints in your code inside the samples extension.ts to debug an extension
+* set breakpoints inside a sample's `extension.ts` to debug an extension
 * find output from your extension in the debug console
 
 ## Make changes
-* you can relaunch a sample from the debug toolbar after changing code in extension.ts
+* you can relaunch a sample from the debug toolbar after changing code in `extension.ts`
 * you can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes
 
 ## Explore the API
