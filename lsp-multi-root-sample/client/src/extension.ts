@@ -7,9 +7,9 @@
 import * as path from 'path';
 
 import { workspace, ExtensionContext, WorkspaceConfiguration, Disposable } from 'vscode';
-import { 
-	LanguageClient, LanguageClientOptions, ServerOptions, TransportKind, CancellationToken, Middleware, 
-	DidChangeConfigurationNotification, Proposed, ProposedFeatures
+import {
+	LanguageClient, LanguageClientOptions, ServerOptions, TransportKind, CancellationToken, Middleware,
+	DidChangeConfigurationNotification, ConfigurationParams
 } from 'vscode-languageclient';
 
 // The example settings
@@ -24,8 +24,8 @@ namespace Configuration {
 	let configurationListener: Disposable;
 
 	// Convert VS Code specific settings to a format acceptable by the server. Since
-	// both client and server do use JSON the conversion is trivial. 
-	export function computeConfiguration(params: Proposed.ConfigurationParams, _token: CancellationToken, _next: Function): any[] {
+	// both client and server do use JSON the conversion is trivial.
+	export function computeConfiguration(params: ConfigurationParams, _token: CancellationToken, _next: Function): any[] {
 		if (!params.items) {
 			return null;
 		}
@@ -50,9 +50,9 @@ namespace Configuration {
 		}
 		return result;
 	}
-	
+
 	export function initialize() {
-		// VS Code currently doesn't sent fine grained configuration changes. So we 
+		// VS Code currently doesn't sent fine grained configuration changes. So we
 		// listen to any change. However this will change in the near future.
 		configurationListener = workspace.onDidChangeConfiguration(() => {
 			client.sendNotification(DidChangeConfigurationNotification.type, { settings: null });
@@ -73,7 +73,7 @@ export function activate(context: ExtensionContext) {
 	let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
 	// The debug options for the server
 	let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
-	
+
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
 	let serverOptions: ServerOptions = {
@@ -81,7 +81,7 @@ export function activate(context: ExtensionContext) {
 		debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
 	}
 
-	let middleware: ProposedFeatures.ConfigurationMiddleware | Middleware = {
+	let middleware: Middleware = {
 		workspace: {
 			configuration: Configuration.computeConfiguration
 		}
@@ -96,20 +96,15 @@ export function activate(context: ExtensionContext) {
 			fileEvents: workspace.createFileSystemWatcher('**/.clientrc'),
 			// In the past this told the client to actively synchronize settings. Since the
 			// client now supports 'getConfiguration' requests this active synchronization is not
-			// necessary anymore. 
+			// necessary anymore.
 			// configurationSection: [ 'lspMultiRootSample' ]
 		},
-		middleware: middleware as Middleware
+		middleware: middleware
 	}
-	
+
 	// Create the language client and start the client.
 	client = new LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
-	// Register new proposed protocol if available.
-	client.registerProposedFeatures();
-	client.onReady().then(() => {
-		Configuration.initialize();
-	});
-	
+
 	// Start the client. This will also launch the server
 	client.start();
 }

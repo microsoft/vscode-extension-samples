@@ -6,7 +6,7 @@
 
 import {
 	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
-	ProposedFeatures, InitializeParams, Proposed
+	ProposedFeatures, InitializeParams, DidChangeConfigurationNotification
 } from 'vscode-languageserver';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
@@ -25,8 +25,8 @@ connection.onInitialize((params: InitializeParams) => {
 
 	// Does the client support the `workspace/configuration` request?
 	// If not, we will fall back using global settings
-	hasWorkspaceFolderCapability = (capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace && !!(capabilities as Proposed.WorkspaceFoldersClientCapabilities).workspace.workspaceFolders;
-	hasConfigurationCapability = (capabilities as Proposed.ConfigurationClientCapabilities).workspace && !!(capabilities as Proposed.ConfigurationClientCapabilities).workspace.configuration;
+	hasConfigurationCapability = capabilities.workspace && !!capabilities.workspace.configuration;
+	hasWorkspaceFolderCapability = capabilities.workspace && !!capabilities.workspace.workspaceFolders;
 
 	return {
 		capabilities: {
@@ -36,9 +36,12 @@ connection.onInitialize((params: InitializeParams) => {
 });
 
 connection.onInitialized(() => {
+	if (hasConfigurationCapability) {
+		connection.client.register(DidChangeConfigurationNotification.type, undefined);
+	}
 	if (hasWorkspaceFolderCapability) {
 		connection.workspace.onDidChangeWorkspaceFolders((_event) => {
-			connection.console.log('Workspace folder change event received');
+			connection.console.log('Workspace folder change event received.');
 		});
 	}
 });
