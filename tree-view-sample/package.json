@@ -35,7 +35,9 @@
 				{
 					"id": "nodeDependencies",
 					"name": "Node Dependencies"
-				},
+				}
+			],
+			"explorer": [
 				{
 					"id": "jsonOutline",
 					"name": "Json Outline",
