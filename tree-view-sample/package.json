@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "ms-vscode",
 	"engines": {
-		"vscode": "^1.20.0"
+		"vscode": "^1.23.0"
 	},
 	"enableProposedApi": true,
 	"categories": [
