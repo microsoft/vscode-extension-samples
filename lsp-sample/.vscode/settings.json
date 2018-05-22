@@ -1,11 +1,4 @@
 {
-	// set to false to hide directory from the VS Code Document Sidebar
-	"files.exclude": {
-		"client/out/**/*": false,
-		"client/server/**/*": false,
-		"client/node_modules": false,
-		"server/node_modules": false
-	},
 	// set this to false to include "out" folder in search results
 	"search.exclude": {
 		"out": true
