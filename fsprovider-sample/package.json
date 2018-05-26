@@ -11,6 +11,7 @@
     "engines": {
         "vscode": "^1.23.0"
     },
+    "enableProposedApi": true,
     "categories": [
         "Other"
     ],
