@@ -220,8 +220,7 @@ export class Controller implements IController {
 	private _interpretNormalModeInput(editor: TextEditor, modifierKeys: ModifierKeys): Thenable<ITypeResult> {
 		if (this._currentInput.startsWith(':')) {
 			return window.showInputBox({ value: 'tabm' }).then((value) => {
-				let result = this._findMapping(value || '', editor, modifierKeys);
-				return Promise.resolve(result);
+				return this._findMapping(value || '', editor, modifierKeys);
 			});
 		}
 		let result = this._findMapping(this._currentInput, editor, modifierKeys);
