@@ -11,7 +11,7 @@
             "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": ["${workspaceRoot}/out/src/**/*.js"],
-            "preLaunchTask": "npm: run compile"
+            "preLaunchTask": "npm: watch"
         },
         {
             "name": "Launch Tests",
@@ -22,17 +22,7 @@
             "stopOnEntry": false,
             "sourceMaps": true,
 			"outFiles": ["${workspaceRoot}/out/test/**/*.js"],
-            "preLaunchTask": "npm: run compile"
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to Extension Host",
-            "protocol": "legacy",
-            "port": 5870,
-            "sourceMaps": true,
-            "restart": true,
-            "outDir": "${workspaceRoot}/out/src"
+            "preLaunchTask": "npm: watch"
         }
     ]
 }

@@ -1,0 +1,4 @@
+{
+    // Turn off tsc task auto detection since we have the necessary task as npm scripts
+    "typescript.tsc.autoDetect": "off"
+}
