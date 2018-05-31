@@ -17,7 +17,7 @@ list of self-contained, running extensions that show one or multiple concepts of
 * [Theme](/theme-sample)
 * [Integrated Terminal](/terminal-sample/README.md)
 * [Vim](/vim-sample/README.md)
-* Experimental: [Tree Explorer](/tree-view-sample/README.md)
+* [Tree Explorer](/tree-view-sample/README.md) (Experimental)
 * [Webview](/webview-sample/README.md)
 
 # How to Run Locally
