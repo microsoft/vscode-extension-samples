@@ -20,7 +20,9 @@ list of self-contained, running extensions that show one or multiple concepts of
 * [Tree Explorer](/tree-view-sample/README.md) (Experimental)
 * [Webview](/webview-sample/README.md)
 
-# How to Run Locally
+# 🎯 Getting Started
+
+You can get started locally by following these steps:
 
 * **Step #1**: `git clone https://github.com/Microsoft/vscode-extension-samples vscode-extension-samples`
 * **Step #2**:`cd vscode-extension-samples`
