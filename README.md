@@ -18,7 +18,7 @@ list of self-contained, running extensions that show one or multiple concepts of
 * Experimental: [Tree Explorer](/tree-view-sample/README.md)
 * [Webview](/webview-sample/README.md)
 
-# How to run locally
+# How to Run Locally
 
 * `git clone`
 * `cd vscode-extension-samples`
