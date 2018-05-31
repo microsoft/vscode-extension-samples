@@ -1,6 +1,9 @@
-# Extension Samples
+<h1 align="center">
+  VSCode Extension Samples
+</h1>
 
-This repository contains sample code illustrating the VS Code extension API. The following is a 
+
+This repository contains sample code illustrating the VS Code extension API. The following is a
 list of self-contained, running extensions that show one or multiple concepts of the API:
 
 * [Virtual Documents](/contentprovider-sample/README.md)
