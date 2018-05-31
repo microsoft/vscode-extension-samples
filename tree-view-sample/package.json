@@ -19,7 +19,6 @@
 		"onLanguage:jsonc"
 	],
 	"main": "./out/src/extension",
-	"icon": "media/dep.png",
 	"contributes": {
 		"viewsContainers": {
 			"activitybar": [
