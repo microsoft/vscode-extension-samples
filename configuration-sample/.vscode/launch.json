@@ -15,7 +15,7 @@
             "outFiles": [
                 "${workspaceRoot}/out/src/**/*.js"
             ],
-            "preLaunchTask": "npm"
+            "preLaunchTask": "tsc: watch - tsconfig.json"
         },
         {
             "name": "Launch Tests",
@@ -31,7 +31,7 @@
             "outFiles": [
                 "${workspaceRoot}/out/test/**/*.js"
             ],
-            "preLaunchTask": "npm"
+            "preLaunchTask": "tsc: watch - tsconfig.json"
         },
         {
             "type": "node",
