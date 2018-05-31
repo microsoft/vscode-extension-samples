@@ -20,7 +20,7 @@ list of self-contained, running extensions that show one or multiple concepts of
 
 # How to Run Locally
 
-* `git clone`
-* `cd vscode-extension-samples`
-* `npm install`
-* open VS Code and start a sample from the debug viewlet
+* **Step #1**: `git clone https://github.com/Microsoft/vscode-extension-samples vscode-extension-samples`
+* **Step #2**:`cd vscode-extension-samples`
+* **Step #3**:`npm install`
+* **Step #4**: Open [VSCode](https://code.visualstudio.com/) and start a sample from the debug viewlet.
