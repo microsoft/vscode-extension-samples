@@ -40,9 +40,9 @@ namespace Configuration {
 			}
 			let config: WorkspaceConfiguration;
 			if (item.scopeUri) {
-				config = workspace.getConfiguration('lspMultiRootSample', client.protocol2CodeConverter.asUri(item.scopeUri));
+				config = workspace.getConfiguration('languageServerExample', client.protocol2CodeConverter.asUri(item.scopeUri));
 			} else {
-				config = workspace.getConfiguration('lspMultiRootSample');
+				config = workspace.getConfiguration('languageServerExample');
 			}
 			result.push({
 				maxNumberOfProblems: config.get('maxNumberOfProblems')
@@ -70,7 +70,7 @@ namespace Configuration {
 export function activate(context: ExtensionContext) {
 
 	// The server is implemented in node
-	let serverModule = context.asAbsolutePath(path.join('server', 'server.js'));
+	let serverModule = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
 	// The debug options for the server
 	let debugOptions = { execArgv: ["--nolazy", "--inspect=6009"] };
 
