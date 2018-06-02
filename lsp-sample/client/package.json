@@ -45,9 +45,9 @@
 		}
 	},
 	"scripts": {
-		"vscode:prepublish": "tsc -p ./",
-		"compile": "tsc -p ./",
-		"watch": "tsc -w -p ./",
+		"vscode:prepublish": "../node_modules/.bin/tsc -p ./",
+		"compile": "../node_modules/.bin/tsc -p ./",
+		"watch": "../node_modules/.bin/tsc -w -p ./",
 		"update-vscode": "node ./node_modules/vscode/bin/install",
 		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
