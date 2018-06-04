@@ -34,14 +34,18 @@ connection.onInitialize((params: InitializeParams) => {
 
 	return {
 		capabilities: {
-			textDocumentSync: documents.syncKind
+			textDocumentSync: documents.syncKind,
+            // Tell the client that the server supports code completion
+            completionProvider: {
+                resolveProvider: true
+            }
 		}
 	}
 });
 
 connection.onInitialized(() => {
 	if (hasConfigurationCapability) {
-		// Register for all conifiguration changes.
+		// Register for all configuration changes.
 		connection.client.register(DidChangeConfigurationNotification.type, undefined);
 	}
 	if (hasWorkspaceFolderCapability) {
@@ -70,7 +74,7 @@ connection.onDidChangeConfiguration(change => {
 		// Reset all cached document settings
 		documentSettings.clear();
 	} else {
-		globalSettings = <ExampleSettings>(change.settings.lspMultiRootSample || defaultSettings);
+		globalSettings = <ExampleSettings>(change.settings.languageServerExample || defaultSettings);
 	}
 
 	// Revalidate all open text documents

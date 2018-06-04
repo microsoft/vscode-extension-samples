@@ -21,7 +21,7 @@
 			"protocol": "inspector",
 			"port": 6009,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/server/**/*.js"]
+			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
 		}
 	]
 }
