@@ -5,38 +5,93 @@
 'use strict';
 
 import {
-	IPCMessageReader, IPCMessageWriter, createConnection, IConnection, TextDocuments, TextDocument,
-	Diagnostic, DiagnosticSeverity, InitializeResult, TextDocumentPositionParams, CompletionItem,
-	CompletionItemKind
+	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
+	ProposedFeatures, InitializeParams, DidChangeConfigurationNotification, CompletionItem,
+	CompletionItemKind, TextDocumentPositionParams
 } from 'vscode-languageserver';
 
-// Create a connection for the server. The connection uses Node's IPC as a transport
-let connection: IConnection = createConnection(new IPCMessageReader(process), new IPCMessageWriter(process));
+// Create a connection for the server. The connection uses Node's IPC as a transport.
+// Also include all preview / proposed LSP features.
+let connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager. The text document manager
 // supports full document sync only
 let documents: TextDocuments = new TextDocuments();
-// Make the text document manager listen on the connection
-// for open, change and close text document events
-documents.listen(connection);
+
+let hasConfigurationCapability: boolean = false;
+let hasWorkspaceFolderCapability: boolean = false;
+let hasDiagnosticRelatedInformationCapability: boolean = false;
 
 
-let shouldSendDiagnosticRelatedInformation: boolean = false;
+connection.onInitialize((params: InitializeParams) => {
+	let capabilities = params.capabilities;
 
-// After the server has started the client sends an initialize request. The server receives
-// in the passed params the rootPath of the workspace plus the client capabilities.
-connection.onInitialize((_params): InitializeResult => {
-	shouldSendDiagnosticRelatedInformation = _params.capabilities && _params.capabilities.textDocument && _params.capabilities.textDocument.publishDiagnostics && _params.capabilities.textDocument.publishDiagnostics.relatedInformation;
+	// Does the client support the `workspace/configuration` request?
+	// If not, we will fall back using global settings
+	hasConfigurationCapability = capabilities.workspace && !!capabilities.workspace.configuration;
+	hasWorkspaceFolderCapability = capabilities.workspace && !!capabilities.workspace.workspaceFolders;
+	hasDiagnosticRelatedInformationCapability = capabilities.textDocument && capabilities.textDocument.publishDiagnostics && capabilities.textDocument.publishDiagnostics.relatedInformation;
+
 	return {
 		capabilities: {
-			// Tell the client that the server works in FULL text document sync mode
-			textDocumentSync: documents.syncKind,
-			// Tell the client that the server support code complete
-			completionProvider: {
-				resolveProvider: true
-			}
+			textDocumentSync: documents.syncKind
 		}
 	}
+});
+
+connection.onInitialized(() => {
+	if (hasConfigurationCapability) {
+		// Register for all conifiguration changes.
+		connection.client.register(DidChangeConfigurationNotification.type, undefined);
+	}
+	if (hasWorkspaceFolderCapability) {
+		connection.workspace.onDidChangeWorkspaceFolders((_event) => {
+			connection.console.log('Workspace folder change event received.');
+		});
+	}
+});
+
+// The example settings
+interface ExampleSettings {
+	maxNumberOfProblems: number;
+}
+
+// The global settings, used when the `workspace/configuration` request is not supported by the client.
+// Please note that this is not the case when using this server with the client provided in this example
+// but could happen with other clients.
+const defaultSettings: ExampleSettings = { maxNumberOfProblems: 1000 };
+let globalSettings: ExampleSettings = defaultSettings;
+
+// Cache the settings of all open documents
+let documentSettings: Map<string, Thenable<ExampleSettings>> = new Map();
+
+connection.onDidChangeConfiguration(change => {
+	if (hasConfigurationCapability) {
+		// Reset all cached document settings
+		documentSettings.clear();
+	} else {
+		globalSettings = <ExampleSettings>(change.settings.lspMultiRootSample || defaultSettings);
+	}
+
+	// Revalidate all open text documents
+	documents.all().forEach(validateTextDocument);
+});
+
+function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
+	if (!hasConfigurationCapability) {
+		return Promise.resolve(globalSettings);
+	}
+	let result = documentSettings.get(resource);
+	if (!result) {
+		result = connection.workspace.getConfiguration({ scopeUri: resource, section: 'languageServerExample' });
+		documentSettings.set(resource, result);
+	}
+	return result;
+}
+
+// Only keep settings for open documents
+documents.onDidClose(e => {
+	documentSettings.delete(e.document.uri);
 });
 
 // The content of a text document has changed. This event is emitted
@@ -45,74 +100,49 @@ documents.onDidChangeContent((change) => {
 	validateTextDocument(change.document);
 });
 
-// The settings interface describe the server relevant settings part
-interface Settings {
-	lspSample: ExampleSettings;
-}
+async function validateTextDocument(textDocument: TextDocument): Promise<void> {
+	// In this simple example we get the settings for every validate run.
+	let settings = await getDocumentSettings(textDocument.uri);
 
-// These are the example settings we defined in the client's package.json
-// file
-interface ExampleSettings {
-	maxNumberOfProblems: number;
-}
+	// The validator creates diagnostics for all uppercase words length 2 and more
+	let text = textDocument.getText();
+	let pattern = /\b[A-Z]{2,}\b/g;
+	let m: RegExpExecArray;
 
-// hold the maxNumberOfProblems setting
-let maxNumberOfProblems: number;
-// The settings have changed. Is send on server activation
-// as well.
-connection.onDidChangeConfiguration((change) => {
-	let settings = <Settings>change.settings;
-	maxNumberOfProblems = settings.lspSample.maxNumberOfProblems || 100;
-	// Revalidate any open text documents
-	documents.all().forEach(validateTextDocument);
-});
-
-function validateTextDocument(textDocument: TextDocument): void {
-	let diagnostics: Diagnostic[] = [];
-	let lines = textDocument.getText().split(/\r?\n/g);
 	let problems = 0;
-	for (var i = 0; i < lines.length && problems < maxNumberOfProblems; i++) {
-		let line = lines[i];
-		let index = line.indexOf('typescript');
-		if (index >= 0) {
-			problems++;
-
-			let diagnosic: Diagnostic = {
-				severity: DiagnosticSeverity.Warning,
-				range: {
-					start: { line: i, character: index },
-					end: { line: i, character: index + 10 }
-				},
-				message: `${line.substr(index, 10)} should be spelled TypeScript`,
-				source: 'ex'
-			};
-			if (shouldSendDiagnosticRelatedInformation) {
-				diagnosic.relatedInformation = [
-					{
-						location: {
-							uri: textDocument.uri,
-							range: {
-								start: { line: i, character: index },
-								end: { line: i, character: index + 10 }
-							}
-						},
-						message: 'Spelling matters'
+	let diagnostics: Diagnostic[] = [];
+	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
+		problems++;
+		let diagnosic: Diagnostic = {
+			severity: DiagnosticSeverity.Warning,
+			range: {
+				start: textDocument.positionAt(m.index),
+				end: textDocument.positionAt(m.index + m[0].length)
+			},
+			message: `${m[0]} is all uppercase.`,
+			source: 'ex'
+		};
+		if (hasDiagnosticRelatedInformationCapability) {
+			diagnosic.relatedInformation = [
+				{
+					location: {
+						uri: textDocument.uri,
+						range: Object.assign({}, diagnosic.range)
 					},
-					{
-						location: {
-							uri: textDocument.uri,
-							range: {
-								start: { line: i, character: index },
-								end: { line: i, character: index + 10 }
-							}
-						},
-						message: 'Particularly for names'
-					}
-				];
-			}
-			diagnostics.push(diagnosic);
+					message: 'Spelling matters'
+				},
+				{
+					location: {
+						uri: textDocument.uri,
+						range: Object.assign({}, diagnosic.range)
+					},
+					message: 'Particularly for names'
+				}
+			];
 		}
+		diagnostics.push(diagnosic);
 	}
+
 	// Send the computed diagnostics to VSCode.
 	connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
@@ -174,6 +204,10 @@ connection.onDidCloseTextDocument((params) => {
 	connection.console.log(`${params.textDocument.uri} closed.`);
 });
 */
+
+// Make the text document manager listen on the connection
+// for open, change and close text document events
+documents.listen(connection);
 
 // Listen on the connection
 connection.listen();

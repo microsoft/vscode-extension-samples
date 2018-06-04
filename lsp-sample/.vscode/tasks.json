@@ -10,7 +10,6 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "compile:client",
 			"type": "npm",
 			"script": "compile:client",
 			"group": "build",
@@ -23,7 +22,6 @@
 			]
 		},
 		{
-			"label": "compile:server",
 			"type": "npm",
 			"script": "compile:server",
 			"group": "build",
@@ -48,7 +46,6 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "watch:client",
 			"type": "npm",
 			"script": "watch:client",
 			"isBackground": true,
@@ -62,7 +59,6 @@
 			]
 		},
 		{
-			"label": "watch:server",
 			"type": "npm",
 			"script": "watch:server",
 			"isBackground": true,

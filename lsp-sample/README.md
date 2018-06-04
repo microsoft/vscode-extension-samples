@@ -1,21 +1,19 @@
-# README
-## This is the README for the "languageprovider-sample" 
--------------------
+# LSP Multi Root Example
 
-This folder contains a sample VS code extension that demonstrates an extension that runs a language server
+A language server example that demonstrates how to handle configuration settings in a workspace that uses multi root folders. Since settings in VS Code in this setup are typically scoped to a resource, the example reads the resource settings from the client using the new proposed API getConfiguration. This is analogous to reading settings in a multi-root folder setup directly in the extension host.
 
-The extension observes all 'plaintext' documents (documents from all editors not associated with a language)
-and uses the server to provide validation and completion proposals.
+The example uses proposed Language Server protocol. So the code demoed here might change when the final version of the configuration and workspace folder protocol is released.
 
-The code for the extension is in the 'client' folder. It uses the 'vscode-languageclient' node module to launch the language server.
+## Compile and Run
 
-The language server is located in the 'server' folder. 
+- run `npm install` in this folder. This installs all necessary npm modules in both the client and server folder
+- open VS Code on this folder.
+- Press Ctrl+Shift+B to compile the client and server
+- Switch to the Debug viewlet
+- Select `Launch Client` from the drop down
+- Run the lauch config
+- If you want to debug the server as well use the launch configuration `Attach to Server`
 
+- In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode.
+  Enter text content such as `AAA aaa BBB`. The extension will emit diagnostics for all words in all-uppercase.
 
-# How to run locally
-* `npm install` to initialize the extension and the server
-* `npm run compile` to compile the extension and the server
-* open the `lsp-sample` folder in VS Code. In the Debug viewlet, run 'Launch Client' from drop-down to launch the extension and attach to the extension.
-* create a file `test.txt`, and type `typescript`. You should see a validation error.
-* to debug the server use the 'Attach to Server' launch config.
-* set breakpoints in the client or the server.
