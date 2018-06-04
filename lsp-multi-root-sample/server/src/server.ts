@@ -6,7 +6,8 @@
 
 import {
 	createConnection, TextDocuments, TextDocument, Diagnostic, DiagnosticSeverity,
-	ProposedFeatures, InitializeParams, DidChangeConfigurationNotification, CompletionItem, CompletionItemKind, TextDocumentPositionParams
+	ProposedFeatures, InitializeParams, DidChangeConfigurationNotification, CompletionItem,
+	CompletionItemKind, TextDocumentPositionParams
 } from 'vscode-languageserver';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
@@ -51,32 +52,32 @@ connection.onInitialized(() => {
 });
 
 // The example settings
-interface Settings {
+interface ExampleSettings {
 	maxNumberOfProblems: number;
 }
 
 // The global settings, used when the `workspace/configuration` request is not supported by the client.
 // Please note that this is not the case when using this server with the client provided in this example
 // but could happen with other clients.
-const defaultSettings: Settings = { maxNumberOfProblems: 1000 };
-let globalSettings: Settings = defaultSettings;
+const defaultSettings: ExampleSettings = { maxNumberOfProblems: 1000 };
+let globalSettings: ExampleSettings = defaultSettings;
 
 // Cache the settings of all open documents
-let documentSettings: Map<string, Thenable<Settings>> = new Map();
+let documentSettings: Map<string, Thenable<ExampleSettings>> = new Map();
 
 connection.onDidChangeConfiguration(change => {
 	if (hasConfigurationCapability) {
 		// Reset all cached document settings
 		documentSettings.clear();
 	} else {
-		globalSettings = <Settings>(change.settings.lspMultiRootSample || defaultSettings);
+		globalSettings = <ExampleSettings>(change.settings.lspMultiRootSample || defaultSettings);
 	}
 
 	// Revalidate all open text documents
 	documents.all().forEach(validateTextDocument);
 });
 
-function getDocumentSettings(resource: string): Thenable<Settings> {
+function getDocumentSettings(resource: string): Thenable<ExampleSettings> {
 	if (!hasConfigurationCapability) {
 		return Promise.resolve(globalSettings);
 	}
