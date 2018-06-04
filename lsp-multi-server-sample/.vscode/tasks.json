@@ -10,9 +10,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "compile:client",
-			"type": "shell",
-			"command": "npm run compile:client",
+			"type": "npm",
+			"script": "compile:client",
 			"group": "build",
 			"presentation": {
 				"panel": "dedicated",
@@ -24,9 +23,8 @@
 			]
 		},
 		{
-			"label": "compile:server",
-			"type": "shell",
-			"command": "npm run compile:server",
+			"type": "npm",
+			"script": "compile:server",
 			"group": "build",
 			"presentation": {
 				"panel": "dedicated",
@@ -49,9 +47,8 @@
 			"problemMatcher": []
 		},
 		{
-			"label": "watch:client",
-			"type": "shell",
-			"command": "npm run watch:client",
+			"type": "npm",
+			"script": "watch:client",
 			"isBackground": true,
 			"group": "build",
 			"presentation": {
@@ -63,9 +60,8 @@
 			]
 		},
 		{
-			"label": "watch:server",
-			"type": "shell",
-			"command": "npm run watch:server",
+			"type": "npm",
+			"script": "watch:server",
 			"isBackground": true,
 			"group": "build",
 			"presentation": {

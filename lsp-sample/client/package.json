@@ -1,5 +1,5 @@
 {
-	"name": "lsp-mulit-root-sample-client-part",
+	"name": "lsp-sample-client",
 	"description": "VSCode part of a language server",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
@@ -13,8 +13,6 @@
 		"vscode": "^1.23.0"
 	},
 	"scripts": {
-		"compile": "tsc -p ./",
-		"watch": "tsc -w -p ./",
 		"update-vscode": "node ./node_modules/vscode/bin/install",
 		"postinstall": "node ./node_modules/vscode/bin/install"
 	},

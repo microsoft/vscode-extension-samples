@@ -1,9 +1,9 @@
 import * as path from 'path';
-import { 
+import {
 	workspace as Workspace, window as Window, ExtensionContext, TextDocument, OutputChannel, WorkspaceFolder, Uri
-} from 'vscode'; 
+} from 'vscode';
 
-import { 
+import {
 	LanguageClient, LanguageClientOptions, TransportKind
 } from 'vscode-languageclient';
 
@@ -45,9 +45,9 @@ function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
 
 export function activate(context: ExtensionContext) {
 
-	let module = context.asAbsolutePath(path.join('server', 'server.js'));
+	let module = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
 	let outputChannel: OutputChannel = Window.createOutputChannel('lsp-multi-server-example');
-	
+
 	function didOpenTextDocument(document: TextDocument): void {
 		// We are only interested in language mode text
 		if (document.languageId !== 'plaintext' || (document.uri.scheme !== 'file' && document.uri.scheme !== 'untitled')) {
@@ -66,11 +66,10 @@ export function activate(context: ExtensionContext) {
 				documentSelector: [
 					{ scheme: 'untitled', language: 'plaintext' }
 				],
-				diagnosticCollectionName: 'multi-lsp',
+				diagnosticCollectionName: 'lsp-multi-server-example',
 				outputChannel: outputChannel
 			}
 			defaultClient = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
-			defaultClient.registerProposedFeatures();
 			defaultClient.start();
 			return;
 		}
@@ -82,7 +81,7 @@ export function activate(context: ExtensionContext) {
 		}
 		// If we have nested workspace folders we only start a server on the outer most workspace folder.
 		folder = getOuterMostWorkspaceFolder(folder);
-		
+
 		if (!clients.has(folder.uri.toString())) {
 			let debugOptions = { execArgv: ["--nolazy", `--inspect=${6011 + clients.size}`] };
 			let serverOptions = {
@@ -98,7 +97,6 @@ export function activate(context: ExtensionContext) {
 				outputChannel: outputChannel
 			}
 			let client = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
-			client.registerProposedFeatures();
 			client.start();
 			clients.set(folder.uri.toString(), client);
 		}

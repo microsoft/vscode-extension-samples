@@ -3,33 +3,45 @@
 	// List of configurations. Add new configurations or edit existing ones.
 	"configurations": [
 		{
-			"name": "Launch Client",
 			"type": "extensionHost",
 			"request": "launch",
+			"name": "Launch Client",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}/client" ],
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": [ "${workspaceRoot}/client/out/src/**/*.js" ],
-			"preLaunchTask": "watch:client"
+			"outFiles": ["${workspaceRoot}/client/out/**/*.js"],
+			"preLaunchTask": "npm: watch:client"
 		},
 		{
-			"name": "Attach to Server 11",
 			"type": "node",
 			"request": "attach",
+			"name": "Attach to Server 6010",
+			"address": "localhost",
+			"protocol": "inspector",
+			"port": 6010,
+			"sourceMaps": true,
+			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
+		},
+		{
+			"type": "node",
+			"request": "attach",
+			"name": "Attach to Server 6011",
+			"address": "localhost",
+			"protocol": "inspector",
 			"port": 6011,
 			"sourceMaps": true,
-			"outFiles": [ "${workspaceRoot}/client/server/**/*.js" ],
-			"preLaunchTask": "watch:server"
+			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
 		},
 		{
-			"name": "Attach to Server 12",
 			"type": "node",
 			"request": "attach",
+			"name": "Attach to Server 6012",
+			"address": "localhost",
+			"protocol": "inspector",
 			"port": 6012,
 			"sourceMaps": true,
-			"outFiles": [ "${workspaceRoot}/client/server/**/*.js" ],
-			"preLaunchTask": "watch:server"
-		}		
+			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
+		}
 	]
 }
