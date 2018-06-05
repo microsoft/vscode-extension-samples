@@ -36,8 +36,8 @@
 		{
 			"label": "watch",
 			"dependsOn": [
-				"watch:client",
-				"watch:server"
+				"npm: watch:client",
+				"npm: watch:server"
 			],
 			"group": {
 				"kind": "build",
