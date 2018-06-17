@@ -5,9 +5,26 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
 	let NEXT_TERM_ID = 1;
 
+	vscode.window.showInformationMessage('Hello World!');
+
+	console.log("Terminals: " + (<any>vscode.window).terminals.length);
+
+	(<any>vscode.window).onDidOpenTerminal(e => {
+		console.log("Terminal opened. Total count: " + (<any>vscode.window).terminals.length);
+
+		e.onData(data => {
+			console.log("Terminal data: ", data);
+		});
+	});
+
+	(<any>vscode.window).onDidChangeActiveTerminal(e => {
+		console.log(`Active terminal changed, name=${e ? e.name : 'undefined'}`);
+	});
+
 	// vscode.window.createTerminal
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createTerminal', () => {
 		vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
+		vscode.window.showInformationMessage('Hello World 2!');
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createAndSend', () => {
 		const terminal = vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
@@ -100,6 +117,89 @@ export function activate(context: vscode.ExtensionContext) {
 			});
 		});
 	}));
+
+	// vvv Proposed APIs in 1.25 below vvv
+	let renderer;
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererCreate', () => {
+		renderer = (<any>vscode.window).createTerminalRenderer('renderer');
+		renderer.write(colorText('~~~ Hello world! ~~~'));
+		renderer.onDidChangeMaximumDimensions(dim => {
+			console.log(`Dimensions for renderer changed: cols=${dim.cols}, rows=${dim.rows}`);
+		});
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererName', () => {
+		if (!renderer) {
+			return;
+		}
+		vscode.window.showInputBox({ placeHolder: "Enter a new name" }).then(value => {
+			if (!value) {
+				return;
+			}
+			renderer.name = value;
+		});
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererWrite', () => {
+		if (!renderer) {
+			return;
+		}
+		vscode.window.showInputBox({ placeHolder: "Enter text to write" }).then(value => {
+			if (!value) {
+				return;
+			}
+			// Note that entering characters like `\r` in the input box will result in `\\r` being written
+			renderer.write(value);
+		});
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createFakeShell', () => {
+		const shell = (<any>vscode.window).createTerminalRenderer('fake shell');
+		shell.write('Type and press enter to echo the text\r\n\r\n');
+		let line = '';
+		shell.onInput(data => {
+			if (data === '\r') {
+				shell.write(`\r\necho: "${colorText(line)}"\r\n\n`);
+				line = '';
+				return;
+			}
+			line += data;
+			shell.write(data);
+		});
+		shell.terminal.then(t => t.show());
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.maximumDimensions', () => {
+		renderer.maximumDimensions.then(dimensions => {
+			vscode.window.showInformationMessage(`TerminalRenderer.maximumDimensions: cols=${dimensions.cols}, rows=${dimensions.rows}`);
+		});
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.dimensions', () => {
+		vscode.window.showInputBox({ placeHolder: "Enter cols" }).then(cols => {
+			if (!cols) {
+				return;
+			}
+			vscode.window.showInputBox({ placeHolder: "Enter rows" }).then(rows => {
+				if (!rows) {
+					return;
+				}
+				renderer.dimensions = { cols: parseInt(cols, 10), rows: parseInt(rows, 10) };
+			});
+		});
+	}));
+}
+
+function colorText(text: string): string {
+	let output = '';
+	let colorIndex = 1;
+	for (let i = 0; i < text.length; i++) {
+		const char = text.charAt(i);
+		if (char === ' ' || char === '\r' || char === '\n') {
+			output += char;
+		} else {
+			output += `\x1b[3${colorIndex++}m${text.charAt(i)}\x1b[0m`;
+			if (colorIndex > 6) {
+				colorIndex = 1;
+			}
+		}
+	}
+	return output;
 }
 
 function selectTerminal(): Thenable<vscode.Terminal> {
