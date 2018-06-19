@@ -145,8 +145,8 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocum
 	}
 
 	public getParent(element: FtpNode): FtpNode {
-		const parent = vscode.Uri.parse(dirname(element.resource.fsPath));
-		return parent.fsPath !== this.model.host ? { resource: parent, isDirectory: true } : null;
+		const parent = element.resource.with({ path: dirname(element.resource.path) });
+		return parent.path !== '//' ? { resource: parent, isDirectory: true } : null;
 	}
 
 	public provideTextDocumentContent(uri: Uri, token: CancellationToken): ProviderResult<string> {
