@@ -44,6 +44,7 @@ export async function multiStepInput(context: ExtensionContext) {
 			totalSteps: 3,
 			placeholder: 'Pick a resource group',
 			items: resourceGroups,
+			activeItem: typeof state.resourceGroup !== 'string' ? state.resourceGroup : undefined,
 			buttons: [createResourceGroupButton],
 			shouldResume: shouldResume
 		});
@@ -69,6 +70,7 @@ export async function multiStepInput(context: ExtensionContext) {
 
 	async function inputName(input: MultiStepInput, state: Partial<State>) {
 		const additionalSteps = typeof state.resourceGroup === 'string' ? 1 : 0;
+		// TODO: Remember current value when navigating back.
 		state.name = await input.showInputBox({
 			title,
 			step: 2 + additionalSteps,
@@ -84,12 +86,14 @@ export async function multiStepInput(context: ExtensionContext) {
 	async function pickRuntime(input: MultiStepInput, state: Partial<State>) {
 		const additionalSteps = typeof state.resourceGroup === 'string' ? 1 : 0;
 		const runtimes = await getAvailableRuntimes(state.resourceGroup!, undefined /* TODO: token */);
+		// TODO: Remember currently active item when navigating back.
 		state.runtime = await input.showQuickPick({
 			title,
 			step: 3 + additionalSteps,
 			totalSteps: 3 + additionalSteps,
 			placeholder: 'Pick a runtime',
 			items: runtimes,
+			activeItem: state.runtime,
 			shouldResume: shouldResume
 		});
 	}
@@ -115,6 +119,7 @@ export async function multiStepInput(context: ExtensionContext) {
 		step: number;
 		totalSteps: number;
 		items: QuickPickItem[];
+		activeItem?: QuickPickItem;
 		placeholder: string;
 		buttons?: QuickInputButton[];
 		shouldResume: () => Thenable<boolean>;
@@ -169,7 +174,7 @@ export async function multiStepInput(context: ExtensionContext) {
 			}
 		}
 
-		async showQuickPick<P extends QuickPickParameters>({ title, step, totalSteps, items, placeholder, buttons, shouldResume }: P) {
+		async showQuickPick<P extends QuickPickParameters>({ title, step, totalSteps, items, activeItem, placeholder, buttons, shouldResume }: P) {
 			const disposables: Disposable[] = [];
 			try {
 				return await new Promise<QuickPickItem | (P extends { buttons: (infer I)[] } ? I : never)>((resolve, reject) => {
@@ -179,6 +184,9 @@ export async function multiStepInput(context: ExtensionContext) {
 					input.totalSteps = totalSteps;
 					input.placeholder = placeholder;
 					input.items = items;
+					if (activeItem) {
+						input.activeItems = [activeItem];
+					}
 					input.buttons = [
 						...(this.steps.length > 1 ? [window.quickInputBackButton] : []),
 						...(buttons || [])
