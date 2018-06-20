@@ -11,19 +11,6 @@ export async function createQuickPick(context: ExtensionContext) {
 		window.showInformationMessage(`Button triggered`);
 	});
 	quickPick.items = ['eins', 'zwei', 'drei'].map(label => ({ label }));
-	quickPick.buttons = [
-		{
-			iconPath: {
-				dark: context.asAbsolutePath('resources/dark/back.svg'),
-				light: context.asAbsolutePath('resources/light/back.svg')
-			}
-		},
-		{
-			iconPath: {
-				dark: context.asAbsolutePath('resources/dark/forward.svg'),
-				light: context.asAbsolutePath('resources/light/forward.svg')
-			}
-		},
-	];
+	quickPick.buttons = [ window.quickInputBackButton ];
 	quickPick.show();
 }
