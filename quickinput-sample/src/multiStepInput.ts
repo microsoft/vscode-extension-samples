@@ -16,7 +16,7 @@ export async function multiStepInput(context: ExtensionContext) {
 		light: context.asAbsolutePath('resources/light/add.svg')
 	}, 'Create Resource Group');
 
-	const resourceGroups: QuickPickItem[] = ['vscode-data-function', 'vscode-website-microservices', 'vscode-website-monitor', 'vscode-website-preview', 'vscode-website-prod']
+	const resourceGroups: QuickPickItem[] = ['vscode-data-function', 'vscode-appservice-microservices', 'vscode-appservice-monitor', 'vscode-appservice-preview', 'vscode-appservice-prod']
 		.map(label => ({ label }));
 
 
@@ -35,7 +35,7 @@ export async function multiStepInput(context: ExtensionContext) {
 		return state as State;
 	}
 
-	const title = 'Create Website';
+	const title = 'Create Application Service';
 
 	async function pickResourceGroup(input: MultiStepInput, state: Partial<State>) {
 		const pick = await input.showQuickPick({
@@ -76,7 +76,7 @@ export async function multiStepInput(context: ExtensionContext) {
 			step: 2 + additionalSteps,
 			totalSteps: 3 + additionalSteps,
 			value: state.name || '',
-			prompt: 'Choose a unique name for the website',
+			prompt: 'Choose a unique name for the Application Service',
 			validate: validateNameIsUnique,
 			shouldResume: shouldResume
 		});
@@ -114,12 +114,12 @@ export async function multiStepInput(context: ExtensionContext) {
 
 	type InputStep = (input: MultiStepInput) => Thenable<InputStep | void>;
 
-	interface QuickPickParameters {
+	interface QuickPickParameters<T extends QuickPickItem> {
 		title: string;
 		step: number;
 		totalSteps: number;
-		items: QuickPickItem[];
-		activeItem?: QuickPickItem;
+		items: T[];
+		activeItem?: T;
 		placeholder: string;
 		buttons?: QuickInputButton[];
 		shouldResume: () => Thenable<boolean>;
@@ -174,11 +174,11 @@ export async function multiStepInput(context: ExtensionContext) {
 			}
 		}
 
-		async showQuickPick<P extends QuickPickParameters>({ title, step, totalSteps, items, activeItem, placeholder, buttons, shouldResume }: P) {
+		async showQuickPick<T extends QuickPickItem, P extends QuickPickParameters<T>>({ title, step, totalSteps, items, activeItem, placeholder, buttons, shouldResume }: P) {
 			const disposables: Disposable[] = [];
 			try {
-				return await new Promise<QuickPickItem | (P extends { buttons: (infer I)[] } ? I : never)>((resolve, reject) => {
-					const input = window.createQuickPick();
+				return await new Promise<T | (P extends { buttons: (infer I)[] } ? I : never)>((resolve, reject) => {
+					const input = window.createQuickPick<T>();
 					input.title = title;
 					input.step = step;
 					input.totalSteps = totalSteps;
@@ -296,5 +296,5 @@ export async function multiStepInput(context: ExtensionContext) {
 	}
 
 	const state = await collectInputs();
-	window.showInformationMessage(`Got: ${typeof state.resourceGroup === 'string' ? state.resourceGroup : state.resourceGroup.label}, ${state.name}, ${state.runtime.label}`);
+	window.showInformationMessage(`Creating Application Service '${state.name}'`);
 }
