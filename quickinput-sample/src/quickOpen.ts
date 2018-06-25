@@ -9,6 +9,12 @@ import { Uri, window, Disposable } from 'vscode';
 import { QuickPickItem } from 'vscode';
 import { workspace } from 'vscode';
 
+/**
+ * A file opener using window.createQuickPick().
+ * 
+ * It shows how the list of items can be dynamically updated based on
+ * the user's input in the filter field.
+ */
 export async function quickOpen() {
 	const uri = await pickFile();
 	if (uri) {

@@ -5,6 +5,9 @@
 
 import { window } from 'vscode';
 
+/**
+ * Shows an input box using window.showInputBox().
+ */
 export async function showInputBox() {
 	const result = await window.showInputBox({
 		value: 'abcdef',
