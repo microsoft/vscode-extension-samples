@@ -38,16 +38,31 @@ export async function setTestContent(content: string): Promise<boolean> {
 export async function testCompletion(docUri: vscode.Uri, position: vscode.Position, expectedCompletionList: vscode.CompletionList) {
   await activate(docUri)
 
-  const result = (await vscode.commands.executeCommand(
+  const actualCompletionList = (await vscode.commands.executeCommand(
     'vscode.executeCompletionItemProvider',
     docUri,
     position
   )) as vscode.CompletionList
 
-  assert.equal(result.items.length, expectedCompletionList.items.length);
+  assert.equal(actualCompletionList.items.length, expectedCompletionList.items.length);
   expectedCompletionList.items.forEach((expectedItem, i) => {
-    const resulItem = result.items[i]
-    assert.equal(resulItem.label, expectedItem.label)
-    assert.equal(resulItem.kind, expectedItem.kind)
+    const actualItem = actualCompletionList.items[i]
+    assert.equal(actualItem.label, expectedItem.label)
+    assert.equal(actualItem.kind, expectedItem.kind)
+  })
+} 
+
+export async function testDiagnostics(docUri: vscode.Uri, expectedDiagnostics: vscode.Diagnostic[]) {
+  await activate(docUri)
+
+  const actualDiagnostics = vscode.languages.getDiagnostics(docUri);
+
+  assert.equal(actualDiagnostics.length, expectedDiagnostics.length);
+
+  expectedDiagnostics.forEach((expectedDiagnostic, i) => {
+    const actualDiagnostic = actualDiagnostics[i]
+    assert.equal(actualDiagnostic.message, expectedDiagnostic.message)
+    assert.deepEqual(actualDiagnostic.range, expectedDiagnostic.range)
+    assert.equal(actualDiagnostic.severity, expectedDiagnostic.severity)
   })
 } 
