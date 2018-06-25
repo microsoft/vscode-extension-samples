@@ -7,7 +7,7 @@
 			"request": "launch",
 			"name": "Launch Client",
 			"runtimeExecutable": "${execPath}",
-			"args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}"],
 			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": ["${workspaceRoot}/client/out/**/*.js"],
@@ -22,6 +22,20 @@
 			"port": 6009,
 			"sourceMaps": true,
 			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
+		},
+		{
+			"name": "Language E2E Test",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}",
+				"--extensionTestsPath=${workspaceRoot}/client/out/test",
+				"${workspaceRoot}/client/testFixture"
+			],
+			"stopOnEntry": false,
+			"sourceMaps": true,
+			"outFiles": ["${workspaceRoot}/client/out/test/**/*.js"]
 		}
 	]
 }
