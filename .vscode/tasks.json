@@ -7,72 +7,89 @@
 // ${cwd}: the current working directory of the spawned process
 // A task runner that calls a custom npm script that compiles the extension.
 {
-	"version": "0.1.0",
-	// we want to run 'npm run'
-	"command": "npm",
-	"args": [
-		"run"
-	],
-	// the command is a shell script
-	"isShellCommand": true,
+	"version": "2.0.0",
 	"tasks": [
 		{
+			"type": "shell",
 			// in package.json we have a compile task for each example
-			"taskName": "compile-completions",
+			"command": "npm run compile-completions",
+			"label": "compile-completions",
 			// show the output window only if unrecognized errors occur.
-			"showOutput": "silent",
+			"presentation": {
+				"reveal": "silent"
+			},
 			// The tsc compiler is started in watching mode
-			"isWatching": true,
+			"isBackground": true,
 			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
 			"problemMatcher": "$tsc-watch"
 		},
 		{
+			"type": "shell",
 			// in package.json we have a compile task for each example
-			"taskName": "compile-decorator",
+			"command": "npm run compile-decorator",
+			"label": "compile-decorator",
 			// show the output window only if unrecognized errors occur.
-			"showOutput": "silent",
+			"presentation": {
+				"reveal": "silent"
+			},
 			// The tsc compiler is started in watching mode
-			"isWatching": true,
+			"isBackground": true,
 			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
 			"problemMatcher": "$tsc-watch"
 		},
 		{
+			"type": "shell",
 			// in package.json we have a compile task for each example
-			"taskName": "compile-previewhtml",
+			"command": "npm run compile-previewhtml",
+			"label": "compile-previewhtml",
 			// show the output window only if unrecognized errors occur.
-			"showOutput": "silent",
+			"presentation": {
+				"reveal": "silent"
+			},
 			// The tsc compiler is started in watching mode
-			"isWatching": true,
+			"isBackground": true,
 			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
 			"problemMatcher": "$tsc-watch"
 		},
 		{
+			"type": "shell",
 			// in package.json we have a compile task for each example
-			"taskName": "compile-statusbar",
+			"command": "npm run compile-statusbar",
+			"label": "compile-statusbar",
 			// show the output window only if unrecognized errors occur.
-			"showOutput": "silent",
+			"presentation": {
+				"reveal": "silent"
+			},
 			// The tsc compiler is started in watching mode
-			"isWatching": true,
+			"isBackground": true,
 			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
 			"problemMatcher": "$tsc-watch"
 		},
 		{
+			"type": "shell",
 			// in package.json we have a compile task for each example
-			"taskName": "compile-contentprovider",
+			"command": "npm run compile-contentprovider",
+			"label": "compile-contentprovider",
 			// show the output window only if unrecognized errors occur.
-			"showOutput": "silent",
+			"presentation": {
+				"reveal": "silent"
+			},
 			// The tsc compiler is started in watching mode
-			"isWatching": true,
+			"isBackground": true,
 			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
 			"problemMatcher": "$tsc-watch"
 		},
 		{
+			"type": "shell",
 			// in package.json we have a compile task for each example
-			"taskName": "compile-languageprovider",
+			"command": "npm run compile-languageprovider",
+			"label": "compile-languageprovider",
 			// show the output window only if unrecognized errors occur.
-			"showOutput": "silent",
+			"presentation": {
+				"reveal": "silent"
+			},
 			// The tsc compiler is started in watching mode
-			"isWatching": true,
+			"isBackground": true,
 			// use the standard tsc in watch mode problem matcher to find compile problems in the output.
 			"problemMatcher": "$tsc-watch"
 		}
