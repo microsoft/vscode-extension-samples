@@ -13,7 +13,7 @@
             "stopOnEntry": false,
             "sourceMaps": true,
             "outDir": "${workspaceRoot}/out/src",
-            "preLaunchTask": "npm"
+            "preLaunchTask": "npm: watch"
         }
     ]
 }
