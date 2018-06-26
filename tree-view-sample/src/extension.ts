@@ -7,8 +7,11 @@ import { JsonOutlineProvider } from './jsonOutline'
 import { FtpExplorer } from './ftpExplorer.textDocumentContentProvider'
 
 export function activate(context: vscode.ExtensionContext) {
-	const rootPath = vscode.workspace.rootPath;
+	// Complete Tree View Sample
+	new FtpExplorer(context);
 
+	// Following are just data provider samples
+	const rootPath = vscode.workspace.rootPath;
 	const nodeDependenciesProvider = new DepNodeProvider(rootPath);
 	const jsonOutlineProvider = new JsonOutlineProvider(context);
 
@@ -24,5 +27,4 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('jsonOutline.renameNode', offset => jsonOutlineProvider.rename(offset));
 	vscode.commands.registerCommand('extension.openJsonSelection', range => jsonOutlineProvider.select(range));
 
-	new FtpExplorer(context);
 }

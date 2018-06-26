@@ -174,11 +174,12 @@ export class FtpExplorer {
 		vscode.window.showTextDocument(resource);
 	}
 
-	private reveal(): void {
+	private reveal(): Thenable<void> {
 		const node = this.getNode();
 		if (node) {
-			this.ftpViewer.reveal(node);
+			return this.ftpViewer.reveal(node);
 		}
+		return null;
 	}
 
 	private getNode(): FtpNode {
