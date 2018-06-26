@@ -24,7 +24,7 @@
 			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
 		},
 		{
-			"name": "Language E2E Test",
+			"name": "Language Server E2E Test",
 			"type": "extensionHost",
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",

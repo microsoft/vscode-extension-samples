@@ -1,3 +1,9 @@
+/* --------------------------------------------------------------------------------------------
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ * ------------------------------------------------------------------------------------------ */
+'use strict';
+
 import * as vscode from 'vscode'
 import * as assert from 'assert'
 import { getDocUri, activate } from './helper'
@@ -18,6 +24,7 @@ describe('Should do completion', () => {
 async function testCompletion(docUri: vscode.Uri, position: vscode.Position, expectedCompletionList: vscode.CompletionList) {
   await activate(docUri)
 
+  // Executing the command `vscode.executeCompletionItemProvider` to simulate triggering completion
   const actualCompletionList = (await vscode.commands.executeCommand(
     'vscode.executeCompletionItemProvider',
     docUri,
