@@ -124,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
 		renderer = (<any>vscode.window).createTerminalRenderer('renderer');
 		renderer.write(colorText('~~~ Hello world! ~~~'));
 		renderer.onDidChangeMaximumDimensions(dim => {
-			console.log(`Dimensions for renderer changed: cols=${dim.cols}, rows=${dim.rows}`);
+			console.log(`Dimensions for renderer changed: columns=${dim.columns}, rows=${dim.rows}`);
 		});
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererName', () => {
@@ -167,19 +167,19 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.maximumDimensions', () => {
 		renderer.maximumDimensions.then(dimensions => {
-			vscode.window.showInformationMessage(`TerminalRenderer.maximumDimensions: cols=${dimensions.cols}, rows=${dimensions.rows}`);
+			vscode.window.showInformationMessage(`TerminalRenderer.maximumDimensions: columns=${dimensions.columns}, rows=${dimensions.rows}`);
 		});
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.dimensions', () => {
-		vscode.window.showInputBox({ placeHolder: "Enter cols" }).then(cols => {
-			if (!cols) {
+		vscode.window.showInputBox({ placeHolder: "Enter columns" }).then(columns => {
+			if (!columns) {
 				return;
 			}
 			vscode.window.showInputBox({ placeHolder: "Enter rows" }).then(rows => {
 				if (!rows) {
 					return;
 				}
-				renderer.dimensions = { cols: parseInt(cols, 10), rows: parseInt(rows, 10) };
+				renderer.dimensions = { columns: parseInt(columns, 10), rows: parseInt(rows, 10) };
 			});
 		});
 	}));
