@@ -34,11 +34,23 @@ class FileItem implements QuickPickItem {
 	}
 }
 
+class MessageItem implements QuickPickItem {
+
+	label: string;
+	description = '';
+	detail: string;
+	
+	constructor(public base: Uri, public message: string) {
+		this.label = message.replace(/\r?\n/g, ' ');
+		this.detail = base.fsPath;
+	}
+}
+
 async function pickFile() {
 	const disposables: Disposable[] = [];
 	try {
 		return await new Promise<Uri | undefined>((resolve, reject) => {
-			const input = window.createQuickPick<FileItem>();
+			const input = window.createQuickPick<FileItem | MessageItem>();
 			input.placeholder = 'Type to search for files';
 			let rgs: cp.ChildProcess[] = [];
 			disposables.push(
@@ -64,6 +76,11 @@ async function pickFile() {
 											.map(relative => new FileItem(Uri.file(cwd), Uri.file(path.join(cwd, relative))))
 									);
 								}
+								if (err && !(<any>err).killed && (<any>err).code !== 1 && err.message) {
+									input.items = input.items.concat([
+										new MessageItem(Uri.file(cwd), err.message)
+									]);
+								}
 								rgs.splice(i, 1);
 								if (!rgs.length) {
 									input.busy = false;
@@ -74,8 +91,11 @@ async function pickFile() {
 					});
 				}),
 				input.onDidChangeSelection(items => {
-					resolve(items[0].uri);
-					input.hide();
+					const item = items[0];
+					if (item instanceof FileItem) {
+						resolve(item.uri);
+						input.hide();
+					}
 				}),
 				input.onDidHide(() => {
 					rgs.forEach(rg => rg.kill());
