@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	(<any>vscode.window).onDidOpenTerminal(e => {
 		console.log("Terminal opened. Total count: " + (<any>vscode.window).terminals.length);
 
-		e.onData(data => {
+		e.onDidWriteData(data => {
 			console.log("Terminal data: ", data);
 		});
 	});
@@ -109,11 +109,11 @@ export function activate(context: vscode.ExtensionContext) {
 			vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
 		});
 	}
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onData', () => {
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidWriteData', () => {
 		selectTerminal().then(terminal => {
-			vscode.window.showInformationMessage(`onData listener attached for terminal: ${terminal.name}, check the devtools console to see events`);
-			(<any>terminal).onData((data: string) => {
-				console.log('onData: ' + data);
+			vscode.window.showInformationMessage(`onDidWriteData listener attached for terminal: ${terminal.name}, check the devtools console to see events`);
+			(<any>terminal).onDidWriteData((data: string) => {
+				console.log('onDidWriteData: ' + data);
 			});
 		});
 	}));
@@ -154,7 +154,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const shell = (<any>vscode.window).createTerminalRenderer('fake shell');
 		shell.write('Type and press enter to echo the text\r\n\r\n');
 		let line = '';
-		shell.onInput(data => {
+		shell.onDidAcceptInput(data => {
 			if (data === '\r') {
 				shell.write(`\r\necho: "${colorText(line)}"\r\n\n`);
 				line = '';
@@ -163,7 +163,7 @@ export function activate(context: vscode.ExtensionContext) {
 			line += data;
 			shell.write(data);
 		});
-		shell.terminal.then(t => t.show());
+		shell.terminal.show();
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.maximumDimensions', () => {
 		renderer.maximumDimensions.then(dimensions => {
