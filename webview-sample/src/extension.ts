@@ -18,6 +18,17 @@ export function activate(context: vscode.ExtensionContext) {
             CatCodingPanel.currentPanel.doRefactor();
         }
     }));
+
+    // Serializers only introduced in VS Code 1.25+
+    if ((vscode.window as any).registerWebviewPanelSerializer) {
+        // Make sure we register a serilizer in activation event
+        (vscode.window as any).registerWebviewPanelSerializer(CatCodingPanel.viewType, {
+            async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+                console.log(`Got state: ${state}`);
+                CatCodingPanel.revive(webviewPanel, context.extensionPath);
+            }
+        });
+    }
 }
 
 /**
@@ -29,7 +40,7 @@ class CatCodingPanel {
      */
     public static currentPanel: CatCodingPanel | undefined;
 
-    private static readonly viewType = 'catCoding';
+    public static readonly viewType = 'catCoding';
 
     private readonly _panel: vscode.WebviewPanel;
     private readonly _extensionPath: string;
@@ -39,27 +50,35 @@ class CatCodingPanel {
         const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
 
         // If we already have a panel, show it.
-        // Otherwise, create a new panel.
         if (CatCodingPanel.currentPanel) {
             CatCodingPanel.currentPanel._panel.reveal(column);
-        } else {
-            CatCodingPanel.currentPanel = new CatCodingPanel(extensionPath, column || vscode.ViewColumn.One);
+            return;
         }
-    }
 
-    private constructor(extensionPath: string, column: vscode.ViewColumn) {
-        this._extensionPath = extensionPath;
-
-        // Create and show a new webview panel
-        this._panel = vscode.window.createWebviewPanel(CatCodingPanel.viewType, "Cat Coding", column, {
+        // Otherwise, create a new panel.
+        const panel = vscode.window.createWebviewPanel(CatCodingPanel.viewType, "Cat Coding", column || vscode.ViewColumn.One, {
             // Enable javascript in the webview
             enableScripts: true,
 
             // And restric the webview to only loading content from our extension's `media` directory.
             localResourceRoots: [
-                vscode.Uri.file(path.join(this._extensionPath, 'media'))
+                vscode.Uri.file(path.join(extensionPath, 'media'))
             ]
         });
+
+        CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
+    }
+
+    public static revive(panel: vscode.WebviewPanel, extensionPath: string) {
+        CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
+    }
+
+    private constructor(
+        panel: vscode.WebviewPanel,
+        extensionPath: string
+    ) {
+        this._panel = panel;
+        this._extensionPath = extensionPath;
 
         // Set the webview's initial html content 
         this._update();

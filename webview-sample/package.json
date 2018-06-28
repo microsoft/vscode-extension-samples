@@ -11,7 +11,8 @@
   ],
   "activationEvents": [
     "onCommand:catCoding.start",
-    "onCommand:catCoding.doRefactor"
+    "onCommand:catCoding.doRefactor",
+    "onWebviewPanel:catCoding"
   ],
   "main": "./out/src/extension",
   "contributes": {
