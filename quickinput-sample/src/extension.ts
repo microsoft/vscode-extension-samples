@@ -6,13 +6,14 @@
 'use strict';
 
 import { window, commands, ExtensionContext } from 'vscode';
-import { showInputBox } from './basicInput';
+import { showQuickPick, showInputBox } from './basicInput';
 import { multiStepInput } from './multiStepInput';
 import { quickOpen } from './quickOpen';
 
 export function activate(context: ExtensionContext) {
 	context.subscriptions.push(commands.registerCommand('samples.quickInput', async () => {
 		const options: { [key: string]: (context: ExtensionContext) => Promise<void> } = {
+			showQuickPick,
 			showInputBox,
 			multiStepInput,
 			quickOpen,

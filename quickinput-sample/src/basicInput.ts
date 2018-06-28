@@ -6,6 +6,18 @@
 import { window } from 'vscode';
 
 /**
+ * Shows a pick list using window.showQuickPick().
+ */
+export async function showQuickPick() {
+	let i = 0;
+	const result = await window.showQuickPick(['eins', 'zwei', 'drei'], {
+		placeHolder: 'eins, zwei or drei',
+		onDidSelectItem: item => window.showInformationMessage(`Focus ${++i}: ${item}`)
+	});
+	window.showInformationMessage(`Got: ${result}`);
+}
+
+/**
  * Shows an input box using window.showInputBox().
  */
 export async function showInputBox() {
@@ -13,7 +25,10 @@ export async function showInputBox() {
 		value: 'abcdef',
 		valueSelection: [2, 4],
 		placeHolder: 'For example: fedcba. But not: 123',
-		validateInput: text => Promise.resolve(text === '123' ? 'Not 123!' : null)
+		validateInput: text => {
+			window.showInformationMessage(`Validating: ${text}`);
+			return text === '123' ? 'Not 123!' : null;
+		}
 	});
 	window.showInformationMessage(`Got: ${result}`);
 }
