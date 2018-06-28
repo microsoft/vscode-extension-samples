@@ -37,5 +37,11 @@
 			"sourceMaps": true,
 			"outFiles": ["${workspaceRoot}/client/out/test/**/*.js"]
 		}
+	],
+	"compounds": [
+		{
+			"name": "Client + Server",
+			"configurations": ["Launch Client", "Attach to Server"]
+		}
 	]
 }

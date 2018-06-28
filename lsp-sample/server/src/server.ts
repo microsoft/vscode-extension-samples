@@ -35,10 +35,10 @@ connection.onInitialize((params: InitializeParams) => {
 	return {
 		capabilities: {
 			textDocumentSync: documents.syncKind,
-            // Tell the client that the server supports code completion
-            completionProvider: {
-                resolveProvider: true
-            }
+			// Tell the client that the server supports code completion
+			completionProvider: {
+				resolveProvider: true
+			}
 		}
 	}
 });
