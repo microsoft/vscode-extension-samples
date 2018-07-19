@@ -10,12 +10,12 @@ Demonstrates VS Code's [webview API](https://code.visualstudio.com/docs/extensio
 - Sending messages from a webview to an extension.
 - Using a basic content security policy.
 - Webview lifecycle and handling dispose.
-- Saving and restoring state when the panel goes into the background. (Requires VS Code 1.25+)
-- Serialization and persistence across VS Code reboots. (Requires VS Code 1.25+)
+- Saving and restoring state when the panel goes into the background.
+- Serialization and persistence across VS Code reboots.
 
 ## Running the example
 
-- Open this example in VS Code 1.23+
+- Open this example in VS Code 1.25+
 - `npm install`
 - `npm run watch` or `npm run compile`
 - `F5` to start debugging

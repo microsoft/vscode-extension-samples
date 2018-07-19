@@ -19,10 +19,9 @@ export function activate(context: vscode.ExtensionContext) {
         }
     }));
 
-    // Serializers only introduced in VS Code 1.25+
-    if ((vscode.window as any).registerWebviewPanelSerializer) {
+    if (vscode.window.registerWebviewPanelSerializer) {
         // Make sure we register a serilizer in activation event
-        (vscode.window as any).registerWebviewPanelSerializer(CatCodingPanel.viewType, {
+        vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
             async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
                 console.log(`Got state: ${state}`);
                 CatCodingPanel.revive(webviewPanel, context.extensionPath);
@@ -125,6 +124,8 @@ class CatCodingPanel {
     }
 
     private _update() {
+
+        const z = 1 + 2;
         // Vary the webview's content based on where it is located in the editor.
         switch (this._panel.viewColumn) {
             case vscode.ViewColumn.Two:

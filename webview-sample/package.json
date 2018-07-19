@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "publisher": "ms-vscode",
   "engines": {
-    "vscode": "^1.23.0"
+    "vscode": "^1.25.0"
   },
   "categories": [
     "Other"

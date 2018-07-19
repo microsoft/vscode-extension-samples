@@ -3,7 +3,7 @@
 (function () {
     const vscode = acquireVsCodeApi();
 
-    const oldState = vscode.getState && vscode.getState();
+    const oldState = vscode.getState();
 
     const counter = document.getElementById('lines-of-code-counter');
     console.log(oldState);
@@ -14,7 +14,7 @@
         counter.textContent = currentCount++;
 
         // Update state
-        vscode.setState && vscode.setState({ count: currentCount });
+        vscode.setState({ count: currentCount });
 
         // Alert the extension when the cat introduces a bug
         if (Math.random() < Math.min(0.001 * currentCount, 0.05)) {
