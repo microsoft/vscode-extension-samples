@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { QuickPickItem, window, Disposable, CancellationToken, QuickInputButton, QuickInput, ExtensionContext } from 'vscode';
+import { QuickPickItem, window, Disposable, CancellationToken, QuickInputButton, QuickInput, ExtensionContext, QuickInputButtons } from 'vscode';
 
 /**
  * A multi-step input using window.createQuickPick() and window.createInputBox().
@@ -216,12 +216,12 @@ class MultiStepInput {
 					input.activeItems = [activeItem];
 				}
 				input.buttons = [
-					...(this.steps.length > 1 ? [window.quickInputBackButton] : []),
+					...(this.steps.length > 1 ? [QuickInputButtons.Back] : []),
 					...(buttons || [])
 				];
 				disposables.push(
 					input.onDidTriggerButton(item => {
-						if (item === window.quickInputBackButton) {
+						if (item === QuickInputButtons.Back) {
 							reject(InputFlowAction.back);
 						} else {
 							resolve(<any>item);
@@ -257,13 +257,13 @@ class MultiStepInput {
 				input.value = value || '';
 				input.prompt = prompt;
 				input.buttons = [
-					...(this.steps.length > 1 ? [window.quickInputBackButton] : []),
+					...(this.steps.length > 1 ? [QuickInputButtons.Back] : []),
 					...(buttons || [])
 				];
 				let validating = validate('');
 				disposables.push(
 					input.onDidTriggerButton(item => {
-						if (item === window.quickInputBackButton) {
+						if (item === QuickInputButtons.Back) {
 							reject(InputFlowAction.back);
 						} else {
 							resolve(<any>item);
