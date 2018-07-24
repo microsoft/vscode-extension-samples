@@ -22,7 +22,7 @@ export function activate(_context: vscode.ExtensionContext): void {
 	fileWatcher.onDidChange(() => rakePromise = undefined);
 	fileWatcher.onDidCreate(() => rakePromise = undefined);
 	fileWatcher.onDidDelete(() => rakePromise = undefined);
-	taskProvider = vscode.workspace.registerTaskProvider('grunt', {
+	taskProvider = vscode.workspace.registerTaskProvider('rake', {
 		provideTasks: () => {
 			if (!rakePromise) {
 				rakePromise = getRakeTasks();
