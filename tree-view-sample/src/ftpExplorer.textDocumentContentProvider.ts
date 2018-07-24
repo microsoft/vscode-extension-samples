@@ -1,10 +1,6 @@
-import { ExtensionContext, EventEmitter, TreeItem, Event, window, TreeItemCollapsibleState, Uri, commands, workspace, TextDocumentContentProvider, CancellationToken, ProviderResult, TreeView } from 'vscode';
 import * as vscode from 'vscode';
 import * as Client from 'ftp';
 import { basename, dirname, join } from 'path';
-import { Socket } from 'net';
-import * as JSFtp from 'jsftp';
-import { TreeDataProvider } from 'vscode';
 
 interface IEntry {
 	name: string;
@@ -54,7 +50,7 @@ export class FtpModel {
 
 					client.end();
 
-					return c(this.sort(list.map(entry => ({ resource: Uri.parse(`ftp://${this.host}///${entry.name}`), isDirectory: entry.type === 'd' }))));
+					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`ftp://${this.host}///${entry.name}`), isDirectory: entry.type === 'd' }))));
 				});
 			});
 		});
@@ -70,7 +66,7 @@ export class FtpModel {
 
 					client.end();
 
-					return c(this.sort(list.map(entry => ({ resource: Uri.parse(`${node.resource.fsPath}/${entry.name}`), isDirectory: entry.type === 'd' }))));
+					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`${node.resource.fsPath}/${entry.name}`), isDirectory: entry.type === 'd' }))));
 				});
 			});
 		});
@@ -90,7 +86,7 @@ export class FtpModel {
 		});
 	}
 
-	public getContent(resource: Uri): Thenable<string> {
+	public getContent(resource: vscode.Uri): Thenable<string> {
 		return this.connect().then(client => {
 			return new Promise((c, e) => {
 				client.get(resource.path.substr(2), (err, stream) => {
@@ -116,10 +112,10 @@ export class FtpModel {
 	}
 }
 
-export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocumentContentProvider {
+export class FtpTreeDataProvider implements vscode.TreeDataProvider<FtpNode>, vscode.TextDocumentContentProvider {
 
-	private _onDidChangeTreeData: EventEmitter<any> = new EventEmitter<any>();
-	readonly onDidChangeTreeData: Event<any> = this._onDidChangeTreeData.event;
+	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
+	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 
 	constructor(private readonly model: FtpModel) { }
 
@@ -128,10 +124,10 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocum
 	}
 
 
-	public getTreeItem(element: FtpNode): TreeItem {
+	public getTreeItem(element: FtpNode): vscode.TreeItem {
 		return {
 			resourceUri: element.resource,
-			collapsibleState: element.isDirectory ? TreeItemCollapsibleState.Collapsed : void 0,
+			collapsibleState: element.isDirectory ? vscode.TreeItemCollapsibleState.Collapsed : void 0,
 			command: element.isDirectory ? void 0 : {
 				command: 'ftpExplorer.openFtpResource',
 				arguments: [element.resource],
@@ -149,14 +145,14 @@ export class FtpTreeDataProvider implements TreeDataProvider<FtpNode>, TextDocum
 		return parent.path !== '//' ? { resource: parent, isDirectory: true } : null;
 	}
 
-	public provideTextDocumentContent(uri: Uri, token: CancellationToken): ProviderResult<string> {
+	public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): vscode.ProviderResult<string> {
 		return this.model.getContent(uri).then(content => content);
 	}
 }
 
 export class FtpExplorer {
 
-	private ftpViewer: TreeView<FtpNode>;
+	private ftpViewer: vscode.TreeView<FtpNode>;
 
 	constructor(context: vscode.ExtensionContext) {
 		const ftpModel = new FtpModel('mirror.switch.ch', 'anonymous', 'anonymous@anonymous.de');

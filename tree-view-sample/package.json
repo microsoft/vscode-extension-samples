@@ -194,7 +194,6 @@
 	"dependencies": {
 		"jsonc-parser": "^0.4.2",
 		"ftp": "^0.3.10",
-		"jsftp": "^2.0.0",
 		"mkdirp": "^0.5.1",
 		"rimraf": "^2.6.2"
 	}
