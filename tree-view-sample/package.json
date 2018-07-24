@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "ms-vscode",
 	"engines": {
-		"vscode": "^1.23.0"
+		"vscode": "^1.25.0"
 	},
 	"enableProposedApi": true,
 	"categories": [
@@ -16,6 +16,7 @@
 		"onView:ftpExplorer",
 		"onView:jsonOutline",
 		"onLanguage:json",
+		"onLanguage:fileExplorer",
 		"onLanguage:jsonc"
 	],
 	"main": "./out/src/extension",
@@ -45,6 +46,10 @@
 				{
 					"id": "ftpExplorer",
 					"name": "FTP Explorer"
+				},
+				{
+					"id": "fileExplorer",
+					"name": "File Explorer"
 				}
 			]
 		},
@@ -100,6 +105,18 @@
 			{
 				"command": "jsonOutline.renameNode",
 				"title": "Rename"
+			},
+			{
+				"command": "fileExplorer.refreshFile",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "fileExplorer.openFile",
+				"title": "Open File"
 			}
 		],
 		"menus": {
@@ -142,6 +159,11 @@
 					"command": "jsonOutline.refreshNode",
 					"when": "view == jsonOutline",
 					"group": "inline"
+				},
+				{
+					"command": "fileExplorer.refreshFile",
+					"when": "view == fileExplorer && viewItem == file",
+					"group": "inline"
 				}
 			]
 		},
@@ -165,11 +187,15 @@
 	"devDependencies": {
 		"typescript": "^2.1.4",
 		"vscode": "^1.1.17",
-		"@types/node": "*"
+		"@types/node": "*",
+		"@types/mkdirp": "^0.5.2",
+		"@types/rimraf": "^2.0.2"
 	},
 	"dependencies": {
 		"jsonc-parser": "^0.4.2",
 		"ftp": "^0.3.10",
-		"jsftp": "^2.0.0"
+		"jsftp": "^2.0.0",
+		"mkdirp": "^0.5.1",
+		"rimraf": "^2.6.2"
 	}
 }

@@ -5,10 +5,12 @@ import * as vscode from 'vscode';
 import { DepNodeProvider } from './nodeDependencies'
 import { JsonOutlineProvider } from './jsonOutline'
 import { FtpExplorer } from './ftpExplorer.textDocumentContentProvider'
+import { FileExplorer } from './fileExplorer';
 
 export function activate(context: vscode.ExtensionContext) {
 	// Complete Tree View Sample
 	new FtpExplorer(context);
+	new FileExplorer(context);
 
 	// Following are just data provider samples
 	const rootPath = vscode.workspace.rootPath;
