@@ -16,8 +16,9 @@ You can also learn how to contribute custom view containers and contribute views
 
 - Open this example in VS Code Insiders
 - `npm install`
-- `npm run compile`
+- `npm run watch`
 - `F5` to start debugging
 - FTP file explorer view should be shown in Explorer
+- File explorer view replicating the file explorer in VS Code should be shown in Explorer
 - Json Outline view is shown in explorer when you open a json file and gets hidden when json file is closed.
 - Node dependencies view is shown in Package explorer view container in Activity bar.
