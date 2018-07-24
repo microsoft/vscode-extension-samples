@@ -15,8 +15,8 @@
 		"onView:nodeDependencies",
 		"onView:ftpExplorer",
 		"onView:jsonOutline",
+		"onView:fileExplorer",
 		"onLanguage:json",
-		"onLanguage:fileExplorer",
 		"onLanguage:jsonc"
 	],
 	"main": "./out/src/extension",
