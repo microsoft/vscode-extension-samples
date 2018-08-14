@@ -13,8 +13,8 @@
 		"vscode": "^1.23.0"
 	},
 	"scripts": {
-		"update-vscode": "node ./node_modules/vscode/bin/install",
-		"postinstall": "node ./node_modules/vscode/bin/install"
+		"update-vscode": "vscode-install",
+		"postinstall": "vscode-install"
 	},
 	"dependencies": {
 		"vscode": "^1.1.18",
