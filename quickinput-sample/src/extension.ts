@@ -7,6 +7,7 @@ import { window, commands, ExtensionContext } from 'vscode';
 import { showQuickPick, showInputBox } from './basicInput';
 import { multiStepInput } from './multiStepInput';
 import { quickOpen } from './quickOpen';
+import { promptCommand } from './promptCommandWithHistory';
 
 export function activate(context: ExtensionContext) {
 	context.subscriptions.push(commands.registerCommand('samples.quickInput', async () => {
@@ -15,6 +16,7 @@ export function activate(context: ExtensionContext) {
 			showInputBox,
 			multiStepInput,
 			quickOpen,
+			promptCommand
 		};
 		const quickPick = window.createQuickPick();
 		quickPick.items = Object.keys(options).map(label => ({ label }));
