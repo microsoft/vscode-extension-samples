@@ -25,9 +25,6 @@
 			"path": "i18n-sample"
 		},
 		{
-			"path": "lsp-multi-root-sample"
-		},
-		{
 			"path": "lsp-multi-server-sample"
 		},
 		{
