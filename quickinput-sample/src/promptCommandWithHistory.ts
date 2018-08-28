@@ -1,8 +1,3 @@
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
 import * as path from 'path';
 import { Uri, window, Disposable } from 'vscode';
 import { QuickPickItem } from 'vscode';
@@ -10,10 +5,8 @@ import { workspace } from 'vscode';
 import * as _ from 'lodash';
 
 /**
- * A file opener using window.createQuickPick().
+ * A command prompt with history
  * 
- * It shows how the list of items can be dynamically updated based on
- * the user's input in the filter field.
  */
 export async function promptCommand() {
 	const command = await pickCommand();
@@ -22,40 +15,45 @@ export async function promptCommand() {
 	}
 }
 
-class HistoryItem implements QuickPickItem {
-
-	constructor(public label: string, description: string?) {
+class CommandItem implements QuickPickItem { }
+class HistoryItem extends CommandItem {
+	constructor(public label: string, public description: string?) {
+		super();
 	}
 }
-
-const commands: string[] = [
-	'ls',
-	'quit',
-	's/toto/titi/g',
-	'vsplit'
-];
+class InputItem extends CommandItem {
+	public description = '(current input)';
+	constructor(public label: string) {
+		super();
+	};
+}
 
 async function pickCommand() {
 	const disposables: Disposable[] = [];
+	const commands: string[] = [
+		'ls',
+		'quit',
+		's/toto/titi/g',
+		'vsplit'
+	];
+	const commandsItems = _.map(commands, (cmd, index) => new HistoryItem(cmd, `(history item ${index})`));
 	try {
-		return await new Promise<string| undefined>((resolve, reject) => {
-			const input = window.createQuickPick<HistoryItem>();
+		return await new Promise<string | undefined>((resolve, reject) => {
+			const input = window.createQuickPick<CommandItem>();
 			input.placeholder = 'Type a command';
-			input.items = _.map(commands, cmd => new HistoryItem(cmd, 'history item'));
+			input.items = commandsItems;
 			disposables.push(
 				input.onDidChangeValue(value => {
 					if (!value) {
-						input.items = _.map(commands, cmd => new HistoryItem(cmd, 'history item'))
+						input.items = commandsItems;
 						return;
 					}
-					// input.busy = true;
 					input.items = [
-						new HistoryItem(value, 'current input')
+						new InputItem(value)
 					].concat(
-						_.map(
-							_.filter(commands, cmd => cmd.includes(_.escapeRegExp(value))),
-							cmd => new HistoryItem(cmd, 'history item'))
+						commandsItems
 					)
+					// §todo: add autocomplete suggestions
 				}),
 				input.onDidChangeSelection(items => {
 					const item = items[0];
