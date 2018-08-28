@@ -4,8 +4,14 @@
 		{
 			"label": "compile",
 			"dependsOn": [
-				"compile:client",
-				"compile:server"
+				{
+					"type": "npm",
+					"script": "compile:client"
+				},
+				{
+					"type": "npm",
+					"script": "compile:server"
+				}
 			],
 			"problemMatcher": []
 		},
@@ -37,8 +43,14 @@
 		{
 			"label": "watch",
 			"dependsOn": [
-				"watch:client",
-				"watch:server"
+				{
+					"type": "npm",
+					"script": "watch:client"
+				},
+				{
+					"type": "npm",
+					"script": "watch:server"
+				}
 			],
 			"group": {
 				"kind": "build",
