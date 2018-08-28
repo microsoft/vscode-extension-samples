@@ -67,10 +67,14 @@ async function pickCommand() {
 					if (item instanceof HistoryItem) {
 						resolve(item.label);
 						input.hide();
+						// do not record new input in history
 					} else if (item instanceof InputItem) {
-						// record new input in history
 						resolve(item.label);
 						input.hide();
+						// record new input in history
+						fs.appendFile(historyPath, item.label + '\n', function (err) {
+							if (err) console.error('Problem while updating history file', err);
+						  });
 					}
 				}),
 				input.onDidHide(() => {
