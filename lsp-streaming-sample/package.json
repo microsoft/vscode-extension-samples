@@ -1,5 +1,5 @@
 {
-	"name": "lsp-sample",
+	"name": "lsp-streaming-sample",
 	"description": "A language server example",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
@@ -14,17 +14,28 @@
 		"multi-root ready"
 	],
 	"engines": {
-		"vscode": "^1.23.0"
+		"vscode": "^1.26.0"
 	},
 	"activationEvents": [
 		"onLanguage:plaintext"
 	],
 	"main": "./client/out/extension",
 	"contributes": {
+		"commands": [
+			{
+				"command": "languageServerExample.startStreaming",
+				"title": "Start Stream Logs into languageServerExample.port"
+			}
+		],
 		"configuration": {
 			"type": "object",
 			"title": "Example configuration",
 			"properties": {
+				"languageServerExample.port": {
+					"type": "number",
+					"default": 7000,
+					"scope": "window"
+				},
 				"languageServerExample.maxNumberOfProblems": {
 					"scope": "resource",
 					"type": "number",
