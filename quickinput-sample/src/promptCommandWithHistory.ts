@@ -43,7 +43,6 @@ async function pickCommand() {
 			input.placeholder = 'Type a command';
 			input.items = commandsItems;
 
-
 			const updateQuickPick = value => {
 				if (!value) {
 					input.items = commandsItems;
@@ -72,9 +71,11 @@ async function pickCommand() {
 						resolve(item.label);
 						input.hide();
 						// record new input in history
-						fs.appendFile(historyPath, item.label + '\n', function (err) {
-							if (err) console.error('Problem while updating history file', err);
-						  });
+						if (historyShouldBeUpdated && !item.label.startsWith(' ')) {
+							fs.appendFile(historyPath, item.label + '\n', function (err) {
+								if (err) console.error('Problem while updating history file', err);
+							});
+						}
 					}
 				}),
 				input.onDidHide(() => {
@@ -95,7 +96,8 @@ async function pickCommand() {
 					updateQuickPick(currentValue);
 				});
 			} else {
-				console.log('history file does not exist yet')
+				console.log('history file does not exist yet');
+				historyShouldBeUpdated = true;
 			}
 
 		});
