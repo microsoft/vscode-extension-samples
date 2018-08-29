@@ -1,8 +1,6 @@
 import * as fs from 'fs';
-import * as path from 'path';
-import { Uri, window, Disposable } from 'vscode';
+import { window, Disposable } from 'vscode';
 import { QuickPickItem } from 'vscode';
-import { workspace } from 'vscode';
 import * as _ from 'lodash';
 
 export const historyPath = `${process.env.HOME}/.vscode-cmd-history`;
@@ -18,23 +16,29 @@ export async function promptCommand() {
 	}
 }
 
-class CommandItem implements QuickPickItem { }
+class CommandItem implements QuickPickItem {
+	public label: string;
+	public description?: string;
+	constructor(label: string, description?: string) {
+		this.label = label;
+		this.description = description;
+	}
+}
 class HistoryItem extends CommandItem {
-	constructor(public label: string, public description: string?) {
-		super();
+	constructor(label: string, description?: string) {
+		super(label, description);
 	}
 }
 class InputItem extends CommandItem {
-	public description = '(current input)';
 	constructor(public label: string) {
-		super();
+		super(label, '(current input)');
 	};
 }
 
 async function pickCommand() {
 	const disposables: Disposable[] = [];
-	let commandsItems = [];
-	let currentValue = undefined;
+	let commandsItems: CommandItem[] = [];
+	let currentValue: string | undefined = undefined;
 	let historyShouldBeUpdated = false;
 
 	try {
@@ -43,7 +47,7 @@ async function pickCommand() {
 			input.placeholder = 'Type a command';
 			input.items = commandsItems;
 
-			const updateQuickPick = value => {
+			const updateQuickPick = (value?: string): void => {
 				if (!value) {
 					input.items = commandsItems;
 					return;
@@ -57,11 +61,11 @@ async function pickCommand() {
 			}
 
 			disposables.push(
-				input.onDidChangeValue(value => {
+				input.onDidChangeValue((value?: string) => {
 					currentValue = value;
 					updateQuickPick(value);
 				}),
-				input.onDidChangeSelection(items => {
+				input.onDidChangeSelection((items: CommandItem[]) => {
 					const item = items[0];
 					if (item instanceof HistoryItem) {
 						resolve(item.label);
@@ -92,7 +96,7 @@ async function pickCommand() {
 					}
 					historyShouldBeUpdated = true;
 					const commands = content.toString().trimRight().split('\n').reverse();
-					commandsItems = _.map(commands, (cmd, index) => new HistoryItem(cmd, `(history item ${index})`));
+					commandsItems = _.map(commands, (cmd: string, index: number) => new HistoryItem(cmd, `(history item ${index})`));
 					updateQuickPick(currentValue);
 				});
 			} else {
