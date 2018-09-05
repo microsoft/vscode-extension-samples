@@ -21,6 +21,12 @@
 	],
 	"main": "./client/out/extension",
 	"contributes": {
+		"commands": [
+			{
+				"command": "languageServerExample.startStreaming",
+				"title": "Start Stream Logs into languageServerExample.port"
+			}
+		],
 		"configuration": {
 			"type": "object",
 			"title": "Example configuration",
@@ -30,6 +36,12 @@
 					"type": "number",
 					"default": 100,
 					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"languageServerExample.port": {
+					"type": "number",
+					"default": 7000,
+					"scope": "window",
+					"description": "The WebSocket port to stream LSP log data into."
 				},
 				"languageServerExample.trace.server": {
 					"scope": "window",
