@@ -1,6 +1,6 @@
 {
-	"name": "lsp-sample",
-	"description": "A language server example",
+	"name": "lsp-log-streaming-sample",
+	"description": "A language server example demonstrating log streaming",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
 	"version": "1.0.0",
@@ -14,7 +14,7 @@
 		"multi-root ready"
 	],
 	"engines": {
-		"vscode": "^1.23.0"
+		"vscode": "^1.26.0"
 	},
 	"activationEvents": [
 		"onLanguage:plaintext"
@@ -33,14 +33,29 @@
 				},
 				"languageServerExample.trace.server": {
 					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
+					"type": "object",
+					"description": "Traces the communication between VS Code and the language server.",
+					"properties": {
+						"verbosity": {
+							"type": "string",
+							"description": "Controls the verbosity of the trace.",
+							"enum": [
+								"off",
+								"message",
+								"verbose"
+							],
+							"default": "off"
+						},
+						"format": {
+							"type": "string",
+							"description": "Controls the output format of the trace.",
+							"enum": [
+								"text",
+								"json"
+							],
+							"default": "text"
+						}
+					}
 				}
 			}
 		}
