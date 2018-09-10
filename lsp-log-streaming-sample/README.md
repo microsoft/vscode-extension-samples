@@ -10,8 +10,8 @@ This is a repository adapted from [lsp-sample](https://github.com/Microsoft/vsco
 - With `vscode-languageclient@5.1.0-next.9`, you can specify a JSON log output format with `[langId].trace.server` as follows:
   ```json
   "languageServerExample.trace.server": {
-    "format": "json",
-    "verbosity": "verbose"
+    "format": "json", // or "text"
+    "verbosity": "verbose" // or "off" | "messages"
   }
   ```
 - A [webview](https://github.com/Microsoft/language-server-protocol-inspector/tree/master/lsp-inspector-webview) build of the LSP Inspector can be downloaded here: https://marketplace.visualstudio.com/items?itemName=octref.lsp-inspector-webview
