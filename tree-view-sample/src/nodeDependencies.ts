@@ -23,20 +23,19 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 			vscode.window.showInformationMessage('No dependency in empty workspace');
 			return Promise.resolve([]);
 		}
-
-		return new Promise(resolve => {
-			if (element) {
-				resolve(this.getDepsInPackageJson(path.join(this.workspaceRoot, 'node_modules', element.label, 'package.json')));
+		
+		if (element) {
+			return Promise.resolve(this.getDepsInPackageJson(path.join(this.workspaceRoot, 'node_modules', element.label, 'package.json')));
+		} else {
+			const packageJsonPath = path.join(this.workspaceRoot, 'package.json');
+			if (this.pathExists(packageJsonPath)) {
+				return Promise.resolve(this.getDepsInPackageJson(packageJsonPath));
 			} else {
-				const packageJsonPath = path.join(this.workspaceRoot, 'package.json');
-				if (this.pathExists(packageJsonPath)) {
-					resolve(this.getDepsInPackageJson(packageJsonPath));
-				} else {
-					vscode.window.showInformationMessage('Workspace has no package.json');
-					resolve([]);
-				}
+				vscode.window.showInformationMessage('Workspace has no package.json');
+				return Promise.resolve([]);
 			}
-		});
+		}
+		
 	}
 
 	/**
