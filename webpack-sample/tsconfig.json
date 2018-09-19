@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "es6",
+        "target": "es6",
+        "outDir": "out",
+        "lib": [
+            "es6"
+        ],
+        "sourceMap": true,
+        "rootDir": "."
+    },
+    "include": [
+        "src/**/*.ts",
+        "./node_modules/vscode/vscode.d.ts",
+    ]
+}
