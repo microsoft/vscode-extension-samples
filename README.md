@@ -12,7 +12,6 @@ list of self-contained, running extensions that show one or multiple concepts of
 
 * [Virtual Documents](/contentprovider-sample/README.md)
 * [Editor Decoration](/decorator-sample/README.md)
-* [Preview Html](/previewhtml-sample/README.md)
 * [Status Bar](/statusbar-sample/README.md)
 * [Theme](/theme-sample)
 * [Integrated Terminal](/terminal-sample/README.md)
