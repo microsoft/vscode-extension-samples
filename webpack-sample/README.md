@@ -1,65 +1,28 @@
-# webpack-sample README
+# Webpack & Extensions
 
-This is the README for your extension "webpack-sample". After writing up a brief description, we recommend including the following sections.
+This is an extension that uses [https://webpack.js.org]() to bundle and minify its sources. Using webpack will help to reduce the install- and startup-time of large extensions because instead of hundreds of files, a single file is produced. 
 
-## Features
+## Configuration
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Webpack in configured in the [`webpack.config.js`](./webpack.config.js)-file. Find annotation inside the file itself or refer to the excellet webpack documentation: [https://webpack.js.org/configuration/](). In short, the config-files defines the entry point of the extension, to use TypeScript, to produce a commonjs-module, and what modules not to bundle.
 
-For example if there is an image subfolder under your extension project workspace:
+## Scripts
 
-\!\[feature X\]\(images/feature-x.png\)
+The `scripts`-section of the [`package.json`](./package.json)-file has entries for webpack. Those compile TypeScript and produce the bundle as well as producing a minified production build. Note, that there is no dedicated TypeScript-script as webpack takes are of that.
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
-## Requirements
+## More
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+If you use `vscode-nls` to localize your extension that you likely also use `vscode-nls-dev` to create language bundles at build time. To support webpack, a loader has been added to vscode-nls-dev. Add the section below to the `modules/rules`-configuration. 
 
-## Extension Settings
+```js
+{
+  // vscode-nls-dev loader:
+  // * rewrite nls-calls
+  loader: 'vscode-nls-dev/lib/webpack-loader',
+  options: {
+    base: path.join(__dirname, 'src')
+}
+```
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+A good sample is the shared config built-in extensions use: https://github.com/Microsoft/vscode/blob/bf5b0585d2a8759541690b2c564b96cb604ff92e/extensions/shared.webpack.config.js#L29-L51

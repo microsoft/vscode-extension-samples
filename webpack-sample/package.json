@@ -23,10 +23,9 @@
         ]
     },
     "scripts": {
+        "vscode:prepublish": "webpack --mode production",
         "webpack": "webpack --mode development",
         "webpack-dev": "webpack --mode development --watch",
-        "vscode:prepublish": "npm run prod",
-        "prod": "webpack --mode production",
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "devDependencies": {
