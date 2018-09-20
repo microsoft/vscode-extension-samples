@@ -16,7 +16,8 @@ const config = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'extension.js',
-        libraryTarget: "commonjs2"
+        libraryTarget: "commonjs2",
+        devtoolModuleFilenameTemplate: "../[resource-path]",
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js']
