@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import { MemFS } from './fileSystemProvider';
-import { SearchMemFS } from './searchProvider';
+import { TextSearchMemFS } from './searchProvider';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     const memFs = new MemFS();
     context.subscriptions.push(vscode.workspace.registerFileSystemProvider('memfs', memFs, { isCaseSensitive: true }));
-    context.subscriptions.push(vscode.workspace.registerSearchProvider('memfs', new SearchMemFS(memFs)));
+    context.subscriptions.push(vscode.workspace.registerTextSearchProvider('memfs', new TextSearchMemFS(memFs)));
     let initialized = false;
 
     context.subscriptions.push(vscode.commands.registerCommand('memfs.reset', _ => {

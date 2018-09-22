@@ -17,6 +17,7 @@
     ],
     "activationEvents": [
         "onFileSystem:memfs",
+        "onSearch:memfs",
         "onCommand:memfs.workspaceInit",
         "onCommand:memfs.init",
         "onCommand:memfs.reset"
