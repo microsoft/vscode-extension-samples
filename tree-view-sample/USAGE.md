@@ -52,7 +52,7 @@ Following, in the views object, you can then add a field with the same string as
 
 ```json
 "contributes": {
-    "viewContainers": {
+    "viewsContainers": {
         "activitybar": [
             {
                 "id": "tree-view",
