@@ -4,10 +4,11 @@ VS Code Extension Samples
 
 This repository contains sample code illustrating the VS Code extension API. Each sample is a self-contained extension that explains one topic.
 
-| Sample | Guide | API |
+| Sample | Guide on VS Code Website | API |
 | ------ | ----- | --- |
-| [Virtual Documents](/contentprovider-sample/README.md) | [https://vscode-ext-docs.azurewebsites.net/api/extension-guides/virtual-documents](/api/extension-guides/virtual-documents) | [`TextDocumentContentProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#TextDocumentContentProvider) |
-
+| [Virtual Documents](/contentprovider-sample/README.md) | [/api/extension-guides/virtual-documents](/api/extension-guides/virtual-documents) | [`TextDocumentContentProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#TextDocumentContentProvider) |
+| [Editor Decoration](/decorator-sample/README.md) | [/api/extension-guides/editor-decoration](/api/extension-guides/editor-decoration) | [`window.createTextEditorDecorationType`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#window.createTextEditorDecorationType) |
+| [Status Bar](/status-bar) | [/api/extension-guides/status-bar](/api/extension-guides/status-bar) | [`StatusBarItem`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#StatusBarItem) |
 
 - [Virtual Documents](/contentprovider-sample/README.md)
 - [Editor Decoration](/decorator-sample/README.md)
