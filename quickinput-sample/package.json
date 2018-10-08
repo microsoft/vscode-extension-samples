@@ -1,37 +1,37 @@
 {
-    "name": "quickinput-sample",
-    "displayName": "QuickInput Sample",
-    "description": "Samples for VS Code's QuickInput API",
-    "version": "0.0.1",
-    "publisher": "ms-vscode",
-    "engines": {
-        "vscode": "^1.26.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
-        "onCommand:samples.quickInput"
-    ],
-    "main": "./out/extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "samples.quickInput",
-                "title": "Quick Input Samples"
-            }
-        ]
-    },
-    "scripts": {
-        "vscode:prepublish": "npm run compile",
-        "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install"
-    },
-    "devDependencies": {
-        "@types/node": "10.3.6",
-        "tslint": "5.10.0",
-        "typescript": "2.9.2",
-        "vscode": "^1.1.21"
-    }
+	"name": "quickinput-sample",
+	"displayName": "QuickInput Sample",
+	"description": "Samples for VS Code's QuickInput API",
+	"version": "0.0.1",
+	"publisher": "ms-vscode",
+	"engines": {
+		"vscode": "^1.26.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:samples.quickInput"
+	],
+	"main": "./out/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "samples.quickInput",
+				"title": "Quick Input Samples"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"@types/node": "10.3.6",
+		"tslint": "5.10.0",
+		"typescript": "2.9.2",
+		"vscode": "^1.1.21"
+	}
 }

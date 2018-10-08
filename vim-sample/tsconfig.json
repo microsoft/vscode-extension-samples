@@ -3,13 +3,9 @@
 		"module": "commonjs",
 		"target": "es5",
 		"outDir": "out",
-		"lib": [
-			"es6"
-		],
+		"lib": ["es6"],
 		"sourceMap": true,
 		"rootDir": "src"
 	},
-	"exclude": [
-		"node_modules"
-	]
+	"exclude": ["node_modules"]
 }

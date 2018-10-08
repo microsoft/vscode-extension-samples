@@ -1,45 +1,45 @@
 {
-  "name": "cat-coding",
-  "description": "Cat Coding - A Webview API Sample",
-  "version": "0.0.1",
-  "publisher": "ms-vscode",
-  "engines": {
-    "vscode": "^1.25.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onCommand:catCoding.start",
-    "onCommand:catCoding.doRefactor",
-    "onWebviewPanel:catCoding"
-  ],
-  "main": "./out/src/extension",
-  "contributes": {
-    "commands": [
-      {
-        "command": "catCoding.start",
-        "title": "Start cat coding session",
-        "category": "Cat Coding"
-      },
-      {
-        "command": "catCoding.doRefactor",
-        "title": "Do some refactoring",
-        "category": "Cat Coding"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -p ./",
-    "watch": "tsc -w -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
-  },
-  "dependencies": {
-    "vscode": "^1.1.18"
-  },
-  "devDependencies": {
-    "@types/node": "^10.5.2",
-    "typescript": "^2.9.2"
-  }
+	"name": "cat-coding",
+	"description": "Cat Coding - A Webview API Sample",
+	"version": "0.0.1",
+	"publisher": "ms-vscode",
+	"engines": {
+		"vscode": "^1.25.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:catCoding.start",
+		"onCommand:catCoding.doRefactor",
+		"onWebviewPanel:catCoding"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "catCoding.start",
+				"title": "Start cat coding session",
+				"category": "Cat Coding"
+			},
+			{
+				"command": "catCoding.doRefactor",
+				"title": "Do some refactoring",
+				"category": "Cat Coding"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -p ./",
+		"watch": "tsc -w -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"dependencies": {
+		"vscode": "^1.1.18"
+	},
+	"devDependencies": {
+		"@types/node": "^10.5.2",
+		"typescript": "^2.9.2"
+	}
 }

@@ -7,5 +7,5 @@
 	},
 	"editor.formatOnSave": true,
 	"editor.useTabStops": true,
-	"editor.tabSize": 4
+	"prettier.useTabs": true
 }

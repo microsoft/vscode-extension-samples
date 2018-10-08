@@ -11,7 +11,5 @@
 		"sourceMap": true,
 		"outDir": "../../client/server"
 	},
-	"exclude": [
-		"node_modules"
-	]
+	"exclude": ["node_modules"]
 }
