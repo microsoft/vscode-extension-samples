@@ -9,43 +9,47 @@ import { Motion, Motions } from './motions';
 import { Operator, Operators } from './operators';
 import { IController, Command, AbstractCommandDescriptor, ModifierKeys } from './common';
 
-const CHAR_TO_BINDING: { [char: string]: any; } = {};
+const CHAR_TO_BINDING: { [char: string]: any } = {};
 function defineBinding(char: string, value: any, modifierKeys: ModifierKeys): void {
 	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
 	CHAR_TO_BINDING[key] = value;
-};
+}
 function getBinding(char: string, modifierKeys: ModifierKeys): any {
 	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
 	return CHAR_TO_BINDING[key];
-};
+}
 
 function defineOperator(char: string, operator: Operator, modifierKeys: ModifierKeys = {}): void {
 	defineBinding(char + '__operator__', operator, modifierKeys);
-};
+}
 function getOperator(char: string, modifierKeys: ModifierKeys = {}): Operator {
 	return getBinding(char + '__operator__', modifierKeys);
-};
+}
 
 function defineCommand(char: string, commandId: string, modifierKeys: ModifierKeys = {}): void {
 	defineBinding(char + '__command__', { commandId: commandId }, modifierKeys);
-};
+}
 function getCommand(char: string, modifierKeys: ModifierKeys = {}): Command {
 	return getBinding(char + '__command__', modifierKeys);
-};
+}
 
 function defineMotion(char: string, motion: Motion, modifierKeys: ModifierKeys = {}): void {
 	defineBinding(char + '__motion__', motion, modifierKeys);
-};
+}
 function getMotion(char: string, modifierKeys: ModifierKeys = {}): Motion {
 	return getBinding(char + '__motion__', modifierKeys);
-};
+}
 
-function defineMotionCommand(char: string, motionCommand: AbstractCommandDescriptor, modifierKeys: ModifierKeys = {}): void {
+function defineMotionCommand(
+	char: string,
+	motionCommand: AbstractCommandDescriptor,
+	modifierKeys: ModifierKeys = {}
+): void {
 	defineBinding(char + '__motioncommand__', motionCommand, modifierKeys);
-};
+}
 function getMotionCommand(char: string, modifierKeys: ModifierKeys = {}): AbstractCommandDescriptor {
 	return getBinding(char + '__motioncommand__', modifierKeys);
-};
+}
 
 // Operators
 defineOperator('x', Operators.DeleteCharUnderCursor);
@@ -120,14 +124,12 @@ defineMotionCommand('zb', Motions.RevealCurrentLineAtBottom);
 defineMotionCommand('zc', Motions.FoldUnder);
 defineMotionCommand('zo', Motions.UnfoldUnder);
 
-
 export interface IFoundOperator {
 	runNormal(controller: IController, editor: TextEditor): boolean;
 	runVisual(controller: IController, editor: TextEditor): boolean;
 }
 
 export class Mappings {
-
 	public static findMotion(input: string): Motion {
 		let parsed = _parseNumberAndString(input);
 		let motion = getMotion(parsed.input.substr(0, 1));
@@ -150,7 +152,11 @@ export class Mappings {
 		return command;
 	}
 
-	private static findMotionCommandFromNumberAndString(numberAndString: INumberAndString, isVisual: boolean, modifierKeys: ModifierKeys): Command {
+	private static findMotionCommandFromNumberAndString(
+		numberAndString: INumberAndString,
+		isVisual: boolean,
+		modifierKeys: ModifierKeys
+	): Command {
 		let motionCommand = getMotionCommand(numberAndString.input.substr(0, 1), modifierKeys);
 		if (!motionCommand) {
 			motionCommand = getMotionCommand(numberAndString.input.substr(0, 2), modifierKeys);
@@ -164,7 +170,12 @@ export class Mappings {
 		if (!motionCommand) {
 			motionCommand = getMotionCommand(numberAndString.input, modifierKeys);
 		}
-		return motionCommand ? motionCommand.createCommand({ isVisual: isVisual, repeat: numberAndString.hasRepeatCount ? numberAndString.repeatCount : undefined }) : null;
+		return motionCommand
+			? motionCommand.createCommand({
+					isVisual: isVisual,
+					repeat: numberAndString.hasRepeatCount ? numberAndString.repeatCount : undefined
+			  })
+			: null;
 	}
 
 	public static findOperator(input: string, modifierKeys: ModifierKeys): IFoundOperator {
@@ -223,7 +234,7 @@ function _parseNumberAndString(input: string, numberAtBeginning: boolean = true)
 		hasRepeatCount: false,
 		repeatCount: 1,
 		input: input
-	}
+	};
 }
 
 interface INumberAndString {

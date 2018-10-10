@@ -7,7 +7,6 @@ import { workspace, languages, window, commands, ExtensionContext, Disposable } 
 import ContentProvider, { encodeLocation } from './provider';
 
 export function activate(context: ExtensionContext) {
-
 	const provider = new ContentProvider();
 
 	// register content provider for scheme `references`
@@ -24,9 +23,5 @@ export function activate(context: ExtensionContext) {
 		return workspace.openTextDocument(uri).then(doc => window.showTextDocument(doc, editor.viewColumn + 1));
 	});
 
-	context.subscriptions.push(
-		provider,
-		commandRegistration,
-		providerRegistrations
-	);
+	context.subscriptions.push(provider, commandRegistration, providerRegistrations);
 }

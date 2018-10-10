@@ -9,7 +9,6 @@ import { Words, WordCharacters } from './words';
 import { Command, AbstractCommandDescriptor } from './common';
 
 export class MotionState {
-
 	public anchor: Position;
 	public cursorDesiredCharacter: number;
 	public wordCharacterClass: WordCharacters;
@@ -19,7 +18,6 @@ export class MotionState {
 		this.wordCharacterClass = null;
 		this.anchor = null;
 	}
-
 }
 
 export abstract class Motion {
@@ -34,7 +32,6 @@ export abstract class Motion {
 }
 
 class RepeatingMotion extends Motion {
-
 	private _actual: Motion;
 	private _repeatCount: number;
 
@@ -56,7 +53,7 @@ class NextCharacterMotion extends Motion {
 	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
 		if (pos.character === doc.lineAt(pos.line).text.length) {
 			// on last character
-			return ((pos.line + 1 < doc.lineCount) ? new Position(pos.line + 1, 0) : pos);
+			return pos.line + 1 < doc.lineCount ? new Position(pos.line + 1, 0) : pos;
 		}
 
 		return new Position(pos.line, pos.character + 1);
@@ -80,7 +77,7 @@ class DownMotion extends Motion {
 	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
 		let line = pos.line;
 
-		state.cursorDesiredCharacter = (state.cursorDesiredCharacter === -1 ? pos.character : state.cursorDesiredCharacter);
+		state.cursorDesiredCharacter = state.cursorDesiredCharacter === -1 ? pos.character : state.cursorDesiredCharacter;
 
 		if (line < doc.lineCount - 1) {
 			line++;
@@ -95,7 +92,7 @@ class UpMotion extends Motion {
 	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
 		let line = pos.line;
 
-		state.cursorDesiredCharacter = (state.cursorDesiredCharacter === -1 ? pos.character : state.cursorDesiredCharacter);
+		state.cursorDesiredCharacter = state.cursorDesiredCharacter === -1 ? pos.character : state.cursorDesiredCharacter;
 
 		if (line > 0) {
 			line--;
@@ -138,7 +135,7 @@ class NextWordStartMotion extends Motion {
 
 		if (pos.character >= lineContent.length - 1) {
 			// cursor at end of line
-			return ((pos.line + 1 < doc.lineCount) ? new Position(pos.line + 1, 0) : pos);
+			return pos.line + 1 < doc.lineCount ? new Position(pos.line + 1, 0) : pos;
 		}
 
 		let nextWord = Words.findNextWord(doc, pos, state.wordCharacterClass);
@@ -171,7 +168,7 @@ class NextWordEndMotion extends Motion {
 
 		if (pos.character >= lineContent.length - 1) {
 			// no content on this line or cursor at end of line
-			return ((pos.line + 1 < doc.lineCount) ? new Position(pos.line + 1, 0) : pos);
+			return pos.line + 1 < doc.lineCount ? new Position(pos.line + 1, 0) : pos;
 		}
 
 		let nextWord = Words.findNextWord(doc, pos, state.wordCharacterClass);
@@ -201,7 +198,6 @@ class GoToLineUndefinedMotion extends Motion {
 }
 
 abstract class GoToLineMotion extends Motion {
-
 	protected firstNonWhitespaceChar(doc: TextDocument, line: number): number {
 		let lineContent = doc.lineAt(line).text;
 		let character = 0;
@@ -214,7 +210,6 @@ abstract class GoToLineMotion extends Motion {
 		}
 		return character;
 	}
-
 }
 
 class GoToFirstLineMotion extends GoToLineMotion {
@@ -245,7 +240,6 @@ class GoToLineDefinedMotion extends GoToLineMotion {
 }
 
 class CursorMoveCommand extends AbstractCommandDescriptor {
-
 	constructor(private to: string, private by?: string) {
 		super();
 	}
@@ -256,7 +250,7 @@ class CursorMoveCommand extends AbstractCommandDescriptor {
 			by: this.by,
 			value: args.repeat || 1,
 			select: !!args.isVisual
-		}
+		};
 		return {
 			commandId: 'cursorMove',
 			args: cursorMoveArgs
@@ -265,7 +259,6 @@ class CursorMoveCommand extends AbstractCommandDescriptor {
 }
 
 class EditorScrollCommand extends AbstractCommandDescriptor {
-
 	constructor(private to: string, private by?: string) {
 		super();
 	}
@@ -276,7 +269,7 @@ class EditorScrollCommand extends AbstractCommandDescriptor {
 			by: this.by,
 			value: args.repeat || 1,
 			revealCursor: true
-		}
+		};
 		return {
 			commandId: 'editorScroll',
 			args: editorScrollArgs
@@ -285,7 +278,6 @@ class EditorScrollCommand extends AbstractCommandDescriptor {
 }
 
 class RevealCurrentLineCommand extends AbstractCommandDescriptor {
-
 	constructor(private at: string) {
 		super();
 	}
@@ -304,7 +296,6 @@ class RevealCurrentLineCommand extends AbstractCommandDescriptor {
 }
 
 class MoveActiveEditorCommandByPosition extends AbstractCommandDescriptor {
-
 	constructor() {
 		super();
 	}
@@ -313,7 +304,7 @@ class MoveActiveEditorCommandByPosition extends AbstractCommandDescriptor {
 		let moveActiveEditorArgs: any = {
 			to: args.repeat === void 0 ? 'last' : 'position',
 			value: args.repeat !== void 0 ? args.repeat + 1 : undefined
-		}
+		};
 		return {
 			commandId: 'moveActiveEditor',
 			args: moveActiveEditorArgs
@@ -322,7 +313,6 @@ class MoveActiveEditorCommandByPosition extends AbstractCommandDescriptor {
 }
 
 class MoveActiveEditorCommand extends AbstractCommandDescriptor {
-
 	constructor(private to: string) {
 		super();
 	}
@@ -331,7 +321,7 @@ class MoveActiveEditorCommand extends AbstractCommandDescriptor {
 		let moveActiveEditorArgs: any = {
 			to: this.to,
 			value: args.repeat ? args.repeat : 1
-		}
+		};
 		return {
 			commandId: 'moveActiveEditor',
 			args: moveActiveEditorArgs
@@ -339,7 +329,6 @@ class MoveActiveEditorCommand extends AbstractCommandDescriptor {
 	}
 }
 class FoldCommand extends AbstractCommandDescriptor {
-
 	constructor() {
 		super();
 	}
@@ -348,7 +337,7 @@ class FoldCommand extends AbstractCommandDescriptor {
 		let foldEditorArgs: any = {
 			levels: args.repeat ? args.repeat : 1,
 			direction: 'up'
-		}
+		};
 		return {
 			commandId: 'editor.fold',
 			args: foldEditorArgs
@@ -357,7 +346,6 @@ class FoldCommand extends AbstractCommandDescriptor {
 }
 
 class UnfoldCommand extends AbstractCommandDescriptor {
-
 	constructor() {
 		super();
 	}
@@ -366,7 +354,7 @@ class UnfoldCommand extends AbstractCommandDescriptor {
 		let foldEditorArgs: any = {
 			levels: args.repeat ? args.repeat : 1,
 			direction: 'up'
-		}
+		};
 		return {
 			commandId: 'editor.unfold',
 			args: foldEditorArgs

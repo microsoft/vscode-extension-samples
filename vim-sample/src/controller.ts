@@ -4,15 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 'use strict';
 
-import {
-	TextEditorCursorStyle,
-	Position,
-	Range,
-	Selection,
-	TextEditor,
-	TextEditorRevealType,
-	window
-} from 'vscode';
+import { TextEditorCursorStyle, Position, Range, Selection, TextEditor, TextEditorRevealType, window } from 'vscode';
 
 import { Words } from './words';
 import { MotionState, Motion } from './motions';
@@ -25,19 +17,28 @@ export interface ITypeResult {
 }
 
 export class Controller implements IController {
-
 	private _currentMode: Mode;
 	private _currentInput: string;
 	private _motionState: MotionState;
 	private _isVisual: boolean;
 
-	public get motionState(): MotionState { return this._motionState; }
-	public findMotion(input: string): Motion { return Mappings.findMotion(input); }
-	public isMotionPrefix(input: string): boolean { return Mappings.isMotionPrefix(input); }
+	public get motionState(): MotionState {
+		return this._motionState;
+	}
+	public findMotion(input: string): Motion {
+		return Mappings.findMotion(input);
+	}
+	public isMotionPrefix(input: string): boolean {
+		return Mappings.isMotionPrefix(input);
+	}
 
 	private _deleteRegister: DeleteRegister;
-	public setDeleteRegister(register: DeleteRegister): void { this._deleteRegister = register; }
-	public getDeleteRegister(): DeleteRegister { return this._deleteRegister; }
+	public setDeleteRegister(register: DeleteRegister): void {
+		this._deleteRegister = register;
+	}
+	public getDeleteRegister(): DeleteRegister {
+		return this._deleteRegister;
+	}
 
 	constructor() {
 		this._motionState = new MotionState();
@@ -180,11 +181,13 @@ export class Controller implements IController {
 
 		if (this._currentMode === Mode.REPLACE) {
 			let pos = editor.selection.active;
-			editor.edit((builder) => {
-				builder.replace(new Range(pos.line, pos.character, pos.line, pos.character + 1), text);
-			}).then(() => {
-				setPositionAndReveal(editor, pos.line, pos.character + 1);
-			});
+			editor
+				.edit(builder => {
+					builder.replace(new Range(pos.line, pos.character, pos.line, pos.character + 1), text);
+				})
+				.then(() => {
+					setPositionAndReveal(editor, pos.line, pos.character + 1);
+				});
 
 			return Promise.resolve({
 				hasConsumedInput: true,
@@ -207,7 +210,7 @@ export class Controller implements IController {
 
 		if (this._currentMode === Mode.REPLACE) {
 			let pos = editor.selection.active;
-			editor.edit((builder) => {
+			editor.edit(builder => {
 				builder.replace(new Range(pos.line, pos.character - replaceCharCnt, pos.line, pos.character), text);
 			});
 
@@ -219,7 +222,7 @@ export class Controller implements IController {
 
 	private _interpretNormalModeInput(editor: TextEditor, modifierKeys: ModifierKeys): Thenable<ITypeResult> {
 		if (this._currentInput.startsWith(':')) {
-			return window.showInputBox({ value: 'tabm' }).then((value) => {
+			return window.showInputBox({ value: 'tabm' }).then(value => {
 				return this._findMapping(value || '', editor, modifierKeys);
 			});
 		}

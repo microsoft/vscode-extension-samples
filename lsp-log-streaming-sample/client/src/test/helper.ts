@@ -40,9 +40,6 @@ export const getDocUri = (p: string) => {
 };
 
 export async function setTestContent(content: string): Promise<boolean> {
-	const all = new vscode.Range(
-		doc.positionAt(0),
-		doc.positionAt(doc.getText().length)
-	);
+	const all = new vscode.Range(doc.positionAt(0), doc.positionAt(doc.getText().length));
 	return editor.edit(eb => eb.replace(all, content));
 }

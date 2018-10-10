@@ -3,27 +3,43 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { QuickPickItem, window, Disposable, CancellationToken, QuickInputButton, QuickInput, ExtensionContext, QuickInputButtons, Uri } from 'vscode';
+import {
+	QuickPickItem,
+	window,
+	Disposable,
+	CancellationToken,
+	QuickInputButton,
+	QuickInput,
+	ExtensionContext,
+	QuickInputButtons,
+	Uri
+} from 'vscode';
 
 /**
  * A multi-step input using window.createQuickPick() and window.createInputBox().
- * 
+ *
  * This first part uses the helper class `MultiStepInput` that wraps the API for the multi-step case.
  */
 export async function multiStepInput(context: ExtensionContext) {
-
 	class MyButton implements QuickInputButton {
-		constructor(public iconPath: { light: Uri; dark: Uri; }, public tooltip: string) { }
+		constructor(public iconPath: { light: Uri; dark: Uri }, public tooltip: string) {}
 	}
 
-	const createResourceGroupButton = new MyButton({
-		dark: Uri.file(context.asAbsolutePath('resources/dark/add.svg')),
-		light: Uri.file(context.asAbsolutePath('resources/light/add.svg')),
-	}, 'Create Resource Group');
+	const createResourceGroupButton = new MyButton(
+		{
+			dark: Uri.file(context.asAbsolutePath('resources/dark/add.svg')),
+			light: Uri.file(context.asAbsolutePath('resources/light/add.svg'))
+		},
+		'Create Resource Group'
+	);
 
-	const resourceGroups: QuickPickItem[] = ['vscode-data-function', 'vscode-appservice-microservices', 'vscode-appservice-monitor', 'vscode-appservice-preview', 'vscode-appservice-prod']
-		.map(label => ({ label }));
-
+	const resourceGroups: QuickPickItem[] = [
+		'vscode-data-function',
+		'vscode-appservice-microservices',
+		'vscode-appservice-monitor',
+		'vscode-appservice-preview',
+		'vscode-appservice-prod'
+	].map(label => ({ label }));
 
 	interface State {
 		title: string;
@@ -105,9 +121,7 @@ export async function multiStepInput(context: ExtensionContext) {
 
 	function shouldResume() {
 		// Could show a notification with the option to resume.
-		return new Promise<boolean>((resolve, reject) => {
-
-		});
+		return new Promise<boolean>((resolve, reject) => {});
 	}
 
 	async function validateNameIsUnique(name: string) {
@@ -116,25 +130,25 @@ export async function multiStepInput(context: ExtensionContext) {
 		return name === 'vscode' ? 'Name not unique' : undefined;
 	}
 
-	async function getAvailableRuntimes(resourceGroup: QuickPickItem | string, token?: CancellationToken): Promise<QuickPickItem[]> {
+	async function getAvailableRuntimes(
+		resourceGroup: QuickPickItem | string,
+		token?: CancellationToken
+	): Promise<QuickPickItem[]> {
 		// ...retrieve...
 		await new Promise(resolve => setTimeout(resolve, 1000));
-		return ['Node 8.9', 'Node 6.11', 'Node 4.5']
-			.map(label => ({ label }));
+		return ['Node 8.9', 'Node 6.11', 'Node 4.5'].map(label => ({ label }));
 	}
 
 	const state = await collectInputs();
 	window.showInformationMessage(`Creating Application Service '${state.name}'`);
 }
 
-
 // -------------------------------------------------------
 // Helper code that wraps the API for the multi-step case.
 // -------------------------------------------------------
 
-
 class InputFlowAction {
-	private constructor() { }
+	private constructor() {}
 	static back = new InputFlowAction();
 	static cancel = new InputFlowAction();
 	static resume = new InputFlowAction();
@@ -165,7 +179,6 @@ interface InputBoxParameters {
 }
 
 class MultiStepInput {
-
 	static async run<T>(start: InputStep) {
 		const input = new MultiStepInput();
 		return input.stepThrough(start);
@@ -202,7 +215,16 @@ class MultiStepInput {
 		}
 	}
 
-	async showQuickPick<T extends QuickPickItem, P extends QuickPickParameters<T>>({ title, step, totalSteps, items, activeItem, placeholder, buttons, shouldResume }: P) {
+	async showQuickPick<T extends QuickPickItem, P extends QuickPickParameters<T>>({
+		title,
+		step,
+		totalSteps,
+		items,
+		activeItem,
+		placeholder,
+		buttons,
+		shouldResume
+	}: P) {
 		const disposables: Disposable[] = [];
 		try {
 			return await new Promise<T | (P extends { buttons: (infer I)[] } ? I : never)>((resolve, reject) => {
@@ -215,10 +237,7 @@ class MultiStepInput {
 				if (activeItem) {
 					input.activeItems = [activeItem];
 				}
-				input.buttons = [
-					...(this.steps.length > 1 ? [QuickInputButtons.Back] : []),
-					...(buttons || [])
-				];
+				input.buttons = [...(this.steps.length > 1 ? [QuickInputButtons.Back] : []), ...(buttons || [])];
 				disposables.push(
 					input.onDidTriggerButton(item => {
 						if (item === QuickInputButtons.Back) {
@@ -230,9 +249,8 @@ class MultiStepInput {
 					input.onDidChangeSelection(items => resolve(items[0])),
 					input.onDidHide(() => {
 						(async () => {
-							reject(shouldResume && await shouldResume() ? InputFlowAction.resume : InputFlowAction.cancel);
-						})()
-							.catch(reject);
+							reject(shouldResume && (await shouldResume()) ? InputFlowAction.resume : InputFlowAction.cancel);
+						})().catch(reject);
 					})
 				);
 				if (this.current) {
@@ -246,7 +264,16 @@ class MultiStepInput {
 		}
 	}
 
-	async showInputBox<P extends InputBoxParameters>({ title, step, totalSteps, value, prompt, validate, buttons, shouldResume }: P) {
+	async showInputBox<P extends InputBoxParameters>({
+		title,
+		step,
+		totalSteps,
+		value,
+		prompt,
+		validate,
+		buttons,
+		shouldResume
+	}: P) {
 		const disposables: Disposable[] = [];
 		try {
 			return await new Promise<string | (P extends { buttons: (infer I)[] } ? I : never)>((resolve, reject) => {
@@ -256,10 +283,7 @@ class MultiStepInput {
 				input.totalSteps = totalSteps;
 				input.value = value || '';
 				input.prompt = prompt;
-				input.buttons = [
-					...(this.steps.length > 1 ? [QuickInputButtons.Back] : []),
-					...(buttons || [])
-				];
+				input.buttons = [...(this.steps.length > 1 ? [QuickInputButtons.Back] : []), ...(buttons || [])];
 				let validating = validate('');
 				disposables.push(
 					input.onDidTriggerButton(item => {
@@ -289,9 +313,8 @@ class MultiStepInput {
 					}),
 					input.onDidHide(() => {
 						(async () => {
-							reject(shouldResume && await shouldResume() ? InputFlowAction.resume : InputFlowAction.cancel);
-						})()
-							.catch(reject);
+							reject(shouldResume && (await shouldResume()) ? InputFlowAction.resume : InputFlowAction.cancel);
+						})().catch(reject);
 					})
 				);
 				if (this.current) {
