@@ -8,7 +8,7 @@ Webpack in configured in the [`webpack.config.js`](./webpack.config.js)-file. Fi
 
 ## Scripts
 
-The `scripts`-section of the [`package.json`](./package.json)-file has entries for webpack. Those compile TypeScript and produce the bundle as well as producing a minified production build. Note, that there is no dedicated TypeScript-script as webpack takes are of that.
+The `scripts`-section of the [`package.json`](./package.json)-file has entries for webpack. Those compile TypeScript and produce the bundle as well as producing a minified production build. Note, that there is no dedicated TypeScript-script as webpack takes care of that.
 
 
 ## More
