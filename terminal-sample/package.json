@@ -3,7 +3,7 @@
 	"displayName": "vscode-terminal-api-example",
 	"description": "abc",
 	"version": "0.0.1",
-	"publisher": "Tyriar",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.22.0"
 	},

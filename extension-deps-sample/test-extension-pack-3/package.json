@@ -3,7 +3,7 @@
 	"displayName": "999-pack3",
 	"description": "999-pack3",
 	"version": "0.5.0",
-	"publisher": "sandy081",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.0.0"
 	},

@@ -3,7 +3,7 @@
 	"displayName": "vim",
 	"description": "vim sample extension",
 	"version": "0.0.1",
-	"publisher": "alexdima",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.0.0"
 	},

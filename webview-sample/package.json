@@ -2,7 +2,7 @@
 	"name": "cat-coding",
 	"description": "Cat Coding - A Webview API Sample",
 	"version": "0.0.1",
-	"publisher": "ms-vscode",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.25.0"
 	},

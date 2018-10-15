@@ -3,7 +3,7 @@
 	"displayName": "QuickInput Sample",
 	"description": "Samples for VS Code's QuickInput API",
 	"version": "0.0.1",
-	"publisher": "ms-vscode",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.26.0"
 	},
