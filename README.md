@@ -20,6 +20,7 @@ You can expect from each sample:
 | [Status Bar](/statusbar-sample/README.md) | [/api/extension-guides/status-bar](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/status-bar) | [`StatusBarItem`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#StatusBarItem) |
 | [Color Theme](/theme-sample/README.md) | [/api/extension-guides/color-theme](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/color-theme) | [`contributes.themes`](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributesthemes) |
 | [File System Provider](/fsprovider-sample/README.md) | N/A | [`vscode.workspace.registerFileSystemProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#workspace.registerFileSystemProvider) |
+| [Extension Dependencies 1](/extension-deps-sample/test-extension-pack-1) [Extension Dependencies 2](/extension-deps-sample/test-extension-pack-2) [Extension Dependencies 3](/extension-deps-sample/test-extension-pack-3) | N/A | [extensionPack]() |
 
 ## :warning: Legacy Samples :warning:
 
