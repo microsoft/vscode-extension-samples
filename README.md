@@ -13,14 +13,41 @@ You can expect from each sample:
 
 ## Samples
 
+
+
+<!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
 | ------ | ----- | --- |
-| [Virtual Documents](/contentprovider-sample/README.md) | [/api/extension-guides/virtual-documents](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/virtual-documents) | [`TextDocumentContentProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#TextDocumentContentProvider)|
-| [Editor Decoration](/decorator-sample/README.md) | [/api/extension-guides/editor-decoration](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/editor-decoration) | [`window.createTextEditorDecorationType`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#window.createTextEditorDecorationType) |
-| [Status Bar](/statusbar-sample/README.md) | [/api/extension-guides/status-bar](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/status-bar) | [`StatusBarItem`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#StatusBarItem) |
-| [Color Theme](/theme-sample/README.md) | [/api/extension-guides/color-theme](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/color-theme) | [`contributes.themes`](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributesthemes) |
-| [File System Provider](/fsprovider-sample/README.md) | N/A | [`vscode.workspace.registerFileSystemProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#workspace.registerFileSystemProvider) |
-| Extension Dependencies:<br>- [Sample 1](/extension-deps-sample/test-extension-pack-1)<br>- [Sample 2](/extension-deps-sample/test-extension-pack-2)<br>- [Sample 3](/extension-deps-sample/test-extension-pack-3) | N/A | [extensionPack]() |
+| [Multi Root Sample](basic-multi-root-sample) | N/A | [workspace.getWorkspaceFolder](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.getWorkspaceFolder)<br>[workspace.onDidChangeWorkspaceFolders](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.onDidChangeWorkspaceFolders) |
+| [Webview Sample](webview-sample) | [/api/extension-guides/webview](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/webview) |  |
+| [Status Bar](statusbar-sample) | [/api/extension-guides/status-bar](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/status-bar) | [StatusBarItem](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#StatusBarItem) |
+| [File System Provider](fsprovider-sample) | N/A | [workspace.registerFileSystemProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.registerFileSystemProvider) |
+| [completions-sample](completions-sample) | N/A |  |
+| [configuration-sample](configuration-sample) | N/A |  |
+| [contentprovider-sample](contentprovider-sample) | N/A |  |
+| [decorator-sample](decorator-sample) | N/A |  |
+| [extension-deps-sample](extension-deps-sample) | N/A |  |
+| [hellocode-minimal-sample](hellocode-minimal-sample) | N/A |  |
+| [hellocode-sample](hellocode-sample) | N/A |  |
+| [i18n-sample](i18n-sample) | N/A |  |
+| [legacy-samples](legacy-samples) | N/A |  |
+| [lsp-log-streaming-sample](lsp-log-streaming-sample) | N/A |  |
+| [lsp-multi-server-sample](lsp-multi-server-sample) | N/A |  |
+| [lsp-sample](lsp-sample) | N/A |  |
+| [multi-diagnostics-sample](multi-diagnostics-sample) | N/A |  |
+| [nodefs-provider-sample](nodefs-provider-sample) | N/A |  |
+| [progress-sample](progress-sample) | N/A |  |
+| [quickinput-sample](quickinput-sample) | N/A |  |
+| [smart-template-strings-sample](smart-template-strings-sample) | N/A |  |
+| [task-provider-sample](task-provider-sample) | N/A |  |
+| [terminal-sample](terminal-sample) | N/A |  |
+| [theme-sample](theme-sample) | N/A |  |
+| [tree-view-sample](tree-view-sample) | N/A |  |
+| [vim-sample](vim-sample) | N/A |  |
+| [webpack-sample](webpack-sample) | N/A |  |
+<!-- SAMPLES_END -->
+
+
 
 ## :warning: Legacy Samples :warning:
 
