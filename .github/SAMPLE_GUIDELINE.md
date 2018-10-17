@@ -12,7 +12,7 @@ The quickest way is to start your project by copying hellocode-sample.
 
 - 2.1: Each README should start with a short sentence / paragraph that describes what the extensions is and what it is meant to illustrate.
 - 2.2: If the sample has a corresponding guide, it should link to the guide.
-- 2.3: If the illustrated functionality is visual, a gif/image should follow the explanation. (File should be demo.png/gif/jpg. Use Dark+ theme)
+- 2.3: If the illustrated functionality is visual, a gif/image should follow the explanation. (File should be demo.png/gif/jpg. Use default Dark+/Light+ theme)
 - 2.4: A `VS Code API` section listing the illustrated API, Contribution Points and Activation Events.
 - 2.5: A `Running the Sample` section should describe the actions to run the sample.
 
