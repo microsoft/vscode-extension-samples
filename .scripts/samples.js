@@ -18,7 +18,13 @@ const samples = [
 		apis: ['workspace.getWorkspaceFolder', 'workspace.onDidChangeWorkspaceFolders'],
 		contributions: []
 	},
-	{ description: 'Webview Sample', path: 'webview-sample', guide: '/api/extension-guides/webview', apis: [], contributions: [] },
+	{
+		description: 'Webview Sample',
+		path: 'webview-sample',
+		guide: '/api/extension-guides/webview',
+		apis: ['window.createWebviewPanel', 'window.registerWebviewPanelSerializer'],
+		contributions: []
+	},
 	{
 		description: 'Status Bar',
 		path: 'statusbar-sample',
