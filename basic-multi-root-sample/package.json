@@ -3,7 +3,7 @@
 	"displayName": "Basic Multi Root Sample",
 	"description": "Samples for VSCode's multi root API",
 	"version": "0.0.1",
-	"publisher": "ms-vscode",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.15.0"
 	},

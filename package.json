@@ -1,5 +1,8 @@
 {
 	"name": "vsc-extension-samples",
 	"publisher": "Microsoft",
-	"version": "0.0.1"
+	"version": "0.0.1",
+	"scripts": {
+		"update-readme": "node .scripts/update-readme.js"
+	}
 }

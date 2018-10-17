@@ -1,15 +1,11 @@
 {
 	"name": "hellocode-minimal-sample",
-	"displayName": "hellocode-minimal-sample",
 	"description": "Minimal HelloWorld example for VS Code",
 	"version": "0.0.1",
-	"publisher": "microsoft",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.28.0"
 	},
-	"categories": [
-		"Other"
-	],
 	"activationEvents": [
 		"onCommand:extension.sayHello"
 	],

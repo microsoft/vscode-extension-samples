@@ -3,7 +3,7 @@
 	"displayName": "nodefs-provider-sample",
 	"description": "",
 	"version": "0.0.1",
-	"publisher": "benjpas",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.22.0"
 	},

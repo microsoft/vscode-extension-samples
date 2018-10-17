@@ -2,7 +2,7 @@
 	"name": "decorator-sample",
 	"description": "Sample for the decorator API",
 	"version": "0.0.1",
-	"publisher": "Microsoft",
+	"publisher": "vscode-samples",
 	"license": "MIT",
 	"engines": {
 		"vscode": "^1.15.0"

@@ -3,7 +3,7 @@
 	"displayName": "i18n-sample",
 	"description": "Sample that shows how to localize an extension",
 	"version": "0.1.0",
-	"publisher": "vazexqi",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.13.0"
 	},

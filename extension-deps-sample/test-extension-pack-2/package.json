@@ -3,7 +3,7 @@
 	"displayName": "999-pack2",
 	"description": "Test extension pack 2",
 	"version": "0.9.0",
-	"publisher": "sandy081",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.0.0"
 	},

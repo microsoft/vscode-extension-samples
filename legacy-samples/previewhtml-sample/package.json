@@ -3,7 +3,7 @@
 	"displayName": "Preview CSS Properties Sample",
 	"description": "A sample illustrating the use of TextContentProviders and the `vscode.previewHtml` command, introduce in 0.10.7",
 	"version": "0.0.10",
-	"publisher": "eg2",
+	"publisher": "vscode-samples",
 	"galleryBanner": {
 		"color": "#5c2d91",
 		"theme": "dark"

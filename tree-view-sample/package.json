@@ -3,7 +3,7 @@
 	"displayName": "Custom view Samples",
 	"description": "Samples for VSCode's view API",
 	"version": "0.0.1",
-	"publisher": "ms-vscode",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.25.0"
 	},
