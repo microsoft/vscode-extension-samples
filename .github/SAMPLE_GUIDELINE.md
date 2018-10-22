@@ -30,7 +30,7 @@ The quickest way is to start your project by copying hellocode-sample.
 
 Only deviate from the standard setting if your sample needs to.
 
-- 5.1: Include a `.prettier.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/hellocode-sample/.prettierrc.json.
+- 5.1: Include a `.prettierrc.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/hellocode-sample/.prettierrc.json.
 - 5.2: Include a `tslint.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/hellocode-sample/tslint.json.
 - 5.3: Include a `tsconfig.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/hellocode-sample/tsconfig.json.
 - 5.4: Your source code should be formatted using the formatter and contain no TSLint/TS errors.
