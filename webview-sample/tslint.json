@@ -1,7 +1,6 @@
 {
 	"rules": {
 		"indent": [true, "tabs"],
-		"quotemark": [true, "single"],
 		"semicolon": [true, "always"]
 	}
 }
