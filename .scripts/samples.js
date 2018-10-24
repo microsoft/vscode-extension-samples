@@ -43,7 +43,13 @@ const samples = [
 	{ description: 'hellocode-sample', path: 'hellocode-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'i18n-sample', path: 'i18n-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'legacy-samples', path: 'legacy-samples', guide: null, apis: [], contributions: [] },
-	{ description: 'lsp-log-streaming-sample', path: 'lsp-log-streaming-sample', guide: null, apis: [], contributions: [] },
+	{
+		description: 'lsp-log-streaming-sample',
+		path: 'lsp-log-streaming-sample',
+		guide: null,
+		apis: [],
+		contributions: []
+	},
 	{ description: 'lsp-multi-server-sample', path: 'lsp-multi-server-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'lsp-sample', path: 'lsp-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'multi-diagnostics-sample', path: 'multi-diagnostics-sample', guide: null, apis: [], contributions: [] },
