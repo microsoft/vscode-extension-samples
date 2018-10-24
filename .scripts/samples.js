@@ -53,14 +53,14 @@ const samples = [
 	{
 		description: 'LSP Multi Root Server Sample',
 		path: 'lsp-multi-server-sample',
-		guide: null,
+		guide: 'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
 		apis: [],
 		contributions: []
 	},
 	{
 		description: 'LSP Sample',
 		path: 'lsp-sample',
-		guide: null,
+		guide: '/api/language-extensions/smart-editing-lsp-guide',
 		apis: [],
 		contributions: []
 	},

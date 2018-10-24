@@ -14,6 +14,7 @@ You can expect from each sample:
 ## Samples
 
 
+
 <!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
 | ------ | ----- | --- |
@@ -31,8 +32,8 @@ You can expect from each sample:
 | [i18n-sample](i18n-sample) | N/A |  |
 | [legacy-samples](legacy-samples) | N/A |  |
 | [LSP Log Streaming Sample](lsp-log-streaming-sample) | N/A |  |
-| [LSP Multi Root Server Sample](lsp-multi-server-sample) | N/A |  |
-| [LSP Sample](lsp-sample) | N/A |  |
+| [LSP Multi Root Server Sample](lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
+| [LSP Sample](lsp-sample) | [/api/language-extensions/smart-editing-lsp-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/smart-editing-lsp-guide) |  |
 | [multi-diagnostics-sample](multi-diagnostics-sample) | N/A |  |
 | [nodefs-provider-sample](nodefs-provider-sample) | N/A |  |
 | [progress-sample](progress-sample) | N/A |  |
@@ -45,6 +46,7 @@ You can expect from each sample:
 | [vim-sample](vim-sample) | N/A |  |
 | [webpack-sample](webpack-sample) | N/A |  |
 <!-- SAMPLES_END -->
+
 
 
 ## :warning: Legacy Samples :warning:
