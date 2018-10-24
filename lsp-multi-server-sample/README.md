@@ -4,7 +4,7 @@ A language server example that demonstrates how to start a server per workspace 
 
 The example uses proposed Language Server protocol. So the code demoed here might change when the final version of the configuration and workspace folder protocol is released.
 
-## Compile and Run
+## Running the Sample
 
 - run `npm install` in this folder. This installs all necessary npm modules in both the client and server folder
 - open VS Code on this folder.

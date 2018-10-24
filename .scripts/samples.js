@@ -32,7 +32,7 @@ const samples = [
 		apis: ['StatusBarItem'],
 		contributions: []
 	},
-	{ description: 'File System Provider', path: 'fsprovider-sample', guide: null, apis: ['workspace.registerFileSystemProvider'], contributions: [] },
+	{ description: 'File System Provider Sample', path: 'fsprovider-sample', guide: null, apis: ['workspace.registerFileSystemProvider'], contributions: [] },
 	// TODO: Fix your sample and move it to above
 	{ description: 'completions-sample', path: 'completions-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'configuration-sample', path: 'configuration-sample', guide: null, apis: [], contributions: [] },
@@ -44,14 +44,26 @@ const samples = [
 	{ description: 'i18n-sample', path: 'i18n-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'legacy-samples', path: 'legacy-samples', guide: null, apis: [], contributions: [] },
 	{
-		description: 'lsp-log-streaming-sample',
+		description: 'LSP Log Streaming Sample',
 		path: 'lsp-log-streaming-sample',
 		guide: null,
 		apis: [],
 		contributions: []
 	},
-	{ description: 'lsp-multi-server-sample', path: 'lsp-multi-server-sample', guide: null, apis: [], contributions: [] },
-	{ description: 'lsp-sample', path: 'lsp-sample', guide: null, apis: [], contributions: [] },
+	{
+		description: 'LSP Multi Root Server Sample',
+		path: 'lsp-multi-server-sample',
+		guide: null,
+		apis: [],
+		contributions: []
+	},
+	{
+		description: 'LSP Sample',
+		path: 'lsp-sample',
+		guide: null,
+		apis: [],
+		contributions: []
+	},
 	{ description: 'multi-diagnostics-sample', path: 'multi-diagnostics-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'nodefs-provider-sample', path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'progress-sample', path: 'progress-sample', guide: null, apis: [], contributions: [] },
