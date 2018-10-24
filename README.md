@@ -13,13 +13,14 @@ You can expect from each sample:
 
 ## Samples
 
+
 <!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
 | ------ | ----- | --- |
 | [Multi Root Sample](basic-multi-root-sample) | N/A | [workspace.getWorkspaceFolder](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.getWorkspaceFolder)<br>[workspace.onDidChangeWorkspaceFolders](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.onDidChangeWorkspaceFolders) |
-| [Webview Sample](webview-sample) | [/api/extension-guides/webview](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/webview) |  |
+| [Webview Sample](webview-sample) | [/api/extension-guides/webview](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/webview) | [window.createWebviewPanel](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createWebviewPanel)<br>[window.registerWebviewPanelSerializer](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.registerWebviewPanelSerializer) |
 | [Status Bar](statusbar-sample) | [/api/extension-guides/status-bar](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/status-bar) | [StatusBarItem](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#StatusBarItem) |
-| [File System Provider](fsprovider-sample) | N/A | [workspace.registerFileSystemProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.registerFileSystemProvider) |
+| [File System Provider Sample](fsprovider-sample) | N/A | [workspace.registerFileSystemProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.registerFileSystemProvider) |
 | [completions-sample](completions-sample) | N/A |  |
 | [configuration-sample](configuration-sample) | N/A |  |
 | [contentprovider-sample](contentprovider-sample) | N/A |  |
@@ -29,9 +30,9 @@ You can expect from each sample:
 | [hellocode-sample](hellocode-sample) | N/A |  |
 | [i18n-sample](i18n-sample) | N/A |  |
 | [legacy-samples](legacy-samples) | N/A |  |
-| [lsp-log-streaming-sample](lsp-log-streaming-sample) | N/A |  |
-| [lsp-multi-server-sample](lsp-multi-server-sample) | N/A |  |
-| [lsp-sample](lsp-sample) | N/A |  |
+| [LSP Log Streaming Sample](lsp-log-streaming-sample) | N/A |  |
+| [LSP Multi Root Server Sample](lsp-multi-server-sample) | N/A |  |
+| [LSP Sample](lsp-sample) | N/A |  |
 | [multi-diagnostics-sample](multi-diagnostics-sample) | N/A |  |
 | [nodefs-provider-sample](nodefs-provider-sample) | N/A |  |
 | [progress-sample](progress-sample) | N/A |  |
@@ -44,6 +45,7 @@ You can expect from each sample:
 | [vim-sample](vim-sample) | N/A |  |
 | [webpack-sample](webpack-sample) | N/A |  |
 <!-- SAMPLES_END -->
+
 
 ## :warning: Legacy Samples :warning:
 
