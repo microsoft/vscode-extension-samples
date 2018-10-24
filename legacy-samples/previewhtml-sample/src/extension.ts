@@ -6,6 +6,7 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
+
 	let previewUri = vscode.Uri.parse('css-preview://authority/css-preview');
 
 	class TextDocumentContentProvider implements vscode.TextDocumentContentProvider {
@@ -26,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 		private createCssSnippet() {
 			let editor = vscode.window.activeTextEditor;
 			if (!(editor.document.languageId === 'css')) {
-				return this.errorSnippet("Active editor doesn't show a CSS document - no properties to preview.");
+				return this.errorSnippet("Active editor doesn't show a CSS document - no properties to preview.")
 			}
 			return this.extractSnippet();
 		}
@@ -60,9 +61,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				</style>
 				<body>
-					<div>Preview of the <a href="${encodeURI(
-						'command:extension.revealCssRule?' + JSON.stringify([document.uri, propStart, propEnd])
-					)}">CSS properties</a></div>
+					<div>Preview of the <a href="${encodeURI('command:extension.revealCssRule?' + JSON.stringify([document.uri, propStart, propEnd]))}">CSS properties</a></div>
 					<hr>
 					<div id="el">Lorem ipsum dolor sit amet, mi et mauris nec ac luctus lorem, proin leo nulla integer metus vestibulum lobortis, eget</div>
 				</body>`;
@@ -82,22 +81,19 @@ export function activate(context: vscode.ExtensionContext) {
 		if (e.textEditor === vscode.window.activeTextEditor) {
 			provider.update(previewUri);
 		}
-	});
+	})
 
 	let disposable = vscode.commands.registerCommand('extension.showCssPropertyPreview', () => {
-		return vscode.commands
-			.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'CSS Property Preview')
-			.then(
-				success => {},
-				reason => {
-					vscode.window.showErrorMessage(reason);
-				}
-			);
+		return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two, 'CSS Property Preview').then((success) => {
+		}, (reason) => {
+			vscode.window.showErrorMessage(reason);
+		});
 	});
 
 	let highlight = vscode.window.createTextEditorDecorationType({ backgroundColor: 'rgba(200,200,200,.35)' });
 
 	vscode.commands.registerCommand('extension.revealCssRule', (uri: vscode.Uri, propStart: number, propEnd: number) => {
+
 		for (let editor of vscode.window.visibleTextEditors) {
 			if (editor.document.uri.toString() === uri.toString()) {
 				let start = editor.document.positionAt(propStart);

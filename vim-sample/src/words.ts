@@ -27,6 +27,7 @@ export interface IWord {
 }
 
 export class Words {
+
 	public static createWordCharacters(wordSeparators: string): WordCharacters {
 		let result: CharacterClass[] = [];
 
@@ -46,67 +47,43 @@ export class Words {
 	}
 
 	public static findNextWord(doc: TextDocument, pos: Position, wordCharacterClass: WordCharacters): IWord {
+
 		let lineContent = doc.lineAt(pos.line).text;
 		let wordType = WordType.NONE;
 		let len = lineContent.length;
 
 		for (let chIndex = pos.character; chIndex < len; chIndex++) {
 			let chCode = lineContent.charCodeAt(chIndex);
-			let chClass = wordCharacterClass[chCode] || CharacterClass.REGULAR;
+			let chClass = (wordCharacterClass[chCode] || CharacterClass.REGULAR);
 
 			if (chClass === CharacterClass.REGULAR) {
 				if (wordType === WordType.SEPARATOR) {
-					return this._createWord(
-						lineContent,
-						wordType,
-						this._findStartOfWord(lineContent, wordCharacterClass, wordType, chIndex - 1),
-						chIndex
-					);
+					return this._createWord(lineContent, wordType, this._findStartOfWord(lineContent, wordCharacterClass, wordType, chIndex - 1), chIndex);
 				}
 				wordType = WordType.REGULAR;
 			} else if (chClass === CharacterClass.WORD_SEPARATOR) {
 				if (wordType === WordType.REGULAR) {
-					return this._createWord(
-						lineContent,
-						wordType,
-						this._findStartOfWord(lineContent, wordCharacterClass, wordType, chIndex - 1),
-						chIndex
-					);
+					return this._createWord(lineContent, wordType, this._findStartOfWord(lineContent, wordCharacterClass, wordType, chIndex - 1), chIndex);
 				}
 				wordType = WordType.SEPARATOR;
 			} else if (chClass === CharacterClass.WHITESPACE) {
 				if (wordType !== WordType.NONE) {
-					return this._createWord(
-						lineContent,
-						wordType,
-						this._findStartOfWord(lineContent, wordCharacterClass, wordType, chIndex - 1),
-						chIndex
-					);
+					return this._createWord(lineContent, wordType, this._findStartOfWord(lineContent, wordCharacterClass, wordType, chIndex - 1), chIndex);
 				}
 			}
 		}
 
 		if (wordType !== WordType.NONE) {
-			return this._createWord(
-				lineContent,
-				wordType,
-				this._findStartOfWord(lineContent, wordCharacterClass, wordType, len - 1),
-				len
-			);
+			return this._createWord(lineContent, wordType, this._findStartOfWord(lineContent, wordCharacterClass, wordType, len - 1), len);
 		}
 
 		return null;
 	}
 
-	private static _findStartOfWord(
-		lineContent: string,
-		wordCharacterClass: WordCharacters,
-		wordType: WordType,
-		startIndex: number
-	): number {
+	private static _findStartOfWord(lineContent: string, wordCharacterClass: WordCharacters, wordType: WordType, startIndex: number): number {
 		for (let chIndex = startIndex; chIndex >= 0; chIndex--) {
 			let chCode = lineContent.charCodeAt(chIndex);
-			let chClass = wordCharacterClass[chCode] || CharacterClass.REGULAR;
+			let chClass = (wordCharacterClass[chCode] || CharacterClass.REGULAR);
 
 			if (chClass === CharacterClass.WHITESPACE) {
 				return chIndex + 1;

@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 // this method is called when vs code is activated
 export function activate(context: vscode.ExtensionContext) {
+
 	console.log('decorator sample is activated');
 
 	// create a decorator type that we use to decorate small numbers
@@ -31,26 +32,18 @@ export function activate(context: vscode.ExtensionContext) {
 		triggerUpdateDecorations();
 	}
 
-	vscode.window.onDidChangeActiveTextEditor(
-		editor => {
-			activeEditor = editor;
-			if (editor) {
-				triggerUpdateDecorations();
-			}
-		},
-		null,
-		context.subscriptions
-	);
+	vscode.window.onDidChangeActiveTextEditor(editor => {
+		activeEditor = editor;
+		if (editor) {
+			triggerUpdateDecorations();
+		}
+	}, null, context.subscriptions);
 
-	vscode.workspace.onDidChangeTextDocument(
-		event => {
-			if (activeEditor && event.document === activeEditor.document) {
-				triggerUpdateDecorations();
-			}
-		},
-		null,
-		context.subscriptions
-	);
+	vscode.workspace.onDidChangeTextDocument(event => {
+		if (activeEditor && event.document === activeEditor.document) {
+			triggerUpdateDecorations();
+		}
+	}, null, context.subscriptions);
 
 	var timeout = null;
 	function triggerUpdateDecorations() {
@@ -69,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const smallNumbers: vscode.DecorationOptions[] = [];
 		const largeNumbers: vscode.DecorationOptions[] = [];
 		let match;
-		while ((match = regEx.exec(text))) {
+		while (match = regEx.exec(text)) {
 			const startPos = activeEditor.document.positionAt(match.index);
 			const endPos = activeEditor.document.positionAt(match.index + match[0].length);
 			const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Number **' + match[0] + '**' };
@@ -83,3 +76,4 @@ export function activate(context: vscode.ExtensionContext) {
 		activeEditor.setDecorations(largeNumberDecorationType, largeNumbers);
 	}
 }
+

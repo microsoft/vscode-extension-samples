@@ -14,9 +14,9 @@ export enum Mode {
 }
 
 export interface ModifierKeys {
-	ctrl?: boolean;
-	alt?: boolean;
-	shifit?: boolean;
+	ctrl?: boolean,
+	alt?: boolean,
+	shifit?: boolean
 }
 
 export class DeleteRegister {
@@ -42,10 +42,12 @@ export interface IController {
 }
 
 export abstract class AbstractCommandDescriptor {
+
 	public abstract createCommand(args?: any): Command;
+
 }
 
 export interface Command {
-	commandId: string;
-	args?: any[];
+	commandId: string,
+	args?: any[]
 }

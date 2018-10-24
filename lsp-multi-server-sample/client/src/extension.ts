@@ -1,15 +1,11 @@
 import * as path from 'path';
 import {
-	workspace as Workspace,
-	window as Window,
-	ExtensionContext,
-	TextDocument,
-	OutputChannel,
-	WorkspaceFolder,
-	Uri
+	workspace as Workspace, window as Window, ExtensionContext, TextDocument, OutputChannel, WorkspaceFolder, Uri
 } from 'vscode';
 
-import { LanguageClient, LanguageClientOptions, TransportKind } from 'vscode-languageclient';
+import {
+	LanguageClient, LanguageClientOptions, TransportKind
+} from 'vscode-languageclient';
 
 let defaultClient: LanguageClient;
 let clients: Map<string, LanguageClient> = new Map();
@@ -17,21 +13,21 @@ let clients: Map<string, LanguageClient> = new Map();
 let _sortedWorkspaceFolders: string[];
 function sortedWorkspaceFolders(): string[] {
 	if (_sortedWorkspaceFolders === void 0) {
-		_sortedWorkspaceFolders = Workspace.workspaceFolders
-			.map(folder => {
-				let result = folder.uri.toString();
-				if (result.charAt(result.length - 1) !== '/') {
-					result = result + '/';
-				}
-				return result;
-			})
-			.sort((a, b) => {
+		_sortedWorkspaceFolders = Workspace.workspaceFolders.map(folder => {
+			let result = folder.uri.toString();
+			if (result.charAt(result.length - 1) !== '/') {
+				result = result + '/';
+			}
+			return result;
+		}).sort(
+			(a, b) => {
 				return a.length - b.length;
-			});
+			}
+		);
 	}
 	return _sortedWorkspaceFolders;
 }
-Workspace.onDidChangeWorkspaceFolders(() => (_sortedWorkspaceFolders = undefined));
+Workspace.onDidChangeWorkspaceFolders(() => _sortedWorkspaceFolders = undefined);
 
 function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
 	let sorted = sortedWorkspaceFolders();
@@ -48,6 +44,7 @@ function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
 }
 
 export function activate(context: ExtensionContext) {
+
 	let module = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
 	let outputChannel: OutputChannel = Window.createOutputChannel('lsp-multi-server-example');
 
@@ -60,22 +57,19 @@ export function activate(context: ExtensionContext) {
 		let uri = document.uri;
 		// Untitled files go to a default client.
 		if (uri.scheme === 'untitled' && !defaultClient) {
-			let debugOptions = { execArgv: ['--nolazy', '--inspect=6010'] };
+			let debugOptions = { execArgv: ["--nolazy", "--inspect=6010"] };
 			let serverOptions = {
 				run: { module, transport: TransportKind.ipc },
-				debug: { module, transport: TransportKind.ipc, options: debugOptions }
+				debug: { module, transport: TransportKind.ipc, options: debugOptions}
 			};
 			let clientOptions: LanguageClientOptions = {
-				documentSelector: [{ scheme: 'untitled', language: 'plaintext' }],
+				documentSelector: [
+					{ scheme: 'untitled', language: 'plaintext' }
+				],
 				diagnosticCollectionName: 'lsp-multi-server-example',
 				outputChannel: outputChannel
-			};
-			defaultClient = new LanguageClient(
-				'lsp-multi-server-example',
-				'LSP Multi Server Example',
-				serverOptions,
-				clientOptions
-			);
+			}
+			defaultClient = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			defaultClient.start();
 			return;
 		}
@@ -89,23 +83,20 @@ export function activate(context: ExtensionContext) {
 		folder = getOuterMostWorkspaceFolder(folder);
 
 		if (!clients.has(folder.uri.toString())) {
-			let debugOptions = { execArgv: ['--nolazy', `--inspect=${6011 + clients.size}`] };
+			let debugOptions = { execArgv: ["--nolazy", `--inspect=${6011 + clients.size}`] };
 			let serverOptions = {
 				run: { module, transport: TransportKind.ipc },
-				debug: { module, transport: TransportKind.ipc, options: debugOptions }
+				debug: { module, transport: TransportKind.ipc, options: debugOptions}
 			};
 			let clientOptions: LanguageClientOptions = {
-				documentSelector: [{ scheme: 'file', language: 'plaintext', pattern: `${folder.uri.fsPath}/**/*` }],
+				documentSelector: [
+					{ scheme: 'file', language: 'plaintext', pattern: `${folder.uri.fsPath}/**/*` }
+				],
 				diagnosticCollectionName: 'lsp-multi-server-example',
 				workspaceFolder: folder,
 				outputChannel: outputChannel
-			};
-			let client = new LanguageClient(
-				'lsp-multi-server-example',
-				'LSP Multi Server Example',
-				serverOptions,
-				clientOptions
-			);
+			}
+			let client = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			client.start();
 			clients.set(folder.uri.toString(), client);
 		}
@@ -113,8 +104,8 @@ export function activate(context: ExtensionContext) {
 
 	Workspace.onDidOpenTextDocument(didOpenTextDocument);
 	Workspace.textDocuments.forEach(didOpenTextDocument);
-	Workspace.onDidChangeWorkspaceFolders(event => {
-		for (let folder of event.removed) {
+	Workspace.onDidChangeWorkspaceFolders((event) => {
+		for (let folder  of event.removed) {
 			let client = clients.get(folder.uri.toString());
 			if (client) {
 				clients.delete(folder.uri.toString());

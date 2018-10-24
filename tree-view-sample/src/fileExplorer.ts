@@ -7,12 +7,8 @@ import * as rimraf from 'rimraf';
 //#region Utilities
 
 namespace _ {
-	function handleResult<T>(
-		resolve: (result: T) => void,
-		reject: (error: Error) => void,
-		error: Error | null | undefined,
-		result: T
-	): void {
+
+	function handleResult<T>(resolve: (result: T) => void, reject: (error: Error) => void, error: Error | null | undefined, result: T): void {
 		if (error) {
 			reject(massageError(error));
 		} else {
@@ -116,16 +112,11 @@ namespace _ {
 }
 
 export class FileStat implements vscode.FileStat {
-	constructor(private fsStat: fs.Stats) {}
+
+	constructor(private fsStat: fs.Stats) { }
 
 	get type(): vscode.FileType {
-		return this.fsStat.isFile()
-			? vscode.FileType.File
-			: this.fsStat.isDirectory()
-				? vscode.FileType.Directory
-				: this.fsStat.isSymbolicLink()
-					? vscode.FileType.SymbolicLink
-					: vscode.FileType.Unknown;
+		return this.fsStat.isFile() ? vscode.FileType.File : this.fsStat.isDirectory() ? vscode.FileType.Directory : this.fsStat.isSymbolicLink() ? vscode.FileType.SymbolicLink : vscode.FileType.Unknown;
 	}
 
 	get isFile(): boolean | undefined {
@@ -154,13 +145,14 @@ export class FileStat implements vscode.FileStat {
 }
 
 interface Entry {
-	uri: vscode.Uri;
-	type: vscode.FileType;
+	uri: vscode.Uri,
+	type: vscode.FileType
 }
 
 //#endregion
 
 export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscode.FileSystemProvider {
+
 	private _onDidChangeFile: vscode.EventEmitter<vscode.FileChangeEvent[]>;
 
 	constructor() {
@@ -171,28 +163,17 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 		return this._onDidChangeFile.event;
 	}
 
-	watch(uri: vscode.Uri, options: { recursive: boolean; excludes: string[] }): vscode.Disposable {
-		const watcher = fs.watch(
-			uri.fsPath,
-			{ recursive: options.recursive },
-			async (event: string, filename: string | Buffer) => {
-				const filepath = path.join(uri.fsPath, _.normalizeNFC(filename.toString()));
+	watch(uri: vscode.Uri, options: { recursive: boolean; excludes: string[]; }): vscode.Disposable {
+		const watcher = fs.watch(uri.fsPath, { recursive: options.recursive }, async (event: string, filename: string | Buffer) => {
+			const filepath = path.join(uri.fsPath, _.normalizeNFC(filename.toString()));
 
-				// TODO support excludes (using minimatch library?)
+			// TODO support excludes (using minimatch library?)
 
-				this._onDidChangeFile.fire([
-					{
-						type:
-							event === 'change'
-								? vscode.FileChangeType.Changed
-								: (await _.exists(filepath))
-									? vscode.FileChangeType.Created
-									: vscode.FileChangeType.Deleted,
-						uri: uri.with({ path: filepath })
-					} as vscode.FileChangeEvent
-				]);
-			}
-		);
+			this._onDidChangeFile.fire([{
+				type: event === 'change' ? vscode.FileChangeType.Changed : await _.exists(filepath) ? vscode.FileChangeType.Created : vscode.FileChangeType.Deleted,
+				uri: uri.with({ path: filepath })
+			} as vscode.FileChangeEvent]);
+		});
 
 		return { dispose: () => watcher.close() };
 	}
@@ -230,19 +211,11 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 		return _.readfile(uri.fsPath);
 	}
 
-	writeFile(
-		uri: vscode.Uri,
-		content: Uint8Array,
-		options: { create: boolean; overwrite: boolean }
-	): void | Thenable<void> {
+	writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean; }): void | Thenable<void> {
 		return this._writeFile(uri, content, options);
 	}
 
-	async _writeFile(
-		uri: vscode.Uri,
-		content: Uint8Array,
-		options: { create: boolean; overwrite: boolean }
-	): Promise<void> {
+	async _writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean; }): Promise<void> {
 		const exists = await _.exists(uri.fsPath);
 		if (!exists) {
 			if (!options.create) {
@@ -259,7 +232,7 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 		return _.writefile(uri.fsPath, content as Buffer);
 	}
 
-	delete(uri: vscode.Uri, options: { recursive: boolean }): void | Thenable<void> {
+	delete(uri: vscode.Uri, options: { recursive: boolean; }): void | Thenable<void> {
 		if (options.recursive) {
 			return _.rmrf(uri.fsPath);
 		}
@@ -267,11 +240,11 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 		return _.unlink(uri.fsPath);
 	}
 
-	rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }): void | Thenable<void> {
+	rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean; }): void | Thenable<void> {
 		return this._rename(oldUri, newUri, options);
 	}
 
-	async _rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean }): Promise<void> {
+	async _rename(oldUri: vscode.Uri, newUri: vscode.Uri, options: { overwrite: boolean; }): Promise<void> {
 		const exists = await _.exists(newUri.fsPath);
 		if (exists) {
 			if (!options.overwrite) {
@@ -305,25 +278,17 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 					return a[0].localeCompare(b[0]);
 				}
 				return a[1] === vscode.FileType.Directory ? -1 : 1;
-			});
-			return children.map(([name, type]) => ({
-				uri: vscode.Uri.file(path.join(workspaceFolder.uri.fsPath, name)),
-				type
-			}));
+			})
+			return children.map(([name, type]) => ({ uri: vscode.Uri.file(path.join(workspaceFolder.uri.fsPath, name)), type }));
 		}
 
 		return [];
 	}
 
 	getTreeItem(element: Entry): vscode.TreeItem {
-		const treeItem = new vscode.TreeItem(
-			element.uri,
-			element.type === vscode.FileType.Directory
-				? vscode.TreeItemCollapsibleState.Collapsed
-				: vscode.TreeItemCollapsibleState.None
-		);
+		const treeItem = new vscode.TreeItem(element.uri, element.type === vscode.FileType.Directory ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
 		if (element.type === vscode.FileType.File) {
-			treeItem.command = { command: 'fileExplorer.openFile', title: 'Open File', arguments: [element.uri] };
+			treeItem.command = { command: 'fileExplorer.openFile', title: "Open File", arguments: [element.uri], };
 			treeItem.contextValue = 'file';
 		}
 		return treeItem;
@@ -331,12 +296,13 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 }
 
 export class FileExplorer {
+
 	private fileExplorer: vscode.TreeView<Entry>;
 
 	constructor(context: vscode.ExtensionContext) {
 		const treeDataProvider = new FileSystemProvider();
 		this.fileExplorer = vscode.window.createTreeView('fileExplorer', { treeDataProvider });
-		vscode.commands.registerCommand('fileExplorer.openFile', resource => this.openResource(resource));
+		vscode.commands.registerCommand('fileExplorer.openFile', (resource) => this.openResource(resource));
 	}
 
 	private openResource(resource: vscode.Uri): void {

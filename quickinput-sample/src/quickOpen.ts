@@ -11,7 +11,7 @@ import { workspace } from 'vscode';
 
 /**
  * A file opener using window.createQuickPick().
- *
+ * 
  * It shows how the list of items can be dynamically updated based on
  * the user's input in the filter field.
  */
@@ -24,9 +24,10 @@ export async function quickOpen() {
 }
 
 class FileItem implements QuickPickItem {
+
 	label: string;
 	description: string;
-
+	
 	constructor(public base: Uri, public uri: Uri) {
 		this.label = path.basename(uri.fsPath);
 		this.description = path.dirname(path.relative(base.fsPath, uri.fsPath));
@@ -34,10 +35,11 @@ class FileItem implements QuickPickItem {
 }
 
 class MessageItem implements QuickPickItem {
+
 	label: string;
 	description = '';
 	detail: string;
-
+	
 	constructor(public base: Uri, public message: string) {
 		this.label = message.replace(/\r?\n/g, ' ');
 		this.detail = base.fsPath;
@@ -60,7 +62,7 @@ async function pickFile() {
 					}
 					input.busy = true;
 					const cwds = workspace.workspaceFolders ? workspace.workspaceFolders.map(f => f.uri.fsPath) : [process.cwd()];
-					const q = process.platform === 'win32' ? '"' : "'";
+					const q = process.platform === 'win32' ? '"' : '\'';
 					rgs = cwds.map(cwd => {
 						const rg = cp.exec(`rg --files -g ${q}*${value}*${q}`, { cwd }, (err, stdout) => {
 							const i = rgs.indexOf(rg);
@@ -71,13 +73,14 @@ async function pickFile() {
 								if (!err) {
 									input.items = input.items.concat(
 										stdout
-											.split('\n')
-											.slice(0, 50)
+											.split('\n').slice(0, 50)
 											.map(relative => new FileItem(Uri.file(cwd), Uri.file(path.join(cwd, relative))))
 									);
 								}
 								if (err && !(<any>err).killed && (<any>err).code !== 1 && err.message) {
-									input.items = input.items.concat([new MessageItem(Uri.file(cwd), err.message)]);
+									input.items = input.items.concat([
+										new MessageItem(Uri.file(cwd), err.message)
+									]);
 								}
 								rgs.splice(i, 1);
 								if (!rgs.length) {

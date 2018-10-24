@@ -8,14 +8,18 @@ interface IEntry {
 }
 
 export interface FtpNode {
+
 	resource: vscode.Uri;
 	isDirectory: boolean;
+
 }
 
 export class FtpModel {
+
 	private nodes: Map<string, FtpNode> = new Map<string, FtpNode>();
 
-	constructor(readonly host: string, private user: string, private password: string) {}
+	constructor(readonly host: string, private user: string, private password: string) {
+	}
 
 	public connect(): Thenable<Client> {
 		return new Promise((c, e) => {
@@ -26,7 +30,7 @@ export class FtpModel {
 
 			client.on('error', error => {
 				e('Error while connecting: ' + error.message);
-			});
+			})
 
 			client.connect({
 				host: this.host,
@@ -46,14 +50,7 @@ export class FtpModel {
 
 					client.end();
 
-					return c(
-						this.sort(
-							list.map(entry => ({
-								resource: vscode.Uri.parse(`ftp://${this.host}///${entry.name}`),
-								isDirectory: entry.type === 'd'
-							}))
-						)
-					);
+					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`ftp://${this.host}///${entry.name}`), isDirectory: entry.type === 'd' }))));
 				});
 			});
 		});
@@ -69,14 +66,7 @@ export class FtpModel {
 
 					client.end();
 
-					return c(
-						this.sort(
-							list.map(entry => ({
-								resource: vscode.Uri.parse(`${node.resource.fsPath}/${entry.name}`),
-								isDirectory: entry.type === 'd'
-							}))
-						)
-					);
+					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`${node.resource.fsPath}/${entry.name}`), isDirectory: entry.type === 'd' }))));
 				});
 			});
 		});
@@ -104,15 +94,15 @@ export class FtpModel {
 						return e(err);
 					}
 
-					let string = '';
-					stream.on('data', function(buffer) {
+					let string = ''
+					stream.on('data', function (buffer) {
 						if (buffer) {
 							var part = buffer.toString();
 							string += part;
 						}
 					});
 
-					stream.on('end', function() {
+					stream.on('end', function () {
 						client.end();
 						c(string);
 					});
@@ -123,26 +113,26 @@ export class FtpModel {
 }
 
 export class FtpTreeDataProvider implements vscode.TreeDataProvider<FtpNode>, vscode.TextDocumentContentProvider {
+
 	private _onDidChangeTreeData: vscode.EventEmitter<any> = new vscode.EventEmitter<any>();
 	readonly onDidChangeTreeData: vscode.Event<any> = this._onDidChangeTreeData.event;
 
-	constructor(private readonly model: FtpModel) {}
+	constructor(private readonly model: FtpModel) { }
 
 	public refresh(): any {
 		this._onDidChangeTreeData.fire();
 	}
 
+
 	public getTreeItem(element: FtpNode): vscode.TreeItem {
 		return {
 			resourceUri: element.resource,
 			collapsibleState: element.isDirectory ? vscode.TreeItemCollapsibleState.Collapsed : void 0,
-			command: element.isDirectory
-				? void 0
-				: {
-						command: 'ftpExplorer.openFtpResource',
-						arguments: [element.resource],
-						title: 'Open FTP Resource'
-				  }
+			command: element.isDirectory ? void 0 : {
+				command: 'ftpExplorer.openFtpResource',
+				arguments: [element.resource],
+				title: 'Open FTP Resource'
+			}
 		};
 	}
 
@@ -161,6 +151,7 @@ export class FtpTreeDataProvider implements vscode.TreeDataProvider<FtpNode>, vs
 }
 
 export class FtpExplorer {
+
 	private ftpViewer: vscode.TreeView<FtpNode>;
 
 	constructor(context: vscode.ExtensionContext) {

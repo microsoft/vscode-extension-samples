@@ -3,12 +3,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
-	private _onDidChangeTreeData: vscode.EventEmitter<Dependency | undefined> = new vscode.EventEmitter<
-		Dependency | undefined
-	>();
+
+	private _onDidChangeTreeData: vscode.EventEmitter<Dependency | undefined> = new vscode.EventEmitter<Dependency | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<Dependency | undefined> = this._onDidChangeTreeData.event;
 
-	constructor(private workspaceRoot: string) {}
+	constructor(private workspaceRoot: string) {
+	}
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
@@ -23,11 +23,9 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 			vscode.window.showInformationMessage('No dependency in empty workspace');
 			return Promise.resolve([]);
 		}
-
+		
 		if (element) {
-			return Promise.resolve(
-				this.getDepsInPackageJson(path.join(this.workspaceRoot, 'node_modules', element.label, 'package.json'))
-			);
+			return Promise.resolve(this.getDepsInPackageJson(path.join(this.workspaceRoot, 'node_modules', element.label, 'package.json')));
 		} else {
 			const packageJsonPath = path.join(this.workspaceRoot, 'package.json');
 			if (this.pathExists(packageJsonPath)) {
@@ -37,6 +35,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 				return Promise.resolve([]);
 			}
 		}
+		
 	}
 
 	/**
@@ -56,7 +55,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 						arguments: [moduleName]
 					});
 				}
-			};
+			}
 
 			const deps = packageJson.dependencies
 				? Object.keys(packageJson.dependencies).map(dep => toDep(dep, packageJson.dependencies[dep]))
@@ -82,6 +81,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 }
 
 class Dependency extends vscode.TreeItem {
+
 	constructor(
 		public readonly label: string,
 		private version: string,
@@ -92,7 +92,7 @@ class Dependency extends vscode.TreeItem {
 	}
 
 	get tooltip(): string {
-		return `${this.label}-${this.version}`;
+		return `${this.label}-${this.version}`
 	}
 
 	iconPath = {
@@ -101,4 +101,5 @@ class Dependency extends vscode.TreeItem {
 	};
 
 	contextValue = 'dependency';
+
 }

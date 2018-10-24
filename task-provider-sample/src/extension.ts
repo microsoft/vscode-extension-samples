@@ -19,9 +19,9 @@ export function activate(_context: vscode.ExtensionContext): void {
 	let pattern = path.join(workspaceRoot, 'Rakefile');
 	let rakePromise: Thenable<vscode.Task[]> | undefined = undefined;
 	let fileWatcher = vscode.workspace.createFileSystemWatcher(pattern);
-	fileWatcher.onDidChange(() => (rakePromise = undefined));
-	fileWatcher.onDidCreate(() => (rakePromise = undefined));
-	fileWatcher.onDidDelete(() => (rakePromise = undefined));
+	fileWatcher.onDidChange(() => rakePromise = undefined);
+	fileWatcher.onDidCreate(() => rakePromise = undefined);
+	fileWatcher.onDidDelete(() => rakePromise = undefined);
 	taskProvider = vscode.tasks.registerTaskProvider('rake', {
 		provideTasks: () => {
 			if (!rakePromise) {
@@ -43,7 +43,7 @@ export function deactivate(): void {
 
 function exists(file: string): Promise<boolean> {
 	return new Promise<boolean>((resolve, _reject) => {
-		fs.exists(file, value => {
+		fs.exists(file, (value) => {
 			resolve(value);
 		});
 	});
@@ -107,7 +107,7 @@ async function getRakeTasks(): Promise<vscode.Task[]> {
 		return emptyTasks;
 	}
 	let rakeFile = path.join(workspaceRoot, 'Rakefile');
-	if (!(await exists(rakeFile))) {
+	if (!await exists(rakeFile)) {
 		return emptyTasks;
 	}
 

@@ -11,13 +11,17 @@ import { sayByeCommand } from './command/sayBye';
 
 export function activate(context: vscode.ExtensionContext) {
 	const helloCmd = vscode.commands.registerCommand('extension.sayHello', () => {
-		const message = localize('sayHello.text', 'Hello');
+		const message = localize('sayHello.text', 'Hello')
 		vscode.window.showInformationMessage(message);
 	});
 
-	const byeCmd = vscode.commands.registerCommand('extension.sayBye', sayByeCommand);
+	const byeCmd = vscode.commands.registerCommand(
+		'extension.sayBye',
+		sayByeCommand
+	);
 
 	context.subscriptions.push(helloCmd, byeCmd);
 }
 
-export function deactivate() {}
+export function deactivate() {
+}

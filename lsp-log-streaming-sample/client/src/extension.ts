@@ -8,21 +8,28 @@ import * as path from 'path';
 import { workspace, commands, ExtensionContext, OutputChannel } from 'vscode';
 import * as WebSocket from 'ws';
 
-import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
+import {
+	LanguageClient,
+	LanguageClientOptions,
+	ServerOptions,
+	TransportKind
+} from 'vscode-languageclient';
 
 let client: LanguageClient;
 
 export function activate(context: ExtensionContext) {
 	const socketPort = workspace.getConfiguration('languageServerExample').get('port', 7000);
-	let socket: WebSocket | null = null;
-
+	let socket: WebSocket | null = null
+	
 	commands.registerCommand('languageServerExample.startStreaming', () => {
 		// Establish websocket connection
-		socket = new WebSocket(`ws://localhost:${socketPort}`);
-	});
+		socket = new WebSocket(`ws://localhost:${socketPort}`)
+	})
 
 	// The server is implemented in node
-	let serverModule = context.asAbsolutePath(path.join('server', 'out', 'server.js'));
+	let serverModule = context.asAbsolutePath(
+		path.join('server', 'out', 'server.js')
+	);
 	// The debug options for the server
 	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
 	let debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
@@ -39,27 +46,27 @@ export function activate(context: ExtensionContext) {
 	};
 
 	// The log to send
-	let log = '';
+	let log = ''
 	const websocketOutputChannel: OutputChannel = {
 		name: 'websocket',
 		// Only append the logs but send them later
 		append(value: string) {
-			log += value;
-			console.log(value);
+			log += value
+			console.log(value)
 		},
 		appendLine(value: string) {
-			log += value;
+			log += value
 			// Don't send logs until WebSocket initialization
 			if (socket && socket.readyState === WebSocket.OPEN) {
-				socket.send(log);
+				socket.send(log)
 			}
-			log = '';
+			log = ''
 		},
 		clear() {},
 		show() {},
 		hide() {},
 		dispose() {}
-	};
+	}
 
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
@@ -74,7 +81,12 @@ export function activate(context: ExtensionContext) {
 	};
 
 	// Create the language client and start the client.
-	client = new LanguageClient('languageServerExample', 'Language Server Example', serverOptions, clientOptions);
+	client = new LanguageClient(
+		'languageServerExample',
+		'Language Server Example',
+		serverOptions,
+		clientOptions
+	);
 
 	// Start the client. This will also launch the server
 	client.start();

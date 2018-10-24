@@ -6,6 +6,7 @@
 import * as vscode from 'vscode';
 
 export default class ReferencesDocument {
+
 	private _uri: vscode.Uri;
 	private _emitter: vscode.EventEmitter<vscode.Uri>;
 	private _locations: vscode.Location[];
@@ -41,15 +42,18 @@ export default class ReferencesDocument {
 	}
 
 	private _populate() {
+
 		if (this._locations.length === 0) {
 			return;
 		}
 
 		// fetch one by one, update doc asap
 		return new Promise<this>(resolve => {
+
 			let index = 0;
 
 			let next = () => {
+
 				// We have seen all groups
 				if (index >= this._locations.length) {
 					resolve(this);
@@ -77,36 +81,34 @@ export default class ReferencesDocument {
 					this._emitter.fire(this._uri);
 					next();
 				});
-			};
+			}
 			next();
 		});
 	}
 
 	private _fetchAndFormatLocations(uri: vscode.Uri, ranges: vscode.Range[]): PromiseLike<void> {
+
 		// Fetch the document denoted by the uri and format the matches
 		// with leading and trailing content form the document. Make sure
 		// to not duplicate lines
-		return vscode.workspace.openTextDocument(uri).then(
-			doc => {
-				this._lines.push('', uri.toString());
+		return vscode.workspace.openTextDocument(uri).then(doc => {
 
-				for (let i = 0; i < ranges.length; i++) {
-					const {
-						start: { line }
-					} = ranges[i];
-					this._appendLeading(doc, line, ranges[i - 1]);
-					this._appendMatch(doc, line, ranges[i], uri);
-					this._appendTrailing(doc, line, ranges[i + 1]);
-				}
-			},
-			err => {
-				this._lines.push('', `Failed to load '${uri.toString()}'\n\n${String(err)}`, '');
+			this._lines.push('', uri.toString());
+
+			for (let i = 0; i < ranges.length; i++) {
+				const {start: {line}} = ranges[i];
+				this._appendLeading(doc, line, ranges[i - 1]);
+				this._appendMatch(doc, line, ranges[i], uri);
+				this._appendTrailing(doc, line, ranges[i + 1]);
 			}
-		);
+
+		}, err => {
+			this._lines.push('', `Failed to load '${uri.toString()}'\n\n${String(err)}`, '');
+		});
 	}
 
 	private _appendLeading(doc: vscode.TextDocument, line: number, previous: vscode.Range): void {
-		let from = Math.max(0, line - 3, (previous && previous.end.line) || 0);
+		let from = Math.max(0, line - 3, previous && previous.end.line || 0);
 		while (++from < line) {
 			const text = doc.lineAt(from).text;
 			this._lines.push(`  ${from + 1}` + (text && `  ${text}`));
@@ -122,12 +124,7 @@ export default class ReferencesDocument {
 		const len = this._lines.push(preamble + text);
 
 		// Create a document link that will reveal the reference
-		const linkRange = new vscode.Range(
-			len - 1,
-			preamble.length + match.start.character,
-			len - 1,
-			preamble.length + match.end.character
-		);
+		const linkRange = new vscode.Range(len - 1, preamble.length + match.start.character, len - 1, preamble.length + match.end.character);
 		const linkTarget = target.with({ fragment: String(1 + match.start.line) });
 		this._links.push(new vscode.DocumentLink(linkRange, linkTarget));
 	}

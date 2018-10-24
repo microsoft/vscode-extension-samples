@@ -4,16 +4,7 @@
 
 'use strict';
 
-import {
-	ExtensionContext,
-	StatusBarAlignment,
-	window,
-	StatusBarItem,
-	Selection,
-	workspace,
-	TextEditor,
-	commands
-} from 'vscode';
+import { ExtensionContext, StatusBarAlignment, window, StatusBarItem, Selection, workspace, TextEditor, commands } from 'vscode';
 
 export function activate(context: ExtensionContext) {
 	const status = window.createStatusBarItem(StatusBarAlignment.Right, 100);
@@ -26,11 +17,9 @@ export function activate(context: ExtensionContext) {
 	context.subscriptions.push(workspace.onDidOpenTextDocument(e => updateStatus(status)));
 	context.subscriptions.push(workspace.onDidCloseTextDocument(e => updateStatus(status)));
 
-	context.subscriptions.push(
-		commands.registerCommand('extension.selectedLines', () => {
-			window.showInformationMessage(getSelectedLines());
-		})
-	);
+	context.subscriptions.push(commands.registerCommand('extension.selectedLines', () => {
+		window.showInformationMessage(getSelectedLines());
+	}));
 
 	updateStatus(status);
 }
@@ -55,7 +44,7 @@ function getSelectedLines(): string {
 	if (editor) {
 		let lines = 0;
 		editor.selections.forEach(selection => {
-			lines += selection.end.line - selection.start.line + 1;
+			lines += (selection.end.line - selection.start.line + 1);
 		});
 
 		if (lines > 0) {

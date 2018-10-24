@@ -9,6 +9,7 @@ import { MotionState, Motion, Motions } from './motions';
 import { Mode, IController, DeleteRegister } from './common';
 
 export abstract class Operator {
+
 	public abstract runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean;
 	public abstract runVisualMode(ctrl: IController, ed: TextEditor, args: string): boolean;
 
@@ -31,7 +32,7 @@ export abstract class Operator {
 
 	protected delete(ctrl: IController, ed: TextEditor, isWholeLine: boolean, range: Range): void {
 		ctrl.setDeleteRegister(new DeleteRegister(isWholeLine, ed.document.getText(range)));
-		ed.edit(builder => {
+		ed.edit((builder) => {
 			builder.delete(range);
 		});
 	}
@@ -80,11 +81,7 @@ class VisualOperator extends OperatorWithNoArgs {
 
 class DeleteCharUnderCursorOperator extends Operator {
 	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
-		let to = Motions.NextCharacter.repeat(repeatCount > 1, repeatCount).run(
-			this.doc(ed),
-			this.pos(ed),
-			ctrl.motionState
-		);
+		let to = Motions.NextCharacter.repeat(repeatCount > 1, repeatCount).run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		let from = this.pos(ed);
 
 		this.delete(ctrl, ed, false, new Range(from.line, from.character, to.line, to.character));
@@ -137,6 +134,7 @@ abstract class OperatorWithMotion extends Operator {
 	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		let motion = ctrl.findMotion(args);
 		if (!motion) {
+
 			// is it motion building
 			if (ctrl.isMotionPrefix(args)) {
 				return false;
@@ -153,6 +151,7 @@ abstract class OperatorWithMotion extends Operator {
 }
 
 class DeleteToOperator extends OperatorWithMotion {
+
 	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		if (args === 'd') {
 			// dd
@@ -178,6 +177,7 @@ class DeleteToOperator extends OperatorWithMotion {
 }
 
 class PutOperator extends Operator {
+
 	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		let register = ctrl.getDeleteRegister();
 		if (!register) {
@@ -189,7 +189,7 @@ class PutOperator extends Operator {
 
 		let pos = this.pos(ed);
 		if (!register.isWholeLine) {
-			ed.edit(builder => {
+			ed.edit((builder) => {
 				builder.insert(new Position(pos.line, pos.character + 1), str);
 			});
 			return true;
@@ -206,7 +206,7 @@ class PutOperator extends Operator {
 			str = '\n' + str;
 		}
 
-		ed.edit(builder => {
+		ed.edit((builder) => {
 			builder.insert(new Position(insertLine, insertCharacter), str);
 		});
 
@@ -223,7 +223,7 @@ class PutOperator extends Operator {
 		let str = register.content;
 
 		let sel = this.sel(ed);
-		ed.edit(builder => {
+		ed.edit((builder) => {
 			builder.replace(sel, str);
 		});
 
@@ -232,6 +232,7 @@ class PutOperator extends Operator {
 }
 
 class ReplaceOperator extends Operator {
+
 	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		if (args.length === 0) {
 			// input not ready
@@ -246,7 +247,7 @@ class ReplaceOperator extends Operator {
 			return true;
 		}
 
-		ed.edit(builder => {
+		ed.edit((builder) => {
 			builder.replace(new Range(pos.line, pos.character, pos.line, toCharacter), repeatString(args, repeatCount));
 		});
 
@@ -273,7 +274,7 @@ class ReplaceOperator extends Operator {
 			}
 		}
 
-		ed.edit(builder => {
+		ed.edit((builder) => {
 			builder.replace(sel, dstString);
 		});
 
@@ -282,6 +283,7 @@ class ReplaceOperator extends Operator {
 }
 
 class ReplaceModeOperator extends Operator {
+
 	public runNormalMode(ctrl: IController, ed: TextEditor, repeatCount: number, args: string): boolean {
 		ctrl.setMode(Mode.REPLACE);
 		return true;
@@ -292,9 +294,11 @@ class ReplaceModeOperator extends Operator {
 		ctrl.setMode(Mode.INSERT);
 		return true;
 	}
+
 }
 
 class ChangeOperator extends OperatorWithMotion {
+
 	protected _runNormalMode(ctrl: IController, ed: TextEditor, motion: Motion): boolean {
 		let to = motion.run(this.doc(ed), this.pos(ed), ctrl.motionState);
 		let from = this.pos(ed);
@@ -336,5 +340,5 @@ export const Operators = {
 	Put: new PutOperator(),
 	Replace: new ReplaceOperator(),
 	Change: new ChangeOperator(),
-	ReplaceMode: new ReplaceModeOperator()
+	ReplaceMode: new ReplaceModeOperator(),
 };
