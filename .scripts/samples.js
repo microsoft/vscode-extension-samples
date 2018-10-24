@@ -69,7 +69,13 @@ const samples = [
 	// { description: 'quickinput-sample', path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'smart-template-strings-sample', path: 'smart-template-strings-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'task-provider-sample', path: 'task-provider-sample', guide: null, apis: [], contributions: [] },
-	// { description: 'terminal-sample', path: 'terminal-sample', guide: null, apis: [], contributions: [] },
+	{ 
+		description: 'terminal-sample',
+		path: 'terminal-sample',
+		guide: null,
+		apis: ['window.createTerminal', 'window.onDidChangeActiveTerminal', 'window.onDidCloseTerminal', 'window.onDidOpenTerminal', 'window.Terminal', 'window.terminals'],
+		contributions: []
+	},
 	// { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'tree-view-sample', path: 'tree-view-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'vim-sample', path: 'vim-sample', guide: null, apis: [], contributions: [] },

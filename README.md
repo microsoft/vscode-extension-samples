@@ -23,6 +23,7 @@ You can expect from each sample:
 | [LSP Sample](lsp-sample) | [/api/language-extensions/smart-editing-lsp-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/smart-editing-lsp-guide) |  |
 | [LSP Log Streaming Sample](lsp-log-streaming-sample) | N/A |  |
 | [LSP Multi Root Server Sample](lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
+| [terminal-sample](terminal-sample) | N/A | [window.createTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createTerminal)<br>[window.onDidChangeActiveTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidChangeActiveTerminal)<br>[window.onDidCloseTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidCloseTerminal)<br>[window.onDidOpenTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidOpenTerminal)<br>[window.Terminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.Terminal)<br>[window.terminals](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.terminals) |
 <!-- SAMPLES_END -->
 
 ## :warning: Legacy Samples :warning:
