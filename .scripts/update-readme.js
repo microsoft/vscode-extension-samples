@@ -2,15 +2,11 @@ const fs = require('fs')
 
 const SAMPLES = require('./samples')
 
-const TABLE_HEAD = `
-<!-- SAMPLES_BEGIN -->
+const TABLE_HEAD = `<!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
-| ------ | ----- | --- |
-`
+| ------ | ----- | --- |`
 
-const TABLE_END = `
-<!-- SAMPLES_END -->
-`
+const TABLE_END = `<!-- SAMPLES_END -->`
 
 const getTableRow = sample => {
   const descriptionCell = `[${sample.description}](${sample.path})`
@@ -37,11 +33,9 @@ const getTableRow = sample => {
 const getSamplesTable = samples => {
   const samplesMd = samples.map(s => getTableRow(s)).join('\n')
 
-  return `
-${TABLE_HEAD.trim()}
+  return `${TABLE_HEAD.trim()}
 ${samplesMd}
-${TABLE_END.trim()}
-`
+${TABLE_END.trim()}`
 }
 
 const readme = fs.readFileSync('README.md', 'utf-8')

@@ -13,8 +13,6 @@ You can expect from each sample:
 
 ## Samples
 
-
-
 <!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
 | ------ | ----- | --- |
@@ -22,32 +20,10 @@ You can expect from each sample:
 | [Webview Sample](webview-sample) | [/api/extension-guides/webview](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/webview) | [window.createWebviewPanel](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createWebviewPanel)<br>[window.registerWebviewPanelSerializer](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.registerWebviewPanelSerializer) |
 | [Status Bar](statusbar-sample) | [/api/extension-guides/status-bar](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/status-bar) | [StatusBarItem](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#StatusBarItem) |
 | [File System Provider Sample](fsprovider-sample) | N/A | [workspace.registerFileSystemProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.registerFileSystemProvider) |
-| [completions-sample](completions-sample) | N/A |  |
-| [configuration-sample](configuration-sample) | N/A |  |
-| [contentprovider-sample](contentprovider-sample) | N/A |  |
-| [decorator-sample](decorator-sample) | N/A |  |
-| [extension-deps-sample](extension-deps-sample) | N/A |  |
-| [hellocode-minimal-sample](hellocode-minimal-sample) | N/A |  |
-| [hellocode-sample](hellocode-sample) | N/A |  |
-| [i18n-sample](i18n-sample) | N/A |  |
-| [legacy-samples](legacy-samples) | N/A |  |
 | [LSP Log Streaming Sample](lsp-log-streaming-sample) | N/A |  |
 | [LSP Multi Root Server Sample](lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
 | [LSP Sample](lsp-sample) | [/api/language-extensions/smart-editing-lsp-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/smart-editing-lsp-guide) |  |
-| [multi-diagnostics-sample](multi-diagnostics-sample) | N/A |  |
-| [nodefs-provider-sample](nodefs-provider-sample) | N/A |  |
-| [progress-sample](progress-sample) | N/A |  |
-| [quickinput-sample](quickinput-sample) | N/A |  |
-| [smart-template-strings-sample](smart-template-strings-sample) | N/A |  |
-| [task-provider-sample](task-provider-sample) | N/A |  |
-| [terminal-sample](terminal-sample) | N/A |  |
-| [theme-sample](theme-sample) | N/A |  |
-| [tree-view-sample](tree-view-sample) | N/A |  |
-| [vim-sample](vim-sample) | N/A |  |
-| [webpack-sample](webpack-sample) | N/A |  |
 <!-- SAMPLES_END -->
-
-
 
 ## :warning: Legacy Samples :warning:
 
