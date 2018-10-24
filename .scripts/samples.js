@@ -43,6 +43,13 @@ const samples = [
 	// { description: 'i18n-sample', path: 'i18n-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'legacy-samples', path: 'legacy-samples', guide: null, apis: [], contributions: [] },
 	{
+		description: 'LSP Sample',
+		path: 'lsp-sample',
+		guide: '/api/language-extensions/smart-editing-lsp-guide',
+		apis: [],
+		contributions: []
+	},
+	{
 		description: 'LSP Log Streaming Sample',
 		path: 'lsp-log-streaming-sample',
 		guide: null,
@@ -53,13 +60,6 @@ const samples = [
 		description: 'LSP Multi Root Server Sample',
 		path: 'lsp-multi-server-sample',
 		guide: 'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
-		apis: [],
-		contributions: []
-	},
-	{
-		description: 'LSP Sample',
-		path: 'lsp-sample',
-		guide: '/api/language-extensions/smart-editing-lsp-guide',
 		apis: [],
 		contributions: []
 	},

@@ -20,9 +20,9 @@ You can expect from each sample:
 | [Webview Sample](webview-sample) | [/api/extension-guides/webview](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/webview) | [window.createWebviewPanel](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createWebviewPanel)<br>[window.registerWebviewPanelSerializer](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.registerWebviewPanelSerializer) |
 | [Status Bar](statusbar-sample) | [/api/extension-guides/status-bar](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/status-bar) | [StatusBarItem](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#StatusBarItem) |
 | [File System Provider Sample](fsprovider-sample) | N/A | [workspace.registerFileSystemProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.registerFileSystemProvider) |
+| [LSP Sample](lsp-sample) | [/api/language-extensions/smart-editing-lsp-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/smart-editing-lsp-guide) |  |
 | [LSP Log Streaming Sample](lsp-log-streaming-sample) | N/A |  |
 | [LSP Multi Root Server Sample](lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
-| [LSP Sample](lsp-sample) | [/api/language-extensions/smart-editing-lsp-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/smart-editing-lsp-guide) |  |
 <!-- SAMPLES_END -->
 
 ## :warning: Legacy Samples :warning:
