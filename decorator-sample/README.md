@@ -4,6 +4,8 @@
 
 This folder contains a sample VS code extension that demonstrates the decorator API.
 
+The Decorator API allows text to be decorated with a subset of CSS.
+
 The sample creates a decoration for each number that appears in the active editor. It
 demonstrates some of the decorator features such as borders, background colors, cursors
 and hovers. 
