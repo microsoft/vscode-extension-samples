@@ -32,8 +32,14 @@ const samples = [
 		apis: ['StatusBarItem'],
 		contributions: []
 	},
+	{
+		description: 'completions-sample',
+		path: 'completions-sample',
+		guide: null,
+		apis: ['languages.registerCompletionItemProvider', 'CompletionItem', 'SnippetString'],
+		contributions: []
+	},
 	{ description: 'File System Provider Sample', path: 'fsprovider-sample', guide: null, apis: ['workspace.registerFileSystemProvider'], contributions: [] },
-	// { description: 'completions-sample', path: 'completions-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'configuration-sample', path: 'configuration-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'contentprovider-sample', path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'decorator-sample', path: 'decorator-sample', guide: null, apis: [], contributions: [] },
@@ -69,7 +75,7 @@ const samples = [
 	// { description: 'quickinput-sample', path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'smart-template-strings-sample', path: 'smart-template-strings-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'task-provider-sample', path: 'task-provider-sample', guide: null, apis: [], contributions: [] },
-	{ 
+	{
 		description: 'terminal-sample',
 		path: 'terminal-sample',
 		guide: null,
