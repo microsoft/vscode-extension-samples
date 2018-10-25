@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	let registration = vscode.languages.registerCompletionItemProvider('plaintext', {
+	let provider1 = vscode.languages.registerCompletionItemProvider('plaintext', {
 
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 
@@ -48,5 +48,27 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(registration);
+	const provider2 = vscode.languages.registerCompletionItemProvider(
+		'plaintext',
+		{
+			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+
+				// get all text until the `position` and check if it reads `console.`
+				// and iff so then complete if `log`, `warn`, and `error`
+				let linePrefix = document.lineAt(position).text.substr(0, position.character);
+				if (!linePrefix.endsWith('console.')) {
+					return undefined;
+				}
+
+				return [
+					new vscode.CompletionItem('log', vscode.CompletionItemKind.Method),
+					new vscode.CompletionItem('warn', vscode.CompletionItemKind.Method),
+					new vscode.CompletionItem('error', vscode.CompletionItemKind.Method),
+				];
+			}
+		},
+		'.' // triggered whenever a '.' is being typed
+	);
+
+	context.subscriptions.push(provider1, provider2);
 }
