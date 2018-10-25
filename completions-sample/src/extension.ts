@@ -12,7 +12,8 @@ export function activate(context: vscode.ExtensionContext) {
 	// * registers for text files (`'plaintext'`), and
 	// * return the 'Hello World' and 
 	//   a snippet-based completion item.
-	vscode.languages.registerCompletionItemProvider('plaintext', {
+	let registration = vscode.languages.registerCompletionItemProvider('plaintext', {
+
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 			return [
 				new vscode.CompletionItem('Hello World!'),
@@ -20,6 +21,8 @@ export function activate(context: vscode.ExtensionContext) {
 			];
 		}
 	});
+
+	context.subscriptions.push(registration);
 
 	function createSnippetItem(): vscode.CompletionItem {
 
