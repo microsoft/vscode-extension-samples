@@ -5,3 +5,8 @@ This sample shows how to provide completions aka IntelliSense into the editor. T
 ![Sample](demo.gif)
 
 
+## VS Code API
+
+### `vscode` module
+
+- [`languages.registerCompletionItemProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#languages.registerCompletionItemProvider)
