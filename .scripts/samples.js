@@ -83,7 +83,13 @@ const samples = [
 		contributions: []
 	},
 	// { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
-	// { description: 'tree-view-sample', path: 'tree-view-sample', guide: null, apis: [], contributions: [] },
+	{
+		description: 'tree-view-sample',
+		path: 'tree-view-sample',
+		guide: '/api/extension-guides/tree-view',
+		apis: ['window.createTreeView', 'window.registerTreeDataProvider', 'TreeView', 'TreeDataProvider'],
+		contributions: ['views', 'viewsContainers']
+	},
 	// { description: 'vim-sample', path: 'vim-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'webpack-sample', path: 'webpack-sample', guide: null, apis: [], contributions: [] },
 ];

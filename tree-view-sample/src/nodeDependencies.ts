@@ -23,7 +23,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 			vscode.window.showInformationMessage('No dependency in empty workspace');
 			return Promise.resolve([]);
 		}
-		
+
 		if (element) {
 			return Promise.resolve(this.getDepsInPackageJson(path.join(this.workspaceRoot, 'node_modules', element.label, 'package.json')));
 		} else {
@@ -35,7 +35,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 				return Promise.resolve([]);
 			}
 		}
-		
+
 	}
 
 	/**
