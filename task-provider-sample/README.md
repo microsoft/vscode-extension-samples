@@ -1,6 +1,17 @@
 # Task Provider Example
 
-- Detects tasks in Rakefiles
+Auto detects tasks in Rakefiles.
+
+## VS Code API
+
+### `vscode` module
+
+- [`tasks`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#_tasks)
+
+### Contribution Points
+
+- [`contributes.taskdefinitions`](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributestaskdefinitions)
+
 
 ## Running the example
 
