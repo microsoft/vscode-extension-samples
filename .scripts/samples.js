@@ -6,7 +6,7 @@
  * @property {string} path - Path to the sample's root
  * @property {string | null} guide - Link to the guide on https://code.visualstudio.com
  * @property {string[]} apis - Listing of VS Code API that is being illustrated. For example, "TextDocumentContentProvider"
- * @property {string[]} contributions - Listing of Contribution Points that are being used. For example, 
+ * @property {string[]} contributions - Listing of Contribution Points that are being used. For example,
  */
 
 /** @type {Sample[]} */
@@ -46,7 +46,13 @@ const samples = [
 	// { description: 'extension-deps-sample', path: 'extension-deps-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'hellocode-minimal-sample', path: 'hellocode-minimal-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'hellocode-sample', path: 'hellocode-sample', guide: null, apis: [], contributions: [] },
-	// { description: 'i18n-sample', path: 'i18n-sample', guide: null, apis: [], contributions: [] },
+	{
+		description: 'I18n Sample',
+		path: 'i18n-sample',
+		guide: null,
+		apis: [],
+		contributions: []
+	},
 	// { description: 'legacy-samples', path: 'legacy-samples', guide: null, apis: [], contributions: [] },
 	{
 		description: 'LSP Sample',
@@ -74,7 +80,13 @@ const samples = [
 	// { description: 'progress-sample', path: 'progress-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'quickinput-sample', path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'smart-template-strings-sample', path: 'smart-template-strings-sample', guide: null, apis: [], contributions: [] },
-	// { description: 'task-provider-sample', path: 'task-provider-sample', guide: null, apis: [], contributions: [] },
+	{
+		description: 'Contribute Tasks via an Extension',
+		path: 'task-provider-sample',
+		guide: '/api/extension-guides/task-provider',
+		apis: ['tasks.registerTaskProvider', 'Task', 'ShellExecution'],
+		contributions: ['taskDefinitions']
+	},
 	{
 		description: 'terminal-sample',
 		path: 'terminal-sample',
