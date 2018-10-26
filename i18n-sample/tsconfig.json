@@ -1,5 +1,5 @@
 {
-	"compileOnSave": false,
+	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
 		"module": "commonjs",
 		"target": "es6",
@@ -8,5 +8,7 @@
 		"sourceMap": true,
 		"rootDir": "src"
 	},
-	"exclude": ["node_modules"]
+	"exclude": [
+		"node_modules"
+	]
 }
