@@ -83,7 +83,7 @@ const samples = [
 	{
 		description: 'Contribute Tasks via an Extension',
 		path: 'task-provider-sample',
-		guide: '/api/extension-guides/task-provider',
+		guide: '/api/extension-guides/api-tasks',
 		apis: ['tasks.registerTaskProvider', 'Task', 'ShellExecution'],
 		contributions: ['taskDefinitions']
 	},
