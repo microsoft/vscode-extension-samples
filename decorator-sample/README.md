@@ -1,5 +1,4 @@
 # Decorator Sample
--------------------
 
 This folder contains a sample VS code extension that demonstrates the editor decorator API.
 
@@ -15,7 +14,7 @@ The sample also shows the use of a user defined themeable color. This is the rec
 
 The sample code show the usage of the vscode.`TextEditor.setDecorations` and `vscode.window.createTextEditorDecorationType` APIs as well as the `colors` contribution point.
 
-# Running the Sample
+## Running the Sample
 
 * `npm install` to initialize the project
 * `npm run watch` to start the compiler in watch mode
