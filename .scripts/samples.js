@@ -52,7 +52,7 @@ const samples = [{
 		path: 'decorator-sample',
 		guide: null,
 		apis: ['TextEditor.setDecorations', 'DecorationOptions', 'DecorationInstanceRenderOptions', 'ThemableDecorationInstanceRenderOptions', 'window.createTextEditorDecorationType', 'TextEditorDecorationType'],
-		contributions: [ 'colors']
+		contributions: ['colors']
 	},
 	// { description: 'extension-deps-sample', path: 'extension-deps-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'hellocode-minimal-sample', path: 'hellocode-minimal-sample', guide: null, apis: [], contributions: [] },
@@ -71,9 +71,9 @@ const samples = [{
 	// { description: 'quickinput-sample', path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'smart-template-strings-sample', path: 'smart-template-strings-sample', guide: null, apis: [], contributions: [] },
 	{
-		description: 'Contribute Tasks via an Extension',
+		description: 'Task Provider Sample',
 		path: 'task-provider-sample',
-		guide: '/api/extension-guides/api-tasks',
+		guide: '/api/extension-guides/task-provider',
 		apis: ['tasks.registerTaskProvider', 'Task', 'ShellExecution'],
 		contributions: ['taskDefinitions']
 	},

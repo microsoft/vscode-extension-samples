@@ -26,7 +26,7 @@ const getTableRow = sample => {
     return `[${api}](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#${api})`
   })
   const contributions = sample.contributions.map(c => {
-    return `[${c}](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#${c})`
+    return `[contributes.${c}](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.${c})`
   })
   const apiAndContributionCell = apis.concat(contributions).join('<br>')
 
