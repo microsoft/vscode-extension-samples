@@ -19,12 +19,21 @@ You can expect from each sample:
 | [Multi Root Sample](basic-multi-root-sample) | N/A | [workspace.getWorkspaceFolder](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.getWorkspaceFolder)<br>[workspace.onDidChangeWorkspaceFolders](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.onDidChangeWorkspaceFolders) |
 | [Webview Sample](webview-sample) | [/api/extension-guides/webview](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/webview) | [window.createWebviewPanel](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createWebviewPanel)<br>[window.registerWebviewPanelSerializer](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.registerWebviewPanelSerializer) |
 | [Status Bar](statusbar-sample) | [/api/extension-guides/status-bar](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/status-bar) | [StatusBarItem](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#StatusBarItem) |
+| [completions-sample](completions-sample) | N/A | [languages.registerCompletionItemProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#languages.registerCompletionItemProvider)<br>[CompletionItem](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#CompletionItem)<br>[SnippetString](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#SnippetString) |
 | [File System Provider Sample](fsprovider-sample) | N/A | [workspace.registerFileSystemProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#workspace.registerFileSystemProvider) |
+| [terminal-sample](terminal-sample) | N/A | [window.createTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createTerminal)<br>[window.onDidChangeActiveTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidChangeActiveTerminal)<br>[window.onDidCloseTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidCloseTerminal)<br>[window.onDidOpenTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidOpenTerminal)<br>[window.Terminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.Terminal)<br>[window.terminals](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.terminals) |
+| [tree-view-sample](tree-view-sample) | [/api/extension-guides/tree-view](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/tree-view) | [window.createTreeView](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createTreeView)<br>[window.registerTreeDataProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.registerTreeDataProvider)<br>[TreeView](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#TreeView)<br>[TreeDataProvider](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#TreeDataProvider)<br>[views](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#views)<br>[viewsContainers](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#viewsContainers) |
+<!-- SAMPLES_END -->
+
+### Language Protocol Server Samples
+
+<!-- LSP_SAMPLES_BEGIN -->
+| Sample | Guide on VS Code Website | API & Contribution |
+| ------ | ----- | --- |
 | [LSP Sample](lsp-sample) | [/api/language-extensions/smart-editing-lsp-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/smart-editing-lsp-guide) |  |
 | [LSP Log Streaming Sample](lsp-log-streaming-sample) | N/A |  |
 | [LSP Multi Root Server Sample](lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
-| [terminal-sample](terminal-sample) | N/A | [window.createTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createTerminal)<br>[window.onDidChangeActiveTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidChangeActiveTerminal)<br>[window.onDidCloseTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidCloseTerminal)<br>[window.onDidOpenTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidOpenTerminal)<br>[window.Terminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.Terminal)<br>[window.terminals](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.terminals) |
-<!-- SAMPLES_END -->
+<!-- LSP_SAMPLES_END -->
 
 ## :warning: Legacy Samples :warning:
 

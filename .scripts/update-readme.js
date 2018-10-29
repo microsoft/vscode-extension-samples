@@ -1,12 +1,15 @@
 const fs = require('fs')
 
-const SAMPLES = require('./samples')
+const { samples, lspSamples } = require('./samples')
 
 const TABLE_HEAD = `<!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
 | ------ | ----- | --- |`
-
 const TABLE_END = `<!-- SAMPLES_END -->`
+const LSP_TABLE_HEAD = `<!-- LSP_SAMPLES_BEGIN -->
+| Sample | Guide on VS Code Website | API & Contribution |
+| ------ | ----- | --- |`
+const LSP_TABLE_END = `<!-- LSP_SAMPLES_END -->`
 
 const getTableRow = sample => {
   const descriptionCell = `[${sample.description}](${sample.path})`
@@ -38,7 +41,17 @@ ${samplesMd}
 ${TABLE_END.trim()}`
 }
 
+const getLSPSamplesTable = samples => {
+  const samplesMd = samples.map(s => getTableRow(s)).join('\n')
+
+  return `${LSP_TABLE_HEAD.trim()}
+${samplesMd}
+${LSP_TABLE_END.trim()}`
+}
+
 const readme = fs.readFileSync('README.md', 'utf-8')
-const newReadme = readme.replace(/<!-- SAMPLES_BEGIN -->(.|\n)*<!-- SAMPLES_END -->/gm, getSamplesTable(SAMPLES))
+const newReadme = readme
+  .replace(/<!-- SAMPLES_BEGIN -->(.|\n)*<!-- SAMPLES_END -->/gm, getSamplesTable(samples))
+  .replace(/<!-- LSP_SAMPLES_BEGIN -->(.|\n)*<!-- LSP_SAMPLES_END -->/gm, getLSPSamplesTable(lspSamples))
 
 fs.writeFileSync('README.md', newReadme)

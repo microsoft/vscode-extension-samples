@@ -65,27 +65,6 @@ const samples = [{
 		contributions: []
 	},
 	// { description: 'legacy-samples', path: 'legacy-samples', guide: null, apis: [], contributions: [] },
-	{
-		description: 'LSP Sample',
-		path: 'lsp-sample',
-		guide: '/api/language-extensions/smart-editing-lsp-guide',
-		apis: [],
-		contributions: []
-	},
-	{
-		description: 'LSP Log Streaming Sample',
-		path: 'lsp-log-streaming-sample',
-		guide: null,
-		apis: [],
-		contributions: []
-	},
-	{
-		description: 'LSP Multi Root Server Sample',
-		path: 'lsp-multi-server-sample',
-		guide: 'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
-		apis: [],
-		contributions: []
-	},
 	// { description: 'multi-diagnostics-sample', path: 'multi-diagnostics-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'nodefs-provider-sample', path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'progress-sample', path: 'progress-sample', guide: null, apis: [], contributions: [] },
@@ -117,4 +96,32 @@ const samples = [{
 	// { description: 'webpack-sample', path: 'webpack-sample', guide: null, apis: [], contributions: [] },
 ];
 
-module.exports = samples;
+/** @type {Sample[]} */
+const lspSamples = [
+	{
+		description: 'LSP Sample',
+		path: 'lsp-sample',
+		guide: '/api/language-extensions/smart-editing-lsp-guide',
+		apis: [],
+		contributions: []
+	},
+	{
+		description: 'LSP Log Streaming Sample',
+		path: 'lsp-log-streaming-sample',
+		guide: null,
+		apis: [],
+		contributions: []
+	},
+	{
+		description: 'LSP Multi Root Server Sample',
+		path: 'lsp-multi-server-sample',
+		guide: 'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
+		apis: [],
+		contributions: []
+	},
+]
+
+module.exports = {
+	samples,
+	lspSamples
+}
