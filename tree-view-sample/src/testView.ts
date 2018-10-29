@@ -3,11 +3,11 @@ import * as vscode from 'vscode';
 export class TestView {
 
 	constructor(context: vscode.ExtensionContext) {
-		const view = vscode.window.createTreeView('testView', { treeDataProvider: aNodeWithIdTreeDataProvider() });
+		const view = vscode.window.createTreeView('testView', { treeDataProvider: aNodeWithIdTreeDataProvider(), showCollapseAll: true });
 		vscode.commands.registerCommand('testView.reveal', async () => {
-			const key = await vscode.window.showInputBox();
+			const key = await vscode.window.showInputBox({ placeHolder: 'Type the label of the item to reveal' });
 			if (key) {
-				await view.reveal({ key }, { focus: true, select: false });
+				await view.reveal({ key }, { focus: true, select: false, expand: true });
 			}
 		});
 	}
@@ -63,10 +63,10 @@ function getChildren(key: string): string[] {
 	return [];
 }
 
-function getTreeItem(key: string): vscode.TreeItem {
+function getTreeItem(key: string): vscode.TreeItem2 {
 	const treeElement = getTreeElement(key);
 	return {
-		label: key,
+		label: <vscode.TreeItemLabel>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0},
 		tooltip: `Tooltip for ${key}`,
 		collapsibleState: treeElement && Object.keys(treeElement).length ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None
 	};
