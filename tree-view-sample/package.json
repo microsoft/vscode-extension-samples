@@ -7,7 +7,6 @@
 	"engines": {
 		"vscode": "^1.25.0"
 	},
-	"enableProposedApi": true,
 	"categories": [
 		"Other"
 	],
@@ -16,8 +15,10 @@
 		"onView:ftpExplorer",
 		"onView:jsonOutline",
 		"onView:fileExplorer",
+		"onView:testView",
 		"onLanguage:json",
-		"onLanguage:jsonc"
+		"onLanguage:jsonc",
+		"onCommand:sample.reveal"
 	],
 	"main": "./out/extension",
 	"contributes": {
@@ -50,6 +51,10 @@
 				{
 					"id": "fileExplorer",
 					"name": "File Explorer"
+				},
+				{
+					"id": "testView",
+					"name": "Test View"
 				}
 			]
 		},
@@ -117,6 +122,10 @@
 			{
 				"command": "fileExplorer.openFile",
 				"title": "Open File"
+			},
+			{
+				"command": "testView.reveal",
+				"title": "Reveal"
 			}
 		],
 		"menus": {
