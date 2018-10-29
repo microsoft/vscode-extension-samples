@@ -24,6 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// create a decorator type that we use to decorate large numbers
 	const largeNumberDecorationType = vscode.window.createTextEditorDecorationType({
 		cursor: 'crosshair',
+		// use a themable color. See package.json for the declaration and default values.
 		backgroundColor: { id: 'myextension.largeNumberBackground' }
 	});
 
@@ -45,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}, null, context.subscriptions);
 
-	let timeout = null;
+	let timeout : NodeJS.Timer | null = null;
 	function triggerUpdateDecorations() {
 		if (timeout) {
 			clearTimeout(timeout);

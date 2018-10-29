@@ -52,7 +52,7 @@ const samples = [{
 		path: 'decorator-sample',
 		guide: null,
 		apis: ['TextEditor.setDecorations', 'DecorationOptions', 'DecorationInstanceRenderOptions', 'ThemableDecorationInstanceRenderOptions', 'window.createTextEditorDecorationType', 'TextEditorDecorationType'],
-		contributions: []
+		contributions: [ 'colors']
 	},
 	// { description: 'extension-deps-sample', path: 'extension-deps-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'hellocode-minimal-sample', path: 'hellocode-minimal-sample', guide: null, apis: [], contributions: [] },

@@ -6,7 +6,7 @@ The sample creates a decoration for each number that appears in the active edito
 demonstrates some of the decorator features such as borders, background colors, cursors
 and hovers.
 
-The sample also shows the use of a user defined themeable color. This is the recommended way when using cololrs as it allows users (and themes) to configure the color in the user settings.
+The sample also shows the use of a user defined themeable color. Instead of hardcoding a color value this allows users (and themes) to redefine the color in the user settings.
 
 ![sample](preview.png)
 
