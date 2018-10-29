@@ -1,6 +1,6 @@
-# Task Provider Example
+# Task Provider Sample
 
-Auto detects tasks in Rakefiles.
+This is the source code for the [Task Provider Guide](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/task-provider). It auto-detects tasks in [Rakefiles](https://ruby.github.io/rake/).
 
 ## VS Code API
 
