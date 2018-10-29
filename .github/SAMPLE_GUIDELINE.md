@@ -1,7 +1,7 @@
 # Sample Guideline
 
 Each sample should have the following components and structure, so that users could have a smooth experience when playing with different samples.
-The quickest way is to start your project by copying hellocode-sample.
+The quickest way is to start your project by copying .base-sample.
 
 ## 1: Sample Listing
 
