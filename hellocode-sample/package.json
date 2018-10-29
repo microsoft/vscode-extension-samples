@@ -5,20 +5,20 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.28.0"
+		"vscode": "^1.25.0"
 	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.sayHello"
+		"onCommand:extension.helloCode"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.sayHello",
-				"title": "Hello World"
+				"command": "extension.helloCode",
+				"title": "Hello Code"
 			}
 		]
 	},
@@ -26,14 +26,11 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
 	"devDependencies": {
-		"typescript": "^2.6.1",
-		"vscode": "^1.1.21",
-		"tslint": "^5.8.0",
 		"@types/node": "^8.10.25",
-		"@types/mocha": "^2.2.42"
+		"typescript": "^2.6.1",
+		"vscode": "^1.1.21"
 	}
 }
