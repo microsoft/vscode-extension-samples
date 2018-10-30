@@ -55,8 +55,6 @@ const samples = [{
 		contributions: ['colors']
 	},
 	// { description: 'extension-deps-sample', path: 'extension-deps-sample', guide: null, apis: [], contributions: [] },
-	// { description: 'hellocode-minimal-sample', path: 'hellocode-minimal-sample', guide: null, apis: [], contributions: [] },
-	// { description: 'hellocode-sample', path: 'hellocode-sample', guide: null, apis: [], contributions: [] },
 	{
 		description: 'I18n Sample',
 		path: 'i18n-sample',

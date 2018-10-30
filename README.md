@@ -11,6 +11,12 @@ You can expect from each sample:
 - Listing of used VS Code API and Contribution Points
 - Code of the same style, enforced using TSLint and Prettier
 
+## Special Samples
+
+- [Hello Code Sample](hellocode-sample): The Hello World sample for VS Code.
+- [Hello Code Minimal Sample](hellocode-sample): A minimal version of Hello Code Sample that doesn't use TypeScript.
+- [Proposed API Sample](proposed-api-sample): A sample that illustrates [Proposed API](https://vscode-ext-docs.azurewebsites.net/api/advanced-topics/using-proposed-api).
+
 ## Samples
 
 <!-- SAMPLES_BEGIN -->
