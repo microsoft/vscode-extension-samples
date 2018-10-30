@@ -19,6 +19,8 @@ You can expect from each sample:
 
 ## Samples
 
+These samples illustrate usage of [vscode API](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api) or VS Code [Contribution Points](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points).
+
 <!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
 | ------ | ----- | --- |
