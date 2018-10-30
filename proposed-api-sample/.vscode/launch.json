@@ -10,7 +10,6 @@
 			"request": "launch",
 			"runtimeExecutable": "${execPath}",
 			"args": [
-				// "--enable-proposed-api",
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
 			"outFiles": [
