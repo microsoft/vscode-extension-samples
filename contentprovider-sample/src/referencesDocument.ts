@@ -96,7 +96,7 @@ export default class ReferencesDocument {
 			this._lines.push('', uri.toString());
 
 			for (let i = 0; i < ranges.length; i++) {
-				const {start: {line}} = ranges[i];
+				const { start: { line } } = ranges[i];
 				this._appendLeading(doc, line, ranges[i - 1]);
 				this._appendMatch(doc, line, ranges[i], uri);
 				this._appendTrailing(doc, line, ranges[i + 1]);

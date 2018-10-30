@@ -2,7 +2,6 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
-'use strict';
 
 import * as path from 'path';
 import { workspace, ExtensionContext } from 'vscode';
@@ -58,7 +57,7 @@ export function activate(context: ExtensionContext) {
 	client.start();
 }
 
-export function deactivate(): Thenable<void> {
+export function deactivate(): Thenable<void> | undefined {
 	if (!client) {
 		return undefined;
 	}

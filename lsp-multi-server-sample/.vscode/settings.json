@@ -1,12 +1,6 @@
 {
-	"files.exclude": {
-		"out": false // set this to true to hide the "out" folder with the compiled JS files
-	},
-	"search.exclude": {
-		"out": true // set this to false to include "out" folder in search results
-	},
-	"typescript.tsdk": "./node_modules/typescript/lib",
+	"editor.insertSpaces": false,
+	"tslint.enable": true,
 	"typescript.tsc.autoDetect": "off",
-	"npm.exclude": ["**/client", "**/server"],
-	"npm.enableScriptExplorer": true
+	"typescript.preferences.quoteStyle": "single"
 }

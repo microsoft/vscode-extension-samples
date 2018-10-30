@@ -24,7 +24,7 @@ It also includes an End-to-End test.
         └── server.ts // Language Server entry point
 ```
 
-## Compile and Run
+## Runnint the Sample
 
 - Run `npm install` in this folder. This installs all necessary npm modules in both the client and server folder
 - Open VS Code on this folder.

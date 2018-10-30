@@ -94,10 +94,6 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage(`onDidCloseTerminal, name: ${terminal.name}`);
 	});
 
-
-	// vvv Proposed APIs in 1.23 below vvv
-
-
 	// vscode.window.terminals
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminals', () => {
 		selectTerminal();
@@ -118,7 +114,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}));
 
-	// vvv Proposed APIs in 1.25 below vvv
+	// Proposed APIs below
 	let renderer;
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererCreate', () => {
 		renderer = (<any>vscode.window).createTerminalRenderer('renderer');

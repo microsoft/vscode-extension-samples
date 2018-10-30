@@ -13,6 +13,17 @@ Demonstrates VS Code's [webview API](https://code.visualstudio.com/docs/extensio
 - Saving and restoring state when the panel goes into the background.
 - Serialization and persistence across VS Code reboots.
 
+## Demo
+
+![demo](demo.gif)
+
+## VS Code API
+
+### `vscode` module
+
+- [`window.createWebviewPanel`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#window.createWebviewPanel)
+- [`window.registerWebviewPanelSerializer`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#window.registerWebviewPanelSerializer)
+
 ## Running the example
 
 - Open this example in VS Code 1.25+

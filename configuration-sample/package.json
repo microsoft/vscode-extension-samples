@@ -3,7 +3,7 @@
 	"displayName": "Configuration Sample",
 	"description": "How to contribute and use configurations in VS Code",
 	"version": "0.0.1",
-	"publisher": "ms-vscode",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.17.0"
 	},

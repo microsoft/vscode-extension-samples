@@ -1,16 +1,13 @@
 {
+	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
 		"module": "commonjs",
 		"target": "es6",
 		"outDir": "out",
-		"lib": [
-			"es6"
-		],
+		"lib": ["es6"],
 		"sourceMap": true,
-		"rootDir": "."
+		"rootDir": "src"
 	},
-	"exclude": [
-		"node_modules",
-		".vscode-test"
-	]
+	"include": [ "src" ],
+	"exclude": ["node_modules", ".vscode-test"]
 }

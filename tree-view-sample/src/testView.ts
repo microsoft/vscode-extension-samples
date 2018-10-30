@@ -63,10 +63,17 @@ function getChildren(key: string): string[] {
 	return [];
 }
 
+<<<<<<< HEAD
 function getTreeItem(key: string): vscode.TreeItem2 {
 	const treeElement = getTreeElement(key);
 	return {
 		label: <vscode.TreeItemLabel>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0},
+=======
+function getTreeItem(key: string): vscode.TreeItem {
+	const treeElement = getTreeElement(key);
+	return {
+		label: key,
+>>>>>>> ext-docs
 		tooltip: `Tooltip for ${key}`,
 		collapsibleState: treeElement && Object.keys(treeElement).length ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None
 	};
