@@ -1,5 +1,4 @@
 {
-	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
 		"target": "es6",
 		"module": "commonjs",
@@ -10,5 +9,5 @@
 		"lib": ["es6"]
 	},
 	"include": ["src"],
-	"exclude": ["node_modules"]
+	"exclude": ["node_modules", ".vscode-test"]
 }
