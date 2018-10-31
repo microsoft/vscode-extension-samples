@@ -15,7 +15,6 @@ You can expect from each sample:
 
 - [Hello Code Sample](hellocode-sample): The Hello World sample for VS Code.
 - [Hello Code Minimal Sample](hellocode-sample): A minimal version of Hello Code Sample that doesn't use TypeScript.
-- [Proposed API Sample](proposed-api-sample): A sample that illustrates [Proposed API](https://vscode-ext-docs.azurewebsites.net/api/advanced-topics/using-proposed-api).
 
 ## Samples
 
