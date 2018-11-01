@@ -1,15 +1,31 @@
 # Theme Samples
 
-This sample contains two example TextMate themes. 
+This sample color theme extension contains two TextMate themes. 
 
-Token colorization (syntax highlighting) is based on TextMate grammars and TextMate themes. Colors are matched against one or more scopes. To learn more about scopes and how they're used, check out the [theme](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_adding-a-new-color-theme) documentation.
+Text Mate themes describe the theming rules used for syntax highlighting. Each rule consists of one or more scope selectors and a set of styles. To learn more about scopes and how they're used, check out the [color theme](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_adding-a-new-color-theme) documentation.
 
 You can directly use .tmTheme files in your extensions or import/convert them with VS Code's extension generator [yo code](https://code.visualstudio.com/docs/extensions/yocode).
+
+## Demo
+
+Sample Light
+
+![Sample light](./demo-light.png)
+
+Sample Dark
+
+![Sample dark](./demo-dark.png)
+
+## VS Code API
+
+### Contribution Points
+
+- [contributes.themes](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributesthemes)
 
 ## Running the sample
 
 - Press `F5` to open a new window with your extension loaded.
-- Open `File > Preferences > Color Themes` (or ) and pick `Sample Light` or `Sample Dark`.
+- Open `File > Preferences > Color Themes` (or `Code > Preferences > Color Theme` on macOS), and pick `Sample Light` or `Sample Dark`.
 - Open a file that has a language associated. The languages' configured grammar will tokenize the text and assign 'scopes' to the tokens. To examine these scopes, invoke the `Inspect TM Scopes` command from the Commmand Palette (`Ctrl+Shift+P` or `Cmd+Shift+P` on Mac) .
 
 ## Make changes
