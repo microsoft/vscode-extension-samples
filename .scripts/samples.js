@@ -32,7 +32,7 @@ const samples = [{
 		contributions: []
 	},
 	{
-		description: 'completions-sample',
+		description: 'Completion Provider Sample',
 		path: 'completions-sample',
 		guide: null,
 		apis: ['languages.registerCompletionItemProvider', 'CompletionItem', 'SnippetString'],
@@ -48,7 +48,7 @@ const samples = [{
 	// { description: 'configuration-sample', path: 'configuration-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'contentprovider-sample', path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
 	{
-		description: 'decorator-sample',
+		description: 'Editor Decoractor Sample',
 		path: 'decorator-sample',
 		guide: null,
 		apis: ['TextEditor.setDecorations', 'DecorationOptions', 'DecorationInstanceRenderOptions', 'ThemableDecorationInstanceRenderOptions', 'window.createTextEditorDecorationType', 'TextEditorDecorationType'],
@@ -76,7 +76,7 @@ const samples = [{
 		contributions: ['taskDefinitions']
 	},
 	{
-		description: 'terminal-sample',
+		description: 'Terminal Sample',
 		path: 'terminal-sample',
 		guide: null,
 		apis: ['window.createTerminal', 'window.onDidChangeActiveTerminal', 'window.onDidCloseTerminal', 'window.onDidOpenTerminal', 'window.Terminal', 'window.terminals'],
@@ -84,7 +84,7 @@ const samples = [{
 	},
 	// { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
 	{
-		description: 'tree-view-sample',
+		description: 'Tree View Sample',
 		path: 'tree-view-sample',
 		guide: '/api/extension-guides/tree-view',
 		apis: ['window.createTreeView', 'window.registerTreeDataProvider', 'TreeView', 'TreeDataProvider'],
