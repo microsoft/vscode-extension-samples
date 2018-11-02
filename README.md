@@ -18,7 +18,7 @@ You can expect from each sample:
 
 ## Samples
 
-**:construction: Some links point to our work-in-progress [API Extension](https://vscode-ext-docs.azurewebsites.net/api) documentation that is not published yet :construction:**
+**:construction: :rotating_light: :construction: Some links point to our work-in-progress [API Extension](https://vscode-ext-docs.azurewebsites.net/api) documentation that is not yet published :construction: :rotating_light: :construction:**
 
 <!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
