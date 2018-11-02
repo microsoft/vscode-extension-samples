@@ -18,7 +18,7 @@ You can expect from each sample:
 
 ## Samples
 
-**:warning: Some links point to our work-in-progress extension documentation that is not published yet :warning:**
+**:warning: Some links point to our work-in-progress [API Extension](https://vscode-ext-docs.azurewebsites.net/api) documentation that is not published yet :warning:**
 
 <!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
