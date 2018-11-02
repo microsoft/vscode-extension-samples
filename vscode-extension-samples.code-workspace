@@ -1,0 +1,94 @@
+{
+	"folders": [
+		{
+			"path": "webview-sample"
+		},
+		{
+			"path": "theme-sample"
+		},
+		{
+			"path": "tree-view-sample"
+		},
+		{
+			"path": "webpack-sample"
+		},
+		{
+			"path": "vim-sample"
+		},
+		{
+			"path": "terminal-sample"
+		},
+		{
+			"path": "task-provider-sample"
+		},
+		{
+			"path": "statusbar-sample"
+		},
+		{
+			"path": "smart-template-strings-sample"
+		},
+		{
+			"path": "quickinput-sample"
+		},
+		{
+			"path": "progress-sample"
+		},
+		{
+			"path": "nodefs-provider-sample"
+		},
+		{
+			"path": "multi-diagnostics-sample"
+		},
+		{
+			"path": "lsp-sample"
+		},
+		{
+			"path": "lsp-multi-server-sample"
+		},
+		{
+			"path": "lsp-log-streaming-sample"
+		},
+		{
+			"path": "legacy-samples"
+		},
+		{
+			"path": "i18n-sample"
+		},
+		{
+			"path": "hellocode-sample"
+		},
+		{
+			"path": "hellocode-minimal-sample"
+		},
+		{
+			"path": "fsprovider-sample"
+		},
+		{
+			"path": "decorator-sample"
+		},
+		{
+			"path": "contentprovider-sample"
+		},
+		{
+			"path": "configuration-sample"
+		},
+		{
+			"path": "completions-sample"
+		},
+		{
+			"path": "basic-multi-root-sample"
+		},
+		{
+			"path": "previewhtml-sample"
+		},
+		{
+			"path": "diagnostics-sample"
+		},
+		{
+			"path": "extension-deps-sample"
+		}
+	],
+	"settings": {
+		"editor.insertSpaces": false
+	}
+}
