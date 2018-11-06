@@ -17,5 +17,11 @@
 				"title": "Hello World"
 			}
 		]
+	},
+	"scripts": {
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"devDependencies": {
+		"vscode": "^1.1.17"
 	}
 }
