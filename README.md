@@ -11,7 +11,14 @@ You can expect from each sample:
 - Listing of used VS Code API and Contribution Points
 - Code of the same style, enforced using TSLint
 
-## Special Samples
+## Usage
+
+- `git clone https://github.com/Microsoft/vscode-extension-samples`
+- `code <any-sample-folder>`
+- `npm install` in the terminal, then `F5` to run the sample
+- Alternatively, follow the instructions in each sample's README for setting up and running the sample
+
+## Getting Started
 
 - [Hello Code Sample](hellocode-sample): The Hello World sample for VS Code.
 - [Hello Code Minimal Sample](hellocode-sample): A minimal version of Hello Code Sample that doesn't use TypeScript.
