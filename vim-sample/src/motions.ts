@@ -256,7 +256,7 @@ class CursorMoveCommand extends AbstractCommandDescriptor {
 			by: this.by,
 			value: args.repeat || 1,
 			select: !!args.isVisual
-		}
+		};
 		return {
 			commandId: 'cursorMove',
 			args: cursorMoveArgs
@@ -276,7 +276,7 @@ class EditorScrollCommand extends AbstractCommandDescriptor {
 			by: this.by,
 			value: args.repeat || 1,
 			revealCursor: true
-		}
+		};
 		return {
 			commandId: 'editorScroll',
 			args: editorScrollArgs
@@ -313,7 +313,7 @@ class MoveActiveEditorCommandByPosition extends AbstractCommandDescriptor {
 		let moveActiveEditorArgs: any = {
 			to: args.repeat === void 0 ? 'last' : 'position',
 			value: args.repeat !== void 0 ? args.repeat + 1 : undefined
-		}
+		};
 		return {
 			commandId: 'moveActiveEditor',
 			args: moveActiveEditorArgs
@@ -331,7 +331,7 @@ class MoveActiveEditorCommand extends AbstractCommandDescriptor {
 		let moveActiveEditorArgs: any = {
 			to: this.to,
 			value: args.repeat ? args.repeat : 1
-		}
+		};
 		return {
 			commandId: 'moveActiveEditor',
 			args: moveActiveEditorArgs
@@ -348,7 +348,7 @@ class FoldCommand extends AbstractCommandDescriptor {
 		let foldEditorArgs: any = {
 			levels: args.repeat ? args.repeat : 1,
 			direction: 'up'
-		}
+		};
 		return {
 			commandId: 'editor.fold',
 			args: foldEditorArgs
@@ -366,7 +366,7 @@ class UnfoldCommand extends AbstractCommandDescriptor {
 		let foldEditorArgs: any = {
 			levels: args.repeat ? args.repeat : 1,
 			direction: 'up'
-		}
+		};
 		return {
 			commandId: 'editor.unfold',
 			args: foldEditorArgs

@@ -90,7 +90,13 @@ const samples = [{
 		apis: ['window.createTreeView', 'window.registerTreeDataProvider', 'TreeView', 'TreeDataProvider'],
 		contributions: ['views', 'viewsContainers']
 	},
-	// { description: 'vim-sample', path: 'vim-sample', guide: null, apis: [], contributions: [] },
+	{
+		description: 'vim-sample',
+		path: 'vim-sample',
+		guide: null,
+		apis: [`commands`, `StatusBarItem`, `window.createStatusBarItem`, `TextEditorCursorStyle`, `window.activeTextEditor`, `Position`, `Range`, `Selection`, `TextEditor`, `TextEditorRevealType`, `TextDocument`],
+		contributions: []
+	},
 	// { description: 'webpack-sample', path: 'webpack-sample', guide: null, apis: [], contributions: [] },
 ];
 

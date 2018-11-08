@@ -5,7 +5,7 @@
 'use strict';
 
 import { Position, Selection, Range, TextDocument, TextEditor, TextEditorRevealType } from 'vscode';
-import { MotionState, Motion, Motions } from './motions';
+import { Motion, Motions } from './motions';
 import { Mode, IController, DeleteRegister } from './common';
 
 export abstract class Operator {
