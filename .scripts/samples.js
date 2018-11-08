@@ -91,7 +91,7 @@ const samples = [{
 		contributions: ['views', 'viewsContainers']
 	},
 	{
-		description: 'vim-sample',
+		description: 'Vim Sample',
 		path: 'vim-sample',
 		guide: null,
 		apis: [`commands`, `StatusBarItem`, `window.createStatusBarItem`, `TextEditorCursorStyle`, `window.activeTextEditor`, `Position`, `Range`, `Selection`, `TextEditor`, `TextEditorRevealType`, `TextDocument`],

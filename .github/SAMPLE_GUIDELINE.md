@@ -1,7 +1,7 @@
 # Sample Guideline
 
 Each sample should have the following components and structure, so that users could have a smooth experience when playing with different samples.
-The quickest way is to start your project by copying .base-sample.
+The quickest way is to start your project by copying [.base-sample](https://github.com/Microsoft/vscode-extension-samples/tree/master/.base-sample).
 
 ## 1: Sample Listing
 
@@ -22,9 +22,10 @@ The quickest way is to start your project by copying .base-sample.
 - 3.2: extensions.json: use `eg2.tslint`.
 - 3.3: settings.json: use `"editor.insertSpaces": false`. This ensure when user opens the subfolder, tab indentation is enforced.
 
-## 4: Lockfile
+## 4: Dependencies
 
 - 4.1: Use `npm`'s `package-lock.json` instead of `yarn.lock`.
+- 4.2: `devDependencies` should include `@types/node`, `vscode`, `typescript` and `tslint`.
 
 ## 5: Formatter and Linter
 
