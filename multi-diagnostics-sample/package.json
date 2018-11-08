@@ -22,10 +22,10 @@
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
-		"typescript": "^2.6.1",
-		"vscode": "^1.1.17",
-		"tslint": "^5.8.0",
+		"@types/mocha": "^2.2.42",
 		"@types/node": "^7.0.43",
-		"@types/mocha": "^2.2.42"
+		"tslint": "^5.11.0",
+		"typescript": "^2.6.1",
+		"vscode": "^1.1.17"
 	}
 }

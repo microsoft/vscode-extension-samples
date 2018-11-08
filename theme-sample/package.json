@@ -18,5 +18,8 @@
 				"path": "./Sample_Dark.tmTheme"
 			}
 		]
+	},
+	"devDependencies": {
+		"tslint": "^5.11.0"
 	}
 }

@@ -50,8 +50,9 @@
 		"tslint": "tslint -c tslint.json src/extension.ts"
 	},
 	"devDependencies": {
+		"@types/node": "*",
+		"tslint": "^5.11.0",
 		"typescript": "^2.1.4",
-		"vscode": "^1.1.17",
-		"@types/node": "*"
+		"vscode": "^1.1.17"
 	}
 }
