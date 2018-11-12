@@ -201,7 +201,7 @@
 		"@types/rimraf": "^2.0.2",
 		"tslint": "^5.11.0",
 		"typescript": "^2.1.4",
-		"vscode": "^1.1.17"
+		"vscode": "^1.1.18"
 	},
 	"dependencies": {
 		"jsonc-parser": "^0.4.2",
