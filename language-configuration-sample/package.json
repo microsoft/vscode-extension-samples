@@ -1,0 +1,40 @@
+{
+  "name": "base-sample",
+  "displayName": "base-sample",
+  "description": "Base sample for other samples at Microsoft/vscode-extension-samples",
+  "version": "0.0.1",
+  "publisher": "vscode-samples",
+  "engines": {
+    "vscode": "^1.28.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "javascript",
+        "extensions": [
+          ".js"
+        ],
+        "aliases": [
+          "js",
+          "JavaScript"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install"
+  },
+  "devDependencies": {
+    "@types/node": "^8.10.25",
+    "tslint": "^5.11.0",
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.21"
+  }
+}

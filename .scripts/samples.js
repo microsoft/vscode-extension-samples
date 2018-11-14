@@ -123,6 +123,13 @@ const lspSamples = [
 		apis: [],
 		contributions: []
 	},
+	{
+		description: 'Language Configuration Sample',
+		path: 'language-configuration-sample',
+		guide: 'https://vscode-ext-docs.azurewebsites.net/api/language-extensions/language-configuration-guide',
+		apis: [],
+		contributions: ['languages']
+	},
 ]
 
 module.exports = {
