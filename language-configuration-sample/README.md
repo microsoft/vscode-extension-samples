@@ -6,7 +6,7 @@ This is the source code for the [Language Configuration Guide](https://vscode-ex
 
 ### Contribution Points
 
-- [`contributes.languages`](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributeslanguages)
+- [`contributes.languages`](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.languages)
 
 ## Running the Sample
 

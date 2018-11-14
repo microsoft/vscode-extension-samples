@@ -8,7 +8,7 @@
     "vscode": "^1.28.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages"
   ],
   "contributes": {
     "languages": [
