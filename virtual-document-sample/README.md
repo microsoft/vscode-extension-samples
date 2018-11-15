@@ -2,7 +2,7 @@
 
 This is a sample extension that shows how to add virtual documents to the editor.
 
-![cowsay](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/virtual-document-sample/README.md)
+![cowsay](https://github.com/Microsoft/vscode-extension-samples/blob/master/virtual-document-sample/preview.png)
 
 
 ## VS Code API
