@@ -4,53 +4,37 @@
 
 'use strict';
 
-import { ExtensionContext, StatusBarAlignment, window, StatusBarItem, Selection, workspace, TextEditor, commands } from 'vscode';
+import * as vscode from 'vscode';
 
-export function activate(context: ExtensionContext) {
-	const status = window.createStatusBarItem(StatusBarAlignment.Right, 100);
-	status.command = 'extension.selectedLines';
-	context.subscriptions.push(status);
+let myStatusBarItem: vscode.StatusBarItem;
 
-	context.subscriptions.push(window.onDidChangeActiveTextEditor(e => updateStatus(status)));
-	context.subscriptions.push(window.onDidChangeTextEditorSelection(e => updateStatus(status)));
-	context.subscriptions.push(window.onDidChangeTextEditorViewColumn(e => updateStatus(status)));
-	context.subscriptions.push(workspace.onDidOpenTextDocument(e => updateStatus(status)));
-	context.subscriptions.push(workspace.onDidCloseTextDocument(e => updateStatus(status)));
+export function activate(context: vscode.ExtensionContext) {
 
-	context.subscriptions.push(commands.registerCommand('extension.selectedLines', () => {
-		window.showInformationMessage(getSelectedLines());
-	}));
+	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
 
-	updateStatus(status);
+	context.subscriptions.push(myStatusBarItem);
+
+	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(updateStatusBarItem));
+	context.subscriptions.push(vscode.window.onDidChangeTextEditorSelection(updateStatusBarItem));
+	context.subscriptions.push(vscode.window.onDidChangeTextEditorViewColumn(updateStatusBarItem));
+
+	updateStatusBarItem();
 }
 
-function updateStatus(status: StatusBarItem): void {
-	let text = getSelectedLines();
-	if (text) {
-		status.text = '$(megaphone) ' + text;
-	}
-
-	if (text) {
-		status.show();
+function updateStatusBarItem(): void {
+	let n = getNumberOfSelectedLines(vscode.window.activeTextEditor);
+	if (n > 0) {
+		myStatusBarItem.text = `$(megaphone) ${n} line(s) selected`;;
+		myStatusBarItem.show();
 	} else {
-		status.hide();
+		myStatusBarItem.hide();
 	}
 }
 
-function getSelectedLines(): string {
-	const editor = window.activeTextEditor;
-	let text: string;
-
+function getNumberOfSelectedLines(editor: vscode.TextEditor | undefined): number {
+	let lines = 0;
 	if (editor) {
-		let lines = 0;
-		editor.selections.forEach(selection => {
-			lines += (selection.end.line - selection.start.line + 1);
-		});
-
-		if (lines > 0) {
-			text = `${lines} line(s) selected`;
-		}
+		lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line), 0);
 	}
-
-	return text;
+	return lines;
 }
