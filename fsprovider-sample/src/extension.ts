@@ -1,7 +1,6 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import { MemFS } from './fileSystemProvider';
 
 export function activate(context: vscode.ExtensionContext) {

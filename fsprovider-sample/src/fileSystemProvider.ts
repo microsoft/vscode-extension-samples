@@ -5,10 +5,8 @@
 
 'use strict';
 
-import * as vscode from 'vscode';
-import * as fs from 'fs';
 import * as path from 'path';
-import { workspace } from 'vscode';
+import * as vscode from 'vscode';
 
 export class File implements vscode.FileStat {
 
