@@ -22,9 +22,30 @@
 	],
 	"main": "./out/extension",
 	"contributes": {
-		"commands": {
-			"command": "cowsay.say",
-			"title": "cowsay"
+		"commands": [
+			{
+				"command": "cowsay.say",
+				"title": "cowsay"
+			},
+			{
+				"command": "cowsay.backwards",
+				"title": "cowsay (↹)"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "cowsay.backwards",
+					"group": "navigation",
+					"when": "resourceScheme == cowsay"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "cowsay.backwards",
+					"when": "resourceScheme == cowsay"
+				}
+			]
 		}
 	},
 	"scripts": {
