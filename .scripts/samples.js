@@ -74,7 +74,7 @@ const samples = [
 		apis: [],
 		contributions: []
 	},
-	{ description: 'Multi Diagnostics Sample', path: 'multi-diagnostics-sample', guide: null, apis: ['languages.createDiagnosticCollection', 'Diagnostic', 'DiagnosticRelatedInformation'], contributions: [] },
+	{ description: 'Diagnostic Related Information Sample', path: 'diagnostic-related-information-sample', guide: null, apis: ['languages.createDiagnosticCollection', 'Diagnostic', 'DiagnosticRelatedInformation'], contributions: [] },
 	// { description: 'nodefs-provider-sample', path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'progress-sample', path: 'progress-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'quickinput-sample', path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
