@@ -61,6 +61,14 @@
 		},
 		"commands": [
 			{
+				"command": "nodeDependencies.refreshEntry",
+				"title": "Refresh",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
 				"command": "nodeDependencies.addEntry",
 				"title": "Add"
 			},
@@ -68,16 +76,8 @@
 				"command": "nodeDependencies.editEntry",
 				"title": "Edit",
 				"icon": {
-					"light": "resources/dark/edit.svg",
+					"light": "resources/light/edit.svg",
 					"dark": "resources/dark/edit.svg"
-				}
-			},
-			{
-				"command": "nodeDependencies.refreshEntry",
-				"title": "Refresh",
-				"icon": {
-					"light": "resources/light/refresh.svg",
-					"dark": "resources/dark/refresh.svg"
 				}
 			},
 			{
@@ -145,11 +145,6 @@
 			],
 			"view/title": [
 				{
-					"command": "jsonOutline.refresh",
-					"when": "view == jsonOutline",
-					"group": "navigation"
-				},
-				{
 					"command": "nodeDependencies.refreshEntry",
 					"when": "view == nodeDependencies",
 					"group": "navigation"
@@ -159,6 +154,11 @@
 					"when": "view == nodeDependencies"
 				},
 				{
+					"command": "jsonOutline.refresh",
+					"when": "view == jsonOutline",
+					"group": "navigation"
+				},
+				{
 					"command": "ftpExplorer.refresh",
 					"when": "view == ftpExplorer",
 					"group": "navigation"
@@ -166,13 +166,13 @@
 			],
 			"view/item/context": [
 				{
-					"command": "nodeDependencies.deleteEntry",
-					"when": "view == nodeDependencies && viewItem == dependency"
-				},
-				{
 					"command": "nodeDependencies.editEntry",
 					"when": "view == nodeDependencies && viewItem == dependency",
 					"group": "inline"
+				},
+				{
+					"command": "nodeDependencies.deletentry",
+					"when": "view == nodeDependencies && viewItem == dependency",
 				},
 				{
 					"command": "jsonOutline.renameNode",
