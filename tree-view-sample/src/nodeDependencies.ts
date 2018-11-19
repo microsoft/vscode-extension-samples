@@ -92,7 +92,11 @@ export class Dependency extends vscode.TreeItem {
 	}
 
 	get tooltip(): string {
-		return `${this.label}-${this.version}`
+		return `${this.label}-${this.version}`;
+	}
+
+	get description(): string {
+		return this.version;
 	}
 
 	iconPath = {
