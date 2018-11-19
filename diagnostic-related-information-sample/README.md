@@ -2,7 +2,7 @@
 
 This sample generates diagnostics with related information which can be seen in Problems view and in the editor.
 
-![Multi Diagnostics](./resources/multi-diagnostics.png)
+![Multi Diagnostics](./resources/diagnostic-related-info.png)
 
 ## Set up & Test
 
