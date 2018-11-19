@@ -43,7 +43,6 @@ const samples = [
 	{ description: 'Configuration Sample', path: 'configuration-sample', guide: null, apis: ['workspace.getConfiguration'], contributions: ['configuration'] },
 	// { description: 'contentprovider-sample', path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'decorator-sample', path: 'decorator-sample', guide: null, apis: [], contributions: [] },
-	// { description: 'extension-deps-sample', path: 'extension-deps-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'hellocode-minimal-sample', path: 'hellocode-minimal-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'hellocode-sample', path: 'hellocode-sample', guide: null, apis: [], contributions: [] },
 	{
@@ -75,7 +74,7 @@ const samples = [
 		apis: [],
 		contributions: []
 	},
-	// { description: 'multi-diagnostics-sample', path: 'multi-diagnostics-sample', guide: null, apis: [], contributions: [] },
+	{ description: 'Multi Diagnostics Sample', path: 'multi-diagnostics-sample', guide: null, apis: ['languages.createDiagnosticCollection', 'Diagnostic', 'DiagnosticRelatedInformation'], contributions: [] },
 	// { description: 'nodefs-provider-sample', path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'progress-sample', path: 'progress-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'quickinput-sample', path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
