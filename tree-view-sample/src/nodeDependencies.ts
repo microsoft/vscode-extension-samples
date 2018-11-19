@@ -80,7 +80,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 	}
 }
 
-class Dependency extends vscode.TreeItem {
+export class Dependency extends vscode.TreeItem {
 
 	constructor(
 		public readonly label: string,

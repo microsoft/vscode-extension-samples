@@ -65,6 +65,14 @@
 				"title": "Add"
 			},
 			{
+				"command": "nodeDependencies.editEntry",
+				"title": "Edit",
+				"icon": {
+					"light": "resources/dark/edit.svg",
+					"dark": "resources/dark/edit.svg"
+				}
+			},
+			{
 				"command": "nodeDependencies.refreshEntry",
 				"title": "Refresh",
 				"icon": {
@@ -126,7 +134,7 @@
 			},
 			{
 				"command": "testView.reveal",
-				"title": "Reveal"
+				"title": "Test View: Reveal"
 			}
 		],
 		"menus": {
@@ -160,6 +168,11 @@
 				{
 					"command": "nodeDependencies.deleteEntry",
 					"when": "view == nodeDependencies && viewItem == dependency"
+				},
+				{
+					"command": "nodeDependencies.editEntry",
+					"when": "view == nodeDependencies && viewItem == dependency",
+					"group": "inline"
 				},
 				{
 					"command": "jsonOutline.renameNode",
