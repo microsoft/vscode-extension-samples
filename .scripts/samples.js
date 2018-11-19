@@ -40,7 +40,7 @@ const samples = [
 		contributions: []
 	},
 	{ description: 'File System Provider Sample', path: 'fsprovider-sample', guide: null, apis: ['workspace.registerFileSystemProvider'], contributions: [] },
-	// { description: 'configuration-sample', path: 'configuration-sample', guide: null, apis: [], contributions: [] },
+	{ description: 'Configuration Sample', path: 'configuration-sample', guide: null, apis: ['workspace.getConfiguration'], contributions: ['configuration'] },
 	// { description: 'contentprovider-sample', path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'decorator-sample', path: 'decorator-sample', guide: null, apis: [], contributions: [] },
 	// { description: 'extension-deps-sample', path: 'extension-deps-sample', guide: null, apis: [], contributions: [] },
@@ -96,7 +96,7 @@ const samples = [
 	},
 	// { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
 	{
-		description: 'tree-view-sample',
+		description: 'Tree view and View container samples',
 		path: 'tree-view-sample',
 		guide: '/api/extension-guides/tree-view',
 		apis: ['window.createTreeView', 'window.registerTreeDataProvider', 'TreeView', 'TreeDataProvider'],
