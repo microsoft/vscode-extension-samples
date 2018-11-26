@@ -19,8 +19,7 @@ The quickest way is to start your project by copying [.base-sample](https://gith
 ## 3: .vscode
 
 - 3.1: launch.json: use 0.2.0 version.
-- 3.2: extensions.json: use `eg2.tslint`.
-- 3.3: settings.json: use `"editor.insertSpaces": false`. This ensure when user opens the subfolder, tab indentation is enforced.
+- 3.2: settings.json: use `"editor.insertSpaces": false`. This ensure when user opens the subfolder, tab indentation is enforced.
 
 ## 4: Dependencies
 
