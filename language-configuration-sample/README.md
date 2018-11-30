@@ -1,6 +1,14 @@
 # Language Configuration Sample
 
-This is the source code for the [Language Configuration Guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/language-configuration-guide).
+This is the source code for the [Language Configuration Guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/language-configuration-guide). This sample controls the following [Declarative Language Features](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/overview#declarative-language-support) for JavaScript:
+
+- Comment toggling
+- Brackets definition
+- Autoclosing
+- Autosurronding
+- Folding
+- Word pattern
+- Indentation Rules
 
 ## VS Code API
 
