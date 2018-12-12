@@ -1,10 +1,10 @@
 {
-	"name": "hellocode-sample",
-	"displayName": "hellocode-sample",
+	"name": "helloworld-sample",
+	"displayName": "helloworld-sample",
 	"description": "HelloWorld example for VS Code",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
-	"repository": "https://github.com/Microsoft/vscode-extension-samples/hellocode-sample",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-sample",
 	"engines": {
 		"vscode": "^1.25.0"
 	},
@@ -12,14 +12,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloCode"
+		"onCommand:extension.helloWorld"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloCode",
-				"title": "Hello Code"
+				"command": "extension.helloWorld",
+				"title": "Hello World"
 			}
 		]
 	},

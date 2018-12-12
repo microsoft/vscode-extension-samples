@@ -30,8 +30,8 @@ The quickest way is to start your project by copying [.base-sample](https://gith
 
 Only deviate from the standard setting if your sample needs to.
 
-- 5.1: Include a `tslint.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/hellocode-sample/tslint.json.
-- 5.2: Include a `tsconfig.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/hellocode-sample/tsconfig.json.
+- 5.1: Include a `tslint.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/helloworld-sample/tslint.json.
+- 5.2: Include a `tsconfig.json` following https://github.com/Microsoft/vscode-extension-samples/blob/ext-docs/helloworld-sample/tsconfig.json.
 - 5.3: Your source code should be formatted either using [tsfmt](https://github.com/vvakame/typescript-formatter) or the editor's TS formatter and contain no TSLint/TS errors.
 
 ## 6: Tests

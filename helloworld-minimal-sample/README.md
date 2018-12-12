@@ -1,6 +1,6 @@
-# Hello Code Minimal Sample
+# Hello World Minimal Sample
 
-This is a minimal version of the [Hello Code Sample](../hellocode-sample).
+This is a minimal version of the [Hello World Sample](../helloworld-sample).
 
 It does not use TypeScript and only includes the `vscode` devDependency needed for extension development.
 
