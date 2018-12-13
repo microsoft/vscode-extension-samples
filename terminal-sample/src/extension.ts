@@ -9,15 +9,20 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log("Terminals: " + (<any>vscode.window).terminals.length);
 
-	(<any>vscode.window).onDidOpenTerminal(e => {
+	// vscode.window.onDidOpenTerminal
+	vscode.window.onDidOpenTerminal(terminal => {
 		console.log("Terminal opened. Total count: " + (<any>vscode.window).terminals.length);
 
-		e.onDidWriteData(data => {
+		(<any>terminal).onDidWriteData(data => {
 			console.log("Terminal data: ", data);
 		});
 	});
+	vscode.window.onDidOpenTerminal((terminal: vscode.Terminal) => {
+		vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
+	});
 
-	(<any>vscode.window).onDidChangeActiveTerminal(e => {
+	// vscode.window.onDidChangeActiveTerminal
+	vscode.window.onDidChangeActiveTerminal(e => {
 		console.log(`Active terminal changed, name=${e ? e.name : 'undefined'}`);
 	});
 
@@ -99,12 +104,9 @@ export function activate(context: vscode.ExtensionContext) {
 		selectTerminal();
 	}));
 
-	// vscode.window.onDidOpenTerminal
-	if ('onDidOpenTerminal' in vscode.window) {
-		(<any>vscode.window).onDidOpenTerminal((terminal: vscode.Terminal) => {
-			vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
-		});
-	}
+	// vvv Proposed APIs below vvv
+
+	// vscode.window.onDidWriteData
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidWriteData', () => {
 		selectTerminal().then(terminal => {
 			vscode.window.showInformationMessage(`onDidWriteData listener attached for terminal: ${terminal.name}, check the devtools console to see events`);
@@ -114,7 +116,6 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}));
 
-	// Proposed APIs below
 	let renderer;
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererCreate', () => {
 		renderer = (<any>vscode.window).createTerminalRenderer('renderer');
@@ -208,7 +209,7 @@ function selectTerminal(): Thenable<vscode.Terminal> {
 			label: `name: ${t.name}`,
 			terminal: t
 		};
-	})
+	});
 	return vscode.window.showQuickPick(items).then(item => {
 		return item.terminal;
 	});
