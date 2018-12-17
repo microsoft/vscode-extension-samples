@@ -8,12 +8,12 @@ This sample provides several commands that demonstrates how to utilize the integ
 
 ### `vscode` module
 
-- [window.createTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.createTerminal)
-- [window.onDidChangeActiveTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidChangeActiveTerminal)
-- [window.onDidCloseTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidCloseTerminal)
-- [window.onDidOpenTerminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.onDidOpenTerminal)
-- [window.Terminal](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.Terminal)
-- [window.terminals](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#window.terminals) 
+- [window.createTerminal](https://code.visualstudio.com/api/references/vscode-api#window.createTerminal)
+- [window.onDidChangeActiveTerminal](https://code.visualstudio.com/api/references/vscode-api#window.onDidChangeActiveTerminal)
+- [window.onDidCloseTerminal](https://code.visualstudio.com/api/references/vscode-api#window.onDidCloseTerminal)
+- [window.onDidOpenTerminal](https://code.visualstudio.com/api/references/vscode-api#window.onDidOpenTerminal)
+- [window.Terminal](https://code.visualstudio.com/api/references/vscode-api#window.Terminal)
+- [window.terminals](https://code.visualstudio.com/api/references/vscode-api#window.terminals) 
 
 ### Proposed API
 
@@ -22,7 +22,7 @@ This sample provides several commands that demonstrates how to utilize the integ
 
 ### Contribution Points
 
-- [`contributes.commands`](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributescommands)
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributescommands)
 
 ## Running the Sample
 

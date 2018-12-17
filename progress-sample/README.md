@@ -12,7 +12,7 @@ It is not intended as a product quality extension.
 
 # How it works, what it shows?
 
-- The extension uses the [`withProgress`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#ProgressOptions) API to show the task in the notification area.
+- The extension uses the [`withProgress`](https://code.visualstudio.com/api/references/vscode-api#ProgressOptions) API to show the task in the notification area.
 - Registers a command via `package.json` that will trigger the task
 
 # How to run locally

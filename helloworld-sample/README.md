@@ -2,7 +2,7 @@
 
 This is a Hello World example that shows you how to use VS Code API.
 
-Guide for this sample: https://vscode-ext-docs.azurewebsites.net/api/hello-code/introduction.
+Guide for this sample: https://code.visualstudio.com/api/hello-code/introduction.
 
 ## Demo
 
@@ -12,12 +12,12 @@ Guide for this sample: https://vscode-ext-docs.azurewebsites.net/api/hello-code/
 
 ### `vscode` module
 
-- [`commands.registerCommand`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#commands.registerCommand)
-- [`window.showInformationMessage`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#window.showInformationMessage)
+- [`commands.registerCommand`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
+- [`window.showInformationMessage`](https://code.visualstudio.com/api/references/vscode-api#window.showInformationMessage)
 
 ### Contribution Points
 
-- [`contributes.commands`](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributescommands)
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributescommands)
 
 ## Running the Sample
 

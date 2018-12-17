@@ -6,9 +6,9 @@ The following steps can be done to decorate content in an editor:
 
 ## Decoration Types
 
-the [TextEditorDecorationType](https://code.visualstudio.com/docs/extensionAPI/vscode-api#TextEditorDecorationType) class defines how to style a decoration.
+the [TextEditorDecorationType](https://code.visualstudio.com/api/references/vscode-api#TextEditorDecorationType) class defines how to style a decoration.
 
-It can be created using `vscode.window.createTextEditorDecorationType`. It takes an object as a parameter which includes any of the properties of [DecorationRenderOptions](https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationRenderOptions) which match up to their CSS properties.
+It can be created using `vscode.window.createTextEditorDecorationType`. It takes an object as a parameter which includes any of the properties of [DecorationRenderOptions](https://code.visualstudio.com/api/references/vscode-api#DecorationRenderOptions) which match up to their CSS properties.
 
 ```typescript
 const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
@@ -29,9 +29,9 @@ const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
 
 ## Creating an array of Ranges
 
-the Decorator API requires an array of [Ranges](https://code.visualstudio.com/docs/extensionAPI/vscode-api#Range). A VS Code range object describes a range of code which can span across both rows and columns in a single file.
+the Decorator API requires an array of [Ranges](https://code.visualstudio.com/api/references/vscode-api#Range). A VS Code range object describes a range of code which can span across both rows and columns in a single file.
 
-you can either use a `Range[]` or a [DecorationOptions[]](https://code.visualstudio.com/docs/extensionAPI/vscode-api#DecorationOptions).
+you can either use a `Range[]` or a [DecorationOptions[]](https://code.visualstudio.com/api/references/vscode-api#DecorationOptions).
 
 For simple sets of selections, using a regular expression can be useful.
 
@@ -56,7 +56,7 @@ const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'N
 
 ## Setting the decoration
 
-Finally, you can insert the decoration into any editor with the `setDecorations` method of the [TextEditor](https://code.visualstudio.com/docs/extensionAPI/vscode-api#TextEditor) class. It takes two arguments:
+Finally, you can insert the decoration into any editor with the `setDecorations` method of the [TextEditor](https://code.visualstudio.com/api/references/vscode-api#TextEditor) class. It takes two arguments:
 
 * The `TextEditorDecorationType` defined for the decoration.
 * Either a `Range` array or a `DecorationOptions` array.

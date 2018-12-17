@@ -8,12 +8,12 @@ It does not use TypeScript and only includes the `vscode` devDependency needed f
 
 ### `vscode` module
 
-- [`commands.registerCommand`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#commands.registerCommand)
-- [`window.showInformationMessage`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#window.showInformationMessage)
+- [`commands.registerCommand`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
+- [`window.showInformationMessage`](https://code.visualstudio.com/api/references/vscode-api#window.showInformationMessage)
 
 ### Contribution Points
 
-- [`contributes.commands`](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributescommands)
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributescommands)
 
 ## Running the Sample
 

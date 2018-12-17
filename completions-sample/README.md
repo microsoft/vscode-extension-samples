@@ -9,4 +9,4 @@ This sample shows how to provide completions aka IntelliSense into the editor. T
 
 ### `vscode` module
 
-- [`languages.registerCompletionItemProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#languages.registerCompletionItemProvider)
+- [`languages.registerCompletionItemProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerCompletionItemProvider)

@@ -1,12 +1,12 @@
 # Snippet Sample
 
-This is the source code for [Snippet Guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/snippet-guide).
+This is the source code for [Snippet Guide](https://code.visualstudio.com/api/language-extensions/snippet-guide).
 
 ## VS Code API
 
 ### Contribution Points
 
-- [`contributes.snippets`](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.snippets)
+- [`contributes.snippets`](https://code.visualstudio.com/api/references/contribution-points#contributes.snippets)
 
 ## Running the Sample
 
