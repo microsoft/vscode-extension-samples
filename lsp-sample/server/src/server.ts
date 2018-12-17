@@ -194,7 +194,7 @@ connection.onCompletion(
 	}
 );
 
-// This handler resolve additional information for the item selected in
+// This handler resolves additional information for the item selected in
 // the completion list.
 connection.onCompletionResolve(
 	(item: CompletionItem): CompletionItem => {
