@@ -31,7 +31,7 @@
 		"onCommand:terminalTest.terminalTest.terminalRendererWrite",
 		"onCommand:terminalTest.terminals"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{

@@ -14,7 +14,7 @@
 		"onCommand:extension.sayHello",
 		"onCommand:extension.sayBye"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{

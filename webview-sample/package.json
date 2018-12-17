@@ -14,7 +14,7 @@
 		"onCommand:catCoding.doRefactor",
 		"onWebviewPanel:catCoding"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{

@@ -21,7 +21,7 @@
 		"onLanguage:jsonc",
 		"onCommand:sample.reveal"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"viewsContainers": {
 			"activitybar": [

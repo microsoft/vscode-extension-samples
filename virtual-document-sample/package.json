@@ -20,7 +20,7 @@
 	"activationEvents": [
 		"onCommand:cowsay.say"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{

@@ -28,7 +28,7 @@
 			}
 		]
 	},
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"scripts": {
 		"vscode:prepublish": "tsc -p ./",
 		"compile": "tsc -watch -p ./",
