@@ -50,7 +50,7 @@ You can expect from each sample:
 | ------ | ----- | --- |
 | [LSP Sample](lsp-sample) | [/api/language-extensions/smart-editing-lsp-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/smart-editing-lsp-guide) |  |
 | [LSP Log Streaming Sample](lsp-log-streaming-sample) | N/A |  |
-| [LSP Multi Root Server Sample](lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
+| [LSP Multi Root Server Sample](lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
 | [Language Configuration Sample](language-configuration-sample) | [/api/language-extensions/language-configuration-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/language-configuration-guide) | [contributes.languages](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.languages) |
 | [Snippet Sample](snippet-sample) | [/api/language-extensions/snippet-guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/snippet-guide) | [contributes.snippets](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.snippets) |
 <!-- LSP_SAMPLES_END -->
