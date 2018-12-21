@@ -22,7 +22,7 @@ You must specify an identifier and name for the view. You can contribute to foll
 
 - `explorer`: Explorer view in the Side bar
 - `debug`: Debug view in the Side bar
-- `scm`: Debug view in the Side bar
+- `scm`: Source Control Management view in the Side bar
 
 When the user opens the view, VS Code will then emit an activationEvent `onView:${viewId}` (e.g. `onView:nodeDependencies` for the example below). You can also control the visibility of the view by providing the `when` context value.
 
