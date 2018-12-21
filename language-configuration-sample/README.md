@@ -1,6 +1,6 @@
 # Language Configuration Sample
 
-This is the source code for the [Language Configuration Guide](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/language-configuration-guide). This sample controls the following [Declarative Language Features](https://vscode-ext-docs.azurewebsites.net/api/language-extensions/overview#declarative-language-support) for JavaScript:
+This is the source code for the [Language Configuration Guide](https://code.visualstudio.com/api/language-extensions/language-configuration-guide). This sample controls the following [Declarative Language Features](https://code.visualstudio.com/api/language-extensions/overview#declarative-language-support) for JavaScript:
 
 - Comment toggling
 - Brackets definition
@@ -14,7 +14,7 @@ This is the source code for the [Language Configuration Guide](https://vscode-ex
 
 ### Contribution Points
 
-- [`contributes.languages`](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.languages)
+- [`contributes.languages`](https://code.visualstudio.com/api/references/contribution-points#contributes.languages)
 
 ## Running the Sample
 

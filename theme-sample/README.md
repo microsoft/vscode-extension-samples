@@ -2,9 +2,9 @@
 
 This sample color theme extension contains two TextMate themes. 
 
-Text Mate themes describe the theming rules used for syntax highlighting. Each rule consists of one or more scope selectors and a set of styles. To learn more about scopes and how they're used, check out the [color theme](https://code.visualstudio.com/docs/extensions/themes-snippets-colorizers#_adding-a-new-color-theme) documentation.
+Text Mate themes describe the theming rules used for syntax highlighting. Each rule consists of one or more scope selectors and a set of styles. To learn more about scopes and how they're used, check out the [color theme](https://code.visualstudio.com/api/extension-guides/color-theme) documentation.
 
-You can directly use .tmTheme files in your extensions or import/convert them with VS Code's extension generator [yo code](https://code.visualstudio.com/docs/extensions/yocode).
+You can directly use .tmTheme files in your extensions or import/convert them with VS Code's extension generator [yo code](https://code.visualstudio.com/api/get-started/your-first-extension).
 
 ## Demo
 
@@ -20,7 +20,7 @@ Sample Dark
 
 ### Contribution Points
 
-- [contributes.themes](https://code.visualstudio.com/docs/extensionAPI/extension-points#_contributesthemes)
+- [contributes.themes](https://code.visualstudio.com/api/references/contribution-points#contributes.themes)
 
 ## Running the sample
 

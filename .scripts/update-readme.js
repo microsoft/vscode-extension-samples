@@ -23,10 +23,10 @@ const getTableRow = sample => {
   }
 
   const apis = sample.apis.map(api => {
-    return `[${api}](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#${api})`
+    return `[${api}](https://code.visualstudio.com/api/references/vscode-api#${api})`
   })
   const contributions = sample.contributions.map(c => {
-    return `[contributes.${c}](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.${c})`
+    return `[contributes.${c}](https://code.visualstudio.com/api/references/contribution-points#contributes.${c})`
   })
   const apiAndContributionCell = apis.concat(contributions).join('<br>')
 

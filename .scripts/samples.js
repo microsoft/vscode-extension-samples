@@ -131,7 +131,7 @@ const lspSamples = [
   {
     description: 'LSP Sample',
     path: 'lsp-sample',
-    guide: '/api/language-extensions/smart-editing-lsp-guide',
+    guide: '/api/language-extensions/language-server-extension-guide',
     apis: [],
     contributions: []
   },

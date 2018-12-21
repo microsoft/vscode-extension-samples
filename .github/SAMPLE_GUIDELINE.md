@@ -5,7 +5,7 @@ The quickest way is to start your project by copying [.base-sample](https://gith
 
 ## 1: Sample Listing
 
-- 1.1: Each sample should add itself to the sample listing at `.scripts/samples.js`. This file will be used for generating tables in the README and on the [Extension Guides / Overview](https://vscode-ext-docs.azurewebsites.net/api/extension-guides/overview) topic of the website.
+- 1.1: Each sample should add itself to the sample listing at `.scripts/samples.js`. This file will be used for generating tables in the README and on the [Extension Guides / Overview](https://code.visualstudio.com/api/extension-guides/overview) topic of the website.
 - 1.2: Each sample should list the API / Contribution that it means to illustrate.
 
 ## 2: README
