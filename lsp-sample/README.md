@@ -1,6 +1,6 @@
 # LSP Example
 
-Heavily documented sample code for https://code.visualstudio.com/api/language-extensions/smart-editing-lsp-guide
+Heavily documented sample code for https://code.visualstudio.com/api/language-extensions/language-server-extension-guide
 
 ## Functionality
 

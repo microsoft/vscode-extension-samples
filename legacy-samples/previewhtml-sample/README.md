@@ -8,7 +8,7 @@ Please use the new Webview API instead:
 # CSS Properties Preview Sample
 
 This is an sample extension that illustrates the use of virtual documents or `TextDocumentContentProviders` together with the `vscode.previewHtml`
-[command](https://code.visualstudio.com/api/references/commands#_commands).
+[command](https://code.visualstudio.com/api/references/commands#commands).
 
 It is not intended as a product quality extension.
 

@@ -20,7 +20,7 @@ Sample Dark
 
 ### Contribution Points
 
-- [contributes.themes](https://code.visualstudio.com/api/references/contribution-points#contributesthemes)
+- [contributes.themes](https://code.visualstudio.com/api/references/contribution-points#contributes.themes)
 
 ## Running the sample
 

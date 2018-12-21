@@ -13,7 +13,7 @@ It does not use TypeScript and only includes the `vscode` devDependency needed f
 
 ### Contribution Points
 
-- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributescommands)
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
 
 ## Running the Sample
 

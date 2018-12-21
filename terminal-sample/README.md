@@ -22,7 +22,7 @@ This sample provides several commands that demonstrates how to utilize the integ
 
 ### Contribution Points
 
-- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributescommands)
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
 
 ## Running the Sample
 

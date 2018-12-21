@@ -17,7 +17,7 @@ Guide for this sample: https://code.visualstudio.com/api/hello-code/introduction
 
 ### Contribution Points
 
-- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributescommands)
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
 
 ## Running the Sample
 
