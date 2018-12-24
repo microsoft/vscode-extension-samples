@@ -12,14 +12,14 @@ const LSP_TABLE_HEAD = `<!-- LSP_SAMPLES_BEGIN -->
 const LSP_TABLE_END = `<!-- LSP_SAMPLES_END -->`
 
 const getTableRow = sample => {
-  const descriptionCell = `[${sample.description}](${sample.path})`
+  const descriptionCell = `[${sample.description}](https://github.com/Microsoft/vscode-extension-samples/tree/master/${sample.path})`
   let guideCell
   if (!sample.guide) {
     guideCell = 'N/A'
   } else if (sample.guide && sample.guide.startsWith('http')) {
     guideCell = sample.guide
   } else {
-    guideCell = `[${sample.guide}](https://vscode-ext-docs.azurewebsites.net${sample.guide})`
+    guideCell = `[${sample.guide}](https://code.visualstudio.com${sample.guide})`
   }
 
   const apis = sample.apis.map(api => {
