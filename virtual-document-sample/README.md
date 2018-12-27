@@ -9,6 +9,6 @@ This is a sample extension that shows how to add virtual documents to the editor
 
 ### `vscode` module
 
-- [`workspace.registerTextDocumentContentProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#workspace.registerTextDocumentContentProvider)
-- [`commands.registerCommand`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#commands.registerCommand)
-- [`window.showInputBox`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#window.showInputBox)
+- [`workspace.registerTextDocumentContentProvider`](https://code.visualstudio.com/api/references/vscode-api#workspace.registerTextDocumentContentProvider)
+- [`commands.registerCommand`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
+- [`window.showInputBox`](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)

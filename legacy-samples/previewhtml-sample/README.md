@@ -2,13 +2,13 @@
 
 Please use the new Webview API instead:
 
-- Guide: https://code.visualstudio.com/docs/extensions/webview
+- Guide: https://code.visualstudio.com/api/extension-guides/webview
 - Sample: https://github.com/Microsoft/vscode-extension-samples/tree/master/webview-sample
 
 # CSS Properties Preview Sample
 
 This is an sample extension that illustrates the use of virtual documents or `TextDocumentContentProviders` together with the `vscode.previewHtml`
-[command](https://code.visualstudio.com/docs/extensionAPI/vscode-api-commands#_commands).
+[command](https://code.visualstudio.com/api/references/commands#commands).
 
 It is not intended as a product quality extension.
 
@@ -24,7 +24,7 @@ The purpose of the extension is to show a preview of the properties in the decla
 
 # How it works
 
-- The extension implements and registers a [`TextDocumentContentProvider`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#TextDocumentContentProvider) for a particular URI scheme.
+- The extension implements and registers a [`TextDocumentContentProvider`](https://code.visualstudio.com/api/references/vscode-api#TextDocumentContentProvider) for a particular URI scheme.
 - The content provider creates a HTML document that contains the declaration block of the selected CSS rule in the active editor.
 - The generated HTML document contains a link that invokes a contributed command to highlight the CSS rule in the source editor
 - The generated HTML document is then opened in an editor in the 2nd Column using the command `vscode.previewHtml`.

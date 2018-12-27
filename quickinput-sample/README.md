@@ -14,7 +14,7 @@ It is not intended as a production quality extension.
 
 # How it works, what it shows?
 
-- The extension uses the [`QuickPick`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#QuickPick) and [`InputBox`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#InputBox) API to show a UI for user input.
+- The extension uses the [`QuickPick`](https://code.visualstudio.com/api/references/vscode-api#QuickPick) and [`InputBox`](https://code.visualstudio.com/api/references/vscode-api#InputBox) API to show a UI for user input.
 - Registers a command via `package.json` that will trigger the task
 
 # How to run locally

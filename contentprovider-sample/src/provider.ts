@@ -47,7 +47,7 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 		}
 
 		// Decode target-uri and target-position from the provided uri and execute the
-		// `reference provider` command (https://code.visualstudio.com/docs/extensionAPI/vscode-api-commands).
+		// `reference provider` command (https://code.visualstudio.com/api/references/commands).
 		// From the result create a references document which is in charge of loading,
 		// printing, and formatting references
 		const [target, pos] = decodeLocation(uri);

@@ -12,21 +12,21 @@ const LSP_TABLE_HEAD = `<!-- LSP_SAMPLES_BEGIN -->
 const LSP_TABLE_END = `<!-- LSP_SAMPLES_END -->`
 
 const getTableRow = sample => {
-  const descriptionCell = `[${sample.description}](${sample.path})`
+  const descriptionCell = `[${sample.description}](https://github.com/Microsoft/vscode-extension-samples/tree/master/${sample.path})`
   let guideCell
   if (!sample.guide) {
     guideCell = 'N/A'
   } else if (sample.guide && sample.guide.startsWith('http')) {
     guideCell = sample.guide
   } else {
-    guideCell = `[${sample.guide}](https://vscode-ext-docs.azurewebsites.net${sample.guide})`
+    guideCell = `[${sample.guide}](https://code.visualstudio.com${sample.guide})`
   }
 
   const apis = sample.apis.map(api => {
-    return `[${api}](https://vscode-ext-docs.azurewebsites.net/api/references/vscode-api#${api})`
+    return `[${api}](https://code.visualstudio.com/api/references/vscode-api#${api})`
   })
   const contributions = sample.contributions.map(c => {
-    return `[contributes.${c}](https://vscode-ext-docs.azurewebsites.net/api/references/contribution-points#contributes.${c})`
+    return `[contributes.${c}](https://code.visualstudio.com/api/references/contribution-points#contributes.${c})`
   })
   const apiAndContributionCell = apis.concat(contributions).join('<br>')
 

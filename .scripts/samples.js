@@ -21,7 +21,7 @@ const samples = [
   {
     description: 'Status Bar Sample',
     path: 'statusbar-sample',
-    guide: '/api/extension-guides/status-bar',
+    guide: null,
     apis: ['window.createStatusBarItem', 'StatusBarItem'],
     contributions: []
   },
@@ -129,9 +129,23 @@ const samples = [
 /** @type {Sample[]} */
 const lspSamples = [
   {
+    description: 'Snippet Sample',
+    path: 'snippet-sample',
+    guide: '/api/language-extensions/snippet-guide',
+    apis: [],
+    contributions: ['snippets']
+  },
+  {
+    description: 'Language Configuration Sample',
+    path: 'language-configuration-sample',
+    guide: '/api/language-extensions/language-configuration-guide',
+    apis: [],
+    contributions: ['languages']
+  },
+  {
     description: 'LSP Sample',
     path: 'lsp-sample',
-    guide: '/api/language-extensions/smart-editing-lsp-guide',
+    guide: '/api/language-extensions/language-server-extension-guide',
     apis: [],
     contributions: []
   },
@@ -149,20 +163,6 @@ const lspSamples = [
       'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
     apis: [],
     contributions: []
-  },
-  {
-    description: 'Language Configuration Sample',
-    path: 'language-configuration-sample',
-    guide: '/api/language-extensions/language-configuration-guide',
-    apis: [],
-    contributions: ['languages']
-  },
-  {
-    description: 'Snippet Sample',
-    path: 'snippet-sample',
-    guide: '/api/language-extensions/snippet-guide',
-    apis: [],
-    contributions: ['snippets']
   }
 ]
 
