@@ -31,7 +31,7 @@ It also includes an End-to-End test.
 - Press Ctrl+Shift+B to compile the client and server.
 - Switch to the Debug viewlet.
 - Select `Launch Client` from the drop down.
-- Run the lauch config.
+- Run the launch config.
 - If you want to debug the server as well use the launch configuration `Attach to Server`
 - In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode.
   - Type `j` or `t` to see `Javascript` and `TypeScript` completion.
