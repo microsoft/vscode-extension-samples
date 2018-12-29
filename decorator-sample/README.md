@@ -12,7 +12,7 @@ The sample also shows the use of a user defined themeable color. Instead of hard
 
 ## VSCode API
 
-The sample code show the usage of the vscode.`TextEditor.setDecorations` and `vscode.window.createTextEditorDecorationType` APIs as well as the `colors` contribution point.
+The sample code show the usage of the vscode.[`TextEditor.setDecorations`](https://code.visualstudio.com/api/references/vscode-api#TextEditor.setDecorations) and [`vscode.window.createTextEditorDecorationType`](https://code.visualstudio.com/api/references/vscode-api#window.createTextEditorDecorationType) APIs as well as the `colors` contribution point.
 
 ## Running the Sample
 
