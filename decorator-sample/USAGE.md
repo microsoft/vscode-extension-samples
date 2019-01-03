@@ -68,3 +68,5 @@ activeEditor.setDecorations(smallNumberDecorationType, smallNumbers);
 ## Tips
 
 As a note, if you insert a new range of decorations using `editor.setDecorations` with a `TextEditorDecorationType` that has already been used, it will overwrite the previous set of decorations.
+
+If you'd like to remove a decoration(s) of a certain decoration type then pass in an empty array to clear it from the editor. Example: `editor.setDecorations(decorationType, []);`
