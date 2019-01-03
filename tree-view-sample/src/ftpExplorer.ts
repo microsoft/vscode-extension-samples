@@ -155,6 +155,7 @@ export class FtpExplorer {
 	private ftpViewer: vscode.TreeView<FtpNode>;
 
 	constructor(context: vscode.ExtensionContext) {
+		/* Please note that login information is hardcoded only for this example purpose and recommended not to do it in general. */
 		const ftpModel = new FtpModel('mirror.switch.ch', 'anonymous', 'anonymous@anonymous.de');
 		const treeDataProvider = new FtpTreeDataProvider(ftpModel);
 		context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('ftp', treeDataProvider));
