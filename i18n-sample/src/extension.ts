@@ -3,7 +3,9 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 import * as nls from 'vscode-nls';
-const localize = nls.loadMessageBundle();
+
+// The example uses the file message format.
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 import * as vscode from 'vscode';
 import { sayByeCommand } from './command/sayBye';

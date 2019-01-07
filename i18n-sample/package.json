@@ -2,6 +2,7 @@
 	"name": "i18n-sample",
 	"displayName": "i18n-sample",
 	"description": "Sample that shows how to localize an extension",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples/i18n-sample",
 	"version": "0.1.0",
 	"publisher": "vscode-samples",
 	"engines": {
