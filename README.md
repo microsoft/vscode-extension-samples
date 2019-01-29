@@ -21,7 +21,7 @@ You can expect from each sample:
 ## Getting Started
 
 - [Hello World Sample](helloworld-sample): The Hello World sample for VS Code.
-- [Hello World Minimal Sample](helloworld-minimal-sample): A minimal version of Hello World Sample that doesn't use TypeScript.
+- [Hello World Minimal Sample](helloworld-minimal-sample): A minimal version of Hello World Sample written in JavaScript.
 
 ## Samples
 
