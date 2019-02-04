@@ -116,6 +116,14 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}));
 
+	// vscode.window.onDidChangeTerminalDimensions
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidChangeTerminalDimensions', () => {
+		vscode.window.showInformationMessage(`Listening to onDidChangeTerminalDimensions, check the devtools console to see events`);
+		(<any>vscode.window).onDidChangeTerminalDimensions((event) => {
+			console.log(`onDidChangeTerminalDimensions: terminal:${event.terminal.name}, columns=${event.dimensions.columns}, rows=${event.dimensions.rows}`);
+		});
+	}));
+
 	let renderer;
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererCreate', () => {
 		renderer = (<any>vscode.window).createTerminalRenderer('renderer');
