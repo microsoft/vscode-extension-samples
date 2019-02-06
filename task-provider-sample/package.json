@@ -13,7 +13,7 @@
 	"activationEvents": [
 		"onCommand:workbench.action.tasks.runTask"
 	],
-	"main": "./out/src/extension",
+	"main": "./out/extension",
 	"contributes": {
 		"taskDefinitions": [
 			{
