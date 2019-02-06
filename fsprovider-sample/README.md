@@ -1,6 +1,6 @@
 # MemFS
 
-This extension implements an in-memory file system to show-case the [filesytem provider api](https://github.com/Microsoft/vscode/blob/51a880315fd0ec2cafb511a17de48ec31802ba6d/src/vs/vscode.d.ts#L4968). It serves two purposes:
+This extension implements an in-memory file system to show-case the [filesystem provider api](https://github.com/Microsoft/vscode/blob/51a880315fd0ec2cafb511a17de48ec31802ba6d/src/vs/vscode.d.ts#L4968). It serves two purposes:
 
 * Be a sample/reference for extension authors that want to implement a filesystem provider
 * Be a test for other extensions that *falsely* assume text document always live on disk.
