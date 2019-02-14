@@ -30,6 +30,7 @@ let hasWorkspaceFolderCapability: boolean = false;
 let hasDiagnosticRelatedInformationCapability: boolean = false;
 
 connection.onInitialize((params: InitializeParams) => {
+	console.log('test');
 	let capabilities = params.capabilities;
 
 	// Does the client support the `workspace/configuration` request?
@@ -53,6 +54,7 @@ connection.onInitialize((params: InitializeParams) => {
 });
 
 connection.onInitialized(() => {
+	console.log('test');
 	if (hasConfigurationCapability) {
 		// Register for all configuration changes.
 		connection.client.register(
@@ -176,6 +178,7 @@ connection.onDidChangeWatchedFiles(_change => {
 // This handler provides the initial list of the completion items.
 connection.onCompletion(
 	(_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
+		console.log('test');
 		// The pass parameter contains the position of the text document in
 		// which code complete got requested. For the example we ignore this
 		// info and always provide the same completion items.
