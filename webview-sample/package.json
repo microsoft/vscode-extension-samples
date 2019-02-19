@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.25.0"
+		"vscode": "^1.26.0"
 	},
 	"categories": [
 		"Other"
@@ -35,12 +35,11 @@
 		"watch": "tsc -w -p ./",
 		"postinstall": "node ./node_modules/vscode/bin/install"
 	},
-	"dependencies": {
-		"vscode": "^1.1.18"
-	},
+	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "^10.5.2",
 		"tslint": "^5.11.0",
-		"typescript": "^2.9.2"
+		"typescript": "^2.9.2",
+		"vscode": "^1.1.29"
 	}
 }
