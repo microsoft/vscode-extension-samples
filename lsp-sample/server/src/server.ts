@@ -47,7 +47,8 @@ connection.onInitialize((params: InitializeParams) => {
 			// Tell the client that the server supports code completion
 			completionProvider: {
 				resolveProvider: true
-			}
+			},
+			hoverProvider: true
 		}
 	};
 });
@@ -208,6 +209,12 @@ connection.onCompletionResolve(
 		return item;
 	}
 );
+
+connection.onHover(() => {
+	return {
+		contents: "Hello World"
+	};
+});
 
 /*
 connection.onDidOpenTextDocument((params) => {
