@@ -5,6 +5,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log('decorator sample is activated');
 
+	let timeout: NodeJS.Timer | undefined = undefined;
+
 	// create a decorator type that we use to decorate small numbers
 	const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
 		borderWidth: '1px',
@@ -29,30 +31,6 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	let activeEditor = vscode.window.activeTextEditor;
-	if (activeEditor) {
-		triggerUpdateDecorations();
-	}
-
-	vscode.window.onDidChangeActiveTextEditor(editor => {
-		activeEditor = editor;
-		if (editor) {
-			triggerUpdateDecorations();
-		}
-	}, null, context.subscriptions);
-
-	vscode.workspace.onDidChangeTextDocument(event => {
-		if (activeEditor && event.document === activeEditor.document) {
-			triggerUpdateDecorations();
-		}
-	}, null, context.subscriptions);
-
-	let timeout : NodeJS.Timer | null = null;
-	function triggerUpdateDecorations() {
-		if (timeout) {
-			clearTimeout(timeout);
-		}
-		timeout = setTimeout(updateDecorations, 500);
-	}
 
 	function updateDecorations() {
 		if (!activeEditor) {
@@ -76,5 +54,31 @@ export function activate(context: vscode.ExtensionContext) {
 		activeEditor.setDecorations(smallNumberDecorationType, smallNumbers);
 		activeEditor.setDecorations(largeNumberDecorationType, largeNumbers);
 	}
+
+	function triggerUpdateDecorations() {
+		if (timeout) {
+			clearTimeout(timeout);
+			timeout = undefined;
+		}
+		timeout = setTimeout(updateDecorations, 500);
+	}
+
+	if (activeEditor) {
+		triggerUpdateDecorations();
+	}
+
+	vscode.window.onDidChangeActiveTextEditor(editor => {
+		activeEditor = editor;
+		if (editor) {
+			triggerUpdateDecorations();
+		}
+	}, null, context.subscriptions);
+
+	vscode.workspace.onDidChangeTextDocument(event => {
+		if (activeEditor && event.document === activeEditor.document) {
+			triggerUpdateDecorations();
+		}
+	}, null, context.subscriptions);
+
 }
 
