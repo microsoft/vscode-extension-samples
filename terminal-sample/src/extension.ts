@@ -160,7 +160,7 @@ export function activate(context: vscode.ExtensionContext) {
 			line += data;
 			shell.write(data);
 		});
-		shell.terminal.show();
+		shell.show();
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.maximumDimensions', () => {
 		renderer.maximumDimensions.then(dimensions => {
