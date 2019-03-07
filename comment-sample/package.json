@@ -1,0 +1,44 @@
+{
+	"name": "vscode-terminal-api-example",
+	"displayName": "vscode-terminal-api-example",
+	"description": "abc",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"enableProposedApi": true,
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "comment.createComment",
+				"title": "Comment API: Create a comment thread"
+			},
+			{
+				"command": "comment.replyComment",
+				"title": "Comment API: Reply to a comment thread"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint ./src/*.ts",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/node": "^6.0.40",
+		"tslint": "^5.11.0",
+		"typescript": "^2.0.3",
+		"vscode": "^1.1.22"
+	}
+}
