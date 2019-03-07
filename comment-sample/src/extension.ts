@@ -27,17 +27,15 @@ export function activate(context: vscode.ExtensionContext) {
 		thread.label = 'Create New Note';
 
 		// We will render all `acceptInputCommands` as Actions on the bottom of Comment Widget in the editor.
-		thread.acceptInputCommands = [
-			{
-				title: 'Create Note',
-				command: 'mywiki.createNote',
-				// Command is responsible for arguments
-				arguments: [
-					commentController,
-					thread
-				]
-			}
-		];
+		thread.acceptInputCommand = {
+			title: 'Create Note',
+			command: 'mywiki.createNote',
+			// Command is responsible for arguments
+			arguments: [
+				commentController,
+				thread
+			]
+		};
 	};
 
 	// Register commenting range provider and callback.
@@ -55,16 +53,14 @@ export function activate(context: vscode.ExtensionContext) {
 			thread.label = 'Participants: vscode';
 
 			// After we create the new comment thread, we may want to update the actions on the Comment Widget.
-			thread.acceptInputCommands = [
-				{
-					title: 'Create Comment',
-					command: 'mywiki.createComment',
-					arguments: [
-						commentController,
-						thread
-					]
-				}
-			];
+			thread.acceptInputCommand = {
+				title: 'Create Comment',
+				command: 'mywiki.createComment',
+				arguments: [
+					commentController,
+					thread
+				]
+			};
 
 			// Lastly, we want to clear the textarea in Comment Widget.
 			commentController.inputBox.value = '';
