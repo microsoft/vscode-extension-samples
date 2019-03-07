@@ -17,11 +17,11 @@ export function activate(context: vscode.ExtensionContext) {
 	const newCommentWidgetCallback = (document: vscode.TextDocument, range: vscode.Range) => {
 		let thread = commentController.createCommentThread(`${++threadId}`, document.uri, range);
 		thread.collapsibleState = vscode.CommentThreadCollapsibleState.Expanded;
-		thread.label = 'Start New Conversation';
+		thread.label = 'Create New Note';
 		thread.acceptInputCommands = [
 			{
-				title: 'Create Comment',
-				command: 'comment.createComment',
+				title: 'Create Note',
+				command: 'mywiki.createNote',
 				arguments: [
 					commentController,
 					thread
@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	commentController.registerCommentingRangeProvider(provideCommentingRange, newCommentWidgetCallback);
 
-	context.subscriptions.push(vscode.commands.registerCommand('comment.createComment', (commentController: vscode.CommentController, thread: vscode.CommentThread) => {
+	context.subscriptions.push(vscode.commands.registerCommand('mywiki.createNote', (commentController: vscode.CommentController, thread: vscode.CommentThread) => {
 		if (commentController.inputBox) {
 			let text = commentController.inputBox.value;
 			let markedString = new vscode.MarkdownString(text);
@@ -42,8 +42,8 @@ export function activate(context: vscode.ExtensionContext) {
 			thread.label = 'Participants: vscode';
 			thread.acceptInputCommands = [
 				{
-					title: 'Reply Comment',
-					command: 'comment.replyComment',
+					title: 'Create Comment',
+					command: 'mywiki.createComment',
 					arguments: [
 						commentController,
 						thread
@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}));
 
-	context.subscriptions.push(vscode.commands.registerCommand('comment.replyComment', (commentController: vscode.CommentController, thread: vscode.CommentThread) => {
+	context.subscriptions.push(vscode.commands.registerCommand('mywiki.createComment', (commentController: vscode.CommentController, thread: vscode.CommentThread) => {
 		if (commentController.inputBox) {
 			let text = commentController.inputBox.value;
 			let markedString = new vscode.MarkdownString(text);

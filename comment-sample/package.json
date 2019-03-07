@@ -18,11 +18,11 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "comment.createComment",
+				"command": "mywiki.createNote",
 				"title": "Comment API: Create a comment thread"
 			},
 			{
-				"command": "comment.replyComment",
+				"command": "mywiki.createComment",
 				"title": "Comment API: Reply to a comment thread"
 			}
 		]

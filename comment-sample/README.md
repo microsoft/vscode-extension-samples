@@ -1,3 +1,3 @@
 # Commenting API Example
 
-![demo](./demo.gif)
+![demo](./wiki-demo.gif)
