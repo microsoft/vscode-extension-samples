@@ -47,7 +47,7 @@ declare module 'vscode' {
 		range: Range;
 
 		/**
-		 * Label describing the [Comment Thread](#CommentThread)
+		 * The human-readable label describing the [Comment Thread](#CommentThread)
 		 */
 		label: string;
 
@@ -55,20 +55,26 @@ declare module 'vscode' {
 		 * The ordered comments of the thread.
 		 */
 		comments: Comment[];
+
 		/**
+		 * Optional accept input command
+		 *
 		 * `acceptInputCommand` is the default action rendered on Comment Widget, which is always placed rightmost.
-		 * It will be executed when users submit the comment from keyboard shortcut.
-		 * This action is disabled when the comment editor is empty.
+		 * This command will be invoked when users the user accepts the value in the comment editor.
+		 * This command will disabled when the comment editor is empty.
 		 */
 		acceptInputCommand?: Command;
 
 		/**
+		 * Optional additonal commands.
+		 *
 		 * `additionalCommands` are the secondary actions rendered on Comment Widget.
 		 */
 		additionalCommands?: Command[];
 
 		/**
-		 * Whether the thread should be collapsed or expanded when opening the document. Defaults to Collapsed.
+		 * Whether the thread should be collapsed or expanded when opening the document.
+		 * Defaults to Collapsed.
 		 */
 		collapsibleState?: CommentThreadCollapsibleState;
 		dispose(): void;
@@ -125,23 +131,39 @@ declare module 'vscode' {
 	}
 
 	export interface CommentController {
-		readonly id: string;
-		readonly label: string;
 		/**
-		 * The active (focused) comment input box.
+		 * The id of this comment controller.
+		 */
+		readonly id: string;
+
+		/**
+		 * The human-readable label of this comment controller.
+		 */
+		readonly label: string;
+
+		/**
+		 * The active (focused) [comment input box](#CommentInputBox).
 		 */
 		readonly inputBox?: CommentInputBox;
 		createCommentThread(id: string, resource: Uri, range: Range): CommentThread;
+
 		/**
+		 * Optional commenting range provider.
 		 * Provide a list [ranges](#Range) which support commenting to any given resource uri.
-		 *
-		 * @param uri The uri of the resource open in a text editor.
-		 * @param callback, a handler called when users attempt to create a new comment thread, either from the gutter or command palette
-		 * @param token A cancellation token.
-		 * @return A thenable that resolves to a list of commenting ranges or null and undefined if the provider
-		 * does not want to participate or was cancelled.
 		 */
-		registerCommentingRangeProvider(provider: (document: TextDocument, token: CancellationToken) => ProviderResult<Range[]>, callback: (document: TextDocument, range: Range) => void): void;
+		commentingRangeProvider?(document: TextDocument, token: CancellationToken): ProviderResult<Range[]>;
+
+		/**
+		 * The method `newCommentThreadFactory` is called when users attempt to create new comment thread from the gutter or command palette.
+		 * Extensions still need to call `createCommentThread` inside this call when appropriate.
+		 * @param document
+		 * @param range
+		 */
+		newCommentThreadFactory(document: TextDocument, range: Range): void;
+
+		/**
+		 * Dispose this comment controller.
+		 */
 		dispose(): void;
 	}
 

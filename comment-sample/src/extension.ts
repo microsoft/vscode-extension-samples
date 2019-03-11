@@ -11,13 +11,13 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(commentController);
 
 	// commenting range provider
-	const provideCommentingRange = (document: vscode.TextDocument, token: vscode.CancellationToken) => {
+	commentController.commentingRangeProvider = (document: vscode.TextDocument, token: vscode.CancellationToken) => {
 		let lineCount = document.lineCount;
 		return [new vscode.Range(0, 0, lineCount - 1, 0)];
 	};
 
 	// callback when users click `+` button on Gutter or run Create Comment command from Command Palette
-	const newCommentWidgetCallback = (document: vscode.TextDocument, range: vscode.Range) => {
+	commentController.newCommentThreadFactory = (document: vscode.TextDocument, range: vscode.Range) => {
 		// create a empty thread
 		let thread = commentController.createCommentThread(`${++threadId}`, document.uri, range);
 		// by default, a comment thread is collapsed, for newly created empty comment thread, we want to expand it and users can start commenting immediately
@@ -37,9 +37,6 @@ export function activate(context: vscode.ExtensionContext) {
 			]
 		};
 	};
-
-	// Register commenting range provider and callback.
-	commentController.registerCommentingRangeProvider(provideCommentingRange, newCommentWidgetCallback);
 
 	// register `mywiki.createNote` command
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.createNote', (commentController: vscode.CommentController, thread: vscode.CommentThread) => {
