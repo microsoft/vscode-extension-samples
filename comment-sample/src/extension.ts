@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// commenting range provider
 	commentController.commentingRangeProvider = {
-		provideCommentingRange: (document: vscode.TextDocument, token: vscode.CancellationToken) => {
+		provideCommentingRanges: (document: vscode.TextDocument, token: vscode.CancellationToken) => {
 			let lineCount = document.lineCount;
 			return [new vscode.Range(0, 0, lineCount - 1, 0)];
 		}
