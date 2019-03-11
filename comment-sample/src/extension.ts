@@ -11,31 +11,35 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(commentController);
 
 	// commenting range provider
-	commentController.commentingRangeProvider = (document: vscode.TextDocument, token: vscode.CancellationToken) => {
-		let lineCount = document.lineCount;
-		return [new vscode.Range(0, 0, lineCount - 1, 0)];
+	commentController.commentingRangeProvider = {
+		provideCommentingRange: (document: vscode.TextDocument, token: vscode.CancellationToken) => {
+			let lineCount = document.lineCount;
+			return [new vscode.Range(0, 0, lineCount - 1, 0)];
+		}
 	};
 
 	// callback when users click `+` button on Gutter or run Create Comment command from Command Palette
-	commentController.newCommentThreadFactory = (document: vscode.TextDocument, range: vscode.Range) => {
+	commentController.emptyCommentThreadFactory = {
+		createEmptyCommentThread: (document: vscode.TextDocument, range: vscode.Range) => {
 		// create a empty thread
-		let thread = commentController.createCommentThread(`${++threadId}`, document.uri, range);
-		// by default, a comment thread is collapsed, for newly created empty comment thread, we want to expand it and users can start commenting immediately
-		thread.collapsibleState = vscode.CommentThreadCollapsibleState.Expanded;
+			let thread = commentController.createCommentThread(`${++threadId}`, document.uri, range);
+			// by default, a comment thread is collapsed, for newly created empty comment thread, we want to expand it and users can start commenting immediately
+			thread.collapsibleState = vscode.CommentThreadCollapsibleState.Expanded;
 
-		// In this example, we call it `Create New Note` while for GH PR case, we can call it `Start Review` or `Start New Converstation`
-		thread.label = 'Create New Note';
+			// In this example, we call it `Create New Note` while for GH PR case, we can call it `Start Review` or `Start New Converstation`
+			thread.label = 'Create New Note';
 
-		// We will render all `acceptInputCommands` as Actions on the bottom of Comment Widget in the editor.
-		thread.acceptInputCommand = {
-			title: 'Create Note',
-			command: 'mywiki.createNote',
-			// Command is responsible for arguments
-			arguments: [
-				commentController,
-				thread
-			]
-		};
+			// We will render all `acceptInputCommands` as Actions on the bottom of Comment Widget in the editor.
+			thread.acceptInputCommand = {
+				title: 'Create Note',
+				command: 'mywiki.createNote',
+				// Command is responsible for arguments
+				arguments: [
+					commentController,
+					thread
+				]
+			};
+		}
 	};
 
 	// register `mywiki.createNote` command

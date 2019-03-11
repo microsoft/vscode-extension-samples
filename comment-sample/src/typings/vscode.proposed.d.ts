@@ -130,6 +130,18 @@ declare module 'vscode' {
 		value: string;
 	}
 
+	export interface CommentingRangeProvider {
+		provideCommentingRange(document: TextDocument, token: CancellationToken): ProviderResult<Range[]>;
+	}
+
+	export interface EmptyCommentThreadFactory {
+		/**
+		 * The method `createEmptyCommentThread` is called when users attempt to create new comment thread from the gutter or command palette.
+		 * Extensions still need to call `createCommentThread` inside this call when appropriate.
+		 */
+		createEmptyCommentThread(document: TextDocument, range: Range): ProviderResult<void>;
+	}
+
 	export interface CommentController {
 		/**
 		 * The id of this comment controller.
@@ -151,15 +163,12 @@ declare module 'vscode' {
 		 * Optional commenting range provider.
 		 * Provide a list [ranges](#Range) which support commenting to any given resource uri.
 		 */
-		commentingRangeProvider?(document: TextDocument, token: CancellationToken): ProviderResult<Range[]>;
+		commentingRangeProvider?: CommentingRangeProvider;
 
 		/**
-		 * The method `newCommentThreadFactory` is called when users attempt to create new comment thread from the gutter or command palette.
-		 * Extensions still need to call `createCommentThread` inside this call when appropriate.
-		 * @param document
-		 * @param range
+		 * Optional new comment thread factory.
 		 */
-		newCommentThreadFactory(document: TextDocument, range: Range): void;
+		emptyCommentThreadFactory: EmptyCommentThreadFactory;
 
 		/**
 		 * Dispose this comment controller.
