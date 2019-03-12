@@ -1,0 +1,91 @@
+{
+	"name": "source-control-sample",
+	"displayName": "source-control-sample",
+	"description": "Source control VS Code extension sample",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.30.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extension.source-control.open"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.source-control.open",
+				"title": "Open JSFiddle"
+			},
+			{
+				"command": "extension.source-control.commit",
+				"title": "Commit local changes to JS Fiddle",
+				"icon": {
+					"light": "resources/icons/light/check.svg",
+					"dark": "resources/icons/dark/check.svg"
+				  }
+			},
+			{
+				"command": "extension.source-control.refresh",
+				"title": "Refresh JS Fiddle status",
+				"icon": {
+					"light": "resources/icons/light/refresh.svg",
+					"dark": "resources/icons/dark/refresh.svg"
+				  }
+			},
+			{
+				"command": "extension.source-control.discard",
+				"title": "Discards local changes to JS Fiddle",
+				"icon": {
+					"light": "resources/icons/light/discard.svg",
+					"dark": "resources/icons/dark/discard.svg"
+				  }
+			},
+			{
+				"command": "extension.source-control.checkout",
+				"title": "Checkout another version of this Fiddle",
+				"icon": {
+					"light": "resources/icons/light/refresh.svg",
+					"dark": "resources/icons/dark/refresh.svg"
+				  }
+			}
+		],
+		"menus": {
+			"scm/title": [
+				{
+					"command": "extension.source-control.commit",
+					"group": "navigation",
+					"when": "scmProvider == jsfiddle"
+				},
+				{
+					"command": "extension.source-control.discard",
+					"group": "navigation",
+					"when": "scmProvider == jsfiddle"
+				},
+				{
+					"command": "extension.source-control.refresh",
+					"group": "navigation",
+					"when": "scmProvider == jsfiddle"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "node ./node_modules/vscode/bin/install"
+	},
+	"dependencies": {
+		"jsfiddle": "^1.1.7"
+	},
+	"devDependencies": {
+		"@types/node": "^8.10.25",
+		"tslint": "^5.11.0",
+		"typescript": "^2.6.1",
+		"vscode": "^1.1.30"
+	}
+}
