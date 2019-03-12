@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { FiddleData, FiddleRepository, toExtension, downloadFiddle, areIdentical, uploadFiddle, Fiddle } from './fiddleRepository';
+import { FiddleRepository, toExtension, downloadFiddle, areIdentical, uploadFiddle, Fiddle } from './fiddleRepository';
 import * as path from 'path';
 import { writeFileSync, existsSync, unlinkSync } from 'fs';
 

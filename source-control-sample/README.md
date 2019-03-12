@@ -4,7 +4,19 @@ This sample implements a minimal source control provider. It shows how the sourc
 
 ![alt text](resources/images/demo.gif "Extension demo")
 
-Activate the extension by invoking the `Open JSFiddle` command. This invokes following 4 lines, which does the following:
+## VS Code API
+
+Following VS Code APIs are demonstrated by this extension:
+
+- `workspace.workspaceFolders`
+- `scm.createSourceControl`
+- `SourceControl`
+- `SourceControlResourceGroup`
+- `TextDocumentContentProvider`
+
+## Running the Sample
+
+Activate the extension by invoking the `Open JSFiddle` command, specify the JSFiddle code, if no workspace folder is open, select a workspace folder. This invokes following 4 lines, which does the following:
 
 1. creates the custom source control provider associated with the workspace folder
 1. creates the source control resource group to later show the local changes to the files in the repository

@@ -163,6 +163,19 @@ const lspSamples = [
       'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
     apis: [],
     contributions: []
+  },
+  {
+    description: 'Source Control Sample',
+    path: 'source-control-sample',
+    guide: 'https://code.visualstudio.com/api/extension-guides/scm-provider',
+    apis: [
+      'workspace.workspaceFolders',
+      'SourceControl',
+      'SourceControlResourceGroup',
+      'scm.createSourceControl',
+      'TextDocumentContentProvider'
+    ],
+    contributions: ["menus"]
   }
 ]
 
