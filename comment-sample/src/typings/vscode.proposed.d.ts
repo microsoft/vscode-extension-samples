@@ -79,6 +79,11 @@ declare module 'vscode' {
 		 * Defaults to Collapsed.
 		 */
 		collapsibleState?: CommentThreadCollapsibleState;
+
+		/**
+		 * Dispose this comment thread.
+		 * Once disposed, the comment thread will be removed from visible text editors and Comments Panel.
+		 */
 		dispose(): void;
 	}
 
@@ -95,6 +100,11 @@ declare module 'vscode' {
 		 * The text of the comment
 		 */
 		body: MarkdownString;
+
+		/**
+		 * Optional label describing the [Comment](#Comment)
+		 * Label will be rendered next to userName if exists.
+		 */
 		label?: string;
 
 		/**
@@ -112,16 +122,15 @@ declare module 'vscode' {
 		 */
 		selectCommand?: Command;
 
+		/**
+		 * The command to be executed when users try to save the edits to the comment
+		 */
 		editCommand?: Command;
-		deleteCommand?: Command;
-		commentReactions?: CommentReaction[];
-	}
 
-	interface CommentReaction {
-		readonly label?: string;
-		readonly iconPath?: string | Uri;
-		count?: number;
-		readonly hasReacted?: boolean;
+		/**
+		 * The command to be executed when users try to delete the comment
+		 */
+		deleteCommand?: Command;
 	}
 
 	export interface CommentInputBox {
@@ -133,6 +142,9 @@ declare module 'vscode' {
 	}
 
 	export interface CommentingRangeProvider {
+		/**
+		 * Provide a list of ranges which allow new comment threads creation or null for a given document
+		 */
 		provideCommentingRanges(document: TextDocument, token: CancellationToken): ProviderResult<Range[]>;
 	}
 
@@ -159,6 +171,10 @@ declare module 'vscode' {
 		 * The active (focused) [comment input box](#CommentInputBox).
 		 */
 		readonly inputBox?: CommentInputBox;
+
+		/**
+		 * Create a [CommentThread](#CommentThread)
+		 */
 		createCommentThread(id: string, resource: Uri, range: Range, comments: Comment[]): CommentThread;
 
 		/**
@@ -171,7 +187,6 @@ declare module 'vscode' {
 		 * Optional new comment thread factory.
 		 */
 		emptyCommentThreadFactory?: EmptyCommentThreadFactory;
-
 		/**
 		 * Dispose this comment controller.
 		 */
