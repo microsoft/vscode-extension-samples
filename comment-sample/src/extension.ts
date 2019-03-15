@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 	commentController.emptyCommentThreadFactory = {
 		createEmptyCommentThread: (document: vscode.TextDocument, range: vscode.Range) => {
 		// create a empty thread
-			let thread = commentController.createCommentThread(`${++threadId}`, document.uri, range);
+			let thread = commentController.createCommentThread(`${++threadId}`, document.uri, range, []);
 			// by default, a comment thread is collapsed, for newly created empty comment thread, we want to expand it and users can start commenting immediately
 			thread.collapsibleState = vscode.CommentThreadCollapsibleState.Expanded;
 

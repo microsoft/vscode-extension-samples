@@ -1,3 +1,5 @@
+import { Range } from "vscode";
+
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
@@ -108,7 +110,7 @@ declare module 'vscode' {
 		/**
 		 * The command to be executed if the comment is selected in the Comments Panel
 		 */
-		command?: Command;
+		selectCommand?: Command;
 
 		editCommand?: Command;
 		deleteCommand?: Command;
@@ -157,7 +159,7 @@ declare module 'vscode' {
 		 * The active (focused) [comment input box](#CommentInputBox).
 		 */
 		readonly inputBox?: CommentInputBox;
-		createCommentThread(id: string, resource: Uri, range: Range): CommentThread;
+		createCommentThread(id: string, resource: Uri, range: Range, comments: Comment[]): CommentThread;
 
 		/**
 		 * Optional commenting range provider.
@@ -168,7 +170,7 @@ declare module 'vscode' {
 		/**
 		 * Optional new comment thread factory.
 		 */
-		emptyCommentThreadFactory: EmptyCommentThreadFactory;
+		emptyCommentThreadFactory?: EmptyCommentThreadFactory;
 
 		/**
 		 * Dispose this comment controller.
