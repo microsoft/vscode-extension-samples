@@ -23,9 +23,9 @@ Activate the extension by invoking the `Open JSFiddle` command, specify the JSFi
 1. registers the `quickDiffProvider`, which implements the mapping between the documents in the remote repository and documents in the local folder.
 
 ```javascript
-this.jsFiddleScm = vscode.scm.createSourceControl('jsfiddle', 'JSFiddle #' + fiddle.hash, workspaceFolder.uri);
+this.jsFiddleScm = vscode.scm.createSourceControl('jsfiddle', 'JSFiddle #' + fiddle.slug, workspaceFolder.uri);
 this.changedResources = this.jsFiddleScm.createResourceGroup('workingTree', 'Changes');
-this.fiddleRepository = new FiddleRepository(workspaceFolder, fiddle.hash);
+this.fiddleRepository = new FiddleRepository(workspaceFolder, fiddle.slug);
 this.jsFiddleScm.quickDiffProvider = this.fiddleRepository;
 ```
 
@@ -37,28 +37,28 @@ The three commands (command, roll-back and refresh) in the title of the source c
 
 ```JSON
 "contributes": {
-	"commands": [
-		...
-	],
-	"menus": {
-		"scm/title": [
-			{
-				"command": "extension.source-control.commit",
-				"group": "navigation",
-				"when": "scmProvider == jsfiddle"
-			},
-			{
-				"command": "extension.source-control.discard",
-				"group": "navigation",
-				"when": "scmProvider == jsfiddle"
-			},
-			{
-				"command": "extension.source-control.refresh",
-				"group": "navigation",
-				"when": "scmProvider == jsfiddle"
-			}
-		]
-	}
+    "commands": [
+        ...
+    ],
+    "menus": {
+        "scm/title": [
+            {
+                "command": "extension.source-control.commit",
+                "group": "navigation",
+                "when": "scmProvider == jsfiddle"
+            },
+            {
+                "command": "extension.source-control.discard",
+                "group": "navigation",
+                "when": "scmProvider == jsfiddle"
+            },
+            {
+                "command": "extension.source-control.refresh",
+                "group": "navigation",
+                "when": "scmProvider == jsfiddle"
+            }
+        ]
+    }
 },
 ```
 
@@ -66,15 +66,15 @@ It is also worth noting that the sample extension needs to overcome reloading th
 
 ## Status bar controls
 
-The custom source control can add its own controls to the status bar. This typically needs to be refreshed everytime a new version/branch is checked-out.
+The custom source control can add its own controls to the status bar. This typically needs to be refreshed every time a new version/branch is checked-out.
 
 ```javascript
 this.jsFiddleScm.statusBarCommands = [
-	{
-		"command": "extension.source-control.checkout",
-		"title": `↕ ${this.fiddle.hash} #${this.fiddle.version} / ${this.latestFiddleVersion}`,
-		"tooltip": "Checkout another version of this fiddle.",
-	}
+    {
+        "command": "extension.source-control.checkout",
+        "title": `↕ ${this.fiddle.slug} #${this.fiddle.version} / ${this.latestFiddleVersion}`,
+        "tooltip": "Checkout another version of this fiddle.",
+    }
 ];
 ```
 
@@ -86,21 +86,21 @@ The command `extension.source-control.checkout` displays quick pick of the JSFid
 
 The extension listens to changes to files in the workspace folder and compares the new document text to the version originally checked out from the repository. When it differs, it creates `vscode.SourceControlResourceState` for every changed document assigns such list to `this.changedResources.resourceStates`, where the `this.changedResources` was created earlier.
 
-```JS
+```javascript
 {
-	resourceUri: doc.uri,
-	command: {
-		title: "Show changes",
-		command: "vscode.diff",
-		arguments: [repositoryUri, doc.uri, `Checked-out version ↔ Local changes`],
-		tooltip: "Diff your changes"
-	}
+    resourceUri: doc.uri,
+    command: {
+        title: "Show changes",
+        command: "vscode.diff",
+        arguments: [repositoryUri, doc.uri, `Checked-out version ↔ Local changes`],
+        tooltip: "Diff your changes"
+    }
 }
 ```
 
 where `repositoryUri` is determined by
 
-```JS
+```javascript
 this.fiddleRepository.provideOriginalResource(doc.uri, null)
 ```
 
@@ -109,3 +109,31 @@ this.fiddleRepository.provideOriginalResource(doc.uri, null)
 Both the regular diff (invoking the built-in `vscode.diff` when user clicks on the changed resource in the source control view) and the Quick Diff (available in the left margin of the text editor) are rendered automatically by VS Code as long as the extension provides it with the content of the original document checked out from the repository. This is done by implementing a `TextDocumentContentProvider`.
 
 ![alt text](resources/images/quick_diff.gif "Quick diff")
+
+## Source Control extension activation
+
+A source control extensions gets activated either when a remote repository gets _cloned_
+upon user request, or when a previously _cloned_ workspace folder is open.
+
+```JSON
+    "activationEvents": [
+        "onCommand:extension.source-control.open",
+        "workspaceContains:.jsfiddle"
+    ],
+```
+
+This extension implements the _cloning_ using the `extension.source-control.open` command.
+
+This sample extension stores the source control configuration in the `.jsfiddle` JSON file in the workspace folder root.
+
+Upon extension activation such file is discovered in the workspace folder and source control initialized.
+
+## Multiple workspace folder support
+
+Source control extension should support multiple workspace folders bound to different remote repositories.
+
+![alt text](resources/images/multi-workspace-folder.gif "Multiple workspace folder support")
+
+## Testing the sample
+
+This sample can be tested on any JSFiddle with (e.g. `u8B29/1`) or without (e.g. `u8B29`) the version number specified. However, if you want to test committing code back to the repository, try typing in `demo` instead of a real fiddle name, which lets you mock the repository without reading/writing from/to actual JSFiddle.

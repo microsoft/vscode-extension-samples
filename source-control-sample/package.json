@@ -8,10 +8,11 @@
 		"vscode": "^1.30.0"
 	},
 	"categories": [
-		"Other"
+		"SCM Providers"
 	],
 	"activationEvents": [
-		"onCommand:extension.source-control.open"
+		"onCommand:extension.source-control.open",
+		"workspaceContains:.jsfiddle"
 	],
 	"main": "./out/extension.js",
 	"contributes": {

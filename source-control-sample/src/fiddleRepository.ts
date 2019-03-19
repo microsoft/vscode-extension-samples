@@ -1,11 +1,13 @@
 import JSFiddle = require("jsfiddle");
-import { QuickDiffProvider, Uri, CancellationToken, ProviderResult, WorkspaceFolder, workspace, TextDocument } from "vscode";
+import { QuickDiffProvider, Uri, CancellationToken, ProviderResult, WorkspaceFolder, workspace } from "vscode";
 import * as path from 'path';
 
+/** Represents one JSFiddle data and meta-data. */
 export class Fiddle {
-	constructor(public hash: string, public version: number, public data: FiddleData) { }
+	constructor(public slug: string, public version: number, public data: FiddleData) { }
 }
 
+/** Represents JSFiddle HTML, JavaScript and CSS text. */
 export interface FiddleData {
 	html: string;
 	js: string;
@@ -22,56 +24,91 @@ export const JSFIDDLE_SCHEME = 'jsfiddle';
 
 export class FiddleRepository implements QuickDiffProvider {
 
-	constructor(private workspaceFolder: WorkspaceFolder, private fiddleHash: string) { }
+	constructor(private workspaceFolder: WorkspaceFolder, private fiddleSlug: string) { }
 
 	provideOriginalResource?(uri: Uri, token: CancellationToken): ProviderResult<Uri> {
 		// converts the local file uri to jsfiddle:file.ext
 		let relativePath = workspace.asRelativePath(uri.fsPath);
 		return Uri.parse(`${JSFIDDLE_SCHEME}:${relativePath}`);
 	}
+
+	/**
+	 * Enumerates the resources under source control.
+	 */
+	provideSourceControlledResources(): Uri[] {
+		return [
+			Uri.file(this.createLocalResourcePath('html')),
+			Uri.file(this.createLocalResourcePath('js')),
+			Uri.file(this.createLocalResourcePath('css'))		];
+	}
+
+	/**
+	 * Creates a local file path in the local workspace that corresponds to the part of the 
+	 * fiddle denoted by the given extension.
+	 *
+	 * @param extension fiddle part, which is also used as a file extension
+	 * @returns path of the locally cloned fiddle resource ending with the given extension
+	 */
+	createLocalResourcePath(extension: string) {
+		return path.join(this.workspaceFolder.uri.fsPath, this.fiddleSlug + '.' + extension);
+	}
 }
 
-export async function downloadFiddle(hash: string, version: number | undefined): Promise<Fiddle> {
+const DEMO: FiddleData[] = [
+	{
+		html: '<div class="hi">Hi</div>',
+		css: `.hi {\n	color: red;\n}`,
+		js: '$(".hi").fadeOut();'
+	}
+];
 
-	if (hash === "demo") {
-		let maxDemoVersion = 1;
+// emulates prior versions mock-committed in previous sessions
+var demoVersionOffset: number = undefined;
+
+export async function downloadFiddle(slug: string, version: number | undefined): Promise<Fiddle> {
+
+	if (slug === "demo") {
+		// use mock fiddle
+		if (!demoVersionOffset) demoVersionOffset = version-1;
+		let maxDemoVersion = DEMO.length + demoVersionOffset;
 		if (version === undefined) version = maxDemoVersion;
 
-		if (version <= maxDemoVersion) {
-			let fiddleData: FiddleData = {
-				html: '<div class="hi">Hi</div>',
-				css: `.hi {\n	color: red;\n}`,
-				js: '$(".hi").fadeOut();'
-			};
-			return new Fiddle(hash, version, fiddleData);
+		if (version >= 1 && version <= maxDemoVersion) {
+			// mock all versions committed in previous sessions by the first version
+			let index = Math.max(0, version-1 - demoVersionOffset);
+			let fiddleData = DEMO[index];
+			return new Fiddle(slug, version, fiddleData);
 		}
 		else {
 			throw "Invalid demo fiddle version.";
 		}
 	}
 
-	let id = toFiddleId(hash, version);
+	let id = toFiddleId(slug, version);
 
 	return new Promise<Fiddle>((resolve, reject) => {
 		JSFiddle.getFiddle(id, (err: any, fiddleData: any) => {
 			// handle error
 			if (err) reject(err);
 
-			let fiddle = new Fiddle(hash, version, fiddleData);
+			let fiddle = new Fiddle(slug, version, fiddleData);
 
 			resolve(fiddle);
 		});
 	});
 }
 
-export async function uploadFiddle(hash: string, version: number, html: string, js: string, css: string): Promise<Fiddle> {
+export async function uploadFiddle(slug: string, version: number, html: string, js: string, css: string): Promise<Fiddle> {
 
-	if (hash === "demo") {
-		return new Fiddle(hash, version, { html: html, js: js, css: css });
+	if (slug === "demo") {
+		// using mock fiddle
+		let fiddleData: FiddleData = { html: html, js: js, css: css };
+		DEMO.push(fiddleData);
+		return new Fiddle(slug, version, fiddleData);
 	}
 
 	let data = {
-		slug: hash,
+		slug: slug,
 		version: version,
 		html: html,
 		js: js,
@@ -83,19 +120,19 @@ export async function uploadFiddle(hash: string, version: number, html: string, 
 			// handle error
 			if (err) reject(err);
 
-			let fiddle = new Fiddle(hash, version, fiddleData);
+			let fiddle = new Fiddle(slug, version, fiddleData);
 
 			resolve(fiddle);
 		});
 	});
 }
 
-function toFiddleId(hash: string, version: number | undefined): string {
+function toFiddleId(slug: string, version: number | undefined): string {
 	if (version === undefined) {
-		return hash;
+		return slug;
 	}
 	else {
-		return hash + '/' + version;
+		return slug + '/' + version;
 	}
 }
 
