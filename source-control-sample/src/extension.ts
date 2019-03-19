@@ -186,7 +186,7 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 	}
 
 	let workSpacesToReplace = workspaceFolderIndex > -1 ? 1 : 0;
-	if (workspaceFolderIndex < 0) workspaceFolderIndex = 0;
+	if (workspaceFolderIndex === undefined || workspaceFolderIndex < 0) workspaceFolderIndex = 0;
 
 	// replace or insert the workspace
 	vscode.workspace.updateWorkspaceFolders(workspaceFolderIndex, workSpacesToReplace, { uri: workspaceFolderUri });

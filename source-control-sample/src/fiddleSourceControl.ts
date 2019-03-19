@@ -33,7 +33,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 		// clone fiddle to the local workspace
 		this.setFiddle(fiddle, overwrite);
 
-		if (Number.isNaN(this.fiddle.version)) {
+		if (this.fiddle.version === undefined || Number.isNaN(this.fiddle.version)) {
 			this.establishVersion();
 		} else {
 			this.refresh();
@@ -75,18 +75,18 @@ export class FiddleSourceControl implements vscode.Disposable {
 			vscode.window.showErrorMessage("Checkout the latest fiddle version before committing your changes.");
 		}
 		else {
-			let answer = await vscode.window.showQuickPick(["Yes, upload the changes to JS Fiddle.", "No, I was just clicking around."],
-				{ placeHolder: "Are you sure you want to commit?" });
+			let html = await this.getLocalResourceText('html');
+			let js = await this.getLocalResourceText('js');
+			let css = await this.getLocalResourceText('css');
 
-			if (answer && answer.toLowerCase().startsWith("yes")) {
-				let html = await this.getLocalResourceText('html');
-				let js = await this.getLocalResourceText('js');
-				let css = await this.getLocalResourceText('css');
-
-				// here we assume nobody updated the Fiddle on the server since we refreshed the list of versions
-				let newFiddle = await uploadFiddle(this.fiddle.slug, this.fiddle.version + 1, html, js, css);
+			// here we assume nobody updated the Fiddle on the server since we refreshed the list of versions
+			try {
+				let newFiddle = await uploadFiddle(this.fiddle.slug, this.fiddle.version+1, html, js, css);
+				if (!newFiddle) return;
 				this.setFiddle(newFiddle, false);
 				this.jsFiddleScm.inputBox.value = '';
+			} catch (ex) {
+				vscode.window.showErrorMessage("Cannot commit changes to JS Fiddle. " + ex.message);
 			}
 		}
 	}
@@ -115,8 +115,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 		if (!Number.isFinite(this.latestFiddleVersion)) return;
 
 		if (newVersion === undefined) {
-			let allVersions = [...Array(this.latestFiddleVersion).keys()]
-				.map(n => n + 1)
+			let allVersions = [...Array(this.latestFiddleVersion + 1).keys()]
 				.map(ver => new VersionQuickPickItem(ver, ver == this.fiddle.version));
 			let newVersionPick = await vscode.window.showQuickPick(allVersions, { canPickMany: false, placeHolder: 'Select a version...' });
 			if (newVersionPick) {
@@ -126,6 +125,8 @@ export class FiddleSourceControl implements vscode.Disposable {
 				return;
 			}
 		}
+
+		if (newVersion === this.fiddle.version) return; // the same version was selected
 
 		if (this.changedResources.resourceStates.length) {
 			let changedResourcesCount = this.changedResources.resourceStates.length;
@@ -189,18 +190,18 @@ export class FiddleSourceControl implements vscode.Disposable {
 	 * For example another user updates the Fiddle online.
 	 */
 	async refresh(): Promise<void> {
-		let latestVersion = this.fiddle.version;
+		let latestVersion = this.fiddle.version || 0;
 		while (true) {
 			try {
-				latestVersion++;
 				let latestFiddle = await downloadFiddle(this.fiddle.slug, latestVersion);
+				this.latestFiddleVersion = latestVersion;
+				latestVersion++;
 			} catch (ex) {
 				// typically the ex.statusCode == 404, when there is no further version
 				break;
 			}
 		}
 
-		this.latestFiddleVersion = latestVersion - 1;
 		this.refreshStatusBar();
 	}
 
@@ -208,12 +209,14 @@ export class FiddleSourceControl implements vscode.Disposable {
 	 * Determines which version was checked out and finds the index of the latest version.
 	 */
 	async establishVersion(): Promise<void> {
-		let latestVersion = 0;
+		let version = 0;
+		let latestVersion = Number.NaN;
 		let currentFiddle: Fiddle = undefined;
 		while (true) {
 			try {
-				latestVersion++;
-				let latestFiddle = await downloadFiddle(this.fiddle.slug, latestVersion);
+				let latestFiddle = await downloadFiddle(this.fiddle.slug, version);
+				latestVersion = version;
+				version++;
 				if (areIdentical(this.fiddle.data, latestFiddle.data)) {
 					currentFiddle = latestFiddle;
 				}
@@ -223,7 +226,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 			}
 		}
 
-		this.latestFiddleVersion = latestVersion - 1;
+		this.latestFiddleVersion = latestVersion;
 
 		// now we know the version of the current fiddle, let's set it
 		this.setFiddle(currentFiddle, false);
@@ -317,17 +320,19 @@ export class FiddleSourceControl implements vscode.Disposable {
 }
 
 class VersionQuickPickItem implements vscode.QuickPickItem {
-	label: string;
-	description?: string;
-	detail?: string;
-	alwaysShow?: boolean;
 
-	constructor(public version: number, public picked: boolean) {
-		this.label = this.version.toString();
-		this.alwaysShow = picked;
+	constructor(public readonly version: number, public readonly picked: boolean) {
+	}
 
-		if (picked) {
-			this.description = "Currently checked out.";
-		}
+	get label(): string {
+		return `Version ${this.version}`;
+	}
+
+	get description(): string {
+		return this.picked ? '(currently checked-out)' : '';
+	}
+
+	get alwaysShow(): boolean {
+		return this.picked;
 	}
 }

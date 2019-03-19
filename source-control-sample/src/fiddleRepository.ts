@@ -1,5 +1,5 @@
 import JSFiddle = require("jsfiddle");
-import { QuickDiffProvider, Uri, CancellationToken, ProviderResult, WorkspaceFolder, workspace } from "vscode";
+import { QuickDiffProvider, Uri, CancellationToken, ProviderResult, WorkspaceFolder, workspace, window, env } from "vscode";
 import * as path from 'path';
 
 /** Represents one JSFiddle data and meta-data. */
@@ -39,7 +39,7 @@ export class FiddleRepository implements QuickDiffProvider {
 		return [
 			Uri.file(this.createLocalResourcePath('html')),
 			Uri.file(this.createLocalResourcePath('js')),
-			Uri.file(this.createLocalResourcePath('css'))		];
+			Uri.file(this.createLocalResourcePath('css'))];
 	}
 
 	/**
@@ -69,13 +69,14 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 
 	if (slug === "demo") {
 		// use mock fiddle
-		if (!demoVersionOffset) demoVersionOffset = version-1;
-		let maxDemoVersion = DEMO.length + demoVersionOffset;
+		if (demoVersionOffset === undefined && version === undefined) version = 0;
+		if (demoVersionOffset === undefined) demoVersionOffset = version;
+		let maxDemoVersion = DEMO.length -1 + demoVersionOffset;
 		if (version === undefined) version = maxDemoVersion;
 
-		if (version >= 1 && version <= maxDemoVersion) {
+		if (version >= 0 && version <= maxDemoVersion) {
 			// mock all versions committed in previous sessions by the first version
-			let index = Math.max(0, version-1 - demoVersionOffset);
+			let index = Math.max(0, version - demoVersionOffset);
 			let fiddleData = DEMO[index];
 			return new Fiddle(slug, version, fiddleData);
 		}
@@ -106,25 +107,44 @@ export async function uploadFiddle(slug: string, version: number, html: string, 
 		DEMO.push(fiddleData);
 		return new Fiddle(slug, version, fiddleData);
 	}
+	else {
 
-	let data = {
-		slug: slug,
-		version: version,
-		html: html,
-		js: js,
-		css: css
-	};
+		let answer = await window.showQuickPick(["Yes, open in the browser. I will paste the new Fiddle code, discard changes, refresh source control and checkout latest.", "No, I was just clicking around."],
+			{ placeHolder: "JS Fiddle saving is not supported. Do you want to open the JSFiddle in the browser?" });
 
-	return new Promise<Fiddle>((resolve, reject) => {
-		JSFiddle.saveFiddle(data, (err: any, fiddleData: any) => {
-			// handle error
-			if (err) reject(err);
+		if (answer && answer.toLowerCase().startsWith("yes")) {
+			env.openExternal(Uri.parse(`https://jsfiddle.net/${slug}/`));
+			return undefined;
+		}
 
-			let fiddle = new Fiddle(slug, version, fiddleData);
+		if (false) {
+			// this, sadly, does not work as advertised
+			let data = {
+				slug: slug,
+				version: version,
+				html: html,
+				js: js,
+				css: css
+			};
 
-			resolve(fiddle);
-		});
-	});
+			return new Promise<Fiddle>((resolve, reject) => {
+				JSFiddle.saveFiddle(data, (err: any, fiddleData: any) => {
+					// handle error
+					if (err) {
+						reject(err);
+					}
+					else {
+						let fiddle = new Fiddle(slug, version, fiddleData);
+
+						resolve(fiddle);
+					}
+				});
+			});
+		}
+		else {
+			return undefined;
+		}
+	}
 }
 
 function toFiddleId(slug: string, version: number | undefined): string {

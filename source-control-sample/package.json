@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.30.0"
+		"vscode": "^1.31.0"
 	},
 	"categories": [
 		"SCM Providers"
@@ -27,7 +27,7 @@
 				"icon": {
 					"light": "resources/icons/light/check.svg",
 					"dark": "resources/icons/dark/check.svg"
-				  }
+				}
 			},
 			{
 				"command": "extension.source-control.refresh",
@@ -35,7 +35,7 @@
 				"icon": {
 					"light": "resources/icons/light/refresh.svg",
 					"dark": "resources/icons/dark/refresh.svg"
-				  }
+				}
 			},
 			{
 				"command": "extension.source-control.discard",
@@ -43,7 +43,7 @@
 				"icon": {
 					"light": "resources/icons/light/discard.svg",
 					"dark": "resources/icons/dark/discard.svg"
-				  }
+				}
 			},
 			{
 				"command": "extension.source-control.checkout",
@@ -51,7 +51,7 @@
 				"icon": {
 					"light": "resources/icons/light/refresh.svg",
 					"dark": "resources/icons/dark/refresh.svg"
-				  }
+				}
 			}
 		],
 		"menus": {
