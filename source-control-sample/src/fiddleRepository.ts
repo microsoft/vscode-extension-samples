@@ -71,7 +71,7 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 		// use mock fiddle
 		if (demoVersionOffset === undefined && version === undefined) version = 0;
 		if (demoVersionOffset === undefined) demoVersionOffset = version;
-		let maxDemoVersion = DEMO.length -1 + demoVersionOffset;
+		let maxDemoVersion = DEMO.length - 1 + demoVersionOffset;
 		if (version === undefined) version = maxDemoVersion;
 
 		if (version >= 0 && version <= maxDemoVersion) {

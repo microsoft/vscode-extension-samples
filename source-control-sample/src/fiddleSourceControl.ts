@@ -81,7 +81,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 
 			// here we assume nobody updated the Fiddle on the server since we refreshed the list of versions
 			try {
-				let newFiddle = await uploadFiddle(this.fiddle.slug, this.fiddle.version+1, html, js, css);
+				let newFiddle = await uploadFiddle(this.fiddle.slug, this.fiddle.version + 1, html, js, css);
 				if (!newFiddle) return;
 				this.setFiddle(newFiddle, false);
 				this.jsFiddleScm.inputBox.value = '';
