@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
     }));
 
     if (vscode.window.registerWebviewPanelSerializer) {
-        // Make sure we register a serilizer in activation event
+        // Make sure we register a serializer in activation event
         vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
             async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
                 console.log(`Got state: ${state}`);
