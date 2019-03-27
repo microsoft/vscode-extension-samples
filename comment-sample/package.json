@@ -24,6 +24,10 @@
 			{
 				"command": "mywiki.createComment",
 				"title": "Comment API: Reply to a comment thread"
+			},
+			{
+				"command": "mywiki.deleteNote",
+				"title": "Comment API: Delete a comment thread"
 			}
 		],
 		"menus": {
@@ -34,6 +38,10 @@
 				},
 				{
 					"command": "mywiki.createComment",
+					"when": "false"
+				},
+				{
+					"command": "mywiki.deleteNote",
 					"when": "false"
 				}
 			]

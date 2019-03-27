@@ -39,6 +39,14 @@ export function activate(context: vscode.ExtensionContext) {
 					thread
 				]
 			};
+
+			thread.deleteCommand = {
+				title: 'Delete Note',
+				command: 'mywiki.deleteNote',
+				arguments: [
+					thread
+				]
+			};
 		}
 	};
 
@@ -77,5 +85,9 @@ export function activate(context: vscode.ExtensionContext) {
 			thread.comments = [...thread.comments, newComment];
 			commentController.inputBox.value = '';
 		}
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('mywiki.deleteNote', (thread: vscode.CommentThread) => {
+		thread.dispose();
 	}));
 }
