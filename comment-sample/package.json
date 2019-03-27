@@ -25,7 +25,19 @@
 				"command": "mywiki.createComment",
 				"title": "Comment API: Reply to a comment thread"
 			}
-		]
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "mywiki.createNote",
+					"when": "false"
+				},
+				{
+					"command": "mywiki.createComment",
+					"when": "false"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
