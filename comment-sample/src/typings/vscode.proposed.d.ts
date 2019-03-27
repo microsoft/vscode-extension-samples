@@ -31,7 +31,7 @@ declare module 'vscode' {
 	/**
 	 * A collection of comments representing a conversation at a particular range in a document.
 	 */
-	interface CommentThread {
+	export interface CommentThread {
 		/**
 		 * A unique identifier of the comment thread.
 		 */
@@ -51,7 +51,7 @@ declare module 'vscode' {
 		/**
 		 * The human-readable label describing the [Comment Thread](#CommentThread)
 		 */
-		label: string;
+		label?: string;
 
 		/**
 		 * The ordered comments of the thread.
@@ -81,16 +81,22 @@ declare module 'vscode' {
 		collapsibleState?: CommentThreadCollapsibleState;
 
 		/**
+		 * The command to be executed when users try to delete the comment thread. Currently, this is only called
+		 * when the user collapses a comment thread that has no comments in it.
+		 */
+		deleteCommand?: Command;
+
+		/**
 		 * Dispose this comment thread.
 		 * Once disposed, the comment thread will be removed from visible text editors and Comments Panel.
 		 */
-		dispose(): void;
+		dispose?(): void;
 	}
 
 	/**
 	 * A comment is displayed within the editor or the Comments Panel, depending on how it is provided.
 	 */
-	interface Comment {
+	export interface Comment {
 		/**
 		 * The id of the comment
 		 */
@@ -118,6 +124,37 @@ declare module 'vscode' {
 		userIconPath?: Uri;
 
 		/**
+		 * @deprecated Use userIconPath instead. The avatar src of the user who created the comment
+		 */
+		gravatar?: string;
+
+		/**
+		 * Whether the current user has permission to edit the comment.
+		 *
+		 * This will be treated as false if the comment is provided by a `WorkspaceCommentProvider`, or
+		 * if it is provided by a `DocumentCommentProvider` and  no `editComment` method is given.
+		 *
+		 * DEPRECATED, use editCommand
+		 */
+		canEdit?: boolean;
+
+		/**
+		 * Whether the current user has permission to delete the comment.
+		 *
+		 * This will be treated as false if the comment is provided by a `WorkspaceCommentProvider`, or
+		 * if it is provided by a `DocumentCommentProvider` and  no `deleteComment` method is given.
+		 *
+		 * DEPRECATED, use deleteCommand
+		 */
+		canDelete?: boolean;
+
+		/**
+		 * @deprecated
+		 * The command to be executed if the comment is selected in the Comments Panel
+		 */
+		command?: Command;
+
+		/**
 		 * The command to be executed if the comment is selected in the Comments Panel
 		 */
 		selectCommand?: Command;
@@ -131,14 +168,42 @@ declare module 'vscode' {
 		 * The command to be executed when users try to delete the comment
 		 */
 		deleteCommand?: Command;
-	}
-
-	export interface CommentInputBox {
 
 		/**
-		 * Setter and getter for the contents of the input box.
+		 * Deprecated
+		 */
+		isDraft?: boolean;
+
+		/**
+		 * Proposed Comment Reaction
+		 */
+		commentReactions?: CommentReaction[];
+	}
+
+	/**
+	 * Comment Reactions
+	 */
+	interface CommentReaction {
+		readonly label?: string;
+		readonly iconPath?: string | Uri;
+		count?: number;
+		readonly hasReacted?: boolean;
+	}
+
+
+	/**
+	 * The comment input box in Comment Widget.
+	 */
+	export interface CommentInputBox {
+		/**
+		 * Setter and getter for the contents of the comment input box.
 		 */
 		value: string;
+	}
+
+	export interface CommentReactionProvider {
+		availableReactions: CommentReaction[];
+		toggleReaction?(document: TextDocument, comment: Comment, reaction: CommentReaction): Promise<void>;
 	}
 
 	export interface CommentingRangeProvider {
@@ -187,6 +252,12 @@ declare module 'vscode' {
 		 * Optional new comment thread factory.
 		 */
 		emptyCommentThreadFactory?: EmptyCommentThreadFactory;
+
+		/**
+		 * Optional reaction provider
+		 */
+		reactionProvider?: CommentReactionProvider;
+
 		/**
 		 * Dispose this comment controller.
 		 */
