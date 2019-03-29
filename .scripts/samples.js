@@ -163,7 +163,14 @@ const lspSamples = [
       'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
     apis: [],
     contributions: []
-  }
+  },
+    {
+      description: 'Commenting API Sample',
+      path: 'comment-sample',
+      guide: null,
+      apis: [],
+      contributions: []
+    },
 ]
 
 module.exports = {
