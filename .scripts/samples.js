@@ -176,6 +176,13 @@ const lspSamples = [
       'TextDocumentContentProvider'
     ],
     contributions: ["menus"]
+  },
+  {
+    description: 'Commenting API Sample',
+    path: 'comment-sample',
+    guide: null,
+    apis: [],
+    contributions: []
   }
 ]
 
