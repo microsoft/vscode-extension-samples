@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.22.0"
+		"vscode": "^1.30.0"
 	},
 	"categories": [
 		"Other"
@@ -33,6 +33,6 @@
 		"@types/rimraf": "^2.0.2",
 		"tslint": "^5.11.0",
 		"typescript": "^2.6.1",
-		"vscode": "^1.1.17"
+		"vscode": "^1.1.33"
 	}
 }

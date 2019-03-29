@@ -164,13 +164,26 @@ const lspSamples = [
     apis: [],
     contributions: []
   },
-    {
-      description: 'Commenting API Sample',
-      path: 'comment-sample',
-      guide: null,
-      apis: [],
-      contributions: []
-    },
+  {
+    description: 'Source Control Sample',
+    path: 'source-control-sample',
+    guide: 'https://code.visualstudio.com/api/extension-guides/scm-provider',
+    apis: [
+      'workspace.workspaceFolders',
+      'SourceControl',
+      'SourceControlResourceGroup',
+      'scm.createSourceControl',
+      'TextDocumentContentProvider'
+    ],
+    contributions: ["menus"]
+  },
+  {
+    description: 'Commenting API Sample',
+    path: 'comment-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  }
 ]
 
 module.exports = {
