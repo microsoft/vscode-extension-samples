@@ -1,84 +1,89 @@
-import * as fs from 'fs';
-import { window, Disposable } from 'vscode';
+import { window, Disposable, Memento } from 'vscode';
 import { QuickPickItem } from 'vscode';
-import * as _ from 'lodash';
 
 export const historyPath = `${process.env.HOME}/.vscode-cmd-history`;
+
+const HISTORY_KEY = 'HISTORY_KEY';
 
 /**
  * A command prompt with history
  * 
  */
-export async function promptCommand() {
-	const command = await pickCommand();
-	if (command) {
-		window.showInformationMessage(`You picked the following command: '${command}'`)
+export const getPromptCommand = (memo: Memento) => {
+	const pickCommand = getPickCommand(memo);
+	// §TODO: cache promptCommand!
+	return async function promptCommand() {
+		const command = await pickCommand();
+		if (command) {
+			window.showInformationMessage(`You picked the following command: '${command}'`)
+		}
 	}
 }
 
-class CommandItem implements QuickPickItem {
+abstract class CommandItem implements QuickPickItem {
 	public label: string;
 	public description?: string;
+	public abstract type: string;
 	constructor(label: string, description?: string) {
 		this.label = label;
 		this.description = description;
 	}
 }
 class HistoryItem extends CommandItem {
+	public type: string;
 	constructor(label: string, description?: string) {
 		super(label, description);
+		this.type = 'history'
 	}
 }
 class InputItem extends CommandItem {
+	public type: string;
 	constructor(public label: string) {
 		super(label, '(current input)');
+		this.type = 'input';
 	};
 }
 
-async function pickCommand() {
+const getPickCommand = (memo: Memento) => async function pickCommand() {
 	const disposables: Disposable[] = [];
-	let commandsItems: CommandItem[] = [];
-	let currentValue: string | undefined = undefined;
-	let historyShouldBeUpdated = false;
-
 	try {
 		return await new Promise<string | undefined>((resolve, reject) => {
 			const input = window.createQuickPick<CommandItem>();
 			input.placeholder = 'Type a command';
-			input.items = commandsItems;
+			input.items = [];
 
 			const updateQuickPick = (value?: string): void => {
+				if (value === input.value) return;
 				if (!value) {
-					input.items = commandsItems;
+					if (input.items[0] && input.items[0].type === 'input')
+					input.items = input.items.slice(1);
 					return;
 				}
-				input.items = [
-					new InputItem(value)
-				].concat(
-					commandsItems
-				)
+				if (input.items[0] && input.items[0].type === 'input') {
+					input.items = [new InputItem(value)].concat(input.items.slice(1));
+				} else {
+					input.items = [new InputItem(value)].concat(input.items);
+				}
 				// §todo: add autocomplete suggestions
 			}
 
 			disposables.push(
-				input.onDidChangeValue((value?: string) => {
-					currentValue = value;
-					updateQuickPick(value);
-				}),
+				input.onDidChangeValue(updateQuickPick),
 				input.onDidChangeSelection((items: CommandItem[]) => {
 					const item = items[0];
 					if (item instanceof HistoryItem) {
 						resolve(item.label);
 						input.hide();
 						// do not record new input in history
+						// §todo : maybe reorder
 					} else if (item instanceof InputItem) {
 						resolve(item.label);
 						input.hide();
 						// record new input in history
-						if (historyShouldBeUpdated && !item.label.startsWith(' ')) {
-							fs.appendFile(historyPath, item.label + '\n', function (err) {
-								if (err) console.error('Problem while updating history file', err);
-							});
+						if (!item.label.startsWith(' ')) {
+							const currentHistory: string[] = memo.get(HISTORY_KEY, []);
+							currentHistory.unshift(item.label);
+							memo.update(HISTORY_KEY, currentHistory);
 						}
 					}
 				}),
@@ -88,22 +93,10 @@ async function pickCommand() {
 				})
 			);
 			input.show();
-
-			if (fs.existsSync(historyPath)) {
-				fs.readFile(historyPath, (err, content) => {
-					if (err) {
-						console.error('Could not load file history', err);
-					}
-					historyShouldBeUpdated = true;
-					const commands = content.toString().trimRight().split('\n').reverse();
-					commandsItems = _.map(commands, (cmd: string, index: number) => new HistoryItem(cmd, `(history item ${index})`));
-					updateQuickPick(currentValue);
-				});
-			} else {
-				console.log('history file does not exist yet');
-				historyShouldBeUpdated = true;
-			}
-
+			const historyItems: HistoryItem[] = memo.get(HISTORY_KEY, []).map(
+				(cmd: string, index: number) => new HistoryItem(cmd, `(history item ${index})`)
+			);
+			input.items = input.items.concat(historyItems)
 		});
 	} finally {
 		disposables.forEach(d => d.dispose());
