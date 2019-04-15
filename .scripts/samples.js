@@ -183,6 +183,15 @@ const lspSamples = [
     guide: null,
     apis: [],
     contributions: []
+  },
+  {
+    description: 'Document Editing Sample',
+    path: 'document-editing-sample',
+    guide: null,
+    apis: [
+      `commands`
+    ],
+    contributions: []
   }
 ]
 
