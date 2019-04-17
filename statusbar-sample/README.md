@@ -9,4 +9,4 @@ This is a sample extension that adds a status bar entry showing the current numb
 
 ### `vscode` module
 
-- [`languages.registerCompletionItemProvider`](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem)
+- [`window.createStatusBarItem`](https://code.visualstudio.com/api/references/vscode-api#window.createStatusBarItem)
