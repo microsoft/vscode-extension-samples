@@ -11,7 +11,7 @@
 			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": ["${workspaceRoot}/client/out/**/*.js"],
-			"preLaunchTask": "npm: watch:client"
+			"preLaunchTask": "npm: watch"
 		},
 		{
 			"type": "node",
