@@ -1,0 +1,100 @@
+{
+	"folders": [
+		{
+			"path": "virtual-document-sample"
+		},
+		{
+			"path": "vim-sample"
+		},
+		{
+			"path": "statusbar-sample"
+		},
+		{
+			"path": "nodefs-provider-sample"
+		},
+		{
+			"path": "document-editing-sample"
+		},
+		{
+			"path": "comment-sample"
+		},
+		{
+			"path": "fsprovider-sample"
+		},
+		{
+			"path": "webview-sample"
+		},
+		{
+			"path": "webpack-sample"
+		},
+		{
+			"path": "tree-view-sample"
+		},
+		{
+			"path": "theme-sample"
+		},
+		{
+			"path": "terminal-sample"
+		},
+		{
+			"path": "task-provider-sample"
+		},
+		{
+			"path": "source-control-sample"
+		},
+		{
+			"path": "snippet-sample"
+		},
+		{
+			"path": "quickinput-sample"
+		},
+		{
+			"path": "progress-sample"
+		},
+		{
+			"path": "lsp-sample"
+		},
+		{
+			"path": "lsp-multi-server-sample"
+		},
+		{
+			"path": "lsp-log-streaming-sample"
+		},
+		{
+			"path": "legacy-samples"
+		},
+		{
+			"path": "language-configuration-sample"
+		},
+		{
+			"path": "i18n-sample"
+		},
+		{
+			"path": "helloworld-sample"
+		},
+		{
+			"path": "helloworld-minimal-sample"
+		},
+		{
+			"path": "diagnostic-related-information-sample"
+		},
+		{
+			"path": "decorator-sample"
+		},
+		{
+			"path": "contentprovider-sample"
+		},
+		{
+			"path": "configuration-sample"
+		},
+		{
+			"path": "completions-sample"
+		},
+		{
+			"path": "basic-multi-root-sample"
+		},
+		{
+			"path": "tree-explorer-sample"
+		}
+	]
+}
