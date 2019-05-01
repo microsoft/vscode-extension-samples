@@ -54,14 +54,6 @@ You can expect from each sample:
 | [LSP Multi Root Server Sample](https://github.com/Microsoft/vscode-extension-samples/tree/master/lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
 <!-- LSP_SAMPLES_END -->
 
-## :warning: Legacy Samples :warning:
-
-Legacy samples are at [`/legacy-samples`](/legacy-samples). They are unlikely to receive any updates and might not work with the latest version of VS Code.
-
-| Sample | Deprecated Reason |
-| ------ | ----------------- |
-| [Preview HTML](/legacy-samples/previewhtml-sample/README.md) | [Webview API](/webview-sample/README.md) supersedes the old HTML Preview functionality |
-
 ## License
 
 Copyright (c) Microsoft Corporation. All rights reserved.
