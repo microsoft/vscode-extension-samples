@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.27.0"
+		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
@@ -26,17 +26,16 @@
 		"vscode:prepublish": "webpack --mode production",
 		"webpack": "webpack --mode development",
 		"webpack-dev": "webpack --mode development --watch",
-		"test-compile": "tsc -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install"
+		"test-compile": "tsc -p ./"
 	},
 	"devDependencies": {
 		"@types/node": "^7.0.43",
 		"ts-loader": "^4.4.2",
 		"tslint": "^5.11.0",
 		"typescript": "3.0.3",
-		"vscode": "^1.1.22",
 		"webpack": "^4.19.1",
 		"webpack-cli": "^3.1.0",
-		"@types/mocha": "^2.2.42"
+		"@types/mocha": "^2.2.42",
+		"@types/vscode": "^1.32.0"
 	}
 }

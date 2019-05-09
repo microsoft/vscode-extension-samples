@@ -5,7 +5,7 @@
     "version": "0.0.1",
     "publisher": "rebornix",
     "engines": {
-        "vscode": "^1.29.0"
+        "vscode": "^1.32.0"
     },
     "categories": [
         "Other"
@@ -26,14 +26,12 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "lint": "tslint ./src/*.ts",
-        "watch": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+        "watch": "tsc -watch -p ./"
     },
     "devDependencies": {
         "@types/node": "^6.0.40",
         "tslint": "^5.11.0",
         "typescript": "^2.0.3",
-        "vscode": "^1.1.22"
+        "@types/vscode": "^1.32.0"
     }
 }

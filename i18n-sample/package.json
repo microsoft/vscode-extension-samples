@@ -6,7 +6,7 @@
 	"version": "0.1.0",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.13.0"
+		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
@@ -31,11 +31,11 @@
 	"scripts": {
 		"watch": "tsc -b -w",
 		"compile": "tsc -b",
-		"clean": "gulp clean",
-		"postinstall": "node ./node_modules/vscode/bin/install"
+		"clean": "gulp clean"
 	},
 	"devDependencies": {
 		"@types/node": "^6.0.40",
+		"@types/vscode": "^1.32.0",
 		"del": "^3.0.0",
 		"event-stream": "3.3.4",
 		"gulp": "^3.9.1",
@@ -45,7 +45,6 @@
 		"tslint": "^5.11.0",
 		"typescript": "^3.1.3",
 		"vsce": "^1.32.0",
-		"vscode": "^1.1.22",
 		"vscode-nls-dev": "^3.2.3"
 	},
 	"dependencies": {

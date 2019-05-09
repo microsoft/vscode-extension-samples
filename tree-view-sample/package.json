@@ -205,8 +205,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install"
+		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
 		"@types/mkdirp": "^0.5.2",
@@ -214,7 +213,7 @@
 		"@types/rimraf": "^2.0.2",
 		"tslint": "^5.11.0",
 		"typescript": "^2.1.4",
-		"vscode": "^1.1.22"
+		"@types/vscode": "^1.32.0"
 	},
 	"dependencies": {
 		"jsonc-parser": "^0.4.2",
