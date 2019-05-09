@@ -52,13 +52,12 @@
 		"compile": "tsc -p ./",
 		"lint": "tslint ./src/*.ts",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
 		"@types/node": "^6.0.40",
 		"tslint": "^5.11.0",
-		"typescript": "^2.0.3",
+		"typescript": "^3.4.5",
 		"@types/vscode": "^1.32.0"
 	}
 }
