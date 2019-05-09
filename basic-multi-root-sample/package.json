@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.15.0"
+		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
@@ -15,11 +15,9 @@
 	],
 	"main": "./out/src/extension",
 	"scripts": {
-		"vscode:prepublish": "tsc -p ./",
-		"compile": "tsc -watch -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
-		"test": "node ./node_modules/vscode/bin/test"
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./"
 	},
 	"contributes": {
 		"configuration": {
@@ -38,11 +36,9 @@
 		}
 	},
 	"devDependencies": {
-		"@types/mocha": "^2.2.32",
 		"@types/node": "^6.0.40",
-		"mocha": "^2.3.3",
 		"tslint": "^5.11.0",
 		"typescript": "^2.0.3",
-		"vscode": "^1.0.0"
+		"@types/vscode": "^1.32.0"
 	}
 }

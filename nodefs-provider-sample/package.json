@@ -18,7 +18,6 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"dependencies": {
@@ -33,6 +32,7 @@
 		"@types/rimraf": "^2.0.2",
 		"tslint": "^5.11.0",
 		"typescript": "^2.6.1",
-		"vscode": "^1.1.33"
+		"vscode": "^1.1.33",
+		"@types/vscode": "^1.32.0"
 	}
 }
