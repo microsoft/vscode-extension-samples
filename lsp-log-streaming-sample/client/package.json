@@ -21,7 +21,7 @@
 		"ws": "^6.0.0"
 	},
 	"devDependencies": {
-		"vscode": "^1.1.21",
+		"vscode": "^1.1.34",
 		"@types/ws": "^6.0.0"
 	}
 }
