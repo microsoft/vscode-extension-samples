@@ -3,6 +3,8 @@
 	"publisher": "Microsoft",
 	"version": "0.0.1",
 	"scripts": {
+		"compile": "node .scripts/run-script.js compile",
+		"lint": "node .scripts/run-script.js lint",
 		"update-readme": "node .scripts/update-readme.js"
 	}
 }
