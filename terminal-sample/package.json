@@ -115,9 +115,9 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"lint": "tslint ./src/*.ts",
-		"watch": "tsc -watch -p ./"
+		"compile": "tsc  -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "tslint -p ./"
 	},
 	"devDependencies": {
 		"@types/node": "^6.0.40",

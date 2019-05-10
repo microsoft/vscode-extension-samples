@@ -30,7 +30,7 @@ export class FtpModel {
 
 			client.on('error', error => {
 				e('Error while connecting: ' + error.message);
-			})
+			});
 
 			client.connect({
 				host: this.host,
@@ -94,7 +94,7 @@ export class FtpModel {
 						return e(err);
 					}
 
-					let string = ''
+					let string = '';
 					stream.on('data', function (buffer) {
 						if (buffer) {
 							var part = buffer.toString();

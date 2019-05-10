@@ -55,7 +55,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 						arguments: [moduleName]
 					});
 				}
-			}
+			};
 
 			const deps = packageJson.dependencies
 				? Object.keys(packageJson.dependencies).map(dep => toDep(dep, packageJson.dependencies[dep]))

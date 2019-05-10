@@ -145,8 +145,8 @@ export class FileStat implements vscode.FileStat {
 }
 
 interface Entry {
-	uri: vscode.Uri,
-	type: vscode.FileType
+	uri: vscode.Uri;
+	type: vscode.FileType;
 }
 
 //#endregion
@@ -278,7 +278,7 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 					return a[0].localeCompare(b[0]);
 				}
 				return a[1] === vscode.FileType.Directory ? -1 : 1;
-			})
+			});
 			return children.map(([name, type]) => ({ uri: vscode.Uri.file(path.join(workspaceFolder.uri.fsPath, name)), type }));
 		}
 

@@ -31,8 +31,9 @@
 	"main": "./out/extension.js",
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
+		"compile": "tsc  -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "tslint -p ./"
 	},
 	"devDependencies": {
 		"@types/node": "^6.0.40",

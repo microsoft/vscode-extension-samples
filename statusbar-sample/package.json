@@ -23,7 +23,8 @@
 	"main": "./out/extension.js",
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
+		"compile": "tsc  -p ./",
+		"lint": "tslint -p ./",
 		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {

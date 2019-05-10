@@ -2,9 +2,9 @@
 
 import * as vscode from 'vscode';
 
-import { DepNodeProvider, Dependency } from './nodeDependencies'
-import { JsonOutlineProvider } from './jsonOutline'
-import { FtpExplorer } from './ftpExplorer'
+import { DepNodeProvider, Dependency } from './nodeDependencies';
+import { JsonOutlineProvider } from './jsonOutline';
+import { FtpExplorer } from './ftpExplorer';
 import { FileExplorer } from './fileExplorer';
 import { TestView } from './testView';
 

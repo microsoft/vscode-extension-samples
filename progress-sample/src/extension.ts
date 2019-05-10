@@ -14,7 +14,7 @@ export function activate(context: ExtensionContext) {
 			cancellable: true
 		}, (progress, token) => {
 			token.onCancellationRequested(() => {
-				console.log("User canceled the long running operation")
+				console.log("User canceled the long running operation");
 			});
 
 			progress.report({ increment: 0 });

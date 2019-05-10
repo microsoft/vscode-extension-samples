@@ -26,7 +26,8 @@
 		"vscode:prepublish": "webpack --mode production",
 		"webpack": "webpack --mode development",
 		"webpack-dev": "webpack --mode development --watch",
-		"test-compile": "tsc -p ./"
+		"test-compile": "tsc -p ./",
+		"lint": "tslint -p ./"
 	},
 	"devDependencies": {
 		"@types/node": "^7.0.43",
