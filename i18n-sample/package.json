@@ -44,7 +44,7 @@
 		"run-sequence": "^2.2.0",
 		"tslint": "^5.16.0",
 		"typescript": "^3.4.5",
-		"vsce": "^1.32.0",
+		"vsce": "^1.61.0",
 		"vscode-nls-dev": "^3.2.3"
 	},
 	"dependencies": {
