@@ -13,7 +13,7 @@ export default class ReferencesDocument {
 
 	private _lines: string[];
 	private _links: vscode.DocumentLink[];
-	private _join: Thenable<this>;
+	private _join?: Thenable<this>;
 
 	constructor(uri: vscode.Uri, locations: vscode.Location[], emitter: vscode.EventEmitter<vscode.Uri>) {
 		this._uri = uri;
@@ -37,7 +37,7 @@ export default class ReferencesDocument {
 		return this._links;
 	}
 
-	join(): Thenable<this> {
+	join(): Thenable<this> | undefined {
 		return this._join;
 	}
 
@@ -81,7 +81,7 @@ export default class ReferencesDocument {
 					this._emitter.fire(this._uri);
 					next();
 				});
-			}
+			};
 			next();
 		});
 	}

@@ -1,6 +1,6 @@
-export class FiddleConfiguration {
+export interface FiddleConfiguration {
 	readonly slug: string;
-	readonly version: number;
+	readonly version?: number;
 }
 
 export function parseFiddleId(id: string): FiddleConfiguration {

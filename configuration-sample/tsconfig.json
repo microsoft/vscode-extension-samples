@@ -7,6 +7,7 @@
 			"es6"
 		],
 		"sourceMap": true,
+		"strict": true,
 		"rootDir": "src"
 	},
 	"exclude": [

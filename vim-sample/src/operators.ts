@@ -217,7 +217,7 @@ class PutOperator extends Operator {
 		let register = ctrl.getDeleteRegister();
 		if (!register) {
 			// No delete register - beep!!
-			return;
+			return false;
 		}
 
 		let str = register.content;

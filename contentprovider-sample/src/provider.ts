@@ -52,10 +52,11 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 		// printing, and formatting references
 		const [target, pos] = decodeLocation(uri);
 		return vscode.commands.executeCommand<vscode.Location[]>('vscode.executeReferenceProvider', target, pos).then(locations => {
+			locations = locations || [];
 
 			// sort by locations and shuffle to begin from target resource
 			let idx = 0;
-			locations.sort(Provider._compareLocations).find((loc, i) => loc.uri.toString() === target.toString() && (idx = i) && true);
+			locations.sort(Provider._compareLocations).find((loc, i) => loc.uri.toString() === target.toString() && !!(idx = i) && true);
 			locations.push(...locations.splice(0, idx));
 
 			// create document and return its early state
@@ -71,11 +72,11 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 		} else if (a.uri.toString() > b.uri.toString()) {
 			return 1;
 		} else {
-			return a.range.start.compareTo(b.range.start)
+			return a.range.start.compareTo(b.range.start);
 		}
 	}
 
-	provideDocumentLinks(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.DocumentLink[] {
+	provideDocumentLinks(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.DocumentLink[] | undefined {
 		// While building the virtual document we have already created the links.
 		// Those are composed from the range inside the document and a target uri
 		// to which they point

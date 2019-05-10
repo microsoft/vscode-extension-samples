@@ -30,7 +30,7 @@
 	"devDependencies": {
 		"@types/node": "10.3.6",
 		"tslint": "^5.16.0",
-		"typescript": "2.9.2",
+		"typescript": "^3.4.5",
 		"@types/vscode": "^1.32.0"
 	}
 }

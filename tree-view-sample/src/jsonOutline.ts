@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
 import * as path from 'path';
-import { isNumber } from 'util';
 
 export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 

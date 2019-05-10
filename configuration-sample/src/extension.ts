@@ -61,10 +61,10 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(e => {
 
 		// 1) Get the configured glob pattern value for the current file
-		const value = vscode.workspace.getConfiguration('', e.uri).get('conf.resource.insertEmptyLastLine');
+		const value: any = vscode.workspace.getConfiguration('', e.uri).get('conf.resource.insertEmptyLastLine');
 
 		// 2) Check if the current resource matches the glob pattern
-		const matches = value[e.fileName];
+		const matches = value ? value[e.fileName] : undefined;
 
 		// 3) If matches, insert empty last line
 		if (matches) {
@@ -91,9 +91,8 @@ export function activate(context: vscode.ExtensionContext) {
 			const value = { ...currentValue, ...{ [currentDocument.fileName]: true } };
 
 			// 4) Update the configuration
-			await configuration.update('conf.resource.insertEmptyLastLine', value, target)
+			await configuration.update('conf.resource.insertEmptyLastLine', value, target);
 		}
-
 	});
 
 	// Example 5: Updating Resource scoped Configuration
@@ -118,7 +117,7 @@ export function activate(context: vscode.ExtensionContext) {
 				if (target.target === vscode.ConfigurationTarget.WorkspaceFolder) {
 
 					// 3) Getting the workspace folder
-					let workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' })
+					let workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' });
 					if (workspaceFolder) {
 
 						// 4) Get the configuration for the workspace folder
@@ -140,7 +139,7 @@ export function activate(context: vscode.ExtensionContext) {
 					// 4) Get the current value
 					const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
 
-					const newValue = { ...currentValue, ...{ [value]: true } };
+					const newValue = { ...currentValue, ...(value ? { [value]: true } : {}) };
 
 					// 3) Update the value in the target
 					await vscode.workspace.getConfiguration().update('conf.resource.insertEmptyLastLine', newValue, target.target);
@@ -154,7 +153,7 @@ export function activate(context: vscode.ExtensionContext) {
 			// 3) Get the current value
 			const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
 
-			const newValue = { ...currentValue, ...{ [value]: true } };
+			const newValue = { ...currentValue, ...(value ? { [value]: true } : {}) };
 
 			// 4) Update the value in the User Settings
 			await vscode.workspace.getConfiguration().update('conf.resource.insertEmptyLastLine', newValue, vscode.ConfigurationTarget.Global);
@@ -170,7 +169,7 @@ export function activate(context: vscode.ExtensionContext) {
 				const currentDocument = vscode.window.activeTextEditor.document;
 
 				// 1) Get the configured glob pattern value for the current file
-				const value = vscode.workspace.getConfiguration('', currentDocument.uri).get('conf.resource.insertEmptyLastLine');
+				const value: any = vscode.workspace.getConfiguration('', currentDocument.uri).get('conf.resource.insertEmptyLastLine');
 
 				// 2) Check if the current resource matches the glob pattern
 				const matches = value[currentDocument.fileName];

@@ -12,8 +12,8 @@ export class FiddleSourceControl implements vscode.Disposable {
 	private fiddleRepository: FiddleRepository;
 	private latestFiddleVersion: number = Number.POSITIVE_INFINITY; // until actual value is established
 	private _onRepositoryChange = new vscode.EventEmitter<Fiddle>();
-	private timeout: NodeJS.Timer;
-	private fiddle: Fiddle;
+	private timeout?: NodeJS.Timer;
+	private fiddle!: Fiddle;
 
 	constructor(context: vscode.ExtensionContext, private readonly workspaceFolder: vscode.WorkspaceFolder, fiddle: Fiddle, overwrite: boolean) {
 		this.jsFiddleScm = vscode.scm.createSourceControl('jsfiddle', 'JSFiddle #' + fiddle.slug, workspaceFolder.uri);
@@ -211,7 +211,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	async establishVersion(): Promise<void> {
 		let version = 0;
 		let latestVersion = Number.NaN;
-		let currentFiddle: Fiddle = undefined;
+		let currentFiddle: Fiddle | undefined = undefined;
 		while (true) {
 			try {
 				let latestFiddle = await downloadFiddle(this.fiddle.slug, version);
@@ -229,7 +229,9 @@ export class FiddleSourceControl implements vscode.Disposable {
 		this.latestFiddleVersion = latestVersion;
 
 		// now we know the version of the current fiddle, let's set it
-		this.setFiddle(currentFiddle, false);
+		if (currentFiddle) {
+			this.setFiddle(currentFiddle, false);
+		}
 	}
 
 

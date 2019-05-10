@@ -16,7 +16,7 @@ export class File implements vscode.FileStat {
     size: number;
 
     name: string;
-    data: Uint8Array;
+    data?: Uint8Array;
 
     constructor(name: string) {
         this.type = vscode.FileType.File;
@@ -71,7 +71,11 @@ export class MemFS implements vscode.FileSystemProvider {
     // --- manage file contents
 
     readFile(uri: vscode.Uri): Uint8Array {
-        return this._lookupAsFile(uri, false).data;
+        const data = this._lookupAsFile(uri, false).data;
+        if (data) {
+            return data;
+        }
+        throw vscode.FileSystemError.FileNotFound();
     }
 
     writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean, overwrite: boolean }): void {
@@ -200,18 +204,22 @@ export class MemFS implements vscode.FileSystemProvider {
 
     private _emitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
     private _bufferedEvents: vscode.FileChangeEvent[] = [];
-    private _fireSoonHandle: NodeJS.Timer;
+    private _fireSoonHandle?: NodeJS.Timer;
 
     readonly onDidChangeFile: vscode.Event<vscode.FileChangeEvent[]> = this._emitter.event;
 
-    watch(resource: vscode.Uri, opts): vscode.Disposable {
+    watch(_resource: vscode.Uri): vscode.Disposable {
         // ignore, fires for all changes...
         return new vscode.Disposable(() => { });
     }
 
     private _fireSoon(...events: vscode.FileChangeEvent[]): void {
         this._bufferedEvents.push(...events);
-        clearTimeout(this._fireSoonHandle);
+
+        if (this._fireSoonHandle) {
+            clearTimeout(this._fireSoonHandle);
+        }
+
         this._fireSoonHandle = setTimeout(() => {
             this._emitter.fire(this._bufferedEvents);
             this._bufferedEvents.length = 0;

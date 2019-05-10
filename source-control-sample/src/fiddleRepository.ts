@@ -63,7 +63,7 @@ const DEMO: FiddleData[] = [
 ];
 
 // emulates prior versions mock-committed in previous sessions
-var demoVersionOffset: number = undefined;
+var demoVersionOffset: number | undefined = undefined;
 
 export async function downloadFiddle(slug: string, version: number | undefined): Promise<Fiddle> {
 
@@ -99,7 +99,7 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 	});
 }
 
-export async function uploadFiddle(slug: string, version: number, html: string, js: string, css: string): Promise<Fiddle> {
+export async function uploadFiddle(slug: string, version: number, html: string, js: string, css: string): Promise<Fiddle | undefined> {
 
 	if (slug === "demo") {
 		// using mock fiddle

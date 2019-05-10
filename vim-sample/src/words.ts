@@ -46,7 +46,7 @@ export class Words {
 		return result;
 	}
 
-	public static findNextWord(doc: TextDocument, pos: Position, wordCharacterClass: WordCharacters): IWord {
+	public static findNextWord(doc: TextDocument, pos: Position, wordCharacterClass: WordCharacters): IWord | null {
 
 		let lineContent = doc.lineAt(pos.line).text;
 		let wordType = WordType.NONE;

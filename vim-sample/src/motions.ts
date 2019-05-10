@@ -10,9 +10,9 @@ import { Command, AbstractCommandDescriptor } from './common';
 
 export class MotionState {
 
-	public anchor: Position;
+	public anchor: Position | null;
 	public cursorDesiredCharacter: number;
-	public wordCharacterClass: WordCharacters;
+	public wordCharacterClass: WordCharacters | null;
 
 	constructor() {
 		this.cursorDesiredCharacter = -1;
