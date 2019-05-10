@@ -32,28 +32,28 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.refresh", async () => {
 		let sourceControl = await pickSourceControl();
-		if (sourceControl) sourceControl.refresh();
+		if (sourceControl) { sourceControl.refresh(); }
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.discard", async () => {
 		let sourceControl = await pickSourceControl();
-		if (sourceControl) sourceControl.resetFilesToCheckedOutVersion();
+		if (sourceControl) { sourceControl.resetFilesToCheckedOutVersion(); }
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.commit", async () => {
 		let sourceControl = await pickSourceControl();
-		if (sourceControl) sourceControl.commitAll();
+		if (sourceControl) { sourceControl.commitAll(); }
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.checkout",
 		async (sourceControl: FiddleSourceControl, newVersion?: number) => {
 			sourceControl = sourceControl || await pickSourceControl();
-			if (sourceControl) sourceControl.tryCheckout(newVersion);
+			if (sourceControl) { sourceControl.tryCheckout(newVersion); }
 		}));
 }
 
 async function pickSourceControl(): Promise<FiddleSourceControl | undefined> {
 	// todo: when/if the SourceControl exposes a 'selected' property, use that instead
 
-	if (fiddleSourceControlRegister.size == 0) return undefined;
-	else if (fiddleSourceControlRegister.size == 1) return [...fiddleSourceControlRegister.values()][0];
+	if (fiddleSourceControlRegister.size === 0) { return undefined; }
+	else if (fiddleSourceControlRegister.size === 1) { return [...fiddleSourceControlRegister.values()][0]; }
 	else {
 
 		let picks = [...fiddleSourceControlRegister.values()].map(fsc => new RepositoryPick(fsc));
@@ -85,7 +85,7 @@ async function tryOpenFiddle(context: vscode.ExtensionContext, fiddleId?: string
 }
 
 async function openFiddle(context: vscode.ExtensionContext, fiddleId?: string, workspaceUri?: vscode.Uri) {
-	if (workspaceUri && fiddleSourceControlRegister.has(workspaceUri)) vscode.window.showErrorMessage("Another Fiddle was already open in this workspace. Open a new workspace first.");
+	if (workspaceUri && fiddleSourceControlRegister.has(workspaceUri)) { vscode.window.showErrorMessage("Another Fiddle was already open in this workspace. Open a new workspace first."); }
 
 	if (!fiddleId) {
 		fiddleId = (await vscode.window.showInputBox({ prompt: 'Paste JSFiddle ID and optionally version', placeHolder: 'slug or slug/version, e.g. u8B29/1', value: 'demo' })) || '';
@@ -97,7 +97,7 @@ async function openFiddle(context: vscode.ExtensionContext, fiddleId?: string, w
 			await selectWorkspaceFolder(context, fiddleId);
 
 	workspaceFolder = await clearWorkspaceFolder(workspaceFolder);
-	if (!workspaceFolder) return; // canceled by user
+	if (!workspaceFolder) { return; } // canceled by user
 
 	// show the file explorer with the three new files
 	vscode.commands.executeCommand("workbench.view.explorer");
@@ -132,14 +132,14 @@ function registerFiddleSourceControl(fiddleSourceControl: FiddleSourceControl, c
 }
 
 function initializeFromConfigurationFile(context: vscode.ExtensionContext): void {
-	if (!vscode.workspace.workspaceFolders) return;
+	if (!vscode.workspace.workspaceFolders) { return; }
 
 	vscode.workspace.workspaceFolders.forEach(folder => {
 		const configurationPath = path.join(folder.uri.fsPath, CONFIGURATION_FILE);
 		exists(configurationPath, configFileExists => {
 			if (configFileExists) {
 				readFile(configurationPath, { flag: 'r' }, async (err, data) => {
-					if (err) vscode.window.showErrorMessage(err.message);
+					if (err) { vscode.window.showErrorMessage(err.message); }
 					try {
 						let fiddleSourceControl = await FiddleSourceControl.fromConfiguration(<FiddleConfiguration>JSON.parse(data.toString("utf-8")), folder, context, false);
 						registerFiddleSourceControl(fiddleSourceControl, context);
@@ -161,7 +161,7 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 
 	if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 1) {
 		selectedFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick workspace folder to create files in.' });
-		if (!selectedFolder) return undefined;
+		if (!selectedFolder) { return undefined; }
 
 		workspaceFolderIndex = selectedFolder.index;
 		workspaceFolderUri = selectedFolder.uri;
@@ -186,7 +186,7 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 	}
 
 	let workSpacesToReplace = typeof workspaceFolderIndex === 'number' && workspaceFolderIndex > -1 ? 1 : 0;
-	if (workspaceFolderIndex === undefined || workspaceFolderIndex < 0) workspaceFolderIndex = 0;
+	if (workspaceFolderIndex === undefined || workspaceFolderIndex < 0) { workspaceFolderIndex = 0; }
 
 	// replace or insert the workspace
 	if (workspaceFolderUri) {
@@ -198,14 +198,14 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 
 async function clearWorkspaceFolder(workspaceFolder?: vscode.WorkspaceFolder): Promise<vscode.WorkspaceFolder | undefined> {
 
-	if (!workspaceFolder) return undefined;
+	if (!workspaceFolder) { return undefined; }
 
 	// check if the workspace is empty, or clear it
 	let existingWorkspaceFiles = readdirSync(workspaceFolder.uri.fsPath);
 	if (existingWorkspaceFiles.length > 0) {
 		let answer = await vscode.window.showQuickPick(["Yes", "No"],
 			{ placeHolder: `Remove ${existingWorkspaceFiles.length} file(s) from the workspace before cloning the remote repository?` });
-		if (answer === undefined) return undefined;
+		if (answer === undefined) { return undefined; }
 
 		if (answer === "Yes") {
 			existingWorkspaceFiles

@@ -15,9 +15,9 @@ export interface FiddleData {
 }
 
 export function areIdentical(first: FiddleData, second: FiddleData): boolean {
-	return first.html == second.html
-		&& first.css == second.css
-		&& first.js == second.js;
+	return first.html === second.html
+		&& first.css === second.css
+		&& first.js === second.js;
 }
 
 export const JSFIDDLE_SCHEME = 'jsfiddle';
@@ -69,10 +69,10 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 
 	if (slug === "demo") {
 		// use mock fiddle
-		if (demoVersionOffset === undefined && version === undefined) version = 0;
-		if (demoVersionOffset === undefined) demoVersionOffset = version;
+		if (demoVersionOffset === undefined && version === undefined) { version = 0; }
+		if (demoVersionOffset === undefined) { demoVersionOffset = version; }
 		let maxDemoVersion = DEMO.length - 1 + demoVersionOffset;
-		if (version === undefined) version = maxDemoVersion;
+		if (version === undefined) { version = maxDemoVersion; }
 
 		if (version >= 0 && version <= maxDemoVersion) {
 			// mock all versions committed in previous sessions by the first version
@@ -81,7 +81,7 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 			return new Fiddle(slug, version, fiddleData);
 		}
 		else {
-			throw "Invalid demo fiddle version.";
+			throw new Error("Invalid demo fiddle version.");
 		}
 	}
 
@@ -90,7 +90,7 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 	return new Promise<Fiddle>((resolve, reject) => {
 		JSFiddle.getFiddle(id, (err: any, fiddleData: any) => {
 			// handle error
-			if (err) reject(err);
+			if (err) { reject(err); }
 
 			let fiddle = new Fiddle(slug, version, fiddleData);
 

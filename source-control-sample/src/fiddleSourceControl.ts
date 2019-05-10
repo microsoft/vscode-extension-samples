@@ -82,7 +82,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 			// here we assume nobody updated the Fiddle on the server since we refreshed the list of versions
 			try {
 				let newFiddle = await uploadFiddle(this.fiddle.slug, this.fiddle.version + 1, html, js, css);
-				if (!newFiddle) return;
+				if (!newFiddle) { return; }
 				this.setFiddle(newFiddle, false);
 				this.jsFiddleScm.inputBox.value = '';
 			} catch (ex) {
@@ -112,11 +112,11 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	async tryCheckout(newVersion: number | undefined): Promise<void> {
-		if (!Number.isFinite(this.latestFiddleVersion)) return;
+		if (!Number.isFinite(this.latestFiddleVersion)) { return; }
 
 		if (newVersion === undefined) {
 			let allVersions = [...Array(this.latestFiddleVersion + 1).keys()]
-				.map(ver => new VersionQuickPickItem(ver, ver == this.fiddle.version));
+				.map(ver => new VersionQuickPickItem(ver, ver === this.fiddle.version));
 			let newVersionPick = await vscode.window.showQuickPick(allVersions, { canPickMany: false, placeHolder: 'Select a version...' });
 			if (newVersionPick) {
 				newVersion = newVersionPick.version;
@@ -126,7 +126,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 			}
 		}
 
-		if (newVersion === this.fiddle.version) return; // the same version was selected
+		if (newVersion === this.fiddle.version) { return; } // the same version was selected
 
 		if (this.changedResources.resourceStates.length) {
 			let changedResourcesCount = this.changedResources.resourceStates.length;
@@ -143,9 +143,9 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	private setFiddle(newFiddle: Fiddle, overwrite: boolean) {
-		if (newFiddle.version > this.latestFiddleVersion) this.latestFiddleVersion = newFiddle.version;
+		if (newFiddle.version > this.latestFiddleVersion) { this.latestFiddleVersion = newFiddle.version; }
 		this.fiddle = newFiddle;
-		if (overwrite) this.resetFilesToCheckedOutVersion(); // overwrite local file content
+		if (overwrite) { this.resetFilesToCheckedOutVersion(); } // overwrite local file content
 		this._onRepositoryChange.fire(this.fiddle);
 		this.refreshStatusBar();
 
@@ -240,7 +240,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	onResourceChange(_uri: vscode.Uri): void {
-		if (this.timeout) clearTimeout(this.timeout);
+		if (this.timeout) { clearTimeout(this.timeout); }
 		this.timeout = setTimeout(() => this.tryUpdateChangedGroup(), 500);
 	}
 
@@ -285,7 +285,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	/** Determines whether the resource is different, regardless of line endings. */
 	isDirty(doc: vscode.TextDocument): boolean {
 		let originalText = this.fiddle.data[toExtension(doc.uri)];
-		return originalText.replace('\r', '') != doc.getText().replace('\r', '');
+		return originalText.replace('\r', '') !== doc.getText().replace('\r', '');
 	}
 
 	toSourceControlResourceState(docUri: vscode.Uri, deleted: boolean): vscode.SourceControlResourceState {

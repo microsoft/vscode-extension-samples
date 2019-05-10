@@ -28,7 +28,7 @@ export class JSFiddleDocumentContentProvider implements TextDocumentContentProvi
 	}
 
 	provideTextDocumentContent(uri: Uri, token: CancellationToken): ProviderResult<string> {
-		if (token.isCancellationRequested) return "Canceled";
+		if (token.isCancellationRequested) { return "Canceled"; }
 
 		let fiddleSlug = basename(uri.fsPath);
 		// strip off the file extension
@@ -36,7 +36,7 @@ export class JSFiddleDocumentContentProvider implements TextDocumentContentProvi
 		let fiddlePart = toExtension(uri);
 
 		let fiddle = this.fiddles.get(fiddleSlug);
-		if (!fiddle) return "Resource not found: " + uri.toString();
+		if (!fiddle) { return "Resource not found: " + uri.toString(); }
 
 		return fiddle.data[fiddlePart];
 	}
