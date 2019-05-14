@@ -24,33 +24,27 @@ const outDest = 'out';
 // If all VS Code langaues are support you can use nls.coreLanguages
 const languages = [{ folderName: 'jpn', id: 'ja' }];
 
-gulp.task('default', function(callback) {
-	runSequence('build', callback);
-});
-
-gulp.task('compile', function(callback) {
-	runSequence('clean', 'internal-compile', callback);
-});
-
-gulp.task('build', function(callback) {
-	runSequence('clean', 'internal-nls-compile', 'add-i18n', callback);
-});
-
-gulp.task('publish', function(callback) {
-	runSequence('build', 'vsce:publish', callback);
-});
-
-gulp.task('package', function(callback) {
-	runSequence('build', 'vsce:package', callback);
-});
-
-gulp.task('clean', function() {
+const cleanTask = function() {
 	return del(['out/**', 'package.nls.*.json', 'i18n-sample*.vsix']);
-})
+}
 
-//---- internal
+const internalCompileTask = function() {
+	return doCompile(false);
+};
 
-function compile(buildNls) {
+const internalNlsCompileTask = function() {
+	return doCompile(true);
+};
+
+const addI18nTask = function() {
+	return gulp.src(['package.nls.json'])
+		.pipe(nls.createAdditionalLanguageFiles(languages, 'i18n'))
+		.pipe(gulp.dest('.'));
+};
+
+const buildTask = gulp.series(cleanTask, internalNlsCompileTask, addI18nTask);
+
+const doCompile = function (buildNls) {
 	var r = tsProject.src()
 		.pipe(sourcemaps.init())
 		.pipe(tsProject()).js
@@ -71,24 +65,22 @@ function compile(buildNls) {
 	return r.pipe(gulp.dest(outDest));
 }
 
-gulp.task('internal-compile', function() {
-	return compile(false);
-});
-
-gulp.task('internal-nls-compile', function() {
-	return compile(true);
-});
-
-gulp.task('add-i18n', function() {
-	return gulp.src(['package.nls.json'])
-		.pipe(nls.createAdditionalLanguageFiles(languages, 'i18n'))
-		.pipe(gulp.dest('.'));
-});
-
-gulp.task('vsce:publish', function() {
+const vscePublishTask = function() {
 	return vsce.publish();
-});
+};
 
-gulp.task('vsce:package', function() {
+const vscePackageTask = function() {
 	return vsce.createVSIX();
-});
+};
+
+gulp.task('default', buildTask);
+
+gulp.task('clean', cleanTask);
+
+gulp.task('compile', gulp.series(cleanTask, internalCompileTask));
+
+gulp.task('build', buildTask);
+
+gulp.task('publish', gulp.series(buildTask, vscePublishTask));
+
+gulp.task('package', gulp.series(buildTask, vscePackageTask));
