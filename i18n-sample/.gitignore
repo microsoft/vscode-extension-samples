@@ -2,3 +2,4 @@ out
 node_modules
 // These files will be generated from the i18n folder
 *nls.*.json
+*.vsix
