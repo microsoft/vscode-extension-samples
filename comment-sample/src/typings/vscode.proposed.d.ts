@@ -35,15 +35,15 @@ declare module 'vscode' {
 		Expanded = 1
 	}
 
+	export enum CommentMode {
+		Editing = 0,
+		Preview = 1
+	}
+
 	/**
 	 * A collection of [comments](#Comment) representing a conversation at a particular range in a document.
 	 */
 	export interface CommentThread {
-		/**
-		 * A unique identifier of the comment thread.
-		 */
-		readonly id: string;
-
 		/**
 		 * The uri of the document the thread has been created on.
 		 */
@@ -58,7 +58,7 @@ declare module 'vscode' {
 		/**
 		 * The ordered comments of the thread.
 		 */
-		comments: Comment[];
+		comments: ReadonlyArray<Comment>;
 
 		/**
 		 * Whether the thread should be collapsed or expanded when opening the document.
@@ -72,28 +72,6 @@ declare module 'vscode' {
 		label?: string;
 
 		/**
-		 * Optional accept input command
-		 *
-		 * `acceptInputCommand` is the default action rendered on Comment Widget, which is always placed rightmost.
-		 * This command will be invoked when users the user accepts the value in the comment editor.
-		 * This command will disabled when the comment editor is empty.
-		 */
-		acceptInputCommand?: Command;
-
-		/**
-		 * Optional additonal commands.
-		 *
-		 * `additionalCommands` are the secondary actions rendered on Comment Widget.
-		 */
-		additionalCommands?: Command[];
-
-		/**
-		 * The command to be executed when users try to delete the comment thread. Currently, this is only called
-		 * when the user collapses a comment thread that has no comments in it.
-		 */
-		deleteCommand?: Command;
-
-		/**
 		 * Dispose this comment thread.
 		 *
 		 * Once disposed, this comment thread will be removed from visible editors and Comment Panel when approriate.
@@ -102,76 +80,47 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * A comment is displayed within the editor or the Comments Panel, depending on how it is provided.
+	 * Author information of a [comment](#Comment)
 	 */
-	export class Comment {
+	export interface CommentAuthorInformation {
 		/**
-		 * The id of the comment
+		 * The display name of the author of the comment
 		 */
-		readonly id: string;
+		name: string;
 
 		/**
-		 * The human-readable comment body
+		 * The optional icon path for the author
 		 */
-		readonly body: MarkdownString;
-
-		/**
-		 * The display name of the user who created the comment
-		 */
-		readonly userName: string;
-
-		/**
-		 * Optional label describing the [Comment](#Comment)
-		 * Label will be rendered next to userName if exists.
-		 */
-		readonly label?: string;
-
-		/**
-		 * The icon path for the user who created the comment
-		 */
-		readonly userIconPath?: Uri;
-
-		/**
-		 * The command to be executed if the comment is selected in the Comments Panel
-		 */
-		readonly selectCommand?: Command;
-
-		/**
-		 * The command to be executed when users try to save the edits to the comment
-		 */
-		readonly editCommand?: Command;
-
-		/**
-		 * The command to be executed when users try to delete the comment
-		 */
-		readonly deleteCommand?: Command;
-
-		/**
-		 * @param id The id of the comment
-		 * @param body The human-readable comment body
-		 * @param userName The display name of the user who created the comment
-		 */
-		constructor(id: string, body: MarkdownString, userName: string);
+		iconPath?: Uri;
 	}
 
 	/**
-	 * The comment input box in Comment Widget.
+	 * A comment is displayed within the editor or the Comments Panel, depending on how it is provided.
 	 */
-	export interface CommentInputBox {
+	export interface Comment {
 		/**
-		 * Setter and getter for the contents of the comment input box
+		 * The human-readable comment body
 		 */
-		value: string;
+		body: string | MarkdownString;
+
+		mode: CommentMode;
 
 		/**
-		 * The uri of the document comment input box has been created on
+		 * The author information of the comment
 		 */
-		resource: Uri;
+		author: CommentAuthorInformation;
 
 		/**
-		 * The range the comment input box is located within the document
+		 * Optional label describing the [Comment](#Comment)
+		 * Label will be rendered next to authorName if exists.
 		 */
-		range: Range;
+		label?: string;
+	}
+
+	export interface CommentReply {
+		thread: CommentThread;
+
+		text: string;
 	}
 
 	/**
@@ -182,38 +131,6 @@ declare module 'vscode' {
 		 * Provide a list of ranges which allow new comment threads creation or null for a given document
 		 */
 		provideCommentingRanges(document: TextDocument, token: CancellationToken): ProviderResult<Range[]>;
-	}
-
-	/**
-	 * Comment thread template for new comment thread creation.
-	 */
-	export interface CommentThreadTemplate {
-		/**
-		 * The human-readable label describing the [Comment Thread](#CommentThread)
-		 */
-		readonly label: string;
-
-		/**
-		 * Optional accept input command
-		 *
-		 * `acceptInputCommand` is the default action rendered on Comment Widget, which is always placed rightmost.
-		 * This command will be invoked when users the user accepts the value in the comment editor.
-		 * This command will disabled when the comment editor is empty.
-		 */
-		readonly acceptInputCommand?: Command;
-
-		/**
-		 * Optional additonal commands.
-		 *
-		 * `additionalCommands` are the secondary actions rendered on Comment Widget.
-		 */
-		readonly additionalCommands?: Command[];
-
-		/**
-		 * The command to be executed when users try to delete the comment thread. Currently, this is only called
-		 * when the user collapses a comment thread that has no comments in it.
-		 */
-		readonly deleteCommand?: Command;
 	}
 
 	/**
@@ -232,25 +149,6 @@ declare module 'vscode' {
 		readonly label: string;
 
 		/**
-		 * The active [comment input box](#CommentInputBox) or `undefined`. The active `inputBox` is the input box of
-		 * the comment thread widget that currently has focus. It's `undefined` when the focus is not in any CommentInputBox.
-		 */
-		readonly inputBox: CommentInputBox | undefined;
-
-		/**
-		 * Optional comment thread template information.
-		 *
-		 * The comment controller will use this information to create the comment widget when users attempt to create new comment thread
-		 * from the gutter or command palette.
-		 *
-		 * When users run `CommentThreadTemplate.acceptInputCommand` or `CommentThreadTemplate.additionalCommands`, extensions should create
-		 * the approriate [CommentThread](#CommentThread).
-		 *
-		 * If not provided, users won't be able to create new comment threads in the editor.
-		 */
-		template?: CommentThreadTemplate;
-
-		/**
 		 * Optional commenting range provider. Provide a list [ranges](#Range) which support commenting to any given resource uri.
 		 *
 		 * If not provided and `emptyCommentThreadFactory` exits, users can leave comments in any document opened in the editor.
@@ -266,7 +164,7 @@ declare module 'vscode' {
 		 * @param range The range the comment thread is located within the document.
 		 * @param comments The ordered comments of the thread.
 		 */
-		createCommentThread(id: string, resource: Uri, range: Range, comments: Comment[]): CommentThread;
+		createCommentThread(uri: Uri, range: Range, comments: Comment[]): CommentThread;
 
 		/**
 		 * Dispose this comment controller.

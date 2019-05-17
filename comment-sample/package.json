@@ -19,15 +19,35 @@
 		"commands": [
 			{
 				"command": "mywiki.createNote",
-				"title": "Comment API: Create a comment thread"
+				"title": "Create Note"
 			},
 			{
-				"command": "mywiki.createComment",
-				"title": "Comment API: Reply to a comment thread"
+				"command": "mywiki.replyNote",
+				"title": "Reply"
+			},
+			{
+				"command": "mywiki.editNote",
+				"title": "Edit",
+				"icon":{
+					"dark": "resources/edit_inverse.svg",
+					"light": "resources/edit.svg"
+				}
 			},
 			{
 				"command": "mywiki.deleteNote",
-				"title": "Comment API: Delete a comment thread"
+				"title": "Delete",
+				"icon":{
+					"dark": "resources/close_inverse.svg",
+					"light": "resources/close.svg"
+				}
+			},
+			{
+				"command": "mywiki.deleteNoteComment",
+				"title": "Delete",
+				"icon":{
+					"dark": "resources/close_inverse.svg",
+					"light": "resources/close.svg"
+				}
 			}
 		],
 		"menus": {
@@ -37,12 +57,47 @@
 					"when": "false"
 				},
 				{
-					"command": "mywiki.createComment",
+					"command": "mywiki.replyNote",
 					"when": "false"
 				},
 				{
 					"command": "mywiki.deleteNote",
 					"when": "false"
+				},
+				{
+					"command": "mywiki.deleteNoteComment",
+					"when": "false"
+				}
+			],
+			"commentThread/title": [
+				{
+					"command": "mywiki.deleteNote",
+					"group": "navigation",
+					"when": "!commentThreadIsEmpty"
+				}
+			],
+			"commentThread/actions": [
+				{
+					"command": "mywiki.createNote",
+					"precondition": "commentIsEmpty",
+					"group": "navigation",
+					"when": "commentThreadIsEmpty"
+				},
+				{
+					"command": "mywiki.replyNote",
+					"precondition": "commentIsEmpty",
+					"group": "navigation",
+					"when": "!commentThreadIsEmpty"
+				}
+			],
+			"comment/title": [
+				{
+					"command": "mywiki.editNote",
+					"group": "group@1"
+				},
+				{
+					"command": "mywiki.deleteNoteComment",
+					"group": "group@2"
 				}
 			]
 		}
