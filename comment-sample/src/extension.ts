@@ -32,15 +32,11 @@ export function activate(context: vscode.ExtensionContext) {
 	};
 	
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.createNote', (reply: vscode.CommentReply) => {
-		let thread = reply.thread;
-		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
-		thread.comments = [...thread.comments, newComment];
+		replyNote(reply);
 	}));
 	
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.replyNote', (reply: vscode.CommentReply) => {
-		let thread = reply.thread;
-		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
-		thread.comments = [...thread.comments, newComment];
+		replyNote(reply);
 	}));
 	
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.startDraft', (reply: vscode.CommentReply) => {
@@ -104,4 +100,10 @@ export function activate(context: vscode.ExtensionContext) {
 			return cmt;
 		});
 	}));
+
+	function replyNote(reply: vscode.CommentReply) {
+		let thread = reply.thread;
+		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+		thread.comments = [...thread.comments, newComment];
+	}
 }
