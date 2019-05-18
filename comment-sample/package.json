@@ -48,6 +48,14 @@
 					"dark": "resources/close_inverse.svg",
 					"light": "resources/close.svg"
 				}
+			},
+			{
+				"command": "mywiki.saveNote",
+				"title": "Save"
+			},
+			{
+				"command": "mywiki.cancelsaveNote",
+				"title": "Cancel"
 			}
 		],
 		"menus": {
@@ -97,6 +105,16 @@
 				},
 				{
 					"command": "mywiki.deleteNoteComment",
+					"group": "group@2"
+				}
+			],
+			"comment/actions": [
+				{
+					"command": "mywiki.cancelsaveNote",
+					"group": "group@1"
+				},
+				{
+					"command": "mywiki.saveNote",
 					"group": "group@2"
 				}
 			]
