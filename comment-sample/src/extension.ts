@@ -21,6 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// A `CommentController` is able to provide comments for documents.
 	const commentController = vscode.comment.createCommentController('comment-sample', 'Comment API Sample');
 	context.subscriptions.push(commentController);
+	vscode.commands.executeCommand('setContext', 'inDraft', false);
 
 	// commenting range provider
 	commentController.commentingRangeProvider = {
@@ -43,10 +44,22 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 	
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.startDraft', (reply: vscode.CommentReply) => {
+		vscode.commands.executeCommand('setContext', 'inDraft', true);
 		let thread = reply.thread;
 		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
 		newComment.label = 'pending';
 		thread.comments = [...thread.comments, newComment];
+	}));
+	
+	context.subscriptions.push(vscode.commands.registerCommand('mywiki.finishDraft', (reply: vscode.CommentReply) => {
+		vscode.commands.executeCommand('setContext', 'inDraft', false);
+
+		let thread = reply.thread;
+		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+		thread.comments = [...thread.comments, newComment].map(comment => {
+			comment.label = undefined;
+			return comment;
+		});
 	}));
 	
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.deleteNoteComment', (comment: NoteComment) => {

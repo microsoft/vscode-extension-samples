@@ -60,6 +60,10 @@
 			{
 				"command": "mywiki.startDraft",
 				"title": "Start draft"
+			},
+			{
+				"command": "mywiki.finishDraft",
+				"title": "Finish draft"
 			}
 		],
 		"menus": {
@@ -104,7 +108,14 @@
 				{
 					"command": "mywiki.startDraft",
 					"precondition": "commentIsEmpty",
-					"group": "navigation"
+					"group": "navigation",
+					"when": "!inDraft"
+				},
+				{
+					"command": "mywiki.finishDraft",
+					"precondition": "commentIsEmpty",
+					"group": "navigation",
+					"when": "inDraft"
 				}
 			],
 			"comment/title": [
