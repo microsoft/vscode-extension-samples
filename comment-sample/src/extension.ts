@@ -6,6 +6,7 @@ let commentId = 1;
 
 class NoteComment implements vscode.Comment {
 	id: number;
+	label: string | undefined;
 	constructor(
 		public body: string | vscode.MarkdownString,
 		public mode: vscode.CommentMode,
@@ -38,6 +39,13 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.replyNote', (reply: vscode.CommentReply) => {
 		let thread = reply.thread;
 		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+		thread.comments = [...thread.comments, newComment];
+	}));
+	
+	context.subscriptions.push(vscode.commands.registerCommand('mywiki.startDraft', (reply: vscode.CommentReply) => {
+		let thread = reply.thread;
+		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+		newComment.label = 'pending';
 		thread.comments = [...thread.comments, newComment];
 	}));
 	

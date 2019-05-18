@@ -56,6 +56,10 @@
 			{
 				"command": "mywiki.cancelsaveNote",
 				"title": "Cancel"
+			},
+			{
+				"command": "mywiki.startDraft",
+				"title": "Start draft"
 			}
 		],
 		"menus": {
@@ -96,6 +100,11 @@
 					"precondition": "commentIsEmpty",
 					"group": "navigation",
 					"when": "!commentThreadIsEmpty"
+				},
+				{
+					"command": "mywiki.startDraft",
+					"precondition": "commentIsEmpty",
+					"group": "navigation"
 				}
 			],
 			"comment/title": [
