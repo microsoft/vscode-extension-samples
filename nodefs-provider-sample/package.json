@@ -18,8 +18,7 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc  -p ./",
 		"lint": "tslint -p ./",
-		"watch": "tsc -watch -p ./",
-		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
 		"mkdirp": "^0.5.1",
@@ -31,9 +30,8 @@
 		"@types/node": "^7.0.43",
 		"@types/promisify-node": "^0.4.0",
 		"@types/rimraf": "^2.0.2",
+		"@types/vscode": "^1.34.0",
 		"tslint": "^5.16.0",
-		"typescript": "^3.4.5",
-		"vscode": "^1.1.34",
-		"@types/vscode": "^1.32.0"
+		"typescript": "^3.4.5"
 	}
 }
