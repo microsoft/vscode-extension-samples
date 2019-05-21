@@ -19,7 +19,7 @@ class NoteComment implements vscode.Comment {
 
 export function activate(context: vscode.ExtensionContext) {
 	// A `CommentController` is able to provide comments for documents.
-	const commentController = vscode.comment.createCommentController('comment-sample', 'Comment API Sample');
+	const commentController = vscode.comments.createCommentController('comment-sample', 'Comment API Sample');
 	context.subscriptions.push(commentController);
 	vscode.commands.executeCommand('setContext', 'inDraft', false);
 
@@ -30,15 +30,15 @@ export function activate(context: vscode.ExtensionContext) {
 			return [new vscode.Range(0, 0, lineCount - 1, 0)];
 		}
 	};
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.createNote', (reply: vscode.CommentReply) => {
 		replyNote(reply);
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.replyNote', (reply: vscode.CommentReply) => {
 		replyNote(reply);
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.startDraft', (reply: vscode.CommentReply) => {
 		vscode.commands.executeCommand('setContext', 'inDraft', true);
 		let thread = reply.thread;
@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
 		newComment.label = 'pending';
 		thread.comments = [...thread.comments, newComment];
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.finishDraft', (reply: vscode.CommentReply) => {
 		vscode.commands.executeCommand('setContext', 'inDraft', false);
 
@@ -57,11 +57,11 @@ export function activate(context: vscode.ExtensionContext) {
 			return comment;
 		});
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.deleteNoteComment', (comment: NoteComment) => {
 		let thread = comment.parent;
 		thread.comments = thread.comments.filter((cmt: NoteComment) => cmt.id !== comment.id);
-		
+
 		if (thread.comments.length === 0) {
 			thread.dispose();
 		}
@@ -70,33 +70,33 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.deleteNote', (thread: vscode.CommentThread) => {
 		thread.dispose();
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.cancelsaveNote', (comment: NoteComment) => {
 		comment.parent.comments = comment.parent.comments.map((cmt: NoteComment) => {
-			if (cmt.id === comment.id) { 
+			if (cmt.id === comment.id) {
 				cmt.mode = vscode.CommentMode.Preview;
 			}
-			
+
 			return cmt;
 		});
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.saveNote', (comment: NoteComment) => {
 		comment.parent.comments = comment.parent.comments.map((cmt: NoteComment) => {
-			if (cmt.id === comment.id) { 
+			if (cmt.id === comment.id) {
 				cmt.mode = vscode.CommentMode.Preview;
 			}
-			
+
 			return cmt;
 		});
 	}));
-	
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.editNote', (comment: NoteComment) => {
 		comment.parent.comments = comment.parent.comments.map((cmt: NoteComment) => {
-			if (cmt.id === comment.id) { 
+			if (cmt.id === comment.id) {
 				cmt.mode = vscode.CommentMode.Editing;
 			}
-			
+
 			return cmt;
 		});
 	}));

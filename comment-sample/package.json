@@ -85,40 +85,39 @@
 					"when": "false"
 				}
 			],
-			"commentThread/title": [
+			"comments/commentThread/title": [
 				{
 					"command": "mywiki.deleteNote",
 					"group": "navigation",
 					"when": "!commentThreadIsEmpty"
 				}
 			],
-			"commentThread/actions": [
+			"comments/commentThread/actions": [
 				{
 					"command": "mywiki.createNote",
-					"precondition": "commentIsEmpty",
 					"group": "navigation",
+					"precondition": "!commentIsEmpty",
 					"when": "commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.replyNote",
-					"precondition": "commentIsEmpty",
 					"group": "navigation",
+					"precondition": "!commentIsEmpty",
 					"when": "!commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.startDraft",
-					"precondition": "commentIsEmpty",
 					"group": "navigation",
+					"precondition": "!commentIsEmpty",
 					"when": "!inDraft"
 				},
 				{
 					"command": "mywiki.finishDraft",
-					"precondition": "commentIsEmpty",
 					"group": "navigation",
 					"when": "inDraft"
 				}
 			],
-			"comment/title": [
+			"comments/comment/title": [
 				{
 					"command": "mywiki.editNote",
 					"group": "group@1"
@@ -128,7 +127,7 @@
 					"group": "group@2"
 				}
 			],
-			"comment/actions": [
+			"comments/comment/actions": [
 				{
 					"command": "mywiki.cancelsaveNote",
 					"group": "group@1"
