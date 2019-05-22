@@ -1,0 +1,6 @@
+--ui tdd
+--colors
+--reporter spec
+--require source-map-support/register
+--exit
+./out/test/suite/**/*.test.js
