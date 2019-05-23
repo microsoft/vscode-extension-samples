@@ -51,7 +51,12 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('setContext', 'inDraft', false);
 
 		let thread = reply.thread;
-		thread.collapsibleState = undefined;
+
+		if (!thread) {
+			return;
+		}
+
+		thread.collapsibleState = vscode.CommentThreadCollapsibleState.Collapsed;
 		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
 		thread.comments = [...thread.comments, newComment].map(comment => {
 			comment.label = undefined;
@@ -61,7 +66,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.deleteNoteComment', (comment: NoteComment) => {
 		let thread = comment.parent;
-		thread.comments = thread.comments.filter((cmt: NoteComment) => cmt.id !== comment.id);
+		if (!thread) {
+			return;
+		}
+
+		thread.comments = thread.comments.filter(cmt => (cmt as NoteComment).id !== comment.id);
 
 		if (thread.comments.length === 0) {
 			thread.dispose();
@@ -73,8 +82,12 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.cancelsaveNote', (comment: NoteComment) => {
-		comment.parent.comments = comment.parent.comments.map((cmt: NoteComment) => {
-			if (cmt.id === comment.id) {
+		if (!comment.parent) {
+			return;
+		}
+
+		comment.parent.comments = comment.parent.comments.map(cmt => {
+			if ((cmt as NoteComment).id === comment.id) {
 				cmt.mode = vscode.CommentMode.Preview;
 			}
 
@@ -83,8 +96,12 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.saveNote', (comment: NoteComment) => {
-		comment.parent.comments = comment.parent.comments.map((cmt: NoteComment) => {
-			if (cmt.id === comment.id) {
+		if (!comment.parent) {
+			return;
+		}
+
+		comment.parent.comments = comment.parent.comments.map(cmt => {
+			if ((cmt as NoteComment).id === comment.id) {
 				cmt.mode = vscode.CommentMode.Preview;
 			}
 
@@ -93,8 +110,12 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.editNote', (comment: NoteComment) => {
-		comment.parent.comments = comment.parent.comments.map((cmt: NoteComment) => {
-			if (cmt.id === comment.id) {
+		if (!comment.parent) {
+			return;
+		}
+
+		comment.parent.comments = comment.parent.comments.map(cmt => {
+			if ((cmt as NoteComment).id === comment.id) {
 				cmt.mode = vscode.CommentMode.Editing;
 			}
 
