@@ -3,10 +3,10 @@ import * as Mocha from 'mocha';
 
 export function run(testsRoot: string, cb: (error: any, failures?: number) => void): void {
 	let mocha = new Mocha({
-		ui: 'tdd',
-		reporter: 'nyan'
+		ui: 'tdd'
 	});
-	mocha.useColors(true)
+	mocha.reporter('spec');
+	mocha.useColors(true);
 
 	const files = [path.resolve(__dirname, '../../out/test/suite/extension.test.js')];
 
@@ -26,12 +26,14 @@ export function run(testsRoot: string, cb: (error: any, failures?: number) => vo
 			return true;
 		};
 
-		mocha.run(failures => {
-			cb(null, failures);
-		}).on('test end', () => {
-			process.stdout.write = processStdoutWrite;
-			console.log('\n' + stdOutMessages + '\n');
-		})
+		mocha
+			.run(failures => {
+				cb(null, failures);
+			})
+			.on('test end', () => {
+				process.stdout.write = processStdoutWrite;
+				console.log('\n' + stdOutMessages + '\n');
+			});
 	} catch (err) {
 		cb(err);
 	}
