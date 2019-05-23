@@ -30,26 +30,38 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider(JSFIDDLE_SCHEME, jsFiddleDocumentContentProvider));
 
-	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.refresh", async () => {
-		let sourceControl = await pickSourceControl();
-		if (sourceControl) { sourceControl.refresh(); }
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.discard", async () => {
-		let sourceControl = await pickSourceControl();
-		if (sourceControl) { sourceControl.resetFilesToCheckedOutVersion(); }
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.commit", async () => {
-		let sourceControl = await pickSourceControl();
-		if (sourceControl) { sourceControl.commitAll(); }
-	}));
+	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.refresh",
+		async (sourceControlPane: vscode.SourceControl) => {
+			let sourceControl = await pickSourceControl(sourceControlPane);
+			if (sourceControl) { sourceControl.refresh(); }
+		}));
+	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.discard",
+		async (sourceControlPane: vscode.SourceControl) => {
+			let sourceControl = await pickSourceControl(sourceControlPane);
+			if (sourceControl) { sourceControl.resetFilesToCheckedOutVersion(); }
+		}));
+	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.commit",
+		async (sourceControlPane: vscode.SourceControl) => {
+			let sourceControl = await pickSourceControl(sourceControlPane);
+			if (sourceControl) { sourceControl.commitAll(); }
+		}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.checkout",
 		async (sourceControl: FiddleSourceControl, newVersion?: number) => {
-			sourceControl = sourceControl || await pickSourceControl();
+			sourceControl = sourceControl || await pickSourceControl(null);
 			if (sourceControl) { sourceControl.tryCheckout(newVersion); }
+		}));
+	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.browse",
+		async (sourceControlPane: vscode.SourceControl) => {
+			let sourceControl = await pickSourceControl(sourceControlPane);
+			if (sourceControl) { sourceControl.openInBrowser(); }
 		}));
 }
 
-async function pickSourceControl(): Promise<FiddleSourceControl | undefined> {
+async function pickSourceControl(sourceControlPane: vscode.SourceControl): Promise<FiddleSourceControl | undefined> {
+	if (sourceControlPane) {
+		return fiddleSourceControlRegister.get(sourceControlPane.rootUri);
+	}
+
 	// todo: when/if the SourceControl exposes a 'selected' property, use that instead
 
 	if (fiddleSourceControlRegister.size === 0) { return undefined; }
@@ -131,6 +143,10 @@ function registerFiddleSourceControl(fiddleSourceControl: FiddleSourceControl, c
 	context.subscriptions.push(fiddleSourceControl);
 }
 
+/**
+ * When the extension starts up, it must visit all workspace folders to see if any of them are fiddles.
+ * @param context extension context
+ */
 function initializeFromConfigurationFile(context: vscode.ExtensionContext): void {
 	if (!vscode.workspace.workspaceFolders) { return; }
 

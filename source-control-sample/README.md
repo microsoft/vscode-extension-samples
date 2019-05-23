@@ -56,13 +56,19 @@ The three commands (command, roll-back and refresh) in the title of the source c
                 "command": "extension.source-control.refresh",
                 "group": "navigation",
                 "when": "scmProvider == jsfiddle"
+            },
+            {
+                "command": "extension.source-control.browse",
+                "when": "scmProvider == jsfiddle"
             }
         ]
     }
 },
 ```
 
-It is also worth noting that the sample extension needs to overcome reloading that VS Code triggers when a new workspace folder is added. This is done by writing a memo into the `context.globalState` and reading it upon the next extension activation.
+Note that the `extension.source-control.browse` command is intentionally missing the `"group": "navigation"` placement specification, which makes it show up under the [dot dot dot] button.
+
+It is also worth noting that the sample extension needs to overcome reloading that VS Code triggers when a new workspace folder is added. This could be done either by writing a memo into the `context.globalState`, or a configuration file into the workspace folder and reading it upon the next extension activation. The selected solution is to use `.jsfiddle` configuration file as described below.
 
 ## Status bar controls
 
@@ -126,7 +132,7 @@ This extension implements the _cloning_ using the `extension.source-control.open
 
 This sample extension stores the source control configuration in the `.jsfiddle` JSON file in the workspace folder root.
 
-Upon extension activation such file is discovered in the workspace folder and source control initialized.
+This is done by storing the `.jsfiddle` configuration file into the `WorkspaceFolder` just inserting the workspace folder via the `vscode.workspace.updateWorkspaceFolders(...)` call, which seems to make the extension re-activate. Upon the re-activation, the `initializeFromConfigurationFile()` function scans all `WorkspaceFolder`s for the `.jsfiddle` configuration files and re-creates the `SourceControl` instances.
 
 ## Multiple workspace folder support
 

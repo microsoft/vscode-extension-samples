@@ -147,7 +147,7 @@ export async function uploadFiddle(slug: string, version: number, html: string, 
 	}
 }
 
-function toFiddleId(slug: string, version: number | undefined): string {
+export function toFiddleId(slug: string, version: number | undefined): string {
 	if (version === undefined) {
 		return slug;
 	}

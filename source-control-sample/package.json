@@ -52,6 +52,10 @@
 					"light": "resources/icons/light/refresh.svg",
 					"dark": "resources/icons/dark/refresh.svg"
 				}
+			},
+			{
+				"command": "extension.source-control.browse",
+				"title": "Open current Fiddle in the default browser"
 			}
 		],
 		"menus": {
@@ -69,6 +73,10 @@
 				{
 					"command": "extension.source-control.refresh",
 					"group": "navigation",
+					"when": "scmProvider == jsfiddle"
+				},
+				{
+					"command": "extension.source-control.browse",
 					"when": "scmProvider == jsfiddle"
 				}
 			]
