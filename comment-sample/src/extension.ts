@@ -40,8 +40,8 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.startDraft', (reply: vscode.CommentReply) => {
-		vscode.commands.executeCommand('setContext', 'inDraft', true);
 		let thread = reply.thread;
+		thread.contextValue = 'draft';
 		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
 		newComment.label = 'pending';
 		thread.comments = [...thread.comments, newComment];
@@ -51,6 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.executeCommand('setContext', 'inDraft', false);
 
 		let thread = reply.thread;
+		thread.collapsibleState = undefined;
 		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
 		thread.comments = [...thread.comments, newComment].map(comment => {
 			comment.label = undefined;

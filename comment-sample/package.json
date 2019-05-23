@@ -92,29 +92,29 @@
 					"when": "!commentThreadIsEmpty"
 				}
 			],
-			"comments/commentThread/actions": [
+			"comments/commentThread/context": [
 				{
 					"command": "mywiki.createNote",
-					"group": "navigation",
+					"group": "inline",
 					"precondition": "!commentIsEmpty",
 					"when": "commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.replyNote",
-					"group": "navigation",
+					"group": "inline",
 					"precondition": "!commentIsEmpty",
 					"when": "!commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.startDraft",
-					"group": "navigation",
+					"group": "inline",
 					"precondition": "!commentIsEmpty",
-					"when": "!inDraft"
+					"when": "commentThread != draft"
 				},
 				{
 					"command": "mywiki.finishDraft",
-					"group": "navigation",
-					"when": "inDraft"
+					"group": "inline",
+					"when": "commentThread == draft"
 				}
 			],
 			"comments/comment/title": [
@@ -127,14 +127,14 @@
 					"group": "group@2"
 				}
 			],
-			"comments/comment/actions": [
+			"comments/comment/context": [
 				{
 					"command": "mywiki.cancelsaveNote",
-					"group": "group@1"
+					"group": "inline@1"
 				},
 				{
 					"command": "mywiki.saveNote",
-					"group": "group@2"
+					"group": "inline@2"
 				}
 			]
 		}
