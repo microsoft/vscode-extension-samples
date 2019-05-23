@@ -19,15 +19,51 @@
 		"commands": [
 			{
 				"command": "mywiki.createNote",
-				"title": "Comment API: Create a comment thread"
+				"title": "Create Note"
 			},
 			{
-				"command": "mywiki.createComment",
-				"title": "Comment API: Reply to a comment thread"
+				"command": "mywiki.replyNote",
+				"title": "Reply"
+			},
+			{
+				"command": "mywiki.editNote",
+				"title": "Edit",
+				"icon":{
+					"dark": "resources/edit_inverse.svg",
+					"light": "resources/edit.svg"
+				}
 			},
 			{
 				"command": "mywiki.deleteNote",
-				"title": "Comment API: Delete a comment thread"
+				"title": "Delete",
+				"icon":{
+					"dark": "resources/close_inverse.svg",
+					"light": "resources/close.svg"
+				}
+			},
+			{
+				"command": "mywiki.deleteNoteComment",
+				"title": "Delete",
+				"icon":{
+					"dark": "resources/close_inverse.svg",
+					"light": "resources/close.svg"
+				}
+			},
+			{
+				"command": "mywiki.saveNote",
+				"title": "Save"
+			},
+			{
+				"command": "mywiki.cancelsaveNote",
+				"title": "Cancel"
+			},
+			{
+				"command": "mywiki.startDraft",
+				"title": "Start draft"
+			},
+			{
+				"command": "mywiki.finishDraft",
+				"title": "Finish draft"
 			}
 		],
 		"menus": {
@@ -37,12 +73,68 @@
 					"when": "false"
 				},
 				{
-					"command": "mywiki.createComment",
+					"command": "mywiki.replyNote",
 					"when": "false"
 				},
 				{
 					"command": "mywiki.deleteNote",
 					"when": "false"
+				},
+				{
+					"command": "mywiki.deleteNoteComment",
+					"when": "false"
+				}
+			],
+			"comments/commentThread/title": [
+				{
+					"command": "mywiki.deleteNote",
+					"group": "navigation",
+					"when": "!commentThreadIsEmpty"
+				}
+			],
+			"comments/commentThread/context": [
+				{
+					"command": "mywiki.createNote",
+					"group": "inline",
+					"precondition": "!commentIsEmpty",
+					"when": "commentThreadIsEmpty"
+				},
+				{
+					"command": "mywiki.replyNote",
+					"group": "inline",
+					"precondition": "!commentIsEmpty",
+					"when": "!commentThreadIsEmpty"
+				},
+				{
+					"command": "mywiki.startDraft",
+					"group": "inline",
+					"precondition": "!commentIsEmpty",
+					"when": "commentThread != draft"
+				},
+				{
+					"command": "mywiki.finishDraft",
+					"group": "inline",
+					"when": "commentThread == draft"
+				}
+			],
+			"comments/comment/title": [
+				{
+					"command": "mywiki.editNote",
+					"group": "group@1"
+				},
+				{
+					"command": "mywiki.deleteNoteComment",
+					"group": "group@2"
+				}
+			],
+			"comments/comment/context": [
+				{
+					"command": "mywiki.cancelsaveNote",
+					"group": "inline@1"
+				},
+				{
+					"command": "mywiki.saveNote",
+					"group": "inline@2"
 				}
 			]
 		}
