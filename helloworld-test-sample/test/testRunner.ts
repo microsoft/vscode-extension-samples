@@ -1,13 +1,38 @@
 import * as path from 'path';
-import * as cp from 'child_process';
+import * as Mocha from 'mocha';
 
-export function run(testsRoot: string, cb: (error: any) => void): void {
-	const cmd = cp.spawnSync('npx', ['mocha'], { cwd: path.resolve(__dirname, '../../') })
+export function run(testsRoot: string, cb: (error: any, failures?: number) => void): void {
+	let mocha = new Mocha({
+		ui: 'tdd',
+		reporter: 'nyan'
+	});
+	mocha.useColors(true)
 
-	console.log(cmd.stdout.toString())
-	if (cmd.status !== 0) {
-		cb(new Error('Mocha test failed'))
-	} else {
-		cb(null);
+	const files = [path.resolve(__dirname, '../../out/test/suite/extension.test.js')];
+
+	files.forEach(f => mocha.addFile(f));
+
+	try {
+		let stdOutMessages = '';
+
+		const processStdoutWrite = process.stdout.write;
+
+		process.stdout.write = (message: string | Buffer) => {
+			if (typeof message !== 'string') {
+				message = message.toString();
+			}
+			stdOutMessages += message;
+
+			return true;
+		};
+
+		mocha.run(failures => {
+			cb(null, failures);
+		}).on('test end', () => {
+			process.stdout.write = processStdoutWrite;
+			console.log('\n' + stdOutMessages + '\n');
+		})
+	} catch (err) {
+		cb(err);
 	}
 }
