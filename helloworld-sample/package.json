@@ -6,7 +6,7 @@
 	"publisher": "vscode-samples",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-sample",
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.34.0"
 	},
 	"categories": [
 		"Other"
@@ -31,8 +31,8 @@
 	},
 	"devDependencies": {
 		"@types/node": "^8.10.25",
+		"@types/vscode": "^1.34.0",
 		"tslint": "^5.16.0",
-		"typescript": "^3.4.5",
-		"@types/vscode": "^1.32.0"
+		"typescript": "^3.4.5"
 	}
 }
