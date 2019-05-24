@@ -19,10 +19,7 @@ export function run(testsRoot: string, cb: (error: any, failures?: number) => vo
 
 		try {
 			// Run the mocha test
-			mocha
-				.run(failures => {
-					cb(null, failures);
-				});
+			mocha.run(failures => cb(null, failures));
 
 		} catch (err) {
 			cb(err);

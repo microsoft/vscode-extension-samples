@@ -2,21 +2,22 @@ import * as path from 'path';
 
 import { runTests } from 'vscode-test';
 
-async function go() {
+async function main() {
 	try {
+		// The folder containing the Extension Manifest package.json
+		// Passed to `--extensionDevelopmentPath`
 		const extensionPath = path.resolve(__dirname, '../../');
+
+		// The path to test runner
+		// Passed to --extensionTestsPath
 		const testRunnerPath = path.resolve(__dirname, './suite');
 
-		await runTests({
-			// The folder containing the Extension Manifest package.json
-			extensionPath,
-			// The path to test runner
-			testRunnerPath
-		});
+		// Download VS Code, unzip it and run the integration test
+		await runTests({ extensionPath, testRunnerPath });
 	} catch (err) {
 		console.error('Failed to run tests');
 		process.exit(1);
 	}
 }
 
-go();
+main();
