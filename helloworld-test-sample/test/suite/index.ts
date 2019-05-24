@@ -6,7 +6,6 @@ export function run(testsRoot: string, cb: (error: any, failures?: number) => vo
 	// Create the mocha test
 	const mocha = new Mocha({
 		ui: 'tdd',
-		timeout: 10000
 	});
 	mocha.useColors(true);
 
