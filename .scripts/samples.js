@@ -122,10 +122,40 @@ const samples = [
       `TextDocument`
     ],
     contributions: []
-  }
+  },
   // { description: 'webpack-sample', path: 'webpack-sample', guide: null, apis: [], contributions: [] },
+  {
+    description: 'Source Control Sample',
+    path: 'source-control-sample',
+    guide: 'https://code.visualstudio.com/api/extension-guides/scm-provider',
+    apis: [
+      'workspace.workspaceFolders',
+      'SourceControl',
+      'SourceControlResourceGroup',
+      'scm.createSourceControl',
+      'TextDocumentContentProvider'
+    ],
+    contributions: ["menus"]
+  },
+  {
+    description: 'Commenting API Sample',
+    path: 'comment-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'Document Editing Sample',
+    path: 'document-editing-sample',
+    guide: null,
+    apis: [
+      `commands`
+    ],
+    contributions: []
+  }
 ]
 
+/** LSP specific samples */
 /** @type {Sample[]} */
 const lspSamples = [
   {
@@ -163,37 +193,12 @@ const lspSamples = [
       'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
     apis: [],
     contributions: []
-  },
-  {
-    description: 'Source Control Sample',
-    path: 'source-control-sample',
-    guide: 'https://code.visualstudio.com/api/extension-guides/scm-provider',
-    apis: [
-      'workspace.workspaceFolders',
-      'SourceControl',
-      'SourceControlResourceGroup',
-      'scm.createSourceControl',
-      'TextDocumentContentProvider'
-    ],
-    contributions: ["menus"]
-  },
-  {
-    description: 'Commenting API Sample',
-    path: 'comment-sample',
-    guide: null,
-    apis: [],
-    contributions: []
-  },
-  {
-    description: 'Document Editing Sample',
-    path: 'document-editing-sample',
-    guide: null,
-    apis: [
-      `commands`
-    ],
-    contributions: []
   }
 ]
+/**
+ * LSP specific samples
+ * DO NOT add non-LSP items here. Add it to `samples` list.
+ */
 
 module.exports = {
   samples,
