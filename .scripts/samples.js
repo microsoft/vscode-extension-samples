@@ -12,20 +12,6 @@
 /** @type {Sample[]} */
 const samples = [
   {
-    description: 'Hello World Sample',
-    path: 'helloworld-sample',
-    guide: null,
-    apis: [],
-    contributions: []
-  },
-  {
-    description: 'Hello World Minimal Sample',
-    path: 'helloworld-minimal-sample',
-    guide: null,
-    apis: [],
-    contributions: []
-  },
-  {
     description: 'Webview Sample',
     path: 'webview-sample',
     guide: '/api/extension-guides/webview',
