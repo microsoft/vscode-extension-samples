@@ -1,27 +1,16 @@
 # Hello World Sample
 
-This is a Hello World example that shows you how to use VS Code API.
+This is the Hello World example with integration tests.
 
-Guide for this sample: https://code.visualstudio.com/api/get-started/your-first-extension.
+You can find the accompanying documentation at https://code.visualstudio.com/api/working-with-extensions/testing-extension.
 
 ## Demo
 
 ![demo](demo.gif)
 
-## VS Code API
-
-### `vscode` module
-
-- [`commands.registerCommand`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCommand)
-- [`window.showInformationMessage`](https://code.visualstudio.com/api/references/vscode-api#window.showInformationMessage)
-
-### Contribution Points
-
-- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
-
 ## Running the Sample
 
 - Run `npm install` in terminal to install dependencies
-- Run the `Run Extension` target in the Debug View. This will:
+- Run the `Run Extension Tests` target in the Debug View. This will:
 	- Start a task `npm: watch` to compile the code
-	- Run the extension in a new VS Code window
+	- Run the extension integration test in a new VS Code window
