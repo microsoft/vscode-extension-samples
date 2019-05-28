@@ -1,6 +1,6 @@
-# Hello World Sample
+# Hello World Test Sample
 
-This is the Hello World example with integration tests.
+This is the Hello World example with integration tests setup.
 
 You can find the accompanying documentation at https://code.visualstudio.com/api/working-with-extensions/testing-extension.
 
