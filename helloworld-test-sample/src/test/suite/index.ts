@@ -5,8 +5,9 @@ import * as glob from 'glob';
 export function run(testsRoot: string, cb: (error: any, failures?: number) => void): void {
 	// Create the mocha test
 	const mocha = new Mocha({
-		ui: 'tdd',
+		ui: 'tdd'
 	});
+	// Use any mocha API
 	mocha.useColors(true);
 
 	glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
@@ -20,7 +21,6 @@ export function run(testsRoot: string, cb: (error: any, failures?: number) => vo
 		try {
 			// Run the mocha test
 			mocha.run(failures => cb(null, failures));
-
 		} catch (err) {
 			cb(err);
 		}
