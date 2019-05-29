@@ -1,7 +1,7 @@
 {
-	"name": "vscode-terminal-api-example",
-	"displayName": "vscode-terminal-api-example",
-	"description": "abc",
+	"name": "vscode-comment-api-example",
+	"displayName": "Comment API Sample",
+	"description": "Comment API Sample",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
@@ -19,11 +19,13 @@
 		"commands": [
 			{
 				"command": "mywiki.createNote",
-				"title": "Create Note"
+				"title": "Create Note",
+				"enablement": "!commentIsEmpty"
 			},
 			{
 				"command": "mywiki.replyNote",
-				"title": "Reply"
+				"title": "Reply",
+				"enablement": "!commentIsEmpty"
 			},
 			{
 				"command": "mywiki.editNote",
@@ -59,7 +61,8 @@
 			},
 			{
 				"command": "mywiki.startDraft",
-				"title": "Start draft"
+				"title": "Start draft",
+				"enablement": "!commentIsEmpty"
 			},
 			{
 				"command": "mywiki.finishDraft",
@@ -96,19 +99,16 @@
 				{
 					"command": "mywiki.createNote",
 					"group": "inline",
-					"precondition": "!commentIsEmpty",
 					"when": "commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.replyNote",
 					"group": "inline",
-					"precondition": "!commentIsEmpty",
 					"when": "!commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.startDraft",
 					"group": "inline",
-					"precondition": "!commentIsEmpty",
 					"when": "commentThread != draft"
 				},
 				{
