@@ -25,9 +25,10 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc  -p ./",
+		"compile": "tsc -p ./",
 		"lint": "tslint -p ./",
 		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
