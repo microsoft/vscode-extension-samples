@@ -1,7 +1,6 @@
 /*---------------------------------------------------------
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
-'use strict';
 
 import { workspace, languages, window, commands, ExtensionContext, Disposable } from 'vscode';
 import ContentProvider, { encodeLocation } from './provider';
