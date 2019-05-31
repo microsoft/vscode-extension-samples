@@ -54,6 +54,13 @@ const samples = [
     contributions: []
   },
   {
+    description: 'Code Actions Sample',
+    path: 'code-actions-sample',
+    guide: null,
+    apis: ['languages.registerCodeActionsProvider', 'CodeActionProvider'],
+    contributions: []
+  },
+  {
     description: 'File System Provider Sample',
     path: 'fsprovider-sample',
     guide: null,
