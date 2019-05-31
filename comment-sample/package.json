@@ -141,7 +141,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc  -p ./",
+		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
 		"lint": "tslint -p ./",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"

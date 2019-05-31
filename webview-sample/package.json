@@ -31,7 +31,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"compile": "tsc  -p ./",
+		"compile": "tsc -p ./",
 		"lint": "tslint -p ./",
 		"watch": "tsc -w -p ./"
 	},
