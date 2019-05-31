@@ -40,7 +40,7 @@
 		"mocha": "^6.1.4",
 		"source-map-support": "^0.5.12",
 		"tslint": "^5.16.0",
-		"typescript": "^3.4.5",
+		"typescript": "^3.5.1",
 		"vscode-test": "^0.4.2"
 	}
 }

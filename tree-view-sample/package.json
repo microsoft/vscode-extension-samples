@@ -213,7 +213,7 @@
 		"@types/node": "*",
 		"@types/rimraf": "^2.0.2",
 		"tslint": "^5.16.0",
-		"typescript": "^3.4.5",
+		"typescript": "^3.5.1",
 		"@types/vscode": "^1.32.0"
 	},
 	"dependencies": {
