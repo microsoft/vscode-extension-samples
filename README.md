@@ -11,6 +11,10 @@ You can expect from each sample:
 - Listing of used VS Code API and Contribution Points
 - Code of the same style, enforced using TSLint
 
+## Prerequisites
+
+You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/) installed on your system to run the examples. It is recommended to use the node version used for VS Code developement itself which is documented [here](https://github.com/Microsoft/vscode/wiki/How-to-Contribute#prerequisites)
+
 ## Usage
 
 - `git clone https://github.com/Microsoft/vscode-extension-samples`
