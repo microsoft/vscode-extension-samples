@@ -12,7 +12,7 @@ This is a repository adapted from [lsp-sample](https://github.com/Microsoft/vsco
 ## Synopsis
 
 - With `vscode-languageclient@5.1.0-next.9`, you can specify a JSON log output format with `[langId].trace.server` as follows:
-  ```json
+  ```jsonc
   "languageServerExample.trace.server": {
     "format": "json", // or "text"
     "verbosity": "verbose" // or "off" | "messages"
