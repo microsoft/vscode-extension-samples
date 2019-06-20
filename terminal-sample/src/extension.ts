@@ -155,7 +155,7 @@ export function activate(context: vscode.ExtensionContext) {
 		renderer = (<any>vscode.window).createTerminalRenderer('renderer');
 		renderer.write(colorText('~~~ Hello world! ~~~'));
 		renderer.onDidChangeMaximumDimensions((dim: any) => {
-			console.log(`Dimensions for renderer changed: columns=${dim.columns}, rows=${dim.rows}`);
+			console.log(`Maximum dimensions for renderer changed: columns=${dim.columns}, rows=${dim.rows}`);
 		});
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererName', () => {
