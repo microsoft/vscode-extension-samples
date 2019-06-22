@@ -13,7 +13,7 @@ You can expect from each sample:
 
 ## Prerequisites
 
-You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/) installed on your system to run the examples. It is recommended to use the node version used for VS Code developement itself which is documented [here](https://github.com/Microsoft/vscode/wiki/How-to-Contribute#prerequisites)
+You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/) installed on your system to run the examples. It is recommended to use the node version used for VS Code development itself which is documented [here](https://github.com/Microsoft/vscode/wiki/How-to-Contribute#prerequisites)
 
 ## Usage
 
