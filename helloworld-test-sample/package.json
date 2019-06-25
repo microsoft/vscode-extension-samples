@@ -41,6 +41,6 @@
 		"source-map-support": "^0.5.12",
 		"tslint": "^5.16.0",
 		"typescript": "^3.5.1",
-		"vscode-test": "^0.4.2"
+		"vscode-test": "^1.0.0-next.0"
 	}
 }
