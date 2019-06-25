@@ -28,8 +28,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// vscode.window.createTerminal
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createTerminal', () => {
-		vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
+		vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++} (hideFromUser)`);
 		vscode.window.showInformationMessage('Hello World 2!');
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createTerminalHideFromUser', () => {
+		vscode.window.createTerminal({
+			name: `Ext Terminal #${NEXT_TERM_ID++}`,
+			hideFromUser: true
+		} as any);
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createAndSend', () => {
 		const terminal = vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);

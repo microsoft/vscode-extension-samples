@@ -15,6 +15,7 @@
 		"onCommand:terminalTest.createAndSend",
 		"onCommand:terminalTest.createFakeShell",
 		"onCommand:terminalTest.createTerminal",
+		"onCommand:terminalTest.createTerminalHideFromUser",
 		"onCommand:terminalTest.createZshLoginShell",
 		"onCommand:terminalTest.dimensions",
 		"onCommand:terminalTest.dispose",
@@ -46,6 +47,10 @@
 			{
 				"command": "terminalTest.createTerminal",
 				"title": "Terminal API: Create Terminal"
+			},
+			{
+				"command": "terminalTest.createTerminalHideFromUser",
+				"title": "Terminal API: Create Terminal (hideFromUser)"
 			},
 			{
 				"command": "terminalTest.createZshLoginShell",
