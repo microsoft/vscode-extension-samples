@@ -205,16 +205,15 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "tslint -p ./",
 		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
 		"@types/mkdirp": "^0.5.2",
-		"@types/node": "*",
+		"@types/node": "^10.12.21",
 		"@types/rimraf": "^2.0.2",
-		"tslint": "^5.16.0",
+		"@types/vscode": "^1.36.0",
 		"typescript": "^3.5.1",
-		"@types/vscode": "^1.32.0"
+		"tslint": "^5.12.1"
 	},
 	"dependencies": {
 		"jsonc-parser": "^0.4.2",
