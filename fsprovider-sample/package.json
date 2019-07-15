@@ -37,6 +37,16 @@
 				"command": "memfs.reset",
 				"title": "Delete Files",
 				"category": "MemFS"
+			},
+			{
+				"command": "memfs.deleteFile",
+				"title": "Delete \"file.txt\"",
+				"category": "MemFS"
+			},
+			{
+				"command": "memfs.addFile",
+				"title": "Add \"file.txt\"",
+				"category": "MemFS"
 			}
 		],
 		"menus": {
@@ -47,6 +57,14 @@
 				},
 				{
 					"command": "memfs.reset",
+					"when": "workbenchState == workspace"
+				},
+				{
+					"command": "memfs.deleteFile",
+					"when": "workbenchState == workspace"
+				},
+				{
+					"command": "memfs.addFile",
 					"when": "workbenchState == workspace"
 				},
 				{

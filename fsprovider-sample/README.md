@@ -12,6 +12,9 @@ To *get started* you need this:
 * when *not* having a workspace opened, select 'F1 > [MemFS] Setup Workspace' (optionally save the workspace now)
 * select 'F1 > [MemFs] Create Files' and notice how the explorer is now populated
 * ... try things out, e.g. IntelliSense in memfs-files, create new files, save them, etc
+* open `file.txt` and make changes
+* 'F1 > [MemFS] Delete "file.txt', observe that the editor is now indicating that the file is deleted
+* 'F1 > [MemFS] Add "file.txt', observe that the editor content is reset and the '(delete)' annotation disappeard
 * select 'F1 > [MemFs] Delete Files' or reload to restart
 
 ![sample screenshot](https://github.com/Microsoft/vscode-extension-samples/raw/master/fsprovider-sample/sample.png)

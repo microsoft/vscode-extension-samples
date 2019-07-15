@@ -18,6 +18,18 @@ export function activate(context: vscode.ExtensionContext) {
         initialized = false;
     }));
 
+    context.subscriptions.push(vscode.commands.registerCommand('memfs.addFile', _ => {
+        if (initialized) {
+            memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'), { create: true, overwrite: true });
+        }
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('memfs.deleteFile', _ => {
+        if (initialized) {
+            memFs.delete(vscode.Uri.parse('memfs:/file.txt'));
+        }
+    }));
+
     context.subscriptions.push(vscode.commands.registerCommand('memfs.init', _ => {
         if (initialized) {
             return;
