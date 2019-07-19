@@ -123,6 +123,10 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}));
 
+	context.subscriptions.push(vscode.commands.registerCommand('mywiki.dispose', () => {
+		commentController.dispose();
+	}));
+
 	function replyNote(reply: vscode.CommentReply) {
 		let thread = reply.thread;
 		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);

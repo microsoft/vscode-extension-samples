@@ -67,6 +67,10 @@
 			{
 				"command": "mywiki.finishDraft",
 				"title": "Finish draft"
+			},
+			{
+				"command": "mywiki.dispose",
+				"title": "Remove All Notes"
 			}
 		],
 		"menus": {
