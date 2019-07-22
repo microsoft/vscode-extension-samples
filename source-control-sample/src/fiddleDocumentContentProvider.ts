@@ -8,7 +8,7 @@ import { basename } from "path";
  */
 export class JSFiddleDocumentContentProvider implements TextDocumentContentProvider, Disposable {
 	private _onDidChange = new EventEmitter<Uri>();
-	private fiddles = new Map<string, Fiddle>();
+	private fiddles = new Map<string, Fiddle>(); // this assumes each fiddle is only open once per workspace
 
 	get onDidChange(): Event<Uri> {
 		return this._onDidChange.event;

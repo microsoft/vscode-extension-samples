@@ -55,6 +55,19 @@ export function activate(context: vscode.ExtensionContext) {
 			let sourceControl = await pickSourceControl(sourceControlPane);
 			if (sourceControl) { sourceControl.openInBrowser(); }
 		}));
+
+
+	context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(e => {
+		// dispose source control for removed workspace folders
+		e.removed.forEach(wf => {
+			unregisterFiddleSourceControl(wf.uri);
+		});
+
+		// initialize new source control for manually added workspace folders
+		e.added.forEach(wf => {
+			initializeFolderFromConfigurationFile(wf, context);
+		});
+	}));
 }
 
 async function pickSourceControl(sourceControlPane: vscode.SourceControl): Promise<FiddleSourceControl | undefined> {
@@ -143,6 +156,15 @@ function registerFiddleSourceControl(fiddleSourceControl: FiddleSourceControl, c
 	context.subscriptions.push(fiddleSourceControl);
 }
 
+function unregisterFiddleSourceControl(folderUri: vscode.Uri): void {
+	if (fiddleSourceControlRegister.has(folderUri)) {
+		const previousSourceControl = fiddleSourceControlRegister.get(folderUri)!;
+		previousSourceControl.dispose();
+
+		fiddleSourceControlRegister.delete(folderUri);
+	}
+}
+
 /**
  * When the extension starts up, it must visit all workspace folders to see if any of them are fiddles.
  * @param context extension context
@@ -150,22 +172,25 @@ function registerFiddleSourceControl(fiddleSourceControl: FiddleSourceControl, c
 function initializeFromConfigurationFile(context: vscode.ExtensionContext): void {
 	if (!vscode.workspace.workspaceFolders) { return; }
 
-	vscode.workspace.workspaceFolders.forEach(folder => {
-		const configurationPath = path.join(folder.uri.fsPath, CONFIGURATION_FILE);
-		exists(configurationPath, configFileExists => {
-			if (configFileExists) {
-				readFile(configurationPath, { flag: 'r' }, async (err, data) => {
-					if (err) { vscode.window.showErrorMessage(err.message); }
-					try {
-						let fiddleSourceControl = await FiddleSourceControl.fromConfiguration(<FiddleConfiguration>JSON.parse(data.toString("utf-8")), folder, context, false);
-						registerFiddleSourceControl(fiddleSourceControl, context);
-					} catch (ex) {
-						vscode.window.showErrorMessage(ex);
-					}
-				});
-			}
-		});
+	vscode.workspace.workspaceFolders.forEach(folder => initializeFolderFromConfigurationFile(folder, context));
+}
+
+function initializeFolderFromConfigurationFile(folder: vscode.WorkspaceFolder, context: vscode.ExtensionContext): void {
+	const configurationPath = path.join(folder.uri.fsPath, CONFIGURATION_FILE);
+	exists(configurationPath, configFileExists => {
+		if (configFileExists) {
+			readFile(configurationPath, { flag: 'r' }, async (err, data) => {
+				if (err) { vscode.window.showErrorMessage(err.message); }
+				try {
+					let fiddleSourceControl = await FiddleSourceControl.fromConfiguration(<FiddleConfiguration>JSON.parse(data.toString("utf-8")), folder, context, false);
+					registerFiddleSourceControl(fiddleSourceControl, context);
+				} catch (ex) {
+					vscode.window.showErrorMessage(ex);
+				}
+			});
+		}
 	});
+
 }
 
 async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId: string): Promise<vscode.WorkspaceFolder | undefined> {
