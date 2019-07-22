@@ -7,15 +7,14 @@ import { subscribeToDocumentChanges, EMOJI_MENTION } from './diagnostics';
 
 const COMMAND = 'code-actions-sample.command';
 
-var emojiDiagnostics: vscode.DiagnosticCollection;
-
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.languages.registerCodeActionsProvider('markdown', new Emojizer(), {
 			providedCodeActionKinds: Emojizer.providedCodeActionKinds
 		}));
 
-	emojiDiagnostics = vscode.languages.createDiagnosticCollection("emoji");
+	const emojiDiagnostics = vscode.languages.createDiagnosticCollection("emoji");
+	context.subscriptions.push(emojiDiagnostics);
 
 	subscribeToDocumentChanges(context, emojiDiagnostics);
 
@@ -28,12 +27,6 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand(COMMAND, () => vscode.env.openExternal(vscode.Uri.parse('https://unicode.org/emoji/charts-12.0/full-emoji-list.html')))
 	);
-}
-
-export function deactivate(context: vscode.ExtensionContext) {
-	if (emojiDiagnostics) {
-		emojiDiagnostics.dispose();
-	}
 }
 
 /**
