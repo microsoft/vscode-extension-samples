@@ -16,18 +16,26 @@
 	],
 	"activationEvents": [
 		"onCommand:fsConsume/findJS",
-		"onCommand:fsConsume/sumSizes"
+		"onCommand:fsConsume/sumSizes",
+		"onCommand:fsConsume/readWriteFile"
 	],
 	"main": "./out/src/extension",
 	"contributes": {
 		"commands": [
 			{
 				"command": "fsConsume/findJS",
-				"title": "ConsumeFS: Find JavaScript"
+				"title": "Find JavaScript",
+				"category": "ConsumeFS"
 			},
 			{
 				"command": "fsConsume/sumSizes",
-				"title": "ConsumeFS: Sum file sizes in folder"
+				"title": "Sum file sizes in folder",
+				"category": "ConsumeFS"
+			},
+			{
+				"command": "fsConsume/readWriteFile",
+				"title": "Read and Write file",
+				"category": "ConsumeFS"
 			}
 		]
 	},
