@@ -1,15 +1,18 @@
+/*---------------------------------------------------------
+ * Copyright (C) Microsoft Corporation. All rights reserved.
+ *--------------------------------------------------------*/
+
 'use strict';
 
 import * as vscode from 'vscode';
 import { posix } from 'path';
-import { StringDecoder } from 'string_decoder';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	// Sample 1 - Check if for a TypeScript file a JavaScript files exists
-	// * use `uri.with` to derive a new uri without loosing things like scheme, authority, query, or fragment
-	// * use `path.posix` because uris use slashes to separate paths, e.g. backslash is a valid file name character
-	vscode.commands.registerCommand('fsConsume/findJS', async function () {
+	// Command #1 - Check if for a TypeScript-file a JavaScript-file exists
+	// * shows how to derive a new uri from an existing uri
+	// * shows how to check for existence of a file
+	vscode.commands.registerCommand('fs/findJS', async function () {
 		if (!vscode.window.activeTextEditor ||
 			posix.extname(vscode.window.activeTextEditor.document.uri.path) !== '.ts'
 		) {
@@ -27,8 +30,10 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// Sample 2 - Sum up the size of all files inside a folder (none recursive)
-	vscode.commands.registerCommand('fsConsume/sumSizes', async function () {
+	// Command #2 - Compute total size of files in a folder
+	// * shows how to read a directory
+	// * shows how retrieve metadata for a file
+	vscode.commands.registerCommand('fs/sumSizes', async function () {
 
 		async function sizeOfAllFilesInFolder(folder: vscode.Uri) {
 			let sum = 0;
@@ -52,22 +57,25 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// Sample 3 - Create a Uint8Array from a string and reverse
-	vscode.commands.registerCommand('fsConsume/readWriteFile', async function () {
+	// Command #3 - Write and read a file
+	// * shows how to derive a new file-uri from a folder-uri
+	// * shows how to convert a string into a typed array and back
+	vscode.commands.registerCommand('fs/readWriteFile', async function () {
 
 		if (!vscode.workspace.workspaceFolders) {
 			return vscode.window.showInformationMessage('No folder or workspace opened');
 		}
 
 		const writeStr = '1€ is 1.12$ is 0.9£';
-		const writeData = Buffer.from(writeStr);
+		const writeData = Buffer.from(writeStr, 'utf8');
 
-		const folder = vscode.workspace.workspaceFolders[0].uri;
-		const fileUri = folder.with({ path: posix.join(folder.path, 'test.txt') });
+		const folderUri = vscode.workspace.workspaceFolders[0].uri;
+		const fileUri = folderUri.with({ path: posix.join(folderUri.path, 'test.txt') });
+
 		await vscode.workspace.fs.writeFile(fileUri, writeData);
 
 		const readData = await vscode.workspace.fs.readFile(fileUri);
-		const readStr = new StringDecoder().end(Buffer.from(readData));
+		const readStr = Buffer.from(readData).toString('utf8');
 		vscode.window.showInformationMessage(readStr);
 	});
 
