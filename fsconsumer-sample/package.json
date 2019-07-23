@@ -15,7 +15,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:fs/findJS",
+		"onCommand:fs/openJS",
 		"onCommand:fs/sumSizes",
 		"onCommand:fs/readWriteFile"
 	],
@@ -23,13 +23,13 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "fs/findJS",
-				"title": "Find JavaScript",
+				"command": "fs/openJS",
+				"title": "Open JavaScript-file for TypeScript-file...",
 				"category": "FS"
 			},
 			{
 				"command": "fs/sumSizes",
-				"title": "Sum file sizes in folder",
+				"title": "Show folder information for current file",
 				"category": "FS"
 			},
 			{
