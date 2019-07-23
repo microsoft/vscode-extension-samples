@@ -14,5 +14,5 @@ Throughout this sample [`path.posix`](https://nodejs.org/dist/latest-v10.x/docs/
 
 # How to run locally
 
-* `npm run compile` to start the compiler in watch mode
+* `npm run watch` to start the compiler in watch mode
 * open this folder in VS Code and press `F5`
