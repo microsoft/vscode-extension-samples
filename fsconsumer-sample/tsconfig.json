@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"strictNullChecks": true,
+		"module": "commonjs",
+		"target": "es6",
+		"outDir": "out",
+		"sourceMap": true,
+		"strict": true,
+		"rootDir": "."
+	},
+	"exclude": ["node_modules", ".vscode-test"]
+}
