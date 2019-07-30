@@ -157,14 +157,22 @@ class CatCodingPanel {
 
 	private _updateForCat(catName: keyof typeof cats) {
 		this._panel.title = catName;
-		this._panel.webview.html = this._getHtmlForWebview(cats[catName]);
+		this._panel.webview.html = this._getHtmlForWebview(this._panel.webview, cats[catName]);
 	}
 
-	private _getHtmlForWebview(catGif: string) {
+	private _getHtmlForWebview(webview:any, catGif: string) {
 		// Local path to main script run in the webview
 		const scriptPathOnDisk = vscode.Uri.file(
 			path.join(this._extensionPath, 'media', 'main.js')
 		);
+
+		const onDiskPath = vscode.Uri.file(
+			path.join(this._extensionPath, 'media', 'cat.gif')
+		);
+	
+		// And get the special URI to use with the webview
+		// const catGifSrc = onDiskPath.with({ scheme: 'vscode-resource' });
+		const catGifSrc = webview.toWebviewResource(onDiskPath);
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
@@ -181,13 +189,13 @@ class CatCodingPanel {
                 Use a content security policy to only allow loading images from https or from our extension directory,
                 and only allow scripts that have a specific nonce.
                 -->
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';">
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https: ${webview.cspSource}; script-src 'nonce-${nonce}';">
 
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Cat Coding</title>
             </head>
             <body>
-                <img src="${catGif}" width="300" />
+                <img src="${catGifSrc}" width="300" />
                 <h1 id="lines-of-code-counter">0</h1>
 
                 <script nonce="${nonce}" src="${scriptUri}"></script>
