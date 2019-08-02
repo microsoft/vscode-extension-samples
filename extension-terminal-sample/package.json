@@ -1,0 +1,38 @@
+{
+	"name": "extension-terminal-sample",
+	"displayName": "extension-terminal-sample",
+	"description": "An example usage of the extension terminal API",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.37.0"
+	},
+	"enableProposedApi": true,
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extensionTerminalSample.create"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extensionTerminalSample.create",
+				"title": "Extension Terminal Sample: Create"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "tslint -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^6.0.40",
+		"@types/vscode": "^1.33.0",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1"
+	}
+}
