@@ -7,7 +7,7 @@ import { JSFiddleDocumentContentProvider } from './fiddleDocumentContentProvider
 import * as path from 'path';
 import * as afs from './afs';
 import { FiddleConfiguration, parseFiddleId } from './fiddleConfiguration';
-import { firs	tIndex, UTF8 } from './util';
+import { firstIndex, UTF8 } from './util';
 
 const SOURCE_CONTROL_OPEN_COMMAND = 'extension.source-control.open';
 var jsFiddleDocumentContentProvider: JSFiddleDocumentContentProvider;
