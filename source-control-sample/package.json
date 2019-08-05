@@ -19,7 +19,7 @@
 		"commands": [
 			{
 				"command": "extension.source-control.open",
-				"title": "Open JSFiddle"
+				"title": "Open JS Fiddle"
 			},
 			{
 				"command": "extension.source-control.commit",
