@@ -12,6 +12,11 @@
 	],
 	"activationEvents": [
 		"onCommand:extension.source-control.open",
+		"onCommand:extension.source-control.commit",
+		"onCommand:extension.source-control.refresh",
+		"onCommand:extension.source-control.discard",
+		"onCommand:extension.source-control.checkout",
+		"onCommand:extension.source-control.browse",
 		"workspaceContains:.jsfiddle"
 	],
 	"main": "./out/extension.js",
