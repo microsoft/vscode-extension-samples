@@ -4,8 +4,9 @@
 	"description": "Samples for VSCode's view API",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
+	"enableProposedApi": "true",
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.37.0"
 	},
 	"categories": [
 		"Other"
@@ -29,6 +30,22 @@
 					"file": {
 						"type": "string",
 						"description": "The Rake file that provides the task. Can be omitted."
+					}
+				}
+			},
+			{
+				"type": "custombuildscript",
+				"required": [
+					"flavor"
+				],
+				"properties": {
+					"flavor": {
+						"type": "string",
+						"description": "The build flavor. Should be either '32' or '64'."
+					},
+					"flags": {
+						"type": "array",
+						"description": "Additional build flags."
 					}
 				}
 			}
