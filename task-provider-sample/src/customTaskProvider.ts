@@ -111,10 +111,12 @@ class CustomBuildTaskTerminal implements vscode.Pseudoterminal {
 	private async doBuild(): Promise<void> {
 		return new Promise<void>((resolve) => {
 			this.writeEmitter.fire('Starting build...\r\n');
-			if (this.flags.indexOf('incremental') > -1) {
+			let isIncremental = this.flags.indexOf('incremental') > -1;
+			if (isIncremental) {
 				if (this.getSharedState()) {
 					this.writeEmitter.fire('Using last build results: ' + this.getSharedState() + '\r\n');
 				} else {
+					isIncremental = false;
 					this.writeEmitter.fire('No result from last build. Doing full build.\r\n');
 				}
 			}
@@ -128,7 +130,7 @@ class CustomBuildTaskTerminal implements vscode.Pseudoterminal {
 					this.closeEmitter.fire();
 					resolve();
 				}
-			}, 4000);
+			}, isIncremental ? 1000 : 4000);
 		});
 	}
 }
