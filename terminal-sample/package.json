@@ -13,7 +13,6 @@
 	],
 	"activationEvents": [
 		"onCommand:terminalTest.createAndSend",
-		"onCommand:terminalTest.createFakeShell",
 		"onCommand:terminalTest.createTerminal",
 		"onCommand:terminalTest.createTerminalHideFromUser",
 		"onCommand:terminalTest.createZshLoginShell",
@@ -22,15 +21,11 @@
 		"onCommand:terminalTest.hide",
 		"onCommand:terminalTest.onDidChangeTerminalDimensions",
 		"onCommand:terminalTest.onDidWriteData",
-		"onCommand:terminalTest.maximumDimensions",
 		"onCommand:terminalTest.processId",
 		"onCommand:terminalTest.sendText",
 		"onCommand:terminalTest.sendTextNoNewLine",
 		"onCommand:terminalTest.show",
 		"onCommand:terminalTest.showPreserveFocus",
-		"onCommand:terminalTest.terminalRendererCreate",
-		"onCommand:terminalTest.terminalRendererName",
-		"onCommand:terminalTest.terminalTest.terminalRendererWrite",
 		"onCommand:terminalTest.terminals"
 	],
 	"main": "./out/extension.js",
@@ -39,10 +34,6 @@
 			{
 				"command": "terminalTest.createAndSend",
 				"title": "Terminal API: Create Terminal and Immediately Send"
-			},
-			{
-				"command": "terminalTest.createFakeShell",
-				"title": "Terminal API: Create Fake Shell (with Terminal Renderer)"
 			},
 			{
 				"command": "terminalTest.createTerminal",
@@ -77,10 +68,6 @@
 				"title": "Terminal API: Attach dimensions listener"
 			},
 			{
-				"command": "terminalTest.maximumDimensions",
-				"title": "Terminal API: Get maximum dimensions"
-			},
-			{
 				"command": "terminalTest.processId",
 				"title": "Terminal API: Get process ID"
 			},
@@ -99,18 +86,6 @@
 			{
 				"command": "terminalTest.showPreserveFocus",
 				"title": "Terminal API: Show (preserving focus)"
-			},
-			{
-				"command": "terminalTest.terminalRendererCreate",
-				"title": "Terminal API: Create Terminal Renderer"
-			},
-			{
-				"command": "terminalTest.terminalRendererName",
-				"title": "Terminal API: Set Terminal Renderer Name"
-			},
-			{
-				"command": "terminalTest.terminalRendererWrite",
-				"title": "Terminal API: Write to Terminal Renderer"
 			},
 			{
 				"command": "terminalTest.terminals",
