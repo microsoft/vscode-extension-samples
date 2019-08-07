@@ -27,6 +27,14 @@ export class RakeTaskProvider implements vscode.TaskProvider {
 	}
 
 	public resolveTask(_task: vscode.Task): vscode.Task | undefined {
+		const task = _task.definition.task;
+		// A Rake task consists of a task and an optional file as specified in RakeTaskDefinition
+		// Make sure that this looks like a Rake task by checking that there is a task.
+		if (task) {
+			// resolveTask requires that the same definition object be used.
+			const definition: RakeTaskDefinition = <any>_task.definition;
+			return new vscode.Task(definition, definition.task, 'rake', new vscode.ShellExecution(`rake ${definition.task}`));
+		}
 		return undefined;
 	}
 }
