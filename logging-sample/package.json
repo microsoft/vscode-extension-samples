@@ -1,0 +1,64 @@
+{
+	"name": "logging-sample",
+	"displayName": "logging-sample",
+	"description": "Example Using Logging to both files and vscode outputChannel in a VSCode Extension",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extension.helloWorld"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.helloWorld",
+				"title": "Hello World"
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Sample_Logging",
+			"properties": {
+				"sample_logging.loggingLevel": {
+					"type": "string",
+					"enum": [
+						"None",
+						"Fatal",
+						"Error",
+						"Warning",
+						"Information",
+						"Debug",
+						"Trace"
+					],
+					"default": "Warning",
+					"description": "The verbosity of logging. The Order is None < Fatal < Error < Warning < Information < Debug < Trace.",
+					"scope": "resource"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"dependencies": {
+		"log4js": "^4.5.1",
+		"fs-extra": "^8.1.0"
+	},
+	"devDependencies": {
+		"@types/node": "^8.10.25",
+		"@types/fs-extra": "^8.0.0",
+		"@types/vscode": "^1.32.0",
+		"@types/log4js": "^2.3.5",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1"
+	}
+}

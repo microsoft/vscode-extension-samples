@@ -200,6 +200,19 @@ const lspSamples = [
       'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
     apis: [],
     contributions: []
+  },
+  {
+    description: 'Logging Sample',
+    path: 'logging-sample',
+    guide: null,
+    apis: [
+      'workspace.getConfiguration',
+      'ExtensionContext.logPath',
+      'window.createOutputChannel',
+      'OutputChannel.appendLine',
+      'OutputChannel.dispose'
+    ],
+    contributions: []
   }
 ]
 /**
