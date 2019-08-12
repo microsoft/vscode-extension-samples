@@ -110,6 +110,17 @@ const samples = [
     ],
     contributions: []
   },
+  {
+    description: 'Extension Terminal Sample',
+    path: 'extension-terminal-sample',
+    guide: null,
+    apis: [
+      'window.createTerminal',
+      'window.Pseudoterminal',
+      'window.ExtensionTerminalOptions'
+    ],
+    contributions: []
+  },
   // { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
   {
     description: 'Vim Sample',

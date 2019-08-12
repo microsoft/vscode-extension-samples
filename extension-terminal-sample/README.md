@@ -7,11 +7,6 @@ This extension shows how to leverage the extension terminal API proposed in v1.3
 ### `vscode` module
 
 - [window.createTerminal](https://code.visualstudio.com/api/references/vscode-api#window.createTerminal)
-- [window.onDidChangeActiveTerminal](https://code.visualstudio.com/api/references/vscode-api#window.onDidChangeActiveTerminal)
-- [window.onDidCloseTerminal](https://code.visualstudio.com/api/references/vscode-api#window.onDidCloseTerminal)
-- [window.onDidOpenTerminal](https://code.visualstudio.com/api/references/vscode-api#window.onDidOpenTerminal)
-- [window.Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#window.Pseudoterminal)
-- [window.ExtensionTerminalOptions](https://code.visualstudio.com/api/references/vscode-api#window.ExtensionTerminalOptions) 
 
 ### Proposed API
 
