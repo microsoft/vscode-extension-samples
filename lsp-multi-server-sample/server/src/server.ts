@@ -18,7 +18,7 @@ let workspaceFolder: string | null;
 
 documents.onDidOpen((event) => {
 	connection.console.log(`[Server(${process.pid}) ${workspaceFolder}] Document opened: ${event.document.uri}`);
-})
+});
 documents.listen(connection);
 
 connection.onInitialize((params) => {
@@ -31,6 +31,6 @@ connection.onInitialize((params) => {
 				change: TextDocumentSyncKind.None
 			}
 		}
-	}
+	};
 });
 connection.listen();

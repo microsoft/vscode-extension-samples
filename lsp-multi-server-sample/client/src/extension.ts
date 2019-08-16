@@ -72,7 +72,7 @@ export function activate(context: ExtensionContext) {
 				],
 				diagnosticCollectionName: 'lsp-multi-server-example',
 				outputChannel: outputChannel
-			}
+			};
 			defaultClient = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			defaultClient.start();
 			return;
@@ -99,7 +99,7 @@ export function activate(context: ExtensionContext) {
 				diagnosticCollectionName: 'lsp-multi-server-example',
 				workspaceFolder: folder,
 				outputChannel: outputChannel
-			}
+			};
 			let client = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			client.start();
 			clients.set(folder.uri.toString(), client);
