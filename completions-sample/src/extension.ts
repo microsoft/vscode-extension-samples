@@ -52,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 
 				// get all text until the `position` and check if it reads `console.`
-				// and iff so then complete if `log`, `warn`, and `error`
+				// and if so then complete if `log`, `warn`, and `error`
 				let linePrefix = document.lineAt(position).text.substr(0, position.character);
 				if (!linePrefix.endsWith('console.')) {
 					return undefined;
