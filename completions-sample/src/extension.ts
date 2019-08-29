@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const simpleCompletion = new vscode.CompletionItem('Hello World!');
 
 			// a completion item that inserts its text as snippet,
-			// the `insertText`-property is a `SnippetString` which we will
+			// the `insertText`-property is a `SnippetString` which will be
 			// honored by the editor.
 			const snippetCompletion = new vscode.CompletionItem('Good part of the day');
 			snippetCompletion.insertText = new vscode.SnippetString('Good ${1|morning,afternoon,evening|}. It is ${1}, right?');
