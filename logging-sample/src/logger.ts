@@ -5,6 +5,8 @@ import { window } from "vscode";
 
 const pkgJsonPath = resolve(__dirname, "..", "package.json");
 const extName = readJsonSync(pkgJsonPath).name;
+const extVersion = readJsonSync(pkgJsonPath).version;
+
 
 let isConfigured = false;
 let isDisabled = false;
@@ -20,7 +22,7 @@ export function configure(logPath: string, configLogLevel: string): void {
 			logger.info(`Disabling Logging`);
 			log4js.shutdown((logShutdownErr) => {
 				if (logShutdownErr) {
-					console.error(`unable to shutdown Logger: <${logShutdownErr.message}>`)
+					console.error(`unable to shutdown Logger: <${logShutdownErr.message}>`);
 				}
 				isConfigured = false;
 			});
@@ -34,18 +36,21 @@ export function configure(logPath: string, configLogLevel: string): void {
 		logger.info(`Re-configuring Logging, New Log Level will be: <${configLogLevel}>`);
 		log4js.shutdown((logShutdownErr) => {
 			if (logShutdownErr) {
-				console.error(`unable to shutdown Logger: <${logShutdownErr.message}>`)
+				console.error(`unable to shutdown Logger: <${logShutdownErr.message}>`);
 			}
 			logger = configureLog4js(logPath, configLogLevel);
 			isDisabled = false;
 			isConfigured = true;
 			logger.info(`Beginning Logging, Log Level: <${configLogLevel}>`);
 		});
+		// Initial Configuration
 	} else {
 		logger = configureLog4js(logPath, configLogLevel);
 		isDisabled = false;
 		isConfigured = true;
+		logger.info(`Congratulations, your extension: <${extName}> version: <${extVersion}> is now active!`);
 		logger.info(`Beginning Logging, Log Level: <${configLogLevel}>`);
+		logger.info(`Logs can be found in the <${logPath}> directory and in the VSCode outputChannel named: <${extName}>.`);
 	}
 }
 

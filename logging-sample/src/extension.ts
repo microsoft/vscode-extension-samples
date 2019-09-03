@@ -15,10 +15,8 @@ export function activate(context: vscode.ExtensionContext): void {
 	const logLevel = <string>vscode.workspace.getConfiguration().get(loggingLevelConfigProp);
 	// The Logger must first be initialized before any logging commands may be invoked.
 	logger.configure(logPath, logLevel);
-	logger.warn('Congratulations, your extension <sample logging> is now active!');
-	logger.warn(`Logs can be found in the <${logPath}> directory.`);
 
-	let counter = 1;
+	let logMessagesCounter = 1;
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
@@ -26,12 +24,12 @@ export function activate(context: vscode.ExtensionContext): void {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World!');
-		logger.trace(`Hip Hip Hurray, the <Hello World> Command was executed! counter: <${counter++}>`);
+		logger.trace(`Hip Hip Hurray, the <Hello World> Command was executed! counter: <${logMessagesCounter++}>`);
 	});
 
 	context.subscriptions.push(disposable);
 
-	// To enable dynamic logging we must listen to VSCode configuration changes
+	// To enable dynamic logging level we must listen to VSCode configuration changes
 	// on our `loggingLevelConfigProp` configuration setting.
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
 		if (e.affectsConfiguration(loggingLevelConfigProp)) {
