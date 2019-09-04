@@ -145,7 +145,7 @@ const samples = [
   {
     description: 'Source Control Sample',
     path: 'source-control-sample',
-    guide: 'https://code.visualstudio.com/api/extension-guides/scm-provider',
+    guide: '/api/extension-guides/scm-provider',
     apis: [
       'workspace.workspaceFolders',
       'SourceControl',
@@ -166,6 +166,15 @@ const samples = [
     description: 'Document Editing Sample',
     path: 'document-editing-sample',
     guide: null,
+    apis: [
+      `commands`
+    ],
+    contributions: []
+  },
+  {
+    description: 'Custom Data Sample',
+    path: 'custom-data-sample',
+    guide: '/api/extension-guides/custom-data-extension',
     apis: [
       `commands`
     ],

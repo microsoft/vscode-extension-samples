@@ -1,0 +1,22 @@
+{
+	"name": "custom-data-sample",
+	"description": "Custom Data sample extension for VS Code",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples",
+	"engines": {
+		"vscode": "^1.38.0"
+	},
+	"contributes": {
+		"html": {
+			"customData": [
+				"./html.html-data.json"
+			]
+		},
+		"css": {
+			"customData": [
+				"./css.css-data.json"
+			]
+		}
+	}
+}
