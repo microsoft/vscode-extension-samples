@@ -175,9 +175,7 @@ const samples = [
     description: 'Custom Data Sample',
     path: 'custom-data-sample',
     guide: '/api/extension-guides/custom-data-extension',
-    apis: [
-      `commands`
-    ],
+    apis: [],
     contributions: []
   }
 ]
