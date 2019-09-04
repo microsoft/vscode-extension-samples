@@ -1,8 +1,9 @@
 import * as vscode from 'vscode';
 import { FiddleRepository, toExtension, downloadFiddle, areIdentical, uploadFiddle, Fiddle, toFiddleId } from './fiddleRepository';
 import * as path from 'path';
-import { writeFileSync, existsSync, writeFile } from 'fs';
+import * as afs from './afs';
 import { FiddleConfiguration, parseFiddleId } from './fiddleConfiguration';
+import { UTF8 } from './util';
 
 export const CONFIGURATION_FILE = '.jsfiddle';
 
@@ -15,7 +16,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	private timeout?: NodeJS.Timer;
 	private fiddle!: Fiddle;
 
-	constructor(context: vscode.ExtensionContext, private readonly workspaceFolder: vscode.WorkspaceFolder, fiddle: Fiddle, overwrite: boolean) {
+	constructor(context: vscode.ExtensionContext, private readonly workspaceFolder: vscode.WorkspaceFolder, fiddle: Fiddle, download: boolean) {
 		this.jsFiddleScm = vscode.scm.createSourceControl('jsfiddle', 'JSFiddle #' + fiddle.slug, workspaceFolder.uri);
 		this.changedResources = this.jsFiddleScm.createResourceGroup('workingTree', 'Changes');
 		this.fiddleRepository = new FiddleRepository(workspaceFolder, fiddle.slug);
@@ -31,7 +32,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 		context.subscriptions.push(fileSystemWatcher);
 
 		// clone fiddle to the local workspace
-		this.setFiddle(fiddle, overwrite);
+		this.setFiddle(fiddle, download);
 
 		if (this.fiddle.version === undefined || Number.isNaN(this.fiddle.version)) {
 			this.establishVersion();
@@ -106,9 +107,9 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	/** Resets the given local file content to the checked-out version. */
-	private resetFile(extension: string): void {
+	private async resetFile(extension: string): Promise<void> {
 		let filePath = this.fiddleRepository.createLocalResourcePath(extension);
-		writeFileSync(filePath, this.fiddle.data[extension]);
+		await afs.writeFile(filePath, this.fiddle.data[extension]);
 	}
 
 	async tryCheckout(newVersion: number | undefined): Promise<void> {
@@ -172,7 +173,8 @@ export class FiddleSourceControl implements vscode.Disposable {
 	private saveCurrentConfiguration(): void {
 		let fiddleConfiguration: FiddleConfiguration = {
 			slug: this.fiddle.slug,
-			version: this.fiddle.version
+			version: this.fiddle.version,
+			downloaded: true
 		};
 
 		FiddleSourceControl.saveConfiguration(this.workspaceFolder.uri, fiddleConfiguration);
@@ -180,9 +182,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 
 	static saveConfiguration(workspaceFolderUri: vscode.Uri, fiddleConfiguration: FiddleConfiguration): void {
 		let fiddleConfigurationString = JSON.stringify(fiddleConfiguration);
-		writeFile(path.join(workspaceFolderUri.fsPath, CONFIGURATION_FILE), fiddleConfigurationString, err => {
-			vscode.window.showErrorMessage(err.message);
-		});
+		afs.writeFile(path.join(workspaceFolderUri.fsPath, CONFIGURATION_FILE), Buffer.from(fiddleConfigurationString, UTF8));
 	}
 
 	get onRepositoryChange(): vscode.Event<Fiddle> {
@@ -214,7 +214,9 @@ export class FiddleSourceControl implements vscode.Disposable {
 			let isDirty: boolean;
 			let wasDeleted: boolean;
 
-			if (existsSync(uri.fsPath)) {
+			let pathExists = await afs.exists(uri.fsPath);
+
+			if (pathExists) {
 				let document = await vscode.workspace.openTextDocument(uri);
 				isDirty = this.isDirty(document);
 				wasDeleted = false;

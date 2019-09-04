@@ -7,3 +7,5 @@ export function firstIndex<T>(array: T[], fn: (t: T) => boolean): number {
 
 	return -1;
 }
+
+export const UTF8 = 'utf8';
