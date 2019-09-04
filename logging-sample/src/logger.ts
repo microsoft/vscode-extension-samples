@@ -4,8 +4,10 @@ import { resolve } from "path";
 import { window } from "vscode";
 
 const pkgJsonPath = resolve(__dirname, "..", "package.json");
-const extName = readJsonSync(pkgJsonPath).name;
-const extVersion = readJsonSync(pkgJsonPath).version;
+const pkgjson = readJsonSync(pkgJsonPath)
+const extName = pkgjson.name;
+const extPublisher = pkgjson.publisher;
+const extVersion = pkgjson.version;
 
 
 let isConfigured = false;
@@ -60,7 +62,7 @@ export function configure(logPath: string, configLogLevel: string): void {
  * VSCode's outputChannel Logging.
  */
 function configureLog4js(logPath: string, configLogLevel: string) {
-	const logFile = resolve(logPath, `${extName}.log`);
+	const logFile = resolve(logPath, `${extPublisher}.${extName}.log`);
 	const log4jsLogLevel = configToLog4jsLogLevel(configLogLevel);
 	const ourExtOutChannel = window.createOutputChannel(extName);
 

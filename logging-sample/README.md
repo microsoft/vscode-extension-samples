@@ -37,3 +37,16 @@ The sample code show the usage of the following vscode APIs:
 - Find the **Sample_logging: Logging Level** configuration.
 - Modify the log level to the highest: **trace**.
 - Now each time the **Hello World Command** is executed additional information will be written to the logs.
+
+## Integrating the Logger Example into an existing VSCode extension
+- Copy [logger.ts](./src/logger.ts) to your extension.
+- Add relevant dependencies to your package.json
+  - fs-extra
+  - log4js
+- Ensure your VSCode extension contributes a configuration property similar to `Sample_Logging` property
+  in this sample's [package.json](./package.json), with the following changes:
+  - Replace `Sample_Logging` title with `YOUR_EXT_NAME`
+  - Replace `sample_logging.loggingLevel` key with `YOUR_EXT_NAME.loggingLevel`
+- Update your extension's [`activate` method](./src/extension.ts).
+  -  Configure the Logger according to the settings logger level and VSCode ExtensionContext.logPath
+  -  Subscribe a listener to onDidChangeConfiguration to re-configure the logger when the log level setting changes.
