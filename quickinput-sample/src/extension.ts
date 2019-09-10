@@ -3,7 +3,6 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-
 import { window, commands, ExtensionContext } from 'vscode';
 import { showQuickPick, showInputBox } from './basicInput';
 import { multiStepInput } from './multiStepInput';
