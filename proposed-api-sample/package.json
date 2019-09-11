@@ -29,13 +29,12 @@
 		"compile": "tsc -p ./",
 		"lint": "tslint -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "vscode-dts dev"
+		"postinstall": "vscode-dts dev && vscode-dts master"
 	},
 	"devDependencies": {
 		"@types/node": "^10.14.17",
-		"@types/vscode": "^1.34.0",
 		"tslint": "^5.16.0",
 		"typescript": "^3.5.1",
-		"vscode-dts": "^0.2.0"
+		"vscode-dts": "^0.3.1"
 	}
 }
