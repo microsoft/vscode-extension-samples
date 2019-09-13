@@ -20,7 +20,7 @@
 		"onCommand:terminalTest.dispose",
 		"onCommand:terminalTest.hide",
 		"onCommand:terminalTest.onDidChangeTerminalDimensions",
-		"onCommand:terminalTest.onDidWriteData",
+		"onCommand:terminalTest.onDidWriteTerminalData",
 		"onCommand:terminalTest.processId",
 		"onCommand:terminalTest.sendText",
 		"onCommand:terminalTest.sendTextNoNewLine",
@@ -60,7 +60,7 @@
 				"title": "Terminal API: Hide"
 			},
 			{
-				"command": "terminalTest.onDidWriteData",
+				"command": "terminalTest.onDidWriteTerminalData",
 				"title": "Terminal API: Attach data listener"
 			},
 			{

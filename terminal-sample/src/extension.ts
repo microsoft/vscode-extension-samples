@@ -12,10 +12,6 @@ export function activate(context: vscode.ExtensionContext) {
 	// vscode.window.onDidOpenTerminal
 	vscode.window.onDidOpenTerminal(terminal => {
 		console.log("Terminal opened. Total count: " + (<any>vscode.window).terminals.length);
-
-		(<any>terminal).onDidWriteData((data: any) => {
-			console.log("Terminal data: ", data);
-		});
 	});
 	vscode.window.onDidOpenTerminal((terminal: vscode.Terminal) => {
 		vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
@@ -135,16 +131,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// vvv Proposed APIs below vvv
 
-	// vscode.window.onDidWriteData
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidWriteData', () => {
-		selectTerminal().then(terminal => {
-			if (!terminal) {
-				return;
-			}
-			vscode.window.showInformationMessage(`onDidWriteData listener attached for terminal: ${terminal.name}, check the devtools console to see events`);
-			(<any>terminal).onDidWriteData((data: string) => {
-				console.log('onDidWriteData: ' + data);
-			});
+	// vscode.window.onDidWriteTerminalData
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidWriteTerminalData', () => {
+		(<any>vscode.window).onDidWriteTerminalData((e: any) => {
+			vscode.window.showInformationMessage(`onDidWriteTerminalData listener attached, check the devtools console to see events`);
+			console.log('onDidWriteData', e);
 		});
 	}));
 
