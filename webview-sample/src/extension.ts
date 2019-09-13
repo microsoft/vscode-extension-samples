@@ -137,37 +137,38 @@ class CatCodingPanel {
 	}
 
 	private _update() {
-		const z = 1 + 2;
+		const webview = this._panel.webview;
+
 		// Vary the webview's content based on where it is located in the editor.
 		switch (this._panel.viewColumn) {
 			case vscode.ViewColumn.Two:
-				this._updateForCat('Compiling Cat');
+				this._updateForCat(webview, 'Compiling Cat');
 				return;
 
 			case vscode.ViewColumn.Three:
-				this._updateForCat('Testing Cat');
+				this._updateForCat(webview, 'Testing Cat');
 				return;
 
 			case vscode.ViewColumn.One:
 			default:
-				this._updateForCat('Coding Cat');
+				this._updateForCat(webview, 'Coding Cat');
 				return;
 		}
 	}
 
-	private _updateForCat(catName: keyof typeof cats) {
+	private _updateForCat(webview: vscode.Webview, catName: keyof typeof cats) {
 		this._panel.title = catName;
-		this._panel.webview.html = this._getHtmlForWebview(cats[catName]);
+		this._panel.webview.html = this._getHtmlForWebview(webview, cats[catName]);
 	}
 
-	private _getHtmlForWebview(catGif: string) {
+	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
 		// Local path to main script run in the webview
 		const scriptPathOnDisk = vscode.Uri.file(
 			path.join(this._extensionPath, 'media', 'main.js')
 		);
 
 		// And the uri we use to load this script in the webview
-		const scriptUri = scriptPathOnDisk.with({ scheme: 'vscode-resource' });
+		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
@@ -181,13 +182,13 @@ class CatCodingPanel {
                 Use a content security policy to only allow loading images from https or from our extension directory,
                 and only allow scripts that have a specific nonce.
                 -->
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';">
+                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
 
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Cat Coding</title>
             </head>
             <body>
-                <img src="${catGif}" width="300" />
+                <img src="${catGifPath}" width="300" />
                 <h1 id="lines-of-code-counter">0</h1>
 
                 <script nonce="${nonce}" src="${scriptUri}"></script>
