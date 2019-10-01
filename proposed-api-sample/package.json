@@ -29,7 +29,8 @@
 		"compile": "tsc -p ./",
 		"lint": "tslint -p ./",
 		"watch": "tsc -watch -p ./",
-		"postinstall": "vscode-dts dev && vscode-dts master"
+		"install": "vscode-dts dev",
+		"postinstall": "vscode-dts master"
 	},
 	"devDependencies": {
 		"@types/node": "^10.14.17",
