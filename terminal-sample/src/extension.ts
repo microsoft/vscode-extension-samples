@@ -9,15 +9,16 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log("Terminals: " + (<any>vscode.window).terminals.length);
 
-	(<any>vscode.window).onDidOpenTerminal(e => {
+	// vscode.window.onDidOpenTerminal
+	vscode.window.onDidOpenTerminal(terminal => {
 		console.log("Terminal opened. Total count: " + (<any>vscode.window).terminals.length);
-
-		e.onDidWriteData(data => {
-			console.log("Terminal data: ", data);
-		});
+	});
+	vscode.window.onDidOpenTerminal((terminal: vscode.Terminal) => {
+		vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
 	});
 
-	(<any>vscode.window).onDidChangeActiveTerminal(e => {
+	// vscode.window.onDidChangeActiveTerminal
+	vscode.window.onDidChangeActiveTerminal(e => {
 		console.log(`Active terminal changed, name=${e ? e.name : 'undefined'}`);
 	});
 
@@ -25,6 +26,12 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createTerminal', () => {
 		vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
 		vscode.window.showInformationMessage('Hello World 2!');
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createTerminalHideFromUser', () => {
+		vscode.window.createTerminal({
+			name: `Ext Terminal #${NEXT_TERM_ID++}`,
+			hideFromUser: true
+		} as any);
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createAndSend', () => {
 		const terminal = vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
@@ -37,31 +44,51 @@ export function activate(context: vscode.ExtensionContext) {
 	// Terminal.hide
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.hide', () => {
 		if (ensureTerminalExists()) {
-			selectTerminal().then(terminal => terminal.hide());
+			selectTerminal().then(terminal => {
+				if (terminal) {
+					terminal.hide();
+				}
+			});
 		}
 	}));
 
 	// Terminal.show
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.show', () => {
 		if (ensureTerminalExists()) {
-			selectTerminal().then(terminal => terminal.show());
+			selectTerminal().then(terminal => {
+				if (terminal) {
+					terminal.show();
+				}
+			});
 		}
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.showPreserveFocus', () => {
 		if (ensureTerminalExists()) {
-			selectTerminal().then(terminal => terminal.show(true));
+			selectTerminal().then(terminal => {
+				if (terminal) {
+					terminal.show(true);
+				}
+			});
 		}
 	}));
 
 	// Terminal.sendText
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.sendText', () => {
 		if (ensureTerminalExists()) {
-			selectTerminal().then(terminal => terminal.sendText("echo 'Hello world!'"));
+			selectTerminal().then(terminal => {
+				if (terminal) {
+					terminal.sendText("echo 'Hello world!'");
+				}
+			});
 		}
 	}));
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.sendTextNoNewLine', () => {
 		if (ensureTerminalExists()) {
-			selectTerminal().then(terminal => terminal.sendText("echo 'Hello world!'", false));
+			selectTerminal().then(terminal => {
+				if (terminal) {
+					terminal.sendText("echo 'Hello world!'", false);
+				}
+			});
 		}
 	}));
 
@@ -79,6 +106,9 @@ export function activate(context: vscode.ExtensionContext) {
 	// Terminal.processId
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.processId', () => {
 		selectTerminal().then(terminal => {
+			if (!terminal) {
+				return;
+			}
 			terminal.processId.then((processId) => {
 				if (processId) {
 					vscode.window.showInformationMessage(`Terminal.processId: ${processId}`);
@@ -94,93 +124,26 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage(`onDidCloseTerminal, name: ${terminal.name}`);
 	});
 
-
-	// vvv Proposed APIs in 1.23 below vvv
-
-
 	// vscode.window.terminals
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminals', () => {
 		selectTerminal();
 	}));
 
-	// vscode.window.onDidOpenTerminal
-	if ('onDidOpenTerminal' in vscode.window) {
-		(<any>vscode.window).onDidOpenTerminal((terminal: vscode.Terminal) => {
-			vscode.window.showInformationMessage(`onDidOpenTerminal, name: ${terminal.name}`);
-		});
-	}
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidWriteData', () => {
-		selectTerminal().then(terminal => {
-			vscode.window.showInformationMessage(`onDidWriteData listener attached for terminal: ${terminal.name}, check the devtools console to see events`);
-			(<any>terminal).onDidWriteData((data: string) => {
-				console.log('onDidWriteData: ' + data);
-			});
+	// vvv Proposed APIs below vvv
+
+	// vscode.window.onDidWriteTerminalData
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidWriteTerminalData', () => {
+		(<any>vscode.window).onDidWriteTerminalData((e: any) => {
+			vscode.window.showInformationMessage(`onDidWriteTerminalData listener attached, check the devtools console to see events`);
+			console.log('onDidWriteData', e);
 		});
 	}));
 
-	// vvv Proposed APIs in 1.25 below vvv
-	let renderer;
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererCreate', () => {
-		renderer = (<any>vscode.window).createTerminalRenderer('renderer');
-		renderer.write(colorText('~~~ Hello world! ~~~'));
-		renderer.onDidChangeMaximumDimensions(dim => {
-			console.log(`Dimensions for renderer changed: columns=${dim.columns}, rows=${dim.rows}`);
-		});
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererName', () => {
-		if (!renderer) {
-			return;
-		}
-		vscode.window.showInputBox({ placeHolder: "Enter a new name" }).then(value => {
-			if (!value) {
-				return;
-			}
-			renderer.name = value;
-		});
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.terminalRendererWrite', () => {
-		if (!renderer) {
-			return;
-		}
-		vscode.window.showInputBox({ placeHolder: "Enter text to write" }).then(value => {
-			if (!value) {
-				return;
-			}
-			// Note that entering characters like `\r` in the input box will result in `\\r` being written
-			renderer.write(value);
-		});
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.createFakeShell', () => {
-		const shell = (<any>vscode.window).createTerminalRenderer('fake shell');
-		shell.write('Type and press enter to echo the text\r\n\r\n');
-		let line = '';
-		shell.onDidAcceptInput(data => {
-			if (data === '\r') {
-				shell.write(`\r\necho: "${colorText(line)}"\r\n\n`);
-				line = '';
-				return;
-			}
-			line += data;
-			shell.write(data);
-		});
-		shell.terminal.show();
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.maximumDimensions', () => {
-		renderer.maximumDimensions.then(dimensions => {
-			vscode.window.showInformationMessage(`TerminalRenderer.maximumDimensions: columns=${dimensions.columns}, rows=${dimensions.rows}`);
-		});
-	}));
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.dimensions', () => {
-		vscode.window.showInputBox({ placeHolder: "Enter columns" }).then(columns => {
-			if (!columns) {
-				return;
-			}
-			vscode.window.showInputBox({ placeHolder: "Enter rows" }).then(rows => {
-				if (!rows) {
-					return;
-				}
-				renderer.dimensions = { columns: parseInt(columns, 10), rows: parseInt(rows, 10) };
-			});
+	// vscode.window.onDidChangeTerminalDimensions
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.onDidChangeTerminalDimensions', () => {
+		vscode.window.showInformationMessage(`Listening to onDidChangeTerminalDimensions, check the devtools console to see events`);
+		(<any>vscode.window).onDidChangeTerminalDimensions((event: any) => {
+			console.log(`onDidChangeTerminalDimensions: terminal:${event.terminal.name}, columns=${event.dimensions.columns}, rows=${event.dimensions.rows}`);
 		});
 	}));
 }
@@ -202,7 +165,7 @@ function colorText(text: string): string {
 	return output;
 }
 
-function selectTerminal(): Thenable<vscode.Terminal> {
+function selectTerminal(): Thenable<vscode.Terminal | undefined> {
 	interface TerminalQuickPickItem extends vscode.QuickPickItem {
 		terminal: vscode.Terminal;
 	}
@@ -212,9 +175,9 @@ function selectTerminal(): Thenable<vscode.Terminal> {
 			label: `name: ${t.name}`,
 			terminal: t
 		};
-	})
+	});
 	return vscode.window.showQuickPick(items).then(item => {
-		return item.terminal;
+		return item ? item.terminal : undefined;
 	});
 }
 

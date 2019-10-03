@@ -3,7 +3,6 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-'use strict';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -48,7 +47,8 @@ class DateiFileSystemProvider implements vscode.FileSystemProvider {
     }
 
     async _stat(path: string): Promise<vscode.FileStat> {
-        return new FileStat(await _.stat(path));
+        const res = await _.statLink(path);
+        return new FileStat(res.stat, res.isSymbolicLink);
     }
 
     readDirectory(uri: vscode.Uri): [string, vscode.FileType][] | Thenable<[string, vscode.FileType][]> {
@@ -134,6 +134,11 @@ export function deactivate() { }
 
 //#region Utilities
 
+export interface IStatAndLink {
+    stat: fs.Stats;
+    isSymbolicLink: boolean;
+}
+
 namespace _ {
 
     function handleResult<T>(resolve: (result: T) => void, reject: (error: Error) => void, error: Error | null | undefined, result: T): void {
@@ -190,12 +195,6 @@ namespace _ {
         });
     }
 
-    export function stat(path: string): Promise<fs.Stats> {
-        return new Promise<fs.Stats>((resolve, reject) => {
-            fs.stat(path, (error, stat) => handleResult(resolve, reject, error, stat));
-        });
-    }
-
     export function readfile(path: string): Promise<Buffer> {
         return new Promise<Buffer>((resolve, reject) => {
             fs.readFile(path, (error, buffer) => handleResult(resolve, reject, error, buffer));
@@ -237,14 +236,40 @@ namespace _ {
             fs.unlink(path, error => handleResult(resolve, reject, error, void 0));
         });
     }
+
+    export function statLink(path: string): Promise<IStatAndLink> {
+        return new Promise((resolve, reject) => {
+            fs.lstat(path, (error, lstat) => {
+                if (error || lstat.isSymbolicLink()) {
+                    fs.stat(path, (error, stat) => {
+                        if (error) {
+                            return handleResult(resolve, reject, error, void 0);
+                        }
+
+                        handleResult(resolve, reject, error, { stat, isSymbolicLink: lstat && lstat.isSymbolicLink() });
+                    });
+                } else {
+                    handleResult(resolve, reject, error, { stat: lstat, isSymbolicLink: false });
+                }
+            });
+
+        });
+    }
 }
 
 export class FileStat implements vscode.FileStat {
 
-    constructor(private fsStat: fs.Stats) { }
+    constructor(private fsStat: fs.Stats, private _isSymbolicLink: boolean) { }
 
     get type(): vscode.FileType {
-        return this.fsStat.isFile() ? vscode.FileType.File : this.fsStat.isDirectory() ? vscode.FileType.Directory : this.fsStat.isSymbolicLink() ? vscode.FileType.SymbolicLink : vscode.FileType.Unknown;
+        let type: number;
+        if (this._isSymbolicLink) {
+            type = vscode.FileType.SymbolicLink | (this.fsStat.isDirectory() ? vscode.FileType.Directory : vscode.FileType.File);
+        } else {
+            type = this.fsStat.isFile() ? vscode.FileType.File : this.fsStat.isDirectory() ? vscode.FileType.Directory : vscode.FileType.Unknown;
+        }
+
+        return type;
     }
 
     get isFile(): boolean | undefined {
@@ -256,7 +281,7 @@ export class FileStat implements vscode.FileStat {
     }
 
     get isSymbolicLink(): boolean | undefined {
-        return this.fsStat.isSymbolicLink();
+        return this._isSymbolicLink;
     }
 
     get size(): number {

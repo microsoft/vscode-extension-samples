@@ -1,0 +1,17 @@
+{
+  "version": 1.1,
+  "properties": [{
+    "name": "my-size",
+    "description": "Compiles down to `width` and `height`. See details at https://github.com/postcss/postcss-size",
+    "references": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/postcss/postcss-size"
+      }
+    ]
+  }],
+  "pseudoClasses": [{
+    "name": ":my-link",
+    "description": ":any-link pseudo class. See details at https://preset-env.cssdb.org/features#any-link-pseudo-class"
+  }]
+}

@@ -1,0 +1,54 @@
+{
+	"name": "vscode-memfs",
+	"displayName": "FileSystem Consumer Sample",
+	"description": "Showcase for using the workspace.fs.-API which allows reading and writing files and folder",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"repository": {
+		"url": "https://github.com/Microsoft/vscode-extension-samples.git",
+		"type": "git"
+	},
+	"engines": {
+		"vscode": "^1.37.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:fs/openJS",
+		"onCommand:fs/sumSizes",
+		"onCommand:fs/readWriteFile"
+	],
+	"main": "./out/src/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "fs/openJS",
+				"title": "Open JavaScript-file for TypeScript-file...",
+				"category": "FS"
+			},
+			{
+				"command": "fs/sumSizes",
+				"title": "Show folder information for current file",
+				"category": "FS"
+			},
+			{
+				"command": "fs/readWriteFile",
+				"title": "Read and Write file",
+				"category": "FS"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^7.0.43",
+		"@types/vscode": "^1.37.0",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1"
+	}
+}

@@ -2,7 +2,6 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
 
 import { TextEditor } from 'vscode';
 import { Motion, Motions } from './motions';
@@ -13,39 +12,39 @@ const CHAR_TO_BINDING: { [char: string]: any; } = {};
 function defineBinding(char: string, value: any, modifierKeys: ModifierKeys): void {
 	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
 	CHAR_TO_BINDING[key] = value;
-};
+}
 function getBinding(char: string, modifierKeys: ModifierKeys): any {
 	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
 	return CHAR_TO_BINDING[key];
-};
+}
 
 function defineOperator(char: string, operator: Operator, modifierKeys: ModifierKeys = {}): void {
 	defineBinding(char + '__operator__', operator, modifierKeys);
-};
+}
 function getOperator(char: string, modifierKeys: ModifierKeys = {}): Operator {
 	return getBinding(char + '__operator__', modifierKeys);
-};
+}
 
 function defineCommand(char: string, commandId: string, modifierKeys: ModifierKeys = {}): void {
 	defineBinding(char + '__command__', { commandId: commandId }, modifierKeys);
-};
+}
 function getCommand(char: string, modifierKeys: ModifierKeys = {}): Command {
 	return getBinding(char + '__command__', modifierKeys);
-};
+}
 
 function defineMotion(char: string, motion: Motion, modifierKeys: ModifierKeys = {}): void {
 	defineBinding(char + '__motion__', motion, modifierKeys);
-};
+}
 function getMotion(char: string, modifierKeys: ModifierKeys = {}): Motion {
 	return getBinding(char + '__motion__', modifierKeys);
-};
+}
 
 function defineMotionCommand(char: string, motionCommand: AbstractCommandDescriptor, modifierKeys: ModifierKeys = {}): void {
 	defineBinding(char + '__motioncommand__', motionCommand, modifierKeys);
-};
+}
 function getMotionCommand(char: string, modifierKeys: ModifierKeys = {}): AbstractCommandDescriptor {
 	return getBinding(char + '__motioncommand__', modifierKeys);
-};
+}
 
 // Operators
 defineOperator('x', Operators.DeleteCharUnderCursor);
@@ -223,7 +222,7 @@ function _parseNumberAndString(input: string, numberAtBeginning: boolean = true)
 		hasRepeatCount: false,
 		repeatCount: 1,
 		input: input
-	}
+	};
 }
 
 interface INumberAndString {

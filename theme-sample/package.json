@@ -1,7 +1,7 @@
 {
 	"name": "theme-sample",
 	"version": "0.1.0",
-	"publisher": "vscode",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "*"
 	},
@@ -18,5 +18,8 @@
 				"path": "./Sample_Dark.tmTheme"
 			}
 		]
+	},
+	"devDependencies": {
+		"tslint": "^5.16.0"
 	}
 }

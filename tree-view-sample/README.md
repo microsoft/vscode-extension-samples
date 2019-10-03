@@ -1,24 +1,51 @@
 # Views & View Containers
 
-This sample shows how to register and implement a custom tree view using the VS Code API. It has implementation for following views
+This sample demonstrates how to implement and contribute a tree view in VS Code. This includes:
+
+- Contributing views and view containers.
+- Contributing actions in various location of the view.
+- Implementing the tree data provider for the view.
+- Creating and working with the view.
+
+This sample provides following views
 
 - Node dependencies view
-- Json Outline view
 - Ftp file explorer view
 
-These views help you in understanding how to use TreeView API, title actions, inline actions, context menu actions and how to use `when` context to show views and actions.
-
-You can also learn how to contribute custom view containers and contribute views to it. For eg., Node dependencies view is shown under a Package Explorer custom view container.
+Following example shows Node dependencies view in Package Explorer View container.
 
 ![Package Explorer](./resources/package-explorer.png)
 
-## Running the example
+## VS Code API
+
+This sample uses following contribution points, activation events and APIs
+
+### Contribution Points
+
+- `views`
+- `viewContainers`
+- `menu`
+	- `view/title`
+	- `view/item/context`
+
+### Activation Events
+
+- `onView:${viewId}`
+
+### APIs
+
+- `window.createTreeView`
+- `window.registerTreeDataProvider`
+- `TreeView`
+- `TreeDataProvider`
+
+Refer to [Usage](./USAGE.md) document for more details.
+
+## Running the Sample
 
 - Open this example in VS Code Insiders
 - `npm install`
 - `npm run watch`
 - `F5` to start debugging
-- FTP file explorer view should be shown in Explorer
-- File explorer view replicating the file explorer in VS Code should be shown in Explorer
-- Json Outline view is shown in explorer when you open a json file and gets hidden when json file is closed.
 - Node dependencies view is shown in Package explorer view container in Activity bar.
+- FTP file explorer view should be shown in Explorer

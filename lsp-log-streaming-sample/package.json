@@ -8,7 +8,7 @@
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
-	"publisher": "vscode",
+	"publisher": "vscode-samples",
 	"categories": [],
 	"keywords": [
 		"multi-root ready"
@@ -85,6 +85,7 @@
 	"devDependencies": {
 		"@types/mocha": "^5.2.0",
 		"@types/node": "^8.0.0",
+		"tslint": "^5.16.0",
 		"typescript": "2.8.3"
 	}
 }

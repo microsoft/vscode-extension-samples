@@ -5,10 +5,14 @@ This is a repository adapted from [lsp-sample](https://github.com/Microsoft/vsco
 - Usage of the JSON output
 - Streaming the JSON into [LSP Inspector](https://github.com/Microsoft/language-server-protocol-inspector)
 
+## Demo
+
+![demo](demo.gif)
+
 ## Synopsis
 
 - With `vscode-languageclient@5.1.0-next.9`, you can specify a JSON log output format with `[langId].trace.server` as follows:
-  ```json
+  ```jsonc
   "languageServerExample.trace.server": {
     "format": "json", // or "text"
     "verbosity": "verbose" // or "off" | "messages"
@@ -18,7 +22,7 @@ This is a repository adapted from [lsp-sample](https://github.com/Microsoft/vsco
 - When using the Webview LSP Inspector, it will open a WebSocket Server taking incoming connection that sends logs following [this format](https://github.com/Microsoft/language-server-protocol-inspector#log-format).
 - You can stream the JSON log of any Language Server using `vscode-languageclient` to the LSP Inspector, and it will show a live view of the LSP connection.
 
-## Usage
+## Running the Sample
 
 - Install the [LSP Inspector Webview](https://marketplace.visualstudio.com/items?itemName=octref.lsp-inspector-webview) extension
 - Compile and Run this Extension
@@ -39,5 +43,3 @@ This is a repository adapted from [lsp-sample](https://github.com/Microsoft/vsco
   - `textDocument/didChange`
   - `textDocument/completion`
   - `textDocument/publishDiagnostics`
-
-![stream](https://user-images.githubusercontent.com/4033249/45078686-7a22e600-b0a5-11e8-9c75-0d0dc3ec8256.gif)

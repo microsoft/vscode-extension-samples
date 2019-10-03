@@ -1,11 +1,13 @@
 {
 	"name": "i18n-sample",
+	"private": true,
 	"displayName": "i18n-sample",
 	"description": "Sample that shows how to localize an extension",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples/i18n-sample",
 	"version": "0.1.0",
-	"publisher": "vazexqi",
+	"publisher": "vscode-i18n-sample",
 	"engines": {
-		"vscode": "^1.13.0"
+		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
@@ -14,7 +16,7 @@
 		"onCommand:extension.sayHello",
 		"onCommand:extension.sayBye"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
@@ -28,22 +30,24 @@
 		]
 	},
 	"scripts": {
-		"watch": "tsc -watch -p ./",
-		"clean": "gulp clean",
-		"postinstall": "node ./node_modules/vscode/bin/install"
+		"watch": "tsc -b -w",
+		"compile": "tsc -b",
+		"clean": "gulp clean"
 	},
 	"devDependencies": {
-		"@types/node": "^6.0.40",
-		"del": "^3.0.0",
-		"event-stream": "^3.3.4",
-		"gulp": "^3.9.1",
-		"gulp-filter": "^5.0.1",
-		"run-sequence": "^2.2.0",
-		"typescript": "2.5.3",
-		"gulp-typescript": "3.2.2",
-		"vsce": "^1.32.0",
-		"vscode": "^1.1.17",
-		"vscode-nls-dev": "^3.2.2"
+		"@types/node": "^12.0.1",
+		"@types/vscode": "^1.34.0",
+		"del": "^4.1.1",
+		"event-stream": "^4.0.1",
+		"gulp": "^4.0.2",
+		"gulp-filter": "^5.1.0",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-typescript": "^5.0.1",
+		"run-sequence": "^2.2.1",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1",
+		"vsce": "^1.61.0",
+		"vscode-nls-dev": "^3.2.6"
 	},
 	"dependencies": {
 		"vscode-nls": "^3.2.5"

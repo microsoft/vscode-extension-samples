@@ -23,7 +23,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 			vscode.window.showInformationMessage('No dependency in empty workspace');
 			return Promise.resolve([]);
 		}
-		
+
 		if (element) {
 			return Promise.resolve(this.getDepsInPackageJson(path.join(this.workspaceRoot, 'node_modules', element.label, 'package.json')));
 		} else {
@@ -35,7 +35,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 				return Promise.resolve([]);
 			}
 		}
-		
+
 	}
 
 	/**
@@ -55,7 +55,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 						arguments: [moduleName]
 					});
 				}
-			}
+			};
 
 			const deps = packageJson.dependencies
 				? Object.keys(packageJson.dependencies).map(dep => toDep(dep, packageJson.dependencies[dep]))
@@ -80,7 +80,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 	}
 }
 
-class Dependency extends vscode.TreeItem {
+export class Dependency extends vscode.TreeItem {
 
 	constructor(
 		public readonly label: string,
@@ -92,12 +92,16 @@ class Dependency extends vscode.TreeItem {
 	}
 
 	get tooltip(): string {
-		return `${this.label}-${this.version}`
+		return `${this.label}-${this.version}`;
+	}
+
+	get description(): string {
+		return this.version;
 	}
 
 	iconPath = {
-		light: path.join(__filename, '..', '..', '..', 'resources', 'light', 'dependency.svg'),
-		dark: path.join(__filename, '..', '..', '..', 'resources', 'dark', 'dependency.svg')
+		light: path.join(__filename, '..', '..', 'resources', 'light', 'dependency.svg'),
+		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
 	};
 
 	contextValue = 'dependency';

@@ -2,7 +2,6 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
-'use strict';
 
 import * as vscode from 'vscode'
 import * as assert from 'assert'
@@ -39,4 +38,4 @@ async function testDiagnostics(docUri: vscode.Uri, expectedDiagnostics: vscode.D
     assert.deepEqual(actualDiagnostic.range, expectedDiagnostic.range)
     assert.equal(actualDiagnostic.severity, expectedDiagnostic.severity)
   })
-} 
+}

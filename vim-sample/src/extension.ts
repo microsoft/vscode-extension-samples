@@ -2,15 +2,10 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
 
 import * as vscode from 'vscode';
 
-import { Words } from './words';
-import { MotionState, Motion, Motions } from './motions';
-import { Operator, Operators } from './operators';
-import { Mode, IController, ModifierKeys } from './common';
-import { Mappings } from './mappings';
+import { Mode, ModifierKeys } from './common';
 import { Controller } from './controller';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -95,7 +90,7 @@ class VimExt {
 		this._hasInput = new ContextKey('vim.hasInput');
 		this._statusBar = new StatusBar();
 
-		this._controller = new Controller()
+		this._controller = new Controller();
 
 		vscode.window.onDidChangeActiveTextEditor((textEditor) => {
 			if (!textEditor) {

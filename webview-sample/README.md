@@ -1,6 +1,6 @@
 # Cat Coding — A Webview API Sample
 
-Demonstrates VS Code's [webview API](https://code.visualstudio.com/docs/extensions/webview). This includes:
+Demonstrates VS Code's [webview API](https://code.visualstudio.com/api/extension-guides/webview). This includes:
 
 - Creating and showing a basic webview.
 - Dynamically updating a webview's content.
@@ -12,6 +12,17 @@ Demonstrates VS Code's [webview API](https://code.visualstudio.com/docs/extensio
 - Webview lifecycle and handling dispose.
 - Saving and restoring state when the panel goes into the background.
 - Serialization and persistence across VS Code reboots.
+
+## Demo
+
+![demo](demo.gif)
+
+## VS Code API
+
+### `vscode` module
+
+- [`window.createWebviewPanel`](https://code.visualstudio.com/api/references/vscode-api#window.createWebviewPanel)
+- [`window.registerWebviewPanelSerializer`](https://code.visualstudio.com/api/references/vscode-api#window.registerWebviewPanelSerializer)
 
 ## Running the example
 

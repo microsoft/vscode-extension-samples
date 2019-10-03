@@ -3,12 +3,9 @@
 	"publisher": "Microsoft",
 	"version": "0.0.1",
 	"scripts": {
-		"postinstall": "node .build/postinstall.js",
-		"compile-completions": "cd completions-sample && tsc",
-		"compile-decorator": "cd decorator-sample && npm run compile",
-		"compile-previewhtml": "cd previewhtml-sample && npm run compile",
-		"compile-contentprovider": "cd contentprovider-sample && npm run compile",
-		"compile-languageprovider": "cd languageprovider-sample && npm run compile && cd ..",
-		"compile-statusbar": "cd statusbar-sample && npm run compile && cd .."
+		"compile": "node .scripts/run-script.js compile",
+		"install": "node .scripts/run-install.js",
+		"lint": "node .scripts/run-script.js lint",
+		"update-readme": "node .scripts/update-readme.js"
 	}
 }

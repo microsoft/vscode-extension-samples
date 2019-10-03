@@ -2,9 +2,7 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
 
-import * as vscode from 'vscode';
 import { MotionState, Motion } from './motions';
 
 export enum Mode {
@@ -14,9 +12,9 @@ export enum Mode {
 }
 
 export interface ModifierKeys {
-	ctrl?: boolean,
-	alt?: boolean,
-	shifit?: boolean
+	ctrl?: boolean;
+	alt?: boolean;
+	shifit?: boolean;
 }
 
 export class DeleteRegister {
@@ -48,6 +46,6 @@ export abstract class AbstractCommandDescriptor {
 }
 
 export interface Command {
-	commandId: string,
-	args?: any[]
+	commandId: string;
+	args?: any[];
 }

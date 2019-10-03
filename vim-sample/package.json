@@ -3,9 +3,9 @@
 	"displayName": "vim",
 	"description": "vim sample extension",
 	"version": "0.0.1",
-	"publisher": "alexdima",
+	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.0.0"
+		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
@@ -13,7 +13,7 @@
 	"activationEvents": [
 		"*"
 	],
-	"main": "./out/extension",
+	"main": "./out/extension.js",
 	"contributes": {
 		"keybindings": [
 			{
@@ -65,13 +65,15 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install"
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
-		"typescript": "^2.1.4",
-		"vscode": "^1.1.17",
-		"@types/node": "*"
+		"@types/node": "8.x.x",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1",
+		"@types/vscode": "^1.32.0"
 	}
 }

@@ -1,7 +1,6 @@
 /*---------------------------------------------------------
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
-'use strict';
 
 import * as vscode from 'vscode';
 
@@ -13,7 +12,7 @@ export default class ReferencesDocument {
 
 	private _lines: string[];
 	private _links: vscode.DocumentLink[];
-	private _join: Thenable<this>;
+	private _join?: Thenable<this>;
 
 	constructor(uri: vscode.Uri, locations: vscode.Location[], emitter: vscode.EventEmitter<vscode.Uri>) {
 		this._uri = uri;
@@ -37,7 +36,7 @@ export default class ReferencesDocument {
 		return this._links;
 	}
 
-	join(): Thenable<this> {
+	join(): Thenable<this> | undefined {
 		return this._join;
 	}
 
@@ -81,7 +80,7 @@ export default class ReferencesDocument {
 					this._emitter.fire(this._uri);
 					next();
 				});
-			}
+			};
 			next();
 		});
 	}
@@ -96,7 +95,7 @@ export default class ReferencesDocument {
 			this._lines.push('', uri.toString());
 
 			for (let i = 0; i < ranges.length; i++) {
-				const {start: {line}} = ranges[i];
+				const { start: { line } } = ranges[i];
 				this._appendLeading(doc, line, ranges[i - 1]);
 				this._appendMatch(doc, line, ranges[i], uri);
 				this._appendTrailing(doc, line, ranges[i + 1]);

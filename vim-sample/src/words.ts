@@ -2,7 +2,6 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
 
 import { Position, TextDocument } from 'vscode';
 
@@ -46,7 +45,7 @@ export class Words {
 		return result;
 	}
 
-	public static findNextWord(doc: TextDocument, pos: Position, wordCharacterClass: WordCharacters): IWord {
+	public static findNextWord(doc: TextDocument, pos: Position, wordCharacterClass: WordCharacters): IWord | null {
 
 		let lineContent = doc.lineAt(pos.line).text;
 		let wordType = WordType.NONE;

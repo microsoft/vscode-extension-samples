@@ -1,10 +1,6 @@
-# README
-## This is the README for the "i18n-sample" 
--------------------
+# I18n Sample
 
-This folder contains a sample VS code extension that shows how to use the
-package.nls.json and the vscode-nls library for localization. For this sample,
-it shows two commands: Hello and Bye in English and Japanese.
+This folder contains a sample VS code extension that shows how to use the package.nls.json and the vscode-nls library for localization. For this sample, it shows two commands: Hello and Bye in English and Japanese.
 
 **Assumptions**
 
@@ -14,30 +10,34 @@ it shows two commands: Hello and Bye in English and Japanese.
 * Under the language names folder you will create json files that mirror the structure of the source code for your extension (e.g., out/src). The json files are key:value pairs of the text that you want to localize. The naming convention is `<file_name>.i18n.json`.
 * If you have a top-level package.nls.json file in your extension, you should have one for each language following the naming convention of `package.i18n.json`.
 
-# How to run locally
+## Demo
+
+![demo](demo.gif)
+
+## Running the Sample
 
 Localization values are only applied when running the gulp `build` task. During normally development which uses `tsc -watch` to compile no localization post processing happends. This speeds up development time.
 
 1. Ensure that you have `gulp-cli` installed globally using `npm install --global gulp-cli`.
 1. Run `npm install` to bring in the dependencies.
-1. Follow the steps at https://code.visualstudio.com/docs/extensions/publish-extension to ensure that you have installed vsce and have a publisher account. 
+1. Follow the steps at https://code.visualstudio.com/api/working-with-extensions/publishing-extension to ensure that you have installed vsce and have a publisher account.
 1. Run `gulp package` to produce a .vsix file.
 1. Install the .vsix file following the instructions at https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix
 1. Change your locale to Japanese by invoking "Configure Language" from the Command Palette.
 
 See the demo.gif file in this repository for a screencast.
 
-# How to translate our extension
+## How to translate our extension
 
 VS Code itself uses [Transifex](https://www.transifex.com/) to manage its translations. This might be an option for your extension as well, however none of the nls tooling provided by `vscode-nls` or `vscode-nls-dev` requires Transifex as its translation platform. So you are free to choose a different one.
 
-# What happens behind the scenes
+## What happens behind the scenes
 
 1. The `vscode-nls-dev` module is used to rewrite the generated JavaScript.
 1. Calls of the form `localize('some_key', 'Hello')` are transformed to `localize(0, null)` where the first parameter (0, in this example) is the position of the key in your messages file.
 1. The contents of the i18n folder are transformed from key:value pairs into positional arrays.
 
-# Considerations
+## Considerations
 
 It is possible to use your own localization pipeline.
 
@@ -90,13 +90,3 @@ const config = JSON.parse(process.env.VSCODE_NLS_CONFIG);
 localize(config);
 
 ```
-
-# History
-
-## 0.0.2
-
-Hook up the vscode-nls-dev functions to gulp so that you can just run `vsce package` without manual transformations.
-
-## 0.0.1:
-
-Manually transform the calls to localize to illustrate explicitly what is going on.

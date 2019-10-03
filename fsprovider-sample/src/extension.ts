@@ -1,12 +1,11 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import { MemFS } from './fileSystemProvider';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    console.log('MemFS says "Hello"')
+    console.log('MemFS says "Hello"');
 
     const memFs = new MemFS();
     context.subscriptions.push(vscode.workspace.registerFileSystemProvider('memfs', memFs, { isCaseSensitive: true }));
@@ -17,6 +16,18 @@ export function activate(context: vscode.ExtensionContext) {
             memFs.delete(vscode.Uri.parse(`memfs:/${name}`));
         }
         initialized = false;
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('memfs.addFile', _ => {
+        if (initialized) {
+            memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'), { create: true, overwrite: true });
+        }
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('memfs.deleteFile', _ => {
+        if (initialized) {
+            memFs.delete(vscode.Uri.parse('memfs:/file.txt'));
+        }
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('memfs.init', _ => {

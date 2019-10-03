@@ -11,17 +11,7 @@
 			"stopOnEntry": false,
 			"sourceMaps": true,
 			"outFiles": ["${workspaceRoot}/client/out/**/*.js"],
-			"preLaunchTask": "npm: watch:client"
-		},
-		{
-			"type": "node",
-			"request": "attach",
-			"name": "Attach to Server 6010",
-			"address": "localhost",
-			"protocol": "inspector",
-			"port": 6010,
-			"sourceMaps": true,
-			"outFiles": ["${workspaceRoot}/server/out/**/*.js"]
+			"preLaunchTask": "npm: watch"
 		},
 		{
 			"type": "node",

@@ -1,0 +1,64 @@
+{
+	"name": "virtual-document-sample",
+	"displayName": "Cowsay in virtual documents",
+	"description": "A sample for virtual document",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
+	},
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:cowsay.say"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "cowsay.say",
+				"title": "cowsay"
+			},
+			{
+				"command": "cowsay.backwards",
+				"title": "cowsay (↹)"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "cowsay.backwards",
+					"group": "navigation",
+					"when": "resourceScheme == cowsay"
+				}
+			],
+			"commandPalette": [
+				{
+					"command": "cowsay.backwards",
+					"when": "resourceScheme == cowsay"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"dependencies": {
+		"cowsay": "1.3.1"
+	},
+	"devDependencies": {
+		"typescript": "^3.5.1",
+		"@types/vscode": "^1.32.0"
+	}
+}

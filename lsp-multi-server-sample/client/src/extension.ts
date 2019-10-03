@@ -1,3 +1,7 @@
+/* --------------------------------------------------------------------------------------------
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT License. See License.txt in the project root for license information.
+ * ------------------------------------------------------------------------------------------ */
 import * as path from 'path';
 import {
 	workspace as Workspace, window as Window, ExtensionContext, TextDocument, OutputChannel, WorkspaceFolder, Uri
@@ -10,10 +14,10 @@ import {
 let defaultClient: LanguageClient;
 let clients: Map<string, LanguageClient> = new Map();
 
-let _sortedWorkspaceFolders: string[];
+let _sortedWorkspaceFolders: string[] | undefined;
 function sortedWorkspaceFolders(): string[] {
 	if (_sortedWorkspaceFolders === void 0) {
-		_sortedWorkspaceFolders = Workspace.workspaceFolders.map(folder => {
+		_sortedWorkspaceFolders = Workspace.workspaceFolders ? Workspace.workspaceFolders.map(folder => {
 			let result = folder.uri.toString();
 			if (result.charAt(result.length - 1) !== '/') {
 				result = result + '/';
@@ -23,7 +27,7 @@ function sortedWorkspaceFolders(): string[] {
 			(a, b) => {
 				return a.length - b.length;
 			}
-		);
+		) : [];
 	}
 	return _sortedWorkspaceFolders;
 }
@@ -37,7 +41,7 @@ function getOuterMostWorkspaceFolder(folder: WorkspaceFolder): WorkspaceFolder {
 			uri = uri + '/';
 		}
 		if (uri.startsWith(element)) {
-			return Workspace.getWorkspaceFolder(Uri.parse(element));
+			return Workspace.getWorkspaceFolder(Uri.parse(element))!;
 		}
 	}
 	return folder;
@@ -68,7 +72,7 @@ export function activate(context: ExtensionContext) {
 				],
 				diagnosticCollectionName: 'lsp-multi-server-example',
 				outputChannel: outputChannel
-			}
+			};
 			defaultClient = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			defaultClient.start();
 			return;
@@ -95,7 +99,7 @@ export function activate(context: ExtensionContext) {
 				diagnosticCollectionName: 'lsp-multi-server-example',
 				workspaceFolder: folder,
 				outputChannel: outputChannel
-			}
+			};
 			let client = new LanguageClient('lsp-multi-server-example', 'LSP Multi Server Example', serverOptions, clientOptions);
 			client.start();
 			clients.set(folder.uri.toString(), client);

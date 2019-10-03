@@ -2,17 +2,8 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-'use strict';
 
-import {
-	TextEditorCursorStyle,
-	Position,
-	Range,
-	Selection,
-	TextEditor,
-	TextEditorRevealType,
-	window
-} from 'vscode';
+import { TextEditorCursorStyle, Position, Range, Selection, TextEditor, TextEditorRevealType, window } from 'vscode';
 
 import { Words } from './words';
 import { MotionState, Motion } from './motions';

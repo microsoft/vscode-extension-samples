@@ -1,11 +1,7 @@
 {
-	"files.exclude": {
-		"**/out": false // set this to true to hide the "out" folder with the compiled JS files
-	},
-	"search.exclude": {
-		"**/out": true
-	},
-	"editor.formatOnSave": true,
-	"editor.useTabStops": true,
-	"editor.tabSize": 4
+	"editor.insertSpaces": false,
+	"prettier.semi": true,
+	"prettier.printWidth": 92,
+	"prettier.singleQuote": true,
+	"prettier.useTabs": true
 }

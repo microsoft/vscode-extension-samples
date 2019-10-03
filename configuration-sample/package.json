@@ -3,17 +3,19 @@
 	"displayName": "Configuration Sample",
 	"description": "How to contribute and use configurations in VS Code",
 	"version": "0.0.1",
-	"publisher": "ms-vscode",
+	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.17.0"
+		"vscode": "^1.32.0"
 	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"onCommand:config.commands.configureViewOnWindowOpen",
+		"onCommand:config.commands.configureEmptyLastLineCurrentFile",
+		"onCommand:config.commands.configureEmptyLastLineFiles"
 	],
-	"main": "./out/src/extension",
+	"main": "./out/extension",
 	"keywords": [
 		"multi-root ready"
 	],
@@ -38,7 +40,7 @@
 					"conf.resource.insertEmptyLastLine": {
 						"type": "object",
 						"default": {},
-						"description": "Resource configurtion: Configure files using glob patterns to have an empty last line always",
+						"description": "Resource configuration: Configure files using glob patterns to have an empty last line always",
 						"scope": "resource"
 					}
 				}
@@ -63,13 +65,15 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"postinstall": "node ./node_modules/vscode/bin/install"
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
-		"typescript": "^2.1.4",
-		"vscode": "^1.1.17",
-		"@types/node": "*"
+		"@types/node": "*",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1",
+		"@types/vscode": "^1.32.0"
 	}
 }

@@ -1,46 +1,45 @@
 {
-    "name": "basic-multi-root-sample",
-    "displayName": "Basic Multi Root Sample",
-    "description": "Samples for VSCode's multi root API",
-    "version": "0.0.1",
-    "publisher": "ms-vscode",
-    "engines": {
-        "vscode": "^1.15.0"
-    },
-    "categories": [
-        "Other"
-    ],
-    "activationEvents": [
+	"name": "basic-multi-root-sample",
+	"displayName": "Basic Multi Root Sample",
+	"description": "Samples for VSCode's multi root API",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
 		"*"
 	],
-    "main": "./out/src/extension",
-    "scripts": {
-        "vscode:prepublish": "tsc -p ./",
-        "compile": "tsc -watch -p ./",
-        "postinstall": "node ./node_modules/vscode/bin/install",
-        "test": "node ./node_modules/vscode/bin/test"
-    },
-    "contributes": {
-        "configuration": {
-            "type": "object",
-            "title": "Basic Multi Root Sample",
-            "properties": {
-                "multiRootSample.statusColor": {
-                    "type": [
-                        "string"
-                    ],
-                    "default": "#FFFFFF",
-                    "description": "Color to use for the status bar item. Can be set per workspace folder.",
-                    "scope": "resource"
-                }
-            }
-        }
-    },
-    "devDependencies": {
-        "typescript": "^2.0.3",
-        "vscode": "^1.0.0",
-        "mocha": "^2.3.3",
-        "@types/node": "^6.0.40",
-        "@types/mocha": "^2.2.32"
-    }
+	"main": "./out/src/extension",
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Basic Multi Root Sample",
+			"properties": {
+				"multiRootSample.statusColor": {
+					"type": [
+						"string"
+					],
+					"default": "#FFFFFF",
+					"description": "Color to use for the status bar item. Can be set per workspace folder.",
+					"scope": "resource"
+				}
+			}
+		}
+	},
+	"devDependencies": {
+		"@types/node": "^6.0.40",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1",
+		"@types/vscode": "^1.32.0"
+	}
 }

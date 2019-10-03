@@ -12,6 +12,13 @@
 			]
 		},
 		{
+			"type": "npm",
+			"script": "compile",
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
 			"type": "gulp",
 			"task": "clean",
 			"problemMatcher": []

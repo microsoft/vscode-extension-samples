@@ -1,6 +1,6 @@
 // A launch configuration that compiles the extension and then opens it inside a new window
 {
-    "version": "0.1.0",
+    "version": "0.2.0",
     "configurations": [
         {
             "name": "Launch Extension",
@@ -18,31 +18,14 @@
             "preLaunchTask": "npm: watch"
         },
         {
-            "name": "Launch Tests",
-            "type": "extensionHost",
-            "request": "launch",
-            "runtimeExecutable": "${execPath}",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceRoot}",
-                "--extensionTestsPath=${workspaceRoot}/out/test"
-            ],
-            "stopOnEntry": false,
-            "sourceMaps": true,
-            "outFiles": [
-                "${workspaceRoot}/out/test/**/*.js"
-            ],
-            "preLaunchTask": "npm: watch"
-        },
-        {
             "type": "node",
             "request": "attach",
             "name": "Attach to Extension Host",
-            "protocol": "legacy",
+            "protocol": "inspector",
             "port": 5870,
-            "sourceMaps": true,
             "restart": true,
             "outFiles": [
-                "${workspaceRoot}/out/src/**/*.js"
+                "${workspaceRoot}/out/src"
             ]
         }
     ]

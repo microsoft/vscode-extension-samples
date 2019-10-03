@@ -13,8 +13,8 @@ It is not intended as a product quality extension.
 
 # How it works, what it shows?
 
-- The extension implements and registers a [`TextDocumentContentProvider`](http://code.visualstudio.com/docs/extensionAPI/vscode-api#TextDocumentContentProvider) for a particular URI scheme.
-- The content provider uses the [`vscode.executeReferenceProvider`](http://code.visualstudio.com/docs/extensionAPI/vscode-api-commands)-API command to delegate searching for references to the language extensions, like TypeScript, vscode-go, or C#
+- The extension implements and registers a [`TextDocumentContentProvider`](https://code.visualstudio.com/api/references/vscode-api#TextDocumentContentProvider) for a particular URI scheme.
+- The content provider uses the [`vscode.executeReferenceProvider`](https://code.visualstudio.com/api/references/commands)-API command to delegate searching for references to the language extensions, like TypeScript, vscode-go, or C#
 - The generated document initially contains a caption only and incrementally updates as each reference location is resolved.
 - Add links for each result in the virtual document pointing to the reference.
 - Add an entry to editor context menu via `package.json`
