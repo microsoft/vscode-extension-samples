@@ -13,6 +13,9 @@
 			"path": "terminal-sample"
 		},
 		{
+			"path": "codelens-sample"
+		},
+		{
 			"path": "completions-sample"
 		},
 		{

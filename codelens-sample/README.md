@@ -9,10 +9,28 @@ It is not intended as a production quality extension.
 - Click on the CodeLens for action example
 - Can be enabled or disabled by command palete
 
-# How it works, what it shows?
+## Demo
 
-- The extension uses the [`CodeLens`](https://code.visualstudio.com/docs/extensionAPI/vscode-api#CodeLens)
+![demo](demo.gif)
 
-# How to run locally
+## VS Code API
 
-* open this folder in VS Code and press `F5`
+### `vscode` module
+
+- [`commands.registerCodeLensProvider`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCodeLensProvider)
+
+### Contribution Points
+
+- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
+
+### CodeLens Provider
+
+- [`CodeLensProvider.provideCodeLenses`](https://code.visualstudio.com/api/references/vscode-api#CodeLensProvider.provideCodeLenses)
+- [`CodeLensProvider.resolveCodeLens`](https://code.visualstudio.com/api/references/vscode-api#CodeLensProvider.resolveCodeLens)
+
+## Running the Sample
+
+- Run `npm install` in terminal to install dependencies
+- Run the `Run Extension` target in the Debug View. This will:
+	- Start a task `npm: watch` to compile the code
+	- Run the extension in a new VS Code window
