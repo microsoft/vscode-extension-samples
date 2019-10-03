@@ -12,7 +12,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extensionTerminalSample.create"
+		"onCommand:extensionTerminalSample.create",
+		"onCommand:extensionTerminalSample.clear"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -20,6 +21,10 @@
 			{
 				"command": "extensionTerminalSample.create",
 				"title": "Extension Terminal Sample: Create"
+			},
+			{
+				"command": "extensionTerminalSample.clear",
+				"title": "Extension Terminal Sample: Clear"
 			}
 		]
 	},

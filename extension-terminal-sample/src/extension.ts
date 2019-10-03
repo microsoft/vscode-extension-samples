@@ -3,8 +3,8 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
+	const writeEmitter = new vscode.EventEmitter<string>();
 	context.subscriptions.push(vscode.commands.registerCommand('extensionTerminalSample.create', () => {
-		const writeEmitter = new vscode.EventEmitter<string>();
 		let line = '';
 		const pty = {
 			onDidWrite: writeEmitter.event,
@@ -33,6 +33,10 @@ export function activate(context: vscode.ExtensionContext) {
 		};
 		const terminal = (<any>vscode.window).createTerminal({ name: `My Extension REPL`, pty });
 		terminal.show();
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('extensionTerminalSample.clear', () => {
+		writeEmitter.fire('\x1b[2J\x1b[;H');
 	}));
 }
 
