@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('extensionTerminalSample.clear', () => {
-		writeEmitter.fire('\x1b[2J\x1b[;H');
+		writeEmitter.fire('\x1b[2J\x1b[3J\x1b[;H');
 	}));
 }
 
