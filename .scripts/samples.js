@@ -177,6 +177,13 @@ const samples = [
     guide: '/api/extension-guides/custom-data-extension',
     apis: [],
     contributions: []
+  },
+  {
+    description: 'CodeLens Sample',
+    path: 'codelens-sample',
+    guide: null,
+    apis: [`languages.registerCodeLensProvider`, `CodelensProvider`, `CodeLens`],
+    contributions: []
   }
 ]
 
