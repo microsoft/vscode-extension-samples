@@ -15,16 +15,13 @@ It is not intended as a production quality extension.
 
 ## VS Code API
 
-### `vscode` module
+### `languages` module
 
-- [`commands.registerCodeLensProvider`](https://code.visualstudio.com/api/references/vscode-api#commands.registerCodeLensProvider)
-
-### Contribution Points
-
-- [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
+- [`languages.registerCodeLensProvider`](https://code.visualstudio.com/api/references/vscode-api#languages.registerCodeLensProvider)
 
 ### CodeLens Provider
 
+- [`CodeLensProvider`](https://code.visualstudio.com/api/references/vscode-api#CodeLensProvider)
 - [`CodeLensProvider.provideCodeLenses`](https://code.visualstudio.com/api/references/vscode-api#CodeLensProvider.provideCodeLenses)
 - [`CodeLensProvider.resolveCodeLens`](https://code.visualstudio.com/api/references/vscode-api#CodeLensProvider.resolveCodeLens)
 
