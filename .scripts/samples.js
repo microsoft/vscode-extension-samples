@@ -179,10 +179,10 @@ const samples = [
     contributions: []
   },
   {
-    description: 'CodeLensProvider Sample',
+    description: 'CodeLens Provider Sample',
     path: 'codelens-sample',
     guide: null,
-    apis: [`languages.registerCodeLensProvider`, `CodelensProvider`, `CodeLens`],
+    apis: [`languages.registerCodeLensProvider`, `CodeLensProvider`, `CodeLens`],
     contributions: []
   }
 ]
