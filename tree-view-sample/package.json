@@ -135,6 +135,10 @@
 			{
 				"command": "testView.reveal",
 				"title": "Test View: Reveal"
+			},
+			{
+				"command": "testView.changeTitle",
+				"title": "Test View: Change Title"
 			}
 		],
 		"menus": {

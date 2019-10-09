@@ -10,6 +10,12 @@ export class TestView {
 				await view.reveal({ key }, { focus: true, select: false, expand: true });
 			}
 		});
+		vscode.commands.registerCommand('testView.changeTitle', async () => {
+			const title = await vscode.window.showInputBox({ prompt: 'Type the new title for the Test View', placeHolder: view.title });
+			if (title) {
+				view.title = title;
+			}
+		});
 	}
 }
 
