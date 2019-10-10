@@ -6,7 +6,7 @@
 	"publisher": "vscode-samples",
 	"enableProposedApi": true,
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.39.0"
 	},
 	"categories": [
 		"Other"
@@ -215,7 +215,7 @@
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^10.12.21",
 		"@types/rimraf": "^2.0.2",
-		"@types/vscode": "^1.36.0",
+		"@types/vscode": "^1.39.0",
 		"typescript": "^3.5.1",
 		"tslint": "^5.12.1"
 	},
