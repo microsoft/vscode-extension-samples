@@ -6,13 +6,12 @@ import * as vscode from 'vscode';
 
 export default class ReferencesDocument {
 
-	private _uri: vscode.Uri;
-	private _emitter: vscode.EventEmitter<vscode.Uri>;
-	private _locations: vscode.Location[];
+	private readonly _uri: vscode.Uri;
+	private readonly _emitter: vscode.EventEmitter<vscode.Uri>;
+	private readonly _locations: vscode.Location[];
 
-	private _lines: string[];
-	private _links: vscode.DocumentLink[];
-	private _join?: Thenable<this>;
+	private readonly _lines: string[];
+	private readonly _links: vscode.DocumentLink[];
 
 	constructor(uri: vscode.Uri, locations: vscode.Location[], emitter: vscode.EventEmitter<vscode.Uri>) {
 		this._uri = uri;
@@ -25,7 +24,7 @@ export default class ReferencesDocument {
 		// Start with printing a header and start resolving
 		this._lines = [`Found ${this._locations.length} references`];
 		this._links = [];
-		this._join = this._populate();
+		this._populate();
 	}
 
 	get value() {
@@ -36,74 +35,44 @@ export default class ReferencesDocument {
 		return this._links;
 	}
 
-	join(): Thenable<this> | undefined {
-		return this._join;
-	}
+	private async _populate() {
 
-	private _populate() {
-
-		if (this._locations.length === 0) {
-			return;
+		// group all locations by files containg them
+		const groups: vscode.Location[][] = [];
+		let group: vscode.Location[] = [];
+		for (const loc of this._locations) {
+			if (group.length === 0 || group[0].uri.toString() !== loc.uri.toString()) {
+				group = [];
+				groups.push(group);
+			}
+			group.push(loc);
 		}
 
-		// fetch one by one, update doc asap
-		return new Promise<this>(resolve => {
-
-			let index = 0;
-
-			let next = () => {
-
-				// We have seen all groups
-				if (index >= this._locations.length) {
-					resolve(this);
-					return;
-				}
-
-				// We know that this._locations is sorted by uri
-				// such that we can now iterate and collect ranges
-				// until the uri changes
-				let loc = this._locations[index];
-				let uri = loc.uri;
-				let ranges = [loc.range];
-				while (++index < this._locations.length) {
-					loc = this._locations[index];
-					if (loc.uri.toString() !== uri.toString()) {
-						break;
-					} else {
-						ranges.push(loc.range);
-					}
-				}
-
-				// We have all ranges of a resource so that it be
-				// now loaded and formatted
-				this._fetchAndFormatLocations(uri, ranges).then(lines => {
-					this._emitter.fire(this._uri);
-					next();
-				});
-			};
-			next();
-		});
+		//
+		for (const group of groups) {
+			const uri = group[0].uri;
+			const ranges = group.map(loc => loc.range);
+			await this._fetchAndFormatLocations(uri, ranges);
+			this._emitter.fire(this._uri);
+		}
 	}
 
-	private _fetchAndFormatLocations(uri: vscode.Uri, ranges: vscode.Range[]): PromiseLike<void> {
-
+	private async _fetchAndFormatLocations(uri: vscode.Uri, ranges: vscode.Range[]): Promise<void> {
 		// Fetch the document denoted by the uri and format the matches
 		// with leading and trailing content form the document. Make sure
 		// to not duplicate lines
-		return vscode.workspace.openTextDocument(uri).then(doc => {
-
+		try {
+			const doc = await vscode.workspace.openTextDocument(uri);
 			this._lines.push('', uri.toString());
-
 			for (let i = 0; i < ranges.length; i++) {
 				const { start: { line } } = ranges[i];
 				this._appendLeading(doc, line, ranges[i - 1]);
 				this._appendMatch(doc, line, ranges[i], uri);
 				this._appendTrailing(doc, line, ranges[i + 1]);
 			}
-
-		}, err => {
+		} catch (err) {
 			this._lines.push('', `Failed to load '${uri.toString()}'\n\n${String(err)}`, '');
-		});
+		}
 	}
 
 	private _appendLeading(doc: vscode.TextDocument, line: number, previous: vscode.Range): void {

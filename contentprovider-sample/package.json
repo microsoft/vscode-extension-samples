@@ -12,7 +12,7 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
 	},
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.39.0"
 	},
 	"categories": [
 		"Other"
@@ -66,6 +66,6 @@
 		"@types/node": "^6.0.40",
 		"tslint": "^5.16.0",
 		"typescript": "^3.5.1",
-		"@types/vscode": "^1.32.0"
+		"@types/vscode": "^1.39.0"
 	}
 }
