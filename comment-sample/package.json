@@ -61,12 +61,12 @@
 			},
 			{
 				"command": "mywiki.startDraft",
-				"title": "Start draft",
+				"title": "Start Draft",
 				"enablement": "!commentIsEmpty"
 			},
 			{
 				"command": "mywiki.finishDraft",
-				"title": "Finish draft"
+				"title": "Finish Draft"
 			},
 			{
 				"command": "mywiki.dispose",
@@ -96,49 +96,53 @@
 				{
 					"command": "mywiki.deleteNote",
 					"group": "navigation",
-					"when": "!commentThreadIsEmpty"
+					"when": "commentController == comment-sample && !commentThreadIsEmpty"
 				}
 			],
 			"comments/commentThread/context": [
 				{
 					"command": "mywiki.createNote",
 					"group": "inline",
-					"when": "commentThreadIsEmpty"
+					"when": "commentController == comment-sample && commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.replyNote",
 					"group": "inline",
-					"when": "!commentThreadIsEmpty"
+					"when": "commentController == comment-sample && !commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.startDraft",
 					"group": "inline",
-					"when": "commentThread != draft"
+					"when": "commentController == comment-sample && commentThreadIsEmpty"
 				},
 				{
 					"command": "mywiki.finishDraft",
 					"group": "inline",
-					"when": "commentThread == draft"
+					"when": "commentController == commment-sample && commentThread == draft"
 				}
 			],
 			"comments/comment/title": [
 				{
 					"command": "mywiki.editNote",
-					"group": "group@1"
+					"group": "group@1",
+					"when": "commentController == comment-sample"
 				},
 				{
 					"command": "mywiki.deleteNoteComment",
-					"group": "group@2"
+					"group": "group@2",
+					"when": "commentController == comment-sample && comment == canDelete"
 				}
 			],
 			"comments/comment/context": [
 				{
 					"command": "mywiki.cancelsaveNote",
-					"group": "inline@1"
+					"group": "inline@1",
+					"when": "commentController == comment-sample"
 				},
 				{
 					"command": "mywiki.saveNote",
-					"group": "inline@2"
+					"group": "inline@2",
+					"when": "commentController == comment-sample"
 				}
 			]
 		}

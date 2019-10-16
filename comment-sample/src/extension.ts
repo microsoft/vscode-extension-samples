@@ -11,7 +11,8 @@ class NoteComment implements vscode.Comment {
 		public body: string | vscode.MarkdownString,
 		public mode: vscode.CommentMode,
 		public author: vscode.CommentAuthorInformation,
-		public parent?: vscode.CommentThread
+		public parent?: vscode.CommentThread,
+		public contextValue?: string
 	) {
 		this.id = ++commentId;
 	}
@@ -21,9 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
 	// A `CommentController` is able to provide comments for documents.
 	const commentController = vscode.comments.createCommentController('comment-sample', 'Comment API Sample');
 	context.subscriptions.push(commentController);
-	vscode.commands.executeCommand('setContext', 'inDraft', false);
 
-	// commenting range provider
+	// A `CommentingRangeProvider` controls where gutter decorations that allow adding comments are shown
 	commentController.commentingRangeProvider = {
 		provideCommentingRanges: (document: vscode.TextDocument, token: vscode.CancellationToken) => {
 			let lineCount = document.lineCount;
@@ -48,8 +48,6 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.finishDraft', (reply: vscode.CommentReply) => {
-		vscode.commands.executeCommand('setContext', 'inDraft', false);
-
 		let thread = reply.thread;
 
 		if (!thread) {
@@ -129,7 +127,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 	function replyNote(reply: vscode.CommentReply) {
 		let thread = reply.thread;
-		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread, thread.comments.length ? 'canDelete' : undefined);
+		if (thread.contextValue === 'draft') {
+			newComment.label = 'pending';
+		}
+
 		thread.comments = [...thread.comments, newComment];
 	}
 }
