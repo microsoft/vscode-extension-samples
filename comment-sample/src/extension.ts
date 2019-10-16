@@ -54,12 +54,15 @@ export function activate(context: vscode.ExtensionContext) {
 			return;
 		}
 
+		thread.contextValue = undefined;
 		thread.collapsibleState = vscode.CommentThreadCollapsibleState.Collapsed;
-		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
-		thread.comments = [...thread.comments, newComment].map(comment => {
-			comment.label = undefined;
-			return comment;
-		});
+		if (reply.text) {
+			let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+			thread.comments = [...thread.comments, newComment].map(comment => {
+				comment.label = undefined;
+				return comment;
+			});
+		}
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.deleteNoteComment', (comment: NoteComment) => {

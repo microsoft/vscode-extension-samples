@@ -118,7 +118,7 @@
 				{
 					"command": "mywiki.finishDraft",
 					"group": "inline",
-					"when": "commentController == commment-sample && commentThread == draft"
+					"when": "commentController == comment-sample && commentThread == draft"
 				}
 			],
 			"comments/comment/title": [
