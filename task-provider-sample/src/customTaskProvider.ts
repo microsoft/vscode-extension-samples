@@ -20,7 +20,7 @@ interface CustomBuildTaskDefinition extends vscode.TaskDefinition {
 export class CustomBuildTaskProvider implements vscode.TaskProvider {
 	static CustomBuildScriptType: string = 'custombuildscript';
 	private tasks: vscode.Task[] | undefined;
-	
+
 	// We use a CustomExecution task when state needs to be shared accross runs of the task or when 
 	// the task requires use of some VS Code API to run.
 	// If you don't need to share state between runs and if you don't need to execute VS Code API in your task, 
@@ -28,7 +28,7 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 	// Since our build has this shared state, the CustomExecution is used below.
 	private sharedState: string | undefined;
 
-	constructor(private workspaceRoot: string){}
+	constructor(private workspaceRoot: string) { }
 
 	public async provideTasks(): Promise<vscode.Task[]> {
 		return this.getTasks();
@@ -61,7 +61,7 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 		return this.tasks;
 	}
 
-	private getTask(flavor: string, flags: string[], definition?: CustomBuildTaskDefinition): vscode.Task{
+	private getTask(flavor: string, flags: string[], definition?: CustomBuildTaskDefinition): vscode.Task {
 		if (definition === undefined) {
 			definition = {
 				type: CustomBuildTaskProvider.CustomBuildScriptType,
@@ -69,9 +69,8 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 				flags
 			};
 		}
-		return new vscode.Task2(definition, vscode.TaskScope.Workspace, `${flavor} ${flags.join(' ')}`, 
-			CustomBuildTaskProvider.CustomBuildScriptType, new vscode.CustomExecution2(async (): Promise<vscode.Pseudoterminal> => 
-			{
+		return new vscode.Task2(definition, vscode.TaskScope.Workspace, `${flavor} ${flags.join(' ')}`,
+			CustomBuildTaskProvider.CustomBuildScriptType, new vscode.CustomExecution(async (): Promise<vscode.Pseudoterminal> => {
 				// When the task is executed, this callback will run. Here, we setup for running the task.
 				return new CustomBuildTaskTerminal(this.workspaceRoot, flavor, flags, () => this.sharedState, (state: string) => this.sharedState = state);
 			}));
