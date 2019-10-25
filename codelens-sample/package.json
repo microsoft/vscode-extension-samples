@@ -1,0 +1,52 @@
+{
+    "name": "codelens-sample",
+    "displayName": "CodeLens Sample",
+    "description": "Samples for VS Code's CodeLens API",
+    "version": "0.0.1",
+    "publisher": "ms-vscode",
+    "engines": {
+        "vscode": "^1.26.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [
+            {
+                "title": "Enable CodeLens",
+                "command": "codelens-sample.enableCodeLens",
+                "category": "CodeLens Sample"
+            },
+            {
+                "title": "Disable Codelens",
+                "command": "codelens-sample.disableCodeLens",
+                "category": "CodeLens Sample"
+            }
+        ],
+        "configuration": {
+            "properties": {
+                "codelens-sample.enableCodeLens": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/node": "10.3.6",
+        "@types/vscode": "^1.26.0",
+        "tslint": "5.10.0",
+        "typescript": "2.9.2",
+        "vscode": "^1.1.21"
+    }
+}
