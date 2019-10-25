@@ -50,6 +50,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [Commenting API Sample](https://github.com/Microsoft/vscode-extension-samples/tree/master/comment-sample) | N/A |  |
 | [Document Editing Sample](https://github.com/Microsoft/vscode-extension-samples/tree/master/document-editing-sample) | N/A | [commands](https://code.visualstudio.com/api/references/vscode-api#commands) |
 | [Custom Data Sample](https://github.com/Microsoft/vscode-extension-samples/tree/master/custom-data-sample) | [/api/extension-guides/custom-data-extension](https://code.visualstudio.com/api/extension-guides/custom-data-extension) |  |
+| [CodeLens Provider Sample](https://github.com/Microsoft/vscode-extension-samples/tree/master/codelens-sample) | N/A | [languages.registerCodeLensProvider](https://code.visualstudio.com/api/references/vscode-api#languages.registerCodeLensProvider)<br>[CodeLensProvider](https://code.visualstudio.com/api/references/vscode-api#CodeLensProvider)<br>[CodeLens](https://code.visualstudio.com/api/references/vscode-api#CodeLens) |
 <!-- SAMPLES_END -->
 
 ### Language Protocol Server Samples
