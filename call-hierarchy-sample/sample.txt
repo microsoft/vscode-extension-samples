@@ -1,0 +1,11 @@
+# Right click on a term below and select `Peek Call Hierarchy`.
+
+Coyote eats deer.
+Deer eats plants.
+Coyote eats lizard.
+Lizard eats bird.
+Lizard eats frog.
+Lizard eats butterfly.
+Bird eats seeds.
+Frog eats insects.
+Butterfly eats fruit.
