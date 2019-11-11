@@ -88,33 +88,6 @@ export class FoodPyramidHierarchyProvider implements CallHierarchyProvider {
 		return new CallHierarchyItem(SymbolKind.Object, word, `(${type})`, document.uri, range, range);
 	}
 
-	deriveCalledItem(item: CallHierarchyItem, called: string, document: TextDocument): CallHierarchyOutgoingCall {
-		const range = this.rangeOf(called, document);
-		let calledItem = new CallHierarchyItem(item.kind, called, called, item.uri, range, range);
-		return new CallHierarchyOutgoingCall(calledItem, this.allRangesOf(called, document));
-	}
-
-	rangeOf(word: string, document: TextDocument): Range {
-		let match = new RegExp("\\b" + word + "\\b").exec(document.getText());
-		let offset = match!.index;
-		return this.toRange(document, offset, word);
-	}
-
-	allRangesOf(word: string, document: TextDocument): Range[] {
-		let pattern = new RegExp("\b" + word + "\b");
-		let ranges: Range[] = [];
-
-		var match: RegExpExecArray | null;
-		while (match = pattern.exec(document.getText())) {
-			ranges.push(this.toRange(document, match.index, word));
-		}
-		return ranges;
-	}
-
-	private toRange(document: TextDocument, offset: number, word: string) {
-		let position = document.positionAt(offset);
-		return new Range(position, position.translate({ characterDelta: word.length }));
-	}
 }
 
 /**

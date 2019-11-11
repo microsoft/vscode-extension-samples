@@ -1,6 +1,6 @@
 # Call Hierarchy Provider Sample
 
-This sample shows the **Call Hierarchy** in action based on a simple food pyramid model defined using simple subject~verb~object syntax.
+This sample shows the **Call Hierarchy** in action based on a simple food pyramid model defined using simple subject ~ verb ~ object syntax.
 
 ![Sample](demo.gif)
 
