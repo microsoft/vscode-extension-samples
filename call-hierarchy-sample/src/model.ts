@@ -1,51 +1,48 @@
-import {
-	Range, Position, CallHierarchyProvider, TextDocument, CancellationToken, CallHierarchyItem,
-	SymbolKind, ProviderResult, CallHierarchyIncomingCall, CallHierarchyOutgoingCall, workspace, Uri
-} from 'vscode';
+import * as vscode from 'vscode';
 
 /**
  * Sample model of what the text in the document contains.
  */
 export class FoodPyramid {
-	private relations: FoodRelation[] = [];
-	private nouns = new Set<string>();
-	private verbs = new Set<string>();
+	private _relations: FoodRelation[] = [];
+	private _nouns = new Set<string>();
+	private _verbs = new Set<string>();
 
-	getRelationAt(wordRange: Range): FoodRelation | undefined {
-		return this.relations.find(relation => relation.range.contains(wordRange));
+	getRelationAt(wordRange: vscode.Range): FoodRelation | undefined {
+		return this._relations.find(relation => relation.range.contains(wordRange));
 	}
 
 	addRelation(relation: FoodRelation): void {
-		this.relations.push(relation);
-		this.nouns.add(relation.object).add(relation.subject);
-		this.verbs.add(relation.verb);
+		this._relations.push(relation);
+		this._nouns.add(relation.object).add(relation.subject);
+		this._verbs.add(relation.verb);
 	}
 
 	isVerb(name: string): boolean {
-		return this.verbs.has(name.toLowerCase());
+		return this._verbs.has(name.toLowerCase());
 	}
 
 	isNoun(name: string): boolean {
-		return this.nouns.has(name.toLowerCase());
+		return this._nouns.has(name.toLowerCase());
 	}
 
 	getVerbRelations(verb: string): FoodRelation[] {
-		return this.relations
+		return this._relations
 			.filter(relation => relation.verb === verb.toLowerCase());
 	}
 
 	getNounRelations(noun: string): FoodRelation[] {
-		return this.relations
+		return this._relations
 			.filter(relation => relation.involves(noun));
 	}
 
 	getSubjectRelations(subject: string): FoodRelation[] {
-		return this.relations
+		return this._relations
 			.filter(relation => relation.subject === subject.toLowerCase());
 	}
 
 	getObjectRelations(object: string): FoodRelation[] {
-		return this.relations
+		return this._relations
 			.filter(relation => relation.object === object.toLowerCase());
 	}
 }
@@ -59,7 +56,7 @@ export class FoodRelation {
 	private _object: string;
 
 	constructor(subject: string, verb: string, object: string,
-		private readonly originalText: string, public readonly range: Range) {
+		private readonly originalText: string, public readonly range: vscode.Range) {
 			
 		this._subject = subject.toLowerCase();
 		this._verb = verb.toLowerCase();
@@ -83,9 +80,9 @@ export class FoodRelation {
 		return this._subject === needle || this._object === needle;
 	}
 
-	getRangeOf(word: string): Range {
+	getRangeOf(word: string): vscode.Range {
 		let indexOfWord = new RegExp("\\b" + word + "\\b", "i").exec(this.originalText)!.index;
-		return new Range(this.range.start.translate({ characterDelta: indexOfWord }),
+		return new vscode.Range(this.range.start.translate({ characterDelta: indexOfWord }),
 			this.range.start.translate({ characterDelta: indexOfWord + word.length }));
 	}
 }
