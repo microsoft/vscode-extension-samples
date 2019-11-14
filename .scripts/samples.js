@@ -184,6 +184,13 @@ const samples = [
     guide: null,
     apis: [`languages.registerCodeLensProvider`, `CodeLensProvider`, `CodeLens`],
     contributions: []
+  },
+  {
+    description: 'Call Hierarchy Sample',
+    path: 'call-hierarchy-sample',
+    guide: null,
+    apis: [`languages.registerCallHierarchyProvider`, `CallHierarchyProvider`, `CallHierarchyItem`, `CallHierarchyOutgoingCall`, `CallHierarchyIncomingCall`],
+    contributions: []
   }
 ]
 
