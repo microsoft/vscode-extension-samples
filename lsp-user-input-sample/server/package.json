@@ -1,0 +1,22 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"private": true,
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
+	},
+	"engines": {
+		"node": "*"
+	},
+	"dependencies": {
+		"vscode-uri": "^2.0.3",
+		"vscode-languageserver": "6.0.0-next.5",
+		"vscode-languageserver-textdocument": "1.0.0-next.5"
+	}
+}

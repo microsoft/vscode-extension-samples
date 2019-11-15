@@ -1,0 +1,29 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+	"files.exclude": {
+		"out": false
+	},
+	"search.exclude": {
+		"out": true,
+		"server": true
+	},
+	"files.trimTrailingWhitespace": true,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"typescript.tsdk": "./node_modules/typescript/lib",
+	"typescript.tsc.autoDetect": "off",
+	"eslint.enable": true,
+	"eslint.validate": [
+		"typescript"
+	],
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"eslint.workingDirectories": [
+		{ "directory": "./client", "changeProcessCWD": true },
+		{ "directory": "./server", "changeProcessCWD": true }
+	],
+	"eslint.trace.server": "off",
+	"eslint.lintTask.enable": false,
+	"eslint.format.enable": false
+}

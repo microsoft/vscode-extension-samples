@@ -1,0 +1,43 @@
+{
+	"name": "vscode-codeaction-ui-sample",
+	"displayName": "Code Action UI Sample",
+	"description": "Sample to demonstrate code actions with UI",
+	"version": "1.0.0",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"keywords": [
+		"multi-root ready"
+	],
+	"engines": {
+		"vscode": "^1.41.0"
+	},
+	"activationEvents": [
+		"onLanguage:plaintext"
+	],
+	"main": "./client/out/extension",
+	"scripts": {
+		"vscode:prepublish": "npm run webpack",
+		"webpack": "npm run clean && webpack --mode production --config ./client/webpack.config.js && webpack --mode production --config ./server/webpack.config.js",
+		"webpack:dev": "npm run clean && webpack --mode none --config ./client/webpack.config.js && webpack --mode none --config ./server/webpack.config.js",
+		"compile": "tsc -b",
+		"compile:client": "tsc -b ./client/tsconfig.json",
+		"compile:server": "tsc -b ./server/tsconfig.json",
+		"watch": "tsc -b -w",
+		"lint": "npm run lint:client && npm run lint:server",
+		"lint:client": "eslint --config ./client/.eslintrc.json ./client/src/*.ts",
+		"lint:server": "eslint --config ./server/.eslintrc.json ./server/src/*.ts",
+		"clean": "rimraf client/out && rimraf server/out",
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+	},
+	"devDependencies": {
+		"@types/node": "^12.12.6",
+		"typescript": "^3.7.2",
+		"eslint": "^6.6.0",
+		"@typescript-eslint/parser": "^2.6.1",
+		"webpack": "^4.39.2",
+		"webpack-cli": "^3.3.7",
+		"ts-loader": "^5.4.5",
+		"merge-options": "^1.0.1",
+		"rimraf": "^3.0.0"
+	}
+}
