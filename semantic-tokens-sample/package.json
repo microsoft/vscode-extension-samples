@@ -1,0 +1,40 @@
+{
+	"name": "semantic-tokens-sample",
+	"displayName": "semantic-tokens-sample",
+	"description": "Sample showing the Semantic Tokens Provider API",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.41.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onLanguage:semanticLanguage"
+	],
+	"enableProposedApi": true,
+	"main": "./out/extension.js",
+	"contributes": {
+		"languages": [
+			{
+				"id": "semanticLanguage",
+				"extensions": [
+					".semanticLanguage"
+				]
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^10.14.17",
+		"@types/vscode": "^1.32.0",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1"
+	}
+}
