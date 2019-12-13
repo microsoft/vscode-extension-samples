@@ -1,13 +1,12 @@
 import { window, Disposable, Memento } from 'vscode';
 import { QuickPickItem } from 'vscode';
 
-export const historyPath = `${process.env.HOME}/.vscode-cmd-history`;
-
 const HISTORY_KEY = 'HISTORY_KEY';
+
 
 /**
  * A command prompt with history
- * 
+ *
  */
 export const getPromptCommand = (memo: Memento) => {
 	const pickCommand = getPickCommand(memo);
@@ -20,28 +19,26 @@ export const getPromptCommand = (memo: Memento) => {
 	}
 }
 
-abstract class CommandItem implements QuickPickItem {
+class CommandItem implements QuickPickItem {
+	public static HISTORY: string = 'history';
+	public static INPUT: string = 'input';
+
 	public label: string;
 	public description?: string;
-	public abstract type: string;
-	constructor(label: string, description?: string) {
+	public type: string;
+
+	constructor(type: string, label: string, description?: string) {
+		this.type = type;
 		this.label = label;
 		this.description = description;
 	}
-}
-class HistoryItem extends CommandItem {
-	public type: string;
-	constructor(label: string, description?: string) {
-		super(label, description);
-		this.type = 'history'
+
+	static input(content: string): CommandItem {
+		return new CommandItem(CommandItem.INPUT, content, '(current input)');
 	}
-}
-class InputItem extends CommandItem {
-	public type: string;
-	constructor(public label: string) {
-		super(label, '(current input)');
-		this.type = 'input';
-	};
+	static history(content: string, description?: string): CommandItem {
+		return new CommandItem(CommandItem.HISTORY, content, description);
+	}
 }
 
 const getPickCommand = (memo: Memento) => async function pickCommand() {
@@ -56,27 +53,27 @@ const getPickCommand = (memo: Memento) => async function pickCommand() {
 				if (value === input.value) return;
 				if (!value) {
 					if (input.items[0] && input.items[0].type === 'input')
-					input.items = input.items.slice(1);
+						input.items = input.items.slice(1);
 					return;
 				}
-				if (input.items[0] && input.items[0].type === 'input') {
-					input.items = [new InputItem(value)].concat(input.items.slice(1));
-				} else {
-					input.items = [new InputItem(value)].concat(input.items);
-				}
+				input.items = [CommandItem.input(value)].concat(
+					input.items[0] && input.items[0].type === 'input'
+					? input.items.slice(1)
+					:input.items
+				);
 				// §todo: add autocomplete suggestions
-			}
+			};
 
 			disposables.push(
 				input.onDidChangeValue(updateQuickPick),
 				input.onDidChangeSelection((items: CommandItem[]) => {
 					const item = items[0];
-					if (item instanceof HistoryItem) {
+					if (item.type === CommandItem.HISTORY) {
 						resolve(item.label);
 						input.hide();
 						// do not record new input in history
 						// §todo : maybe reorder
-					} else if (item instanceof InputItem) {
+					} else if (item.type === CommandItem.INPUT) {
 						resolve(item.label);
 						input.hide();
 						// record new input in history
@@ -93,12 +90,12 @@ const getPickCommand = (memo: Memento) => async function pickCommand() {
 				})
 			);
 			input.show();
-			const historyItems: HistoryItem[] = memo.get(HISTORY_KEY, []).map(
-				(cmd: string, index: number) => new HistoryItem(cmd, `(history item ${index})`)
+			const historyItems: CommandItem[] = memo.get(HISTORY_KEY, []).map(
+				(cmd: string, index: number) => CommandItem.history(cmd, `(history item ${index})`)
 			);
-			input.items = input.items.concat(historyItems)
+			input.items = input.items.concat(historyItems);
 		});
 	} finally {
 		disposables.forEach(d => d.dispose());
 	}
-}
+};
