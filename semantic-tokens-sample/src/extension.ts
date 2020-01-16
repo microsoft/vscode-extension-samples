@@ -21,7 +21,7 @@ const legend = (function () {
 })();
 
 export function activate(context: vscode.ExtensionContext) {
-	context.subscriptions.push(vscode.languages.registerSemanticTokensProvider({ language: 'semanticLanguage'}, new SemanticTokensProvider(), legend));
+	context.subscriptions.push(vscode.languages.registerDocumentSemanticTokensProvider({ language: 'semanticLanguage'}, new DocumentSemanticTokensProvider(), legend));
 }
 
 interface IParsedToken {
@@ -32,8 +32,8 @@ interface IParsedToken {
 	tokenModifiers: string[];
 }
 
-class SemanticTokensProvider implements vscode.SemanticTokensProvider {
-	async provideSemanticTokens(document: vscode.TextDocument, options: vscode.SemanticTokensRequestOptions, token: vscode.CancellationToken): Promise<vscode.SemanticTokens> {
+class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensProvider {
+	async provideDocumentSemanticTokens(document: vscode.TextDocument, token: vscode.CancellationToken): Promise<vscode.SemanticTokens> {
 		const allTokens = this._parseText(document.getText());
 		const builder = new vscode.SemanticTokensBuilder();
 		allTokens.forEach((token) => {
