@@ -2,6 +2,8 @@
 
 This is an extension sample showing a very simple semantic tokens provider. This semantic tokens provider always returns all the tokens in a file.
 
+For more background on semantic highlighting read [here](https://github.com/microsoft/vscode/wiki/Semantic-Highlighting-Overview)
+
 ![Screenshot](demo.png)
 
 ## How to run
