@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	// Example 1: Reading Window scoped configuration
+	// Example: Reading Window scoped configuration
 	const configuredView = vscode.workspace.getConfiguration().get('conf.view.showOnWindowOpen');
 	switch (configuredView) {
 		case 'explorer':
@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 			break;
 	}
 
-	// Example 2: Updating Window scoped configuration
+	// Example: Updating Window scoped configuration
 	vscode.commands.registerCommand('config.commands.configureViewOnWindowOpen', async () => {
 
 		// 1) Getting the value
@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	});
 
-	// Example 3: Reading Resource scoped configuration for a file
+	// Example: Reading Resource scoped configuration for a file
 	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(e => {
 
 		// 1) Get the configured glob pattern value for the current file
@@ -73,7 +73,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	}));
 
-	// Example 4: Updating Resource scoped Configuration for current file
+	// Example: Updating Resource scoped Configuration for current file
 	vscode.commands.registerCommand('config.commands.configureEmptyLastLineCurrentFile', async () => {
 
 		if (vscode.window.activeTextEditor) {
@@ -95,7 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// Example 5: Updating Resource scoped Configuration
+	// Example: Updating Resource scoped Configuration
 	vscode.commands.registerCommand('config.commands.configureEmptyLastLineFiles', async () => {
 
 		// 1) Getting the value
@@ -121,7 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
 					if (workspaceFolder) {
 
 						// 4) Get the configuration for the workspace folder
-						const configuration = vscode.workspace.getConfiguration('', workspaceFolder.uri);
+						const configuration = vscode.workspace.getConfiguration('', workspaceFolder);
 
 						// 5) Get the current value
 						const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
@@ -160,7 +160,36 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	// Example 6: Listening to configuration changes
+	let statusSizeDisposable: vscode.Disposable;
+	// Example: Reading language overridable configuration for a document
+	context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(e => {
+
+		if (statusSizeDisposable) {
+			statusSizeDisposable.dispose();
+		}
+
+		// 1) Check if showing size is configured for current file
+		const showSize: any = vscode.workspace.getConfiguration('', e).get('conf.language.showSize');
+
+		// 3) If matches, insert empty last line
+		if (showSize) {
+			statusSizeDisposable = vscode.window.setStatusBarMessage(`${e.getText().length}`);
+		}
+
+	}));
+
+	// Example: Overriding configuration value for a language
+	context.subscriptions.push(vscode.commands.registerCommand('config.commands.overrideLanguageValue', async () => {
+
+		// 1) Getting the languge id
+		const languageId = await vscode.window.showInputBox({ placeHolder: 'Enter the language id' });
+
+		// 2) Update
+		vscode.workspace.getConfiguration('', { languageId }).update('conf.language.showSize', true, false, true);
+
+	}));
+
+	// Example: Listening to configuration changes
 	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
 
 		if (e.affectsConfiguration('conf.resource.insertEmptyLastLine')) {
@@ -179,6 +208,16 @@ export function activate(context: vscode.ExtensionContext) {
 					vscode.window.showInformationMessage('An empty line will be added to the document ' + currentDocument.fileName);
 				}
 			}
+		}
+
+		// Check if a language configuration is changed for a text document
+		if (e.affectsConfiguration('conf.language.showSize', vscode.window.activeTextEditor)) {
+
+		}
+
+		// Check if a language configuration is changed for a language
+		if (e.affectsConfiguration('conf.language.showSize', { languageId: 'typescript' })) {
+
 		}
 
 	}));

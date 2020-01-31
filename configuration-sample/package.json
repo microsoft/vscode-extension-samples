@@ -42,6 +42,12 @@
 						"default": {},
 						"description": "Resource configuration: Configure files using glob patterns to have an empty last line always",
 						"scope": "resource"
+					},
+					"conf.language.showSize": {
+						"type": "boolean",
+						"default": false,
+						"description": "Shows the size of the document",
+						"scope": "language-overridable"
 					}
 				}
 			}
@@ -61,6 +67,11 @@
 				"category": "Configuration Sample",
 				"command": "config.commands.configureEmptyLastLineFiles",
 				"title": "Configure empty last line for files"
+			},
+			{
+				"category": "Configuration Sample",
+				"command": "config.commands.overrideLanguageValue",
+				"title": "Configure show size for language"
 			}
 		]
 	},

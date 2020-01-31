@@ -2,10 +2,12 @@
 
 This sample shows
 
-- How to define a `window` and `resource` scoped configurations.
+- How to define a `window`, `resource` and `language-overridable` scoped configurations.
 - How to read and update a `window` scoped configuration
 - How to read a `resource` scoped configuration of a resource
 - How to update a value for `resource` scoped configuration of a resource
+- How to read a `language-overridable` scoped configuration
+- How to override a `language-overridable` scoped configuration under a language
 - How to listen to configuration changes
 - How to test it
 
@@ -34,6 +36,17 @@ Explains how to test this extension in an Empty workspace
 - Run the command `Configure empty last line for files` and provide abosoulte path of another file
 - Value should be updated in User Settings
 
+### Testing Language Specific configuration
+
+- Set `"conf.language.showSize": true` in user settings
+- Open a file and you should see the size of the file in the status
+- Unset `conf.language.showSize`
+- Run the command `Configuration Sample: Configure show size for language`
+- Enter the language for which you want to configure this feature and press Enter.
+- Open a file with above configured language and size of the file is shown in status
+- Open a file with a different language and no status is shown.
+
+
 ## Folder Workspace
 
 Explains how to test this extension in a Folder workspace
@@ -56,6 +69,17 @@ Explains how to test this extension in a Folder workspace
 - Run the command `Configure empty last line for files` and provide abosoulte path of another file.
 - Pick the target `User Settings` or `Workspace Settings` into which the value should be updated
 - Value should be updated in selected target
+
+### Testing Language Specific configuration
+
+- Set `"conf.language.showSize": true` in any settings (user, workspace)
+- Open a file and you should see the size of the file in the status
+- Unset `conf.language.showSize`
+- Run the command `Configuration Sample: Configure show size for language`
+- Enter the language for which you want to configure this feature and press Enter.
+- Open a file with above configured language and size of the file is shown in status
+- Open a file with a different language and no status is shown.
+
 
 ### Multiroot Workspace
 
@@ -82,3 +106,13 @@ Explains how to test this extension in a Multiroot workspace
 - Selecting User or Workspace Settings should update the value in respective targets.
 - Selecting Workspace Folder Settings will show a Workspace Folder Picker
 - Picking a workspace folder should update the value in the respective folder settings file.
+
+### Testing Language Specific configuration
+
+- Set `"conf.language.showSize": true` in any settings (user, workspace or workspace folder)
+- Open a file and you should see the size of the file in the status
+- Unset `conf.language.showSize`
+- Run the command `Configuration Sample: Configure show size for language`
+- Enter the language for which you want to configure this feature and press Enter.
+- Open a file with above configured language and size of the file is shown in status
+- Open a file with a different language and no status is shown.
