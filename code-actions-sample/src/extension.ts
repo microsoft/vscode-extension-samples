@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 /**
- * Provides code actions for converting :) to an smiley emoji.
+ * Provides code actions for converting :) to a smiley emoji.
  */
 export class Emojizer implements vscode.CodeActionProvider {
 
