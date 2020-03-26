@@ -14,7 +14,7 @@
 		"multi-root ready"
 	],
 	"engines": {
-		"vscode": "^1.33.0"
+		"vscode": "^1.43.0"
 	},
 	"activationEvents": [
 		"onLanguage:plaintext"
@@ -54,8 +54,10 @@
 	},
 	"devDependencies": {
 		"@types/mocha": "^5.2.7",
+		"mocha": "^6.2.2",
 		"@types/node": "^12.11.7",
-		"tslint": "^5.16.0",
-		"typescript": "^3.6.4"
+		"eslint": "^6.4.0",
+		"@typescript-eslint/parser": "^2.3.0",
+		"typescript": "^3.8.3"
 	}
 }
