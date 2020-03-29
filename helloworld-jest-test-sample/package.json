@@ -30,7 +30,7 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile",
 		"test": "node ./out/tests/runTest.js",
-		"test:update": "cross-env JEST_TEST_RUNNER_UPDATE_SNAPSHOTS=true npm test"
+		"test:update": "cross-env JEST_RUNNER_UPDATE_SNAPSHOTS=true npm test"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",

@@ -5,7 +5,7 @@ This is the Hello World example with jest integration tests setup.
 You can find the accompanying documentation at:
 
 - https://code.visualstudio.com/api/working-with-extensions/testing-extension#testing-extension-with-jest
-- https://github.com/bmealhouse/vscode-jest-test-runner
+- https://github.com/microsoft/vscode-test/blob/master/jest-runner
 
 ## Demo
 

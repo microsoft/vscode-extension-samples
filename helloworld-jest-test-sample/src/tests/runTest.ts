@@ -11,22 +11,25 @@ async function main() {
 		// Passed to --extensionTestsPath
 		const extensionTestsPath = path.resolve(
 			__dirname,
-			'../../node_modules/vscode-jest-test-runner'
+			'../../node_modules/vscode-test/out/jest-runner'
 		);
+
+		const extensionTestsEnv = {};
 
 		// The path to a module that runs some code to configure or set up the
 		// testing framework before each test.
-		// See https://github.com/bmealhouse/vscode-jest-test-runner#jest_test_runner_setup
-		// process.env.JEST_TEST_RUNNER_SETUP = path.resolve(
+		// See https://github.com/microsoft/vscode-test/blob/master/jest-runner#jest_runner_setup
+		// extensionTestsEnv.JEST_RUNNER_SETUP = path.resolve(
 		// 	__dirname,
-		// 	'./custom-vscode-jest-test-runner-setup.js'
+		// 	'./custom-jest-runner-setup.js'
 		// );
 
 		// Download VS Code, unzip it and run the integration test
 		await runTests({
 			extensionDevelopmentPath,
 			extensionTestsPath,
-			launchArgs: ['--disable-extensions']
+			launchArgs: ['--disable-extensions'],
+			extensionTestsEnv
 		});
 	} catch (err) {
 		console.error('Failed to run tests');
