@@ -39,7 +39,7 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 		allTokens.forEach((token) => {
 			builder.push(token.line, token.startCharacter, token.length, this._encodeTokenType(token.tokenType), this._encodeTokenModifiers(token.tokenModifiers));
 		});
-		return new vscode.SemanticTokens(builder.build());
+		return builder.build();
 	}
 
 	private _encodeTokenType(tokenType: string): number {
