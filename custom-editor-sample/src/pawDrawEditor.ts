@@ -57,9 +57,9 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 	public static readonly viewType = 'catEdit.pawDraw';
 
 	/**
-	 * Map from resource to webview panels.
+	 * Tracks all known webviews
 	 */
-	private readonly _allWebviews = new Map<string, Set<vscode.WebviewPanel>>();
+	private readonly webviews = new WebviewCollection();
 
 	private readonly backupFolder = 'pawDraw';
 
@@ -92,23 +92,8 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 		webviewPanel: vscode.WebviewPanel,
 		_token: vscode.CancellationToken
 	): Promise<void> {
-		const resourceKey = document.uri.toString();
-
-		const webviews = this._allWebviews.get(resourceKey) || new Set();
-		webviews.add(webviewPanel);
-		this._allWebviews.set(resourceKey, webviews);
-
-		webviewPanel.onDidDispose(() => {
-			const webviews = this._allWebviews.get(resourceKey);
-			if (!webviews) {
-				return;
-			}
-
-			webviews.delete(webviewPanel);
-			if (!webviews.size) {
-				this._allWebviews.delete(resourceKey);
-			}
-		});
+		// Add the webview to our internal set of active webviews
+		this.webviews.add(document.uri, webviewPanel);
 
 		// Setup initial content for the webview
 		webviewPanel.webview.options = {
@@ -188,11 +173,11 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 	}
 
 	async saveAs(document: PawDrawDocument, targetResource: vscode.Uri): Promise<void> {
-		const webviews = this._allWebviews.get(document.uri.toString());
-		if (!webviews || !webviews.size) {
+		const webviews = Array.from(this.webviews.get(document.uri));
+		if (!webviews.length) {
 			throw new Error('Could not find webview to save for');
 		}
-		const [panel] = webviews.values();
+		const panel = webviews[0];
 		const response = await this.postMessageWithResponse<{ data: number[] }>(panel, 'getFileData', {});
 		const fileData = new Uint8Array(response.data);
 		vscode.workspace.fs.writeFile(targetResource, fileData);
@@ -219,7 +204,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 		this.deleteBackup(document);
 
 		const diskContent = await vscode.workspace.fs.readFile(document.uri);
-		for (const webviewPanel of this._allWebviews.get(document.uri.toString()) || []) {
+		for (const webviewPanel of this.webviews.get(document.uri)) {
 			this.postMessage(webviewPanel, 'init', {
 				value: diskContent
 			});
@@ -266,7 +251,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 	// #endregion
 
 	public updateWebviews(document: PawDrawDocument) {
-		for (const webviewPanel of this._allWebviews.get(document.uri.toString()) || []) {
+		for (const webviewPanel of this.webviews.get(document.uri)) {
 			this.postMessage(webviewPanel, 'update', {
 				edits: document.appliedEdits,
 			});
@@ -323,3 +308,34 @@ async function exists(backupResource: vscode.Uri): Promise<boolean> {
 	}
 }
 
+/**
+ * Tracks all webviews.
+ */
+class WebviewCollection {
+
+	private readonly webviews = new Set<{ readonly resource: string, readonly webviewPanel: vscode.WebviewPanel }>();
+
+	/**
+	 * Get all known webviews for a given uri.
+	 */
+	public *get(uri: vscode.Uri): Iterable<vscode.WebviewPanel> {
+		const key = uri.toString();
+		for (const entry of this.webviews) {
+			if (entry.resource === key) {
+				yield entry.webviewPanel;
+			}
+		}
+	}
+
+	/**
+	 * Add a new webview to the collection.
+	 */
+	public add(uri: vscode.Uri, webviewPanel: vscode.WebviewPanel) {
+		const entry = { resource: uri.toString(), webviewPanel };
+		this.webviews.add(entry);
+
+		webviewPanel.onDidDispose(() => {
+			this.webviews.delete(entry);
+		});
+	}
+}
