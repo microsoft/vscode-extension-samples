@@ -128,13 +128,15 @@
 				document.body.classList.remove('isDrawing');
 				this.drawingCtx.closePath();
 
-				const stroke = this.endStroke();
+				const edit = this.endStroke();
 
-				vscode.postMessage({
-					type: 'stroke',
-					color: this.drawingColor,
-					stroke: stroke.stroke,
-				});
+				if (edit.stroke.length) {
+					vscode.postMessage({
+						type: 'stroke',
+						color: edit.color,
+						stroke: edit.stroke,
+					});
+				}
 			});
 
 			parent.addEventListener('mousemove', e => {
