@@ -200,15 +200,30 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 
 	async applyEdits(document: PawDrawDocument, _edits: readonly PawDrawEdit[]): Promise<void> {
 		this.updateWebviews(document);
+
+		if (document.appliedEdits.length === document.savedEdits.length) {
+			this.deleteBackup(document);
+		}
 	}
 
 	async undoEdits(document: PawDrawDocument, _edits: readonly PawDrawEdit[]): Promise<void> {
 		this.updateWebviews(document);
+
+		if (document.appliedEdits.length === document.savedEdits.length) {
+			this.deleteBackup(document);
+		}
 	}
 
 	async revert(document: PawDrawDocument, _edits: vscode.CustomDocumentRevert<PawDrawEdit>): Promise<void> {
 		this.updateWebviews(document);
 		this.deleteBackup(document);
+
+		const diskContent = await vscode.workspace.fs.readFile(document.uri);
+		for (const webviewPanel of this._allWebviews.get(document.uri.toString()) || []) {
+			this.postMessage(webviewPanel, 'init', {
+				value: diskContent
+			});
+		}
 	}
 
 	async backup(document: PawDrawDocument, _cancellation: vscode.CancellationToken): Promise<void> {
