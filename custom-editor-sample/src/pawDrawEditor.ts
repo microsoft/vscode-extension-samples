@@ -19,7 +19,7 @@ class PawDrawDocument extends vscode.CustomDocument<PawDrawEdit> {
 		uri: vscode.Uri,
 		public readonly initialContent: Uint8Array,
 	) {
-		super(PawDrawEditorProvider.viewType, uri);
+		super(uri);
 	}
 }
 
