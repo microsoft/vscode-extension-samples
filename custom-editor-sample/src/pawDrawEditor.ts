@@ -106,7 +106,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 
 			webviews.delete(webviewPanel);
 			if (!webviews.size) {
-				this._allWebviews.delete(resourceKey)
+				this._allWebviews.delete(resourceKey);
 			}
 		});
 
@@ -184,16 +184,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 
 	async save(document: PawDrawDocument, _cancellation: vscode.CancellationToken): Promise<void> {
 		await this.saveAs(document, document.uri);
-		
-		// Delete backup on save
-		const backupResource = this.getBackupResource(document.uri);
-		if (backupResource) {
-			try {
-				vscode.workspace.fs.delete(backupResource)
-			} catch {
-				// noop
-			}
-		}
+		this.deleteBackup(document);
 	}
 
 	async saveAs(document: PawDrawDocument, targetResource: vscode.Uri): Promise<void> {
@@ -217,6 +208,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 
 	async revert(document: PawDrawDocument, _edits: vscode.CustomDocumentRevert<PawDrawEdit>): Promise<void> {
 		this.updateWebviews(document);
+		this.deleteBackup(document);
 	}
 
 	async backup(document: PawDrawDocument, _cancellation: vscode.CancellationToken): Promise<void> {
@@ -241,6 +233,19 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 		const fileName = crypto.createHash('sha256').update(uri.toString(), 'utf8').digest('hex');
 
 		return vscode.Uri.file(path.join(dir, fileName));
+	}
+
+	private async deleteBackup(document: PawDrawDocument) {
+		const backupResource = this.getBackupResource(document.uri);
+		if (!backupResource) {
+			return;
+		}
+
+		try {
+			await vscode.workspace.fs.delete(backupResource);
+		} catch {
+			// noop
+		}
 	}
 
 	// #endregion
@@ -299,7 +304,7 @@ async function exists(backupResource: vscode.Uri): Promise<boolean> {
 		await vscode.workspace.fs.stat(backupResource);
 		return true;
 	} catch {
-		return false
+		return false;
 	}
 }
 
