@@ -165,11 +165,12 @@
 			}
 		}
 
-		setInitialImage(/** @type {HTMLImageElement} */ img) {
+		reset(/** @type {HTMLImageElement} */ img) {
 			this.initialCanvas.width = this.drawingCanvas.width = img.naturalWidth;
 			this.initialCanvas.height = this.drawingCanvas.height = img.naturalHeight;
 			this.initialCtx.drawImage(img, 0, 0);
 			this.ready = true;
+			this.strokes = [];
 			this._redraw();
 		}
 
@@ -201,7 +202,7 @@
 				// Load the initial image into the canvas.
 				const initialContent = new Uint8Array(body.value.data);
 				const img = await loadImageFromData(initialContent);
-				editor.setInitialImage(img);
+				editor.reset(img);
 				return;
 
 			case 'update':
