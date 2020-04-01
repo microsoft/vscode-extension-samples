@@ -54,7 +54,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 			});
 	}
 
-	public static readonly viewType = 'catEdit.pawDraw';
+	public static readonly viewType = 'catCustoms.pawDraw';
 
 	/**
 	 * Tracks all known webviews

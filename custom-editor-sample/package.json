@@ -11,8 +11,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCustomEditor:catEdit.catScratch",
-		"onCustomEditor:catEdit.pawDraw"
+		"onCustomEditor:catCustoms.catScratch",
+		"onCustomEditor:catCustoms.pawDraw"
 	],
 	"repository": {
 		"type": "git",
@@ -22,7 +22,7 @@
 	"contributes": {
 		"customEditors": [
 			{
-				"viewType": "catEdit.catScratch",
+				"viewType": "catCustoms.catScratch",
 				"displayName": "Cat Scratch",
 				"selector": [
 					{
@@ -31,7 +31,7 @@
 				]
 			},
 			{
-				"viewType": "catEdit.pawDraw",
+				"viewType": "catCustoms.pawDraw",
 				"displayName": "Paw Draw",
 				"selector": [
 					{
