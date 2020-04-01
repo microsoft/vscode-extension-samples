@@ -13,7 +13,6 @@
 	"activationEvents": [
 		"onLanguage:semanticLanguage"
 	],
-	"enableProposedApi": true,
 	"main": "./out/extension.js",
 	"contributes": {
 		"languages": [
