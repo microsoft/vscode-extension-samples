@@ -35,8 +35,9 @@ export function activate(context: ExtensionContext) {
 
 	workspace.registerTextDocumentContentProvider('embedded-content', {
 		provideTextDocumentContent: uri => {
-			const originalUri = uri.fsPath.slice(1).slice(0, -4);
-			return virtualDocumentContents.get(originalUri);
+			const originalUri = uri.path.slice(1).slice(0, -4);
+			const decodedUri = decodeURIComponent(originalUri);
+			return virtualDocumentContents.get(decodedUri);
 		}
 	});
 
