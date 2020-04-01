@@ -1,28 +1,13 @@
 # LSP Example for Embedded Language using Language Service
 
-Heavily documented sample code for https://code.visualstudio.com/api/language-extensions/embedded-language-server-guide
+Heavily documented sample code for https://code.visualstudio.com/api/language-extensions/embedded-languages#language-services
 
 ## Functionality
 
-This Language Server works for plain text file. It has the following language features:
-- Completions
-- Diagnostics regenerated on each file change or configuration change
-
-It also includes an End-to-End test.
-
-## Structure
-
-```
-.
-├── client // Language Client
-│   ├── src
-│   │   ├── test // End to End tests for Language Client / Server
-│   │   └── extension.ts // Language Client entry point
-├── package.json // The extension manifest.
-└── server // Language Server
-    └── src
-        └── server.ts // Language Server entry point
-```
+This Language Server works for HTML file. It has the following language features:
+- Completions for HTML
+- Completions for CSS in `<style>` tag
+- Diagnostics for CSS
 
 ## Running the Sample
 
@@ -33,6 +18,7 @@ It also includes an End-to-End test.
 - Select `Launch Client` from the drop down.
 - Run the launch config.
 - If you want to debug the server as well use the launch configuration `Attach to Server`
-- In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode.
-  - Type `j` or `t` to see `Javascript` and `TypeScript` completion.
-  - Enter text content such as `AAA aaa BBB`. The extension will emit diagnostics for all words in all-uppercase.
+- In the [Extension Development Host] instance of VSCode, open a HTML document
+  - Type `<d|` to try HTML completion
+  - Type `<style>.foo { c| }</style>` to try CSS completino
+  - Have `<style>.foo { }</style>` to see CSS Diagnostics
