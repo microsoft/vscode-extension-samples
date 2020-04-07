@@ -15,10 +15,26 @@
 		"vscode": "^1.43.0"
 	},
 	"activationEvents": [
-		"onLanguage:html"
+		"onLanguage:html1"
 	],
 	"main": "./client/out/extension",
-	"contributes": {},
+	"contributes": {
+    "languages": [
+      {
+        "id": "html1",
+        "extensions": [
+					".html1"
+				]
+			}
+		],
+    "grammars": [
+      {
+				"language": "html1",
+        "scopeName": "text.html1.basic",
+        "path": "./syntaxes/html1.tmLanguage.json"
+      }
+    ]
+	},
 	"scripts": {
 		"vscode:prepublish": "cd client && npm install && cd .. && npm run compile",
 		"compile": "tsc -b",

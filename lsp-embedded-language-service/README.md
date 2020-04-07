@@ -4,8 +4,11 @@ Heavily documented sample code for https://code.visualstudio.com/api/language-ex
 
 ## Functionality
 
-This Language Server works for HTML file. It has the following language features:
-- Completions for HTML
+This extension contributes a new language, `html1`. The new language is for illustration purpose and has basic syntax highlighting.
+
+This Language Server works for `html1` file. HTML1 is like HTML file but has file extension `.html1`. You can create a `test.html1` file to play with below functionaltiies:
+
+- Completions for HTML tags
 - Completions for CSS in `<style>` tag
 - Diagnostics for CSS
 

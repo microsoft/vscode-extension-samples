@@ -38,7 +38,7 @@ export function activate(context: ExtensionContext) {
 	// Options to control the language client
 	let clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
-		documentSelector: [{ scheme: 'file', language: 'html' }]
+		documentSelector: [{ scheme: 'file', language: 'html1' }]
 	};
 
 	// Create the language client and start the client.
