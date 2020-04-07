@@ -42,7 +42,7 @@ export function activate(context: ExtensionContext) {
 	});
 
 	let clientOptions: LanguageClientOptions = {
-		documentSelector: [{ scheme: 'file', language: 'html' }],
+		documentSelector: [{ scheme: 'file', language: 'html1' }],
 		middleware: {
 			provideCompletionItem: async (document, position, context, token, next) => {
 				const originalUri = document.uri.toString();
