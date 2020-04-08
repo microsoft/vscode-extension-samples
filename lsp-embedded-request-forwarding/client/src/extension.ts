@@ -7,7 +7,7 @@ import * as path from 'path';
 import { commands, CompletionList, ExtensionContext, Uri, workspace } from 'vscode';
 import { getLanguageService } from 'vscode-html-languageservice';
 import { LanguageClient, LanguageClientOptions, ServerOptions, TransportKind } from 'vscode-languageclient';
-import { getCSSVirtualContent } from './embeddedSupport';
+import { getCSSVirtualContent, isInsideStyleRegion } from './embeddedSupport';
 
 let client: LanguageClient;
 
@@ -45,6 +45,11 @@ export function activate(context: ExtensionContext) {
 		documentSelector: [{ scheme: 'file', language: 'html1' }],
 		middleware: {
 			provideCompletionItem: async (document, position, context, token, next) => {
+				// If not in `<style>`, do not perform request forwarding
+				if (!isInsideStyleRegion(htmlLanguageService, document.getText(), document.offsetAt(position))) {
+					return await next(document, position, context, token);
+				}
+
 				const originalUri = document.uri.toString();
 				virtualDocumentContents.set(originalUri, getCSSVirtualContent(htmlLanguageService, document.getText()));
 

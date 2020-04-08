@@ -28,6 +28,27 @@ interface EmbeddedRegion {
 	attributeValue?: boolean;
 }
 
+export function isInsideStyleRegion(
+	languageService: LanguageService,
+	documentText: string,
+	offset: number
+) {
+	let scanner = languageService.createScanner(documentText);
+
+	let token = scanner.scan();
+	while (token !== TokenType.EOS) {
+		switch (token) {
+			case TokenType.Styles:
+				if (offset >= scanner.getTokenOffset() && offset <= scanner.getTokenEnd()) {
+					return true;
+				}
+		}
+		token = scanner.scan();
+	}
+	
+	return false;
+}
+
 export function getCSSVirtualContent(
 	languageService: LanguageService,
 	documentText: string
@@ -106,7 +127,7 @@ export function getCSSVirtualContent(
 		}
 		token = scanner.scan();
 	}
-	
+
 	let content = documentText
 		.split('\n')
 		.map(line => {
@@ -118,7 +139,7 @@ export function getCSSVirtualContent(
 			content = content.slice(0, r.start) + documentText.slice(r.start, r.end) + content.slice(r.end);
 		}
 	});
-	
+
 	return content;
 }
 
