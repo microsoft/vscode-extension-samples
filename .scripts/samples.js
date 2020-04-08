@@ -191,7 +191,14 @@ const samples = [
     guide: null,
     apis: [`languages.registerCallHierarchyProvider`, `CallHierarchyProvider`, `CallHierarchyItem`, `CallHierarchyOutgoingCall`, `CallHierarchyIncomingCall`],
     contributions: []
-  }
+  },
+  {
+    description: 'Custom Editors Sample',
+    path: 'custom-editor-sample',
+    guide: '/api/extension-guides/custom-editors',
+    apis: ['window.registerCustomEditorProvider', 'CustomTextEditorProvider'],
+    contributions: ["customEditors"]
+  },
 ]
 
 /** LSP specific samples */
