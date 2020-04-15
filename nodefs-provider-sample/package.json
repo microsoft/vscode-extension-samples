@@ -31,7 +31,7 @@
 		"@types/promisify-node": "^0.4.0",
 		"@types/rimraf": "^2.0.2",
 		"@types/vscode": "^1.34.0",
-		"tslint": "^5.16.0",
+		"tslint": "^5.19.0",
 		"typescript": "^3.8.3"
 	}
 }
