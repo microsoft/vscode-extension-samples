@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, languages, commands, Disposable, workspace, window, ConfigurationTarget } from 'vscode';
+import { ExtensionContext, languages, commands, Disposable, workspace, window } from 'vscode';
 import { CodelensProvider } from './CodelensProvider';
 
 // this method is called when your extension is activated
