@@ -26,7 +26,8 @@
 		"onCommand:terminalTest.sendTextNoNewLine",
 		"onCommand:terminalTest.show",
 		"onCommand:terminalTest.showPreserveFocus",
-		"onCommand:terminalTest.terminals"
+		"onCommand:terminalTest.terminals",
+		"onCommand:terminalTest.updateEnvironment"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -90,6 +91,10 @@
 			{
 				"command": "terminalTest.terminals",
 				"title": "Terminal API: View terminals"
+			},
+			{
+				"command": "terminalTest.updateEnvironment",
+				"title": "Terminal API: Update environment"
 			}
 		]
 	},
