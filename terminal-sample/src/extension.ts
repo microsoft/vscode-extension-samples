@@ -146,9 +146,14 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.updateEnvironment', () => {
-		const collection = (<any>vscode.window).getEnvironmentVariableCollection();
+		const collection = (context as any).environmentVariableCollection;
 		collection.replace('FOO', 'BAR');
 		collection.append('PATH', '/test/path');
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.clearEnvironment', () => {
+		const collection = (context as any).environmentVariableCollection;
+		collection.clear();
 	}));
 }
 

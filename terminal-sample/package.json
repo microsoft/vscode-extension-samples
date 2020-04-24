@@ -27,7 +27,8 @@
 		"onCommand:terminalTest.show",
 		"onCommand:terminalTest.showPreserveFocus",
 		"onCommand:terminalTest.terminals",
-		"onCommand:terminalTest.updateEnvironment"
+		"onCommand:terminalTest.updateEnvironment",
+		"onCommand:terminalTest.clearEnvironment"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -95,6 +96,10 @@
 			{
 				"command": "terminalTest.updateEnvironment",
 				"title": "Terminal API: Update environment"
+			},
+			{
+				"command": "terminalTest.clearEnvironment",
+				"title": "Terminal API: Clear environment"
 			}
 		]
 	},
