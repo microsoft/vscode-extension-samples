@@ -12,7 +12,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCustomEditor:catCustoms.catScratch"
+		"onCustomEditor:catCustoms.catScratch",
+		"onCustomEditor:catCustoms.pawDraw"
 	],
 	"repository": {
 		"type": "git",
@@ -29,6 +30,15 @@
 						"filenamePattern": "*.cscratch"
 					}
 				]
+			},
+			{
+				"viewType": "catCustoms.pawDraw",
+				"displayName": "Paw Draw",
+				"selector": [
+					{
+						"filenamePattern": "*.pawdraw"
+			}
+		]
 			}
 		]
 	},
