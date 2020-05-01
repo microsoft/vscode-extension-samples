@@ -43,10 +43,12 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 	}
 
 	private _encodeTokenType(tokenType: string): number {
-		if (!tokenTypes.has(tokenType)) {
-			return 0;
+		if (tokenTypes.has(tokenType)) {
+			return tokenTypes.get(tokenType)!;
+		} else if (tokenType === 'notInLegend') {
+			return tokenTypes.size + 2;
 		}
-		return tokenTypes.get(tokenType)!;
+		return 0;
 	}
 
 	private _encodeTokenModifiers(strTokenModifiers: string[]): number {
@@ -55,6 +57,8 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 			const tokenModifier = strTokenModifiers[i];
 			if (tokenModifiers.has(tokenModifier)) {
 				result = result | (1 << tokenModifiers.get(tokenModifier)!);
+			} else if (tokenModifier === 'notInLegend') {
+				result = result | (1 << tokenModifiers.size + 2);
 			}
 		}
 		return result;
