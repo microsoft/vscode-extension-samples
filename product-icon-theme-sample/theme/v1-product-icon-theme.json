@@ -1,0 +1,47 @@
+{
+	"fonts": [
+		{
+			"id": "vscode10",
+			"src": [
+				{
+					"path": "./vscode-10.woff",
+					"format": "woff"
+				}
+			],
+			"weight": "normal",
+			"style": "normal",
+		}
+	],
+	"iconDefinitions": {
+		"files": {
+			"fontCharacter": "\\e901"
+		},
+		"search": {
+			"fontCharacter": "\\e903"
+		},
+		"debug-alt-2": {
+			"fontCharacter": "\\e900"
+		},
+		"source-control": {
+			"fontCharacter": "\\e902"
+		},
+		"gear": {
+			"fontCharacter": "\\e947"
+		},
+		"tree-item-expanded": {
+			"fontCharacter": "\\e91a"
+		},
+		"folding-expanded": {
+			"fontCharacter": "\\f06c"
+		},
+		"folding-collapsed": {
+			"fontCharacter": "\\f06b"
+		},
+		"feedback": {
+			"fontCharacter": "\\e917"
+		},
+		"extensions": {
+			"fontCharacter": "\\e918"
+		}
+	}
+}
