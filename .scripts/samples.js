@@ -121,7 +121,20 @@ const samples = [
     ],
     contributions: []
   },
-  // { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
+  {
+    description: 'Color Theme Sample',
+    path: 'theme-sample',
+    guide: '/api/extension-guides/color-theme',
+    apis: [],
+    contributions: ['themes']
+  },
+  {
+    description: 'Product Icon Theme Sample',
+    path: 'theme-sample',
+    guide: '/api/extension-guides/product-icon-theme',
+    apis: [],
+    contributions: ['productIconThemes']
+  },
   {
     description: 'Vim Sample',
     path: 'vim-sample',
