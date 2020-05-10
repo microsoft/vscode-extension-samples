@@ -14,3 +14,10 @@ You can find the accompanying documentation at https://code.visualstudio.com/api
 - Run the `Run Extension Tests` target in the Debug View. This will:
 	- Start a task `npm: watch` to compile the code
 	- Run the extension integration test in a new VS Code window
+
+## Running the tests in Mocha Test Explorer
+
+- Run the extension tests as described above to ensure that the initial setup (including downloading a copy of VS Code, which may take some time) is completed
+- Open the Test Explorer view
+- Click the reload button
+- Click the run button
