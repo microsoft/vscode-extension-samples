@@ -38,6 +38,7 @@
 		"@types/vscode": "^1.32.0",
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
+		"mocha-explorer-launcher-scripts": "^0.1.0",
 		"source-map-support": "^0.5.12",
 		"tslint": "^5.19.0",
 		"typescript": "^3.8.3",
