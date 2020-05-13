@@ -14,34 +14,31 @@
 	],
 	"iconDefinitions": {
 		"files": {
-			"fontCharacter": "\\e901"
+			"fontCharacter": "\\e000"
 		},
 		"search": {
-			"fontCharacter": "\\e903"
+			"fontCharacter": "\\e001"
 		},
 		"debug-alt-2": {
-			"fontCharacter": "\\e900"
+			"fontCharacter": "\\e002"
 		},
 		"source-control": {
-			"fontCharacter": "\\e902"
-		},
-		"gear": {
-			"fontCharacter": "\\e947"
+			"fontCharacter": "\\e003"
 		},
 		"tree-item-expanded": {
-			"fontCharacter": "\\e91a"
+			"fontCharacter": "\\e008"
 		},
 		"folding-expanded": {
-			"fontCharacter": "\\f06c"
+			"fontCharacter": "\\e006"
 		},
 		"folding-collapsed": {
-			"fontCharacter": "\\f06b"
+			"fontCharacter": "\\e007"
 		},
 		"feedback": {
-			"fontCharacter": "\\e917"
+			"fontCharacter": "\\e005"
 		},
 		"extensions": {
-			"fontCharacter": "\\e918"
+			"fontCharacter": "\\e004"
 		}
 	}
 }

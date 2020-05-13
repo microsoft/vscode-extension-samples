@@ -4,6 +4,8 @@
 
 This sample provides a product icon theme with icons used in VS Code 1.0.
 
+The sample also contains a build script that creates the icon font from svg images.
+
 ## Demo
 
 VSCode V1.0 Icons
@@ -24,4 +26,15 @@ VSCode V1.0 Icons
 
 ## Make changes
 
-- Changes to the product theme file are applied live in the extension development host window. No need to relaunch the extension.
+To add or change icons in the icon font:
+
+- add or change the svg icons to the `icons/` folder
+- update the `build/updateFont.js` file to add the new icon names to list of icons
+- run `npm run updateFont`
+- run `npm run showFont` to open `theme/vscode-10.html` in a browser. The page shows the icons in the font.
+
+To change the icon theme:
+
+- modify `theme/v1-product-icon-theme.json` to associate font icons to VS Code icon IDs
+- test the theme by running the extension (`F5`)
+- changes to the product theme file are applied live in the extension development host window. No need to relaunch the extension.
