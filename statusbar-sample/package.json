@@ -28,7 +28,8 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
-		"typescript": "^3.5.1",
+		"typescript": "^3.8.3",
+		"tslint": "^5.19.0",
 		"@types/vscode": "^1.32.0"
 	}
 }

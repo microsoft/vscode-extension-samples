@@ -23,10 +23,10 @@ This sample uses following contribution points, activation events and APIs
 ### Contribution Points
 
 - `views`
-- `viewContainers`
+- `viewsContainers`
 - `menu`
-	- `view/title`
-	- `view/item/context`
+  - `view/title`
+  - `view/item/context`
 
 ### Activation Events
 

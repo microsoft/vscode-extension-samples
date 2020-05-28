@@ -1,0 +1,51 @@
+{
+	"name": "lsp-embedded-language-service-sample",
+	"description": "A language server example using language services to support embedded languages",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"publisher": "vscode-samples",
+	"categories": [],
+	"keywords": [],
+	"engines": {
+		"vscode": "^1.43.0"
+	},
+	"activationEvents": [
+		"onLanguage:html1"
+	],
+	"main": "./client/out/extension",
+	"contributes": {
+    "languages": [
+      {
+        "id": "html1",
+        "extensions": [
+					".html1"
+				]
+			}
+		],
+    "grammars": [
+      {
+				"language": "html1",
+        "scopeName": "text.html1.basic",
+        "path": "./syntaxes/html1.tmLanguage.json"
+      }
+    ]
+	},
+	"scripts": {
+		"vscode:prepublish": "cd client && npm install && cd .. && npm run compile",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+		"test": "sh ./scripts/e2e.sh"
+	},
+	"devDependencies": {
+		"@types/mocha": "^5.2.7",
+		"@types/node": "^12.12.0",
+		"tslint": "^5.19.0",
+		"typescript": "^3.8.3"
+	}
+}

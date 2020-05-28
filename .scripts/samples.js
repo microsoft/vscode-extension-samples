@@ -121,7 +121,20 @@ const samples = [
     ],
     contributions: []
   },
-  // { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
+  {
+    description: 'Color Theme Sample',
+    path: 'theme-sample',
+    guide: '/api/extension-guides/color-theme',
+    apis: [],
+    contributions: ['themes']
+  },
+  {
+    description: 'Product Icon Theme Sample',
+    path: 'theme-sample',
+    guide: '/api/extension-guides/product-icon-theme',
+    apis: [],
+    contributions: ['productIconThemes']
+  },
   {
     description: 'Vim Sample',
     path: 'vim-sample',
@@ -191,7 +204,14 @@ const samples = [
     guide: null,
     apis: [`languages.registerCallHierarchyProvider`, `CallHierarchyProvider`, `CallHierarchyItem`, `CallHierarchyOutgoingCall`, `CallHierarchyIncomingCall`],
     contributions: []
-  }
+  },
+  {
+    description: 'Custom Editors Sample',
+    path: 'custom-editor-sample',
+    guide: '/api/extension-guides/custom-editors',
+    apis: ['window.registerCustomEditorProvider', 'CustomTextEditorProvider'],
+    contributions: ["customEditors"]
+  },
 ]
 
 /** LSP specific samples */
