@@ -219,9 +219,9 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 		openContext: { backupId?: string },
 		_token: vscode.CancellationToken
 	): Promise<PawDrawDocument> {
-		const document = await PawDrawDocument.create(uri, openContext.backupId, {
+		const document: PawDrawDocument = await PawDrawDocument.create(uri, openContext.backupId, {
 			getFileData: async () => {
-				const webviewsForDocument: any = Array.from(this.webviews.get(document.uri));
+				const webviewsForDocument = Array.from(this.webviews.get(document.uri));
 				if (!webviewsForDocument.length) {
 					throw new Error('Could not find webview to save for');
 				}
