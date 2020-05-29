@@ -33,9 +33,9 @@ export class JSFiddleDocumentContentProvider implements TextDocumentContentProvi
 		let fiddleSlug = basename(uri.fsPath);
 		// strip off the file extension
 		fiddleSlug = fiddleSlug.split('.').slice(0, -1).join('.');
-		let fiddlePart = toExtension(uri);
+		const fiddlePart = toExtension(uri);
 
-		let fiddle = this.fiddles.get(fiddleSlug);
+		const fiddle = this.fiddles.get(fiddleSlug);
 		if (!fiddle) { return "Resource not found: " + uri.toString(); }
 
 		return fiddle.data[fiddlePart];

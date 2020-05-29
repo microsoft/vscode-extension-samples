@@ -39,7 +39,7 @@ const tree = {
 		'bb': {}
 	}
 };
-let nodes = {};
+const nodes = {};
 
 function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }> {
 	return {
@@ -62,7 +62,7 @@ function getChildren(key: string): string[] {
 	if (!key) {
 		return Object.keys(tree);
 	}
-	let treeElement = getTreeElement(key);
+	const treeElement = getTreeElement(key);
 	if (treeElement) {
 		return Object.keys(treeElement);
 	}

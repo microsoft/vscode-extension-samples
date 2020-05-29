@@ -28,14 +28,14 @@ export interface IWord {
 export class Words {
 
 	public static createWordCharacters(wordSeparators: string): WordCharacters {
-		let result: CharacterClass[] = [];
+		const result: CharacterClass[] = [];
 
 		// Make array fast for ASCII text
-		for (var chCode = 0; chCode < 256; chCode++) {
+		for (let chCode = 0; chCode < 256; chCode++) {
 			result[chCode] = CharacterClass.REGULAR;
 		}
 
-		for (var i = 0, len = wordSeparators.length; i < len; i++) {
+		for (let i = 0, len = wordSeparators.length; i < len; i++) {
 			result[wordSeparators.charCodeAt(i)] = CharacterClass.WORD_SEPARATOR;
 		}
 
@@ -47,13 +47,13 @@ export class Words {
 
 	public static findNextWord(doc: TextDocument, pos: Position, wordCharacterClass: WordCharacters): IWord | null {
 
-		let lineContent = doc.lineAt(pos.line).text;
+		const lineContent = doc.lineAt(pos.line).text;
 		let wordType = WordType.NONE;
-		let len = lineContent.length;
+		const len = lineContent.length;
 
 		for (let chIndex = pos.character; chIndex < len; chIndex++) {
-			let chCode = lineContent.charCodeAt(chIndex);
-			let chClass = (wordCharacterClass[chCode] || CharacterClass.REGULAR);
+			const chCode = lineContent.charCodeAt(chIndex);
+			const chClass = (wordCharacterClass[chCode] || CharacterClass.REGULAR);
 
 			if (chClass === CharacterClass.REGULAR) {
 				if (wordType === WordType.SEPARATOR) {
@@ -81,8 +81,8 @@ export class Words {
 
 	private static _findStartOfWord(lineContent: string, wordCharacterClass: WordCharacters, wordType: WordType, startIndex: number): number {
 		for (let chIndex = startIndex; chIndex >= 0; chIndex--) {
-			let chCode = lineContent.charCodeAt(chIndex);
-			let chClass = (wordCharacterClass[chCode] || CharacterClass.REGULAR);
+			const chCode = lineContent.charCodeAt(chIndex);
+			const chClass = (wordCharacterClass[chCode] || CharacterClass.REGULAR);
 
 			if (chClass === CharacterClass.WHITESPACE) {
 				return chIndex + 1;

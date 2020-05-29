@@ -26,7 +26,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "tslint -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile",
 		"test": "node ./out/test/runTest.js"
@@ -39,7 +39,9 @@
 		"glob": "^7.1.4",
 		"mocha": "^6.1.4",
 		"source-map-support": "^0.5.12",
-		"tslint": "^5.19.0",
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"eslint": "^7.1.0",
 		"typescript": "^3.8.3",
 		"vscode-test": "^1.3.0"
 	}

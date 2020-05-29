@@ -51,7 +51,7 @@ ${LSP_TABLE_END.trim()}`
 
 const readme = fs.readFileSync('README.md', 'utf-8')
 const newReadme = readme
-  .replace(/<!-- SAMPLES_BEGIN -->(.|\n)*<!-- SAMPLES_END -->/gm, getSamplesTable(samples))
+  .replace(/<!-- SAMPLES_BEGIN -->(.|\n)*<!-- SAMPLES_END -->/gm, getSamplesTable(samples.filter(x => !x.excludeFromReadme)))
   .replace(/<!-- LSP_SAMPLES_BEGIN -->(.|\n)*<!-- LSP_SAMPLES_END -->/gm, getLSPSamplesTable(lspSamples))
 
 fs.writeFileSync('README.md', newReadme)

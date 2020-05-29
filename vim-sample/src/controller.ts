@@ -48,14 +48,14 @@ export class Controller implements IController {
 		if (this._isVisual) {
 			return;
 		}
-		let sel = editor.selection;
-		let pos = sel.active;
-		let doc = editor.document;
-		let lineContent = doc.lineAt(pos.line).text;
+		const sel = editor.selection;
+		const pos = sel.active;
+		const doc = editor.document;
+		const lineContent = doc.lineAt(pos.line).text;
 		if (lineContent.length === 0) {
 			return;
 		}
-		let maxCharacter = lineContent.length - 1;
+		const maxCharacter = lineContent.length - 1;
 		if (pos.character > maxCharacter) {
 			setPositionAndReveal(editor, pos.line, maxCharacter);
 		}
@@ -126,7 +126,7 @@ export class Controller implements IController {
 	}
 
 	public getStatusText(): string {
-		let label = this._getModeLabel();
+		const label = this._getModeLabel();
 		return `VIM:> ${label}` + (this._currentInput ? ` >${this._currentInput}` : ``);
 	}
 
@@ -140,7 +140,7 @@ export class Controller implements IController {
 
 	public compositionEnd(editor: TextEditor): Thenable<ITypeResult> {
 		this._isInComposition = false;
-		let text = this._composingText;
+		const text = this._composingText;
 		this._composingText = '';
 
 		if (text.length === 0) {
@@ -170,7 +170,7 @@ export class Controller implements IController {
 		}
 
 		if (this._currentMode === Mode.REPLACE) {
-			let pos = editor.selection.active;
+			const pos = editor.selection.active;
 			editor.edit((builder) => {
 				builder.replace(new Range(pos.line, pos.character, pos.line, pos.character + 1), text);
 			}).then(() => {
@@ -197,7 +197,7 @@ export class Controller implements IController {
 		}
 
 		if (this._currentMode === Mode.REPLACE) {
-			let pos = editor.selection.active;
+			const pos = editor.selection.active;
 			editor.edit((builder) => {
 				builder.replace(new Range(pos.line, pos.character - replaceCharCnt, pos.line, pos.character), text);
 			});
@@ -214,12 +214,12 @@ export class Controller implements IController {
 				return this._findMapping(value || '', editor, modifierKeys);
 			});
 		}
-		let result = this._findMapping(this._currentInput, editor, modifierKeys);
+		const result = this._findMapping(this._currentInput, editor, modifierKeys);
 		return Promise.resolve(result);
 	}
 
 	private _findMapping(input: string, editor: TextEditor, modifierKeys: ModifierKeys): ITypeResult {
-		let command = Mappings.findCommand(input, modifierKeys);
+		const command = Mappings.findCommand(input, modifierKeys);
 		if (command) {
 			this._currentInput = '';
 			return {
@@ -228,7 +228,7 @@ export class Controller implements IController {
 			};
 		}
 
-		let operator = Mappings.findOperator(input, modifierKeys);
+		const operator = Mappings.findOperator(input, modifierKeys);
 		if (operator) {
 			if (this._isVisual) {
 				if (operator.runVisual(this, editor)) {
@@ -246,7 +246,7 @@ export class Controller implements IController {
 			};
 		}
 
-		let motionCommand = Mappings.findMotionCommand(input, this._isVisual, modifierKeys);
+		const motionCommand = Mappings.findMotionCommand(input, this._isVisual, modifierKeys);
 		if (motionCommand) {
 			this._currentInput = '';
 			return {
@@ -255,9 +255,9 @@ export class Controller implements IController {
 			};
 		}
 
-		let motion = Mappings.findMotion(input);
+		const motion = Mappings.findMotion(input);
 		if (motion) {
-			let newPos = motion.run(editor.document, editor.selection.active, this._motionState);
+			const newPos = motion.run(editor.document, editor.selection.active, this._motionState);
 			if (this._isVisual) {
 				setSelectionAndReveal(editor, this._motionState.anchor, newPos.line, newPos.character);
 			} else {

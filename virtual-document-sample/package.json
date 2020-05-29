@@ -51,7 +51,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "tslint -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {

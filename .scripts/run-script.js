@@ -7,7 +7,7 @@ const path = require('path');
 const child_process = require('child_process');
 const { samples, lspSamples } = require('./samples')
 
-async function tryRun(
+function tryRun(
   /** @type {string} */ scriptName,
   /** @type {import('./samples').Sample} */ sample
 ) {

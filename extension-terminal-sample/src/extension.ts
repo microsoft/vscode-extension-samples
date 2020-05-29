@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const pty = {
 			onDidWrite: writeEmitter.event,
 			open: () => writeEmitter.fire('Type and press enter to echo the text\r\n\r\n'),
-			close: () => {},
+			close: () => { /* noop*/ },
 			handleInput: (data: string) => {
 				if (data === '\r') { // Enter
 					writeEmitter.fire(`\r\necho: "${colorText(line)}"\r\n\n`);

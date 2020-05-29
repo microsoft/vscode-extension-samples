@@ -117,7 +117,7 @@ export function activate(context: vscode.ExtensionContext) {
 				if (target.target === vscode.ConfigurationTarget.WorkspaceFolder) {
 
 					// 3) Getting the workspace folder
-					let workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' });
+					const workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' });
 					if (workspaceFolder) {
 
 						// 4) Get the configuration for the workspace folder
@@ -212,12 +212,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 		// Check if a language configuration is changed for a text document
 		if (e.affectsConfiguration('conf.language.showSize', vscode.window.activeTextEditor)) {
-
+			// noop 
 		}
 
 		// Check if a language configuration is changed for a language
 		if (e.affectsConfiguration('conf.language.showSize', { languageId: 'typescript' })) {
-
+			// noop 
 		}
 
 	}));

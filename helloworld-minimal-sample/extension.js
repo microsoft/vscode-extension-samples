@@ -29,6 +29,7 @@ function activate(context) {
 // this method is called when your extension is deactivated
 function deactivate() {}
 
+// eslint-disable-next-line no-undef
 module.exports = {
 	activate,
 	deactivate

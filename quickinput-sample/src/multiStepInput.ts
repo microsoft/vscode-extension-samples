@@ -106,7 +106,7 @@ export async function multiStepInput(context: ExtensionContext) {
 	function shouldResume() {
 		// Could show a notification with the option to resume.
 		return new Promise<boolean>((resolve, reject) => {
-
+			// noop
 		});
 	}
 
@@ -134,7 +134,6 @@ export async function multiStepInput(context: ExtensionContext) {
 
 
 class InputFlowAction {
-	private constructor() { }
 	static back = new InputFlowAction();
 	static cancel = new InputFlowAction();
 	static resume = new InputFlowAction();

@@ -98,7 +98,7 @@ export default class ReferencesDocument {
 	}
 
 	private _appendTrailing(doc: vscode.TextDocument, line: number, next: vscode.Range): void {
-		let to = Math.min(doc.lineCount, line + 3);
+		const to = Math.min(doc.lineCount, line + 3);
 		if (next && next.start.line - to <= 2) {
 			return; // next is too close, _appendLeading does the work
 		}

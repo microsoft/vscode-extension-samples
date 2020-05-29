@@ -28,7 +28,7 @@ export class FiddleRepository implements QuickDiffProvider {
 
 	provideOriginalResource?(uri: Uri, token: CancellationToken): ProviderResult<Uri> {
 		// converts the local file uri to jsfiddle:file.ext
-		let relativePath = workspace.asRelativePath(uri.fsPath);
+		const relativePath = workspace.asRelativePath(uri.fsPath);
 		return Uri.parse(`${JSFIDDLE_SCHEME}:${relativePath}`);
 	}
 
@@ -63,7 +63,7 @@ const DEMO: FiddleData[] = [
 ];
 
 // emulates prior versions mock-committed in previous sessions
-var demoVersionOffset: number | undefined = undefined;
+let demoVersionOffset: number | undefined = undefined;
 
 export async function downloadFiddle(slug: string, version: number | undefined): Promise<Fiddle> {
 
@@ -71,13 +71,13 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 		// use mock fiddle
 		if (demoVersionOffset === undefined && version === undefined) { version = 0; }
 		if (demoVersionOffset === undefined) { demoVersionOffset = version; }
-		let maxDemoVersion = DEMO.length - 1 + demoVersionOffset;
+		const maxDemoVersion = DEMO.length - 1 + demoVersionOffset;
 		if (version === undefined) { version = maxDemoVersion; }
 
 		if (version >= 0 && version <= maxDemoVersion) {
 			// mock all versions committed in previous sessions by the first version
-			let index = Math.max(0, version - demoVersionOffset);
-			let fiddleData = DEMO[index];
+			const index = Math.max(0, version - demoVersionOffset);
+			const fiddleData = DEMO[index];
 			return new Fiddle(slug, version, fiddleData);
 		}
 		else {
@@ -85,14 +85,14 @@ export async function downloadFiddle(slug: string, version: number | undefined):
 		}
 	}
 
-	let id = toFiddleId(slug, version);
+	const id = toFiddleId(slug, version);
 
 	return new Promise<Fiddle>((resolve, reject) => {
 		JSFiddle.getFiddle(id, (err: any, fiddleData: any) => {
 			// handle error
 			if (err) { reject(err); }
 
-			let fiddle = new Fiddle(slug, version, fiddleData);
+			const fiddle = new Fiddle(slug, version, fiddleData);
 
 			resolve(fiddle);
 		});
@@ -103,13 +103,13 @@ export async function uploadFiddle(slug: string, version: number, html: string, 
 
 	if (slug === "demo") {
 		// using mock fiddle
-		let fiddleData: FiddleData = { html: html, js: js, css: css };
+		const fiddleData: FiddleData = { html: html, js: js, css: css };
 		DEMO.push(fiddleData);
 		return new Fiddle(slug, version, fiddleData);
 	}
 	else {
 
-		let answer = await window.showQuickPick(["Yes, open in the browser. I will paste the new Fiddle code, discard changes, refresh source control and checkout latest.", "No, I was just clicking around."],
+		const answer = await window.showQuickPick(["Yes, open in the browser. I will paste the new Fiddle code, discard changes, refresh source control and checkout latest.", "No, I was just clicking around."],
 			{ placeHolder: "JS Fiddle saving is not supported. Do you want to open the JSFiddle in the browser?" });
 
 		if (answer && answer.toLowerCase().startsWith("yes")) {
@@ -119,7 +119,7 @@ export async function uploadFiddle(slug: string, version: number, html: string, 
 
 		if (false) {
 			// this, sadly, does not work as advertised
-			let data = {
+			const data = {
 				slug: slug,
 				version: version,
 				html: html,
@@ -134,7 +134,7 @@ export async function uploadFiddle(slug: string, version: number, html: string, 
 						reject(err);
 					}
 					else {
-						let fiddle = new Fiddle(slug, version, fiddleData);
+						const fiddle = new Fiddle(slug, version, fiddleData);
 
 						resolve(fiddle);
 					}

@@ -97,7 +97,7 @@ export class FtpModel {
 					let string = '';
 					stream.on('data', function (buffer) {
 						if (buffer) {
-							var part = buffer.toString();
+							const part = buffer.toString();
 							string += part;
 						}
 					});
@@ -120,7 +120,7 @@ export class FtpTreeDataProvider implements vscode.TreeDataProvider<FtpNode>, vs
 	constructor(private readonly model: FtpModel) { }
 
 	public refresh(): any {
-		this._onDidChangeTreeData.fire();
+		this._onDidChangeTreeData.fire(undefined);
 	}
 
 

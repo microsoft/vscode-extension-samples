@@ -26,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// A `CommentingRangeProvider` controls where gutter decorations that allow adding comments are shown
 	commentController.commentingRangeProvider = {
 		provideCommentingRanges: (document: vscode.TextDocument, token: vscode.CancellationToken) => {
-			let lineCount = document.lineCount;
+			const lineCount = document.lineCount;
 			return [new vscode.Range(0, 0, lineCount - 1, 0)];
 		}
 	};
@@ -40,15 +40,15 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.startDraft', (reply: vscode.CommentReply) => {
-		let thread = reply.thread;
+		const thread = reply.thread;
 		thread.contextValue = 'draft';
-		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+		const newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
 		newComment.label = 'pending';
 		thread.comments = [...thread.comments, newComment];
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.finishDraft', (reply: vscode.CommentReply) => {
-		let thread = reply.thread;
+		const thread = reply.thread;
 
 		if (!thread) {
 			return;
@@ -57,7 +57,7 @@ export function activate(context: vscode.ExtensionContext) {
 		thread.contextValue = undefined;
 		thread.collapsibleState = vscode.CommentThreadCollapsibleState.Collapsed;
 		if (reply.text) {
-			let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
+			const newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread);
 			thread.comments = [...thread.comments, newComment].map(comment => {
 				comment.label = undefined;
 				return comment;
@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.deleteNoteComment', (comment: NoteComment) => {
-		let thread = comment.parent;
+		const thread = comment.parent;
 		if (!thread) {
 			return;
 		}
@@ -129,8 +129,8 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	function replyNote(reply: vscode.CommentReply) {
-		let thread = reply.thread;
-		let newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread, thread.comments.length ? 'canDelete' : undefined);
+		const thread = reply.thread;
+		const newComment = new NoteComment(reply.text, vscode.CommentMode.Preview, { name: 'vscode' }, thread, thread.comments.length ? 'canDelete' : undefined);
 		if (thread.contextValue === 'draft') {
 			newComment.label = 'pending';
 		}

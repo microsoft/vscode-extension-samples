@@ -72,7 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function randomData(lineCnt: number, lineLen = 155): Buffer {
-    let lines: string[] = [];
+    const lines: string[] = [];
     for (let i = 0; i < lineCnt; i++) {
         let line = '';
         while (line.length < lineLen) {

@@ -209,7 +209,8 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./"
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint . --ext .ts,.tsx"
 	},
 	"devDependencies": {
 		"@types/mkdirp": "^0.5.2",
@@ -217,7 +218,9 @@
 		"@types/rimraf": "^2.0.2",
 		"@types/vscode": "^1.42.0",
 		"typescript": "^3.8.3",
-		"tslint": "^5.12.1"
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"eslint": "^7.1.0"
 	},
 	"dependencies": {
 		"jsonc-parser": "^0.4.2",

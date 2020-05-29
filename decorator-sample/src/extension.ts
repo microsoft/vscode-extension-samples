@@ -41,7 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const smallNumbers: vscode.DecorationOptions[] = [];
 		const largeNumbers: vscode.DecorationOptions[] = [];
 		let match;
-		while (match = regEx.exec(text)) {
+		while ((match = regEx.exec(text))) {
 			const startPos = activeEditor.document.positionAt(match.index);
 			const endPos = activeEditor.document.positionAt(match.index + match[0].length);
 			const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Number **' + match[0] + '**' };
