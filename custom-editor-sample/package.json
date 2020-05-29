@@ -37,22 +37,24 @@
 				"selector": [
 					{
 						"filenamePattern": "*.pawdraw"
-			}
-		]
+					}
+				]
 			}
 		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "tslint -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -w -p ./"
 	},
 	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "^12.12.0",
-		"tslint": "^5.19.0",
-		"typescript": "^3.8.3",
-		"@types/vscode": "^1.44.0"
+		"@types/vscode": "^1.44.0",
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"eslint": "^7.1.0",
+		"typescript": "^3.8.3"
 	}
 }

@@ -373,9 +373,11 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 				return;
 
 			case 'response':
-				const callback = this._callbacks.get(message.requestId);
-				callback?.(message.body);
-				return;
+				{
+					const callback = this._callbacks.get(message.requestId);
+					callback?.(message.body);
+					return;
+				}
 		}
 	}
 }
