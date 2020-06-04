@@ -187,9 +187,9 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDrawDocument> {
 
 	public static register(context: vscode.ExtensionContext): vscode.Disposable {
-		return vscode.window.registerCustomEditorProvider2(
+		return vscode.window.registerCustomEditorProvider(
 			PawDrawEditorProvider.viewType,
-			new PawDrawEditorProvider(context),
+			new PawDrawEditorProvider(context) as any,
 			{
 				// For this demo extension, we enable `retainContextWhenHidden` which keeps the 
 				// webview alive even when it is not visible. You should avoid using this setting
@@ -198,7 +198,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 					retainContextWhenHidden: true,
 				},
 				supportsMultipleEditorsPerDocument: false,
-			});
+			} as any);
 	}
 
 	private static readonly viewType = 'catCustoms.pawDraw';
