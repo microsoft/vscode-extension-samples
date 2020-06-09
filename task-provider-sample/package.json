@@ -4,7 +4,6 @@
 	"description": "Samples for VSCode's view API",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
-	"enableProposedApi": "true",
 	"engines": {
 		"vscode": "^1.45.0"
 	},
