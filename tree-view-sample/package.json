@@ -6,7 +6,7 @@
 	"publisher": "vscode-samples",
 	"enableProposedApi": true,
 	"engines": {
-		"vscode": "^1.42.0"
+		"vscode": "^1.46.0"
 	},
 	"categories": [
 		"Other"
@@ -36,7 +36,9 @@
 			"package-explorer": [
 				{
 					"id": "nodeDependencies",
-					"name": "Node Dependencies"
+					"name": "Node Dependencies",
+					"icon": "media/dep.svg",
+					"contextualTitle": "Package Explorer"
 				}
 			],
 			"explorer": [
