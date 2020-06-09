@@ -18,7 +18,7 @@ interface CustomBuildTaskDefinition extends vscode.TaskDefinition {
 }
 
 export class CustomBuildTaskProvider implements vscode.TaskProvider {
-	static CustomBuildScriptType: string = 'custombuildscript';
+	static CustomBuildScriptType = 'custombuildscript';
 	private tasks: vscode.Task[] | undefined;
 
 	// We use a CustomExecution task when state needs to be shared accross runs of the task or when 
@@ -69,7 +69,7 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 				flags
 			};
 		}
-		return new vscode.Task2(definition, vscode.TaskScope.Workspace, `${flavor} ${flags.join(' ')}`,
+		return new vscode.Task(definition, vscode.TaskScope.Workspace, `${flavor} ${flags.join(' ')}`,
 			CustomBuildTaskProvider.CustomBuildScriptType, new vscode.CustomExecution(async (): Promise<vscode.Pseudoterminal> => {
 				// When the task is executed, this callback will run. Here, we setup for running the task.
 				return new CustomBuildTaskTerminal(this.workspaceRoot, flavor, flags, () => this.sharedState, (state: string) => this.sharedState = state);
@@ -91,7 +91,7 @@ class CustomBuildTaskTerminal implements vscode.Pseudoterminal {
 	open(initialDimensions: vscode.TerminalDimensions | undefined): void {
 		// At this point we can start using the terminal.
 		if (this.flags.indexOf('watch') > -1) {
-			let pattern = path.join(this.workspaceRoot, 'customBuildFile');
+			const pattern = path.join(this.workspaceRoot, 'customBuildFile');
 			this.fileWatcher = vscode.workspace.createFileSystemWatcher(pattern);
 			this.fileWatcher.onDidChange(() => this.doBuild());
 			this.fileWatcher.onDidCreate(() => this.doBuild());
