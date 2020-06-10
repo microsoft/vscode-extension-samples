@@ -8,12 +8,12 @@ import * as cp from 'child_process';
 import * as vscode from 'vscode';
 
 export class RakeTaskProvider implements vscode.TaskProvider {
-	static RakeType: string = 'rake';
+	static RakeType = 'rake';
 	private rakePromise: Thenable<vscode.Task[]> | undefined = undefined;
 
 	constructor(workspaceRoot: string) {
-		let pattern = path.join(workspaceRoot, 'Rakefile');
-		let fileWatcher = vscode.workspace.createFileSystemWatcher(pattern);
+		const pattern = path.join(workspaceRoot, 'Rakefile');
+		const fileWatcher = vscode.workspace.createFileSystemWatcher(pattern);
 		fileWatcher.onDidChange(() => this.rakePromise = undefined);
 		fileWatcher.onDidCreate(() => this.rakePromise = undefined);
 		fileWatcher.onDidDelete(() => this.rakePromise = undefined);
@@ -80,7 +80,7 @@ interface RakeTaskDefinition extends vscode.TaskDefinition {
 
 const buildNames: string[] = ['build', 'compile', 'watch'];
 function isBuildTask(name: string): boolean {
-	for (let buildName of buildNames) {
+	for (const buildName of buildNames) {
 		if (name.indexOf(buildName) !== -1) {
 			return true;
 		}
@@ -90,7 +90,7 @@ function isBuildTask(name: string): boolean {
 
 const testNames: string[] = ['test'];
 function isTestTask(name: string): boolean {
-	for (let testName of testNames) {
+	for (const testName of testNames) {
 		if (name.indexOf(testName) !== -1) {
 			return true;
 		}
@@ -99,60 +99,64 @@ function isTestTask(name: string): boolean {
 }
 
 async function getRakeTasks(): Promise<vscode.Task[]> {
-	let workspaceRoot = vscode.workspace.rootPath;
-	let emptyTasks: vscode.Task[] = [];
-	if (!workspaceRoot) {
-		return emptyTasks;
+	const workspaceFolders = vscode.workspace.workspaceFolders;
+	const result: vscode.Task[] = [];
+	if (!workspaceFolders || workspaceFolders.length === 0) {
+		return result;
 	}
-	let rakeFile = path.join(workspaceRoot, 'Rakefile');
-	if (!await exists(rakeFile)) {
-		return emptyTasks;
-	}
-
-	let commandLine = 'rake -AT -f Rakefile';
-	try {
-		let { stdout, stderr } = await exec(commandLine, { cwd: workspaceRoot });
-		if (stderr && stderr.length > 0) {
-			getOutputChannel().appendLine(stderr);
-			getOutputChannel().show(true);
+	for (const workspaceFolder of workspaceFolders) {
+		const folderString = workspaceFolder.uri.fsPath;
+		if (!folderString) {
+			continue;
 		}
-		let result: vscode.Task[] = [];
-		if (stdout) {
-			let lines = stdout.split(/\r{0,1}\n/);
-			for (let line of lines) {
-				if (line.length === 0) {
-					continue;
-				}
-				let regExp = /rake\s(.*)#/;
-				let matches = regExp.exec(line);
-				if (matches && matches.length === 2) {
-					let taskName = matches[1].trim();
-					let kind: RakeTaskDefinition = {
-						type: 'rake',
-						task: taskName
-					};
-					let task = new vscode.Task(kind, taskName, 'rake', new vscode.ShellExecution(`rake ${taskName}`));
-					result.push(task);
-					let lowerCaseLine = line.toLowerCase();
-					if (isBuildTask(lowerCaseLine)) {
-						task.group = vscode.TaskGroup.Build;
-					} else if (isTestTask(lowerCaseLine)) {
-						task.group = vscode.TaskGroup.Test;
+		const rakeFile = path.join(folderString, 'Rakefile');
+		if (!await exists(rakeFile)) {
+			continue;
+		}
+
+		const commandLine = 'rake -AT -f Rakefile';
+		try {
+			const { stdout, stderr } = await exec(commandLine, { cwd: folderString });
+			if (stderr && stderr.length > 0) {
+				getOutputChannel().appendLine(stderr);
+				getOutputChannel().show(true);
+			}
+			if (stdout) {
+				const lines = stdout.split(/\r{0,1}\n/);
+				for (const line of lines) {
+					if (line.length === 0) {
+						continue;
+					}
+					const regExp = /rake\s(.*)#/;
+					const matches = regExp.exec(line);
+					if (matches && matches.length === 2) {
+						const taskName = matches[1].trim();
+						const kind: RakeTaskDefinition = {
+							type: 'rake',
+							task: taskName
+						};
+						const task = new vscode.Task(kind, workspaceFolder, taskName, 'rake', new vscode.ShellExecution(`rake ${taskName}`));
+						result.push(task);
+						const lowerCaseLine = line.toLowerCase();
+						if (isBuildTask(lowerCaseLine)) {
+							task.group = vscode.TaskGroup.Build;
+						} else if (isTestTask(lowerCaseLine)) {
+							task.group = vscode.TaskGroup.Test;
+						}
 					}
 				}
 			}
+		} catch (err) {
+			const channel = getOutputChannel();
+			if (err.stderr) {
+				channel.appendLine(err.stderr);
+			}
+			if (err.stdout) {
+				channel.appendLine(err.stdout);
+			}
+			channel.appendLine('Auto detecting rake tasks failed.');
+			channel.show(true);
 		}
-		return result;
-	} catch (err) {
-		let channel = getOutputChannel();
-		if (err.stderr) {
-			channel.appendLine(err.stderr);
-		}
-		if (err.stdout) {
-			channel.appendLine(err.stdout);
-		}
-		channel.appendLine('Auto detecting rake tasts failed.');
-		channel.show(true);
-		return emptyTasks;
 	}
+	return result;
 }
