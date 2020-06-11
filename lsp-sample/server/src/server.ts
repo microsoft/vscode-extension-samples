@@ -21,12 +21,11 @@ import {
 	TextDocument
 } from 'vscode-languageserver-textdocument';
 
-// Create a connection for the server. The connection uses Node's IPC as a transport.
+// Create a connection for the server, using Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
 
-// Create a simple text document manager. The text document manager
-// supports full document sync only
+// Create a simple text document manager. 
 let documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 let hasConfigurationCapability: boolean = false;
@@ -37,7 +36,7 @@ connection.onInitialize((params: InitializeParams) => {
 	let capabilities = params.capabilities;
 
 	// Does the client support the `workspace/configuration` request?
-	// If not, we will fall back using global settings
+	// If not, we fall back using global settings.
 	hasConfigurationCapability = !!(
 		capabilities.workspace && !!capabilities.workspace.configuration
 	);
@@ -53,7 +52,7 @@ connection.onInitialize((params: InitializeParams) => {
 	const result: InitializeResult = {
 		capabilities: {
 			textDocumentSync: TextDocumentSyncKind.Incremental,
-			// Tell the client that the server supports code completion
+			// Tell the client that this server supports code completion.
 			completionProvider: {
 				resolveProvider: true
 			}
