@@ -1,0 +1,7 @@
+.vscode
+node_modules
+src/**
+package-json.lock
+tsconfig.json
+.parcel-cache
+.cache

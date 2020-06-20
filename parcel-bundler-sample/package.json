@@ -1,0 +1,63 @@
+{
+	"name": "parcel-sample",
+	"displayName": "parcel-sample",
+	"description": "",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.32.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extension.helloParcel"
+	],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.helloParcel",
+				"title": "Hello Parcel"
+			}
+		]
+	},
+	"scripts": {
+		"clean": "rimraf -rf out dist *.vsix",
+		"predev": "npm run clean",
+		"vscode:prepublish": "npm run build",
+		"build": "parcel build ./src/extension.ts --target main --dist-dir dist --no-cache",
+		"watch": "concurrently -k \"npm:watch:*\"",
+		"watch:tsc": "npm run ts -- -w --noEmit --preserveWatchOutput",
+		"watch:ext": "parcel watch ./src/extension.ts --target main --dist-dir dist --no-hmr --no-cache",
+		"test-compile": "npm run ts",
+		"lint": "eslint . --ext .ts,.tsx",
+		"ts": "tsc -p ."
+	},
+	"targets": {
+		"main": {
+			"context": "node",
+			"includeNodeModules": {
+				"vscode": false
+			},
+			"outputFormat": "commonjs"
+		}
+	},
+	"optimizers": {
+		"*.js": [
+			"@parcel/optimizer-terser"
+		]
+	},
+	"devDependencies": {
+		"@parcel/optimizer-terser": "2.0.0-alpha.3",
+		"@types/node": "^12.12.0",
+		"@types/vscode": "^1.32.0",
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"concurrently": "^5.2.0",
+		"eslint": "^7.1.0",
+		"parcel": "2.0.0-beta.1",
+		"rimraf": "^3.0.2",
+		"typescript": "^3.9.4"
+	}
+}
