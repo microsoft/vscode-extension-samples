@@ -4,7 +4,7 @@ This is an extension that uses [https://webpack.js.org]() to bundle and minify i
 
 ## Configuration
 
-Webpack in configured in the [`webpack.config.js`](./webpack.config.js)-file. Find annotation inside the file itself or refer to the excellent webpack documentation: [https://webpack.js.org/configuration/](). In short, the config-files defines the entry point of the extension, to use TypeScript, to produce a commonjs-module, and what modules not to bundle.
+Webpack is configured in the [`webpack.config.js`](./webpack.config.js)-file. Find annotation inside the file itself or refer to the excellent webpack documentation: [https://webpack.js.org/configuration/](). In short, the config-files defines the entry point of the extension, to use TypeScript, to produce a commonjs-module, and what modules not to bundle.
 
 ## Scripts
 
