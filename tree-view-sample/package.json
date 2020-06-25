@@ -218,7 +218,7 @@
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^12.12.0",
 		"@types/rimraf": "^2.0.2",
-		"@types/vscode": "^1.42.0",
+		"@types/vscode": "^1.45.0",
 		"typescript": "^3.9.4",
 		"@typescript-eslint/eslint-plugin": "^3.0.2",
 		"@typescript-eslint/parser": "^3.0.2",
