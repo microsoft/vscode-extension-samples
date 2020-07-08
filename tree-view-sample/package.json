@@ -19,7 +19,7 @@
 		"onView:testView",
 		"onLanguage:json",
 		"onLanguage:jsonc",
-		"onCommand:sample.reveal"
+		"onCommand:testView.reveal"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -228,6 +228,7 @@
 		"jsonc-parser": "^0.4.2",
 		"ftp": "^0.3.10",
 		"mkdirp": "^0.5.1",
-		"rimraf": "^2.6.2"
+		"rimraf": "^2.6.2",
+		"minimist": "^0.2.1"
 	}
 }
