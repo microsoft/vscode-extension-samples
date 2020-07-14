@@ -3,10 +3,12 @@
 	"displayName": "Custom view Samples",
 	"description": "Samples for VSCode's view API",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
-	"enableProposedApi": true,
+	"publisher": "test",
+	"repository": {
+		"url": "https://github.com/microsoft/vscode-extension-samples"
+	},
 	"engines": {
-		"vscode": "^1.46.0"
+		"vscode": "^1.47.0"
 	},
 	"categories": [
 		"Other"

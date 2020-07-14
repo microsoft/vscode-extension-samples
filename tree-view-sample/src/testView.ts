@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 
+const _onDidChangeTreeData: vscode.EventEmitter<{ key: string } | undefined | void> = new vscode.EventEmitter();
+
 export class TestView {
 
 	constructor(context: vscode.ExtensionContext) {
 		const view = vscode.window.createTreeView('testView', { treeDataProvider: aNodeWithIdTreeDataProvider(), showCollapseAll: true });
 		vscode.commands.registerCommand('testView.reveal', async () => {
-			const key = await vscode.window.showInputBox({ placeHolder: 'Type the label of the item to reveal' });
-			if (key) {
-				await view.reveal({ key }, { focus: true, select: false, expand: true });
-			}
+			vscode.window.showInformationMessage('firing');
+			_onDidChangeTreeData.fire();
 		});
 		vscode.commands.registerCommand('testView.changeTitle', async () => {
 			const title = await vscode.window.showInputBox({ prompt: 'Type the new title for the Test View', placeHolder: view.title });
@@ -40,10 +40,11 @@ const tree = {
 	}
 };
 const nodes = {};
-
-function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }> {
+function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string } | undefined> {
 	return {
-		getChildren: (element: { key: string }): { key: string }[] => {
+		onDidChangeTreeData: _onDidChangeTreeData.event,
+		getChildren: (element: { key: string } | undefined): { key: string }[] => {
+			vscode.window.showInformationMessage('Updating custom view with ' + (element ? element.key : undefined));
 			return getChildren(element ? element.key : undefined).map(key => getNode(key));
 		},
 		getTreeItem: (element: { key: string }): vscode.TreeItem => {
@@ -58,7 +59,7 @@ function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }>
 	};
 }
 
-function getChildren(key: string): string[] {
+function getChildren(key: string | undefined): string[] {
 	if (!key) {
 		return Object.keys(tree);
 	}
@@ -69,10 +70,10 @@ function getChildren(key: string): string[] {
 	return [];
 }
 
-function getTreeItem(key: string): vscode.TreeItem2 {
+function getTreeItem(key: string): vscode.TreeItem {
 	const treeElement = getTreeElement(key);
 	return {
-		label: <vscode.TreeItemLabel>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0},
+		label: key,
 		tooltip: `Tooltip for ${key}`,
 		collapsibleState: treeElement && Object.keys(treeElement).length ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None
 	};
