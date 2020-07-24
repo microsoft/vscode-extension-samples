@@ -13,7 +13,8 @@
 	],
 	"activationEvents": [
 		"onCustomEditor:catCustoms.catScratch",
-		"onCustomEditor:catCustoms.pawDraw"
+		"onCustomEditor:catCustoms.pawDraw",
+		"onCommand:catCustoms.pawDraw.new"
 	],
 	"repository": {
 		"type": "git",
@@ -39,6 +40,13 @@
 						"filenamePattern": "*.pawdraw"
 					}
 				]
+			}
+		],
+		"commands": [
+			{
+				"command": "catCustoms.pawDraw.new",
+				"title": "Create new Paw Draw Document",
+				"category": "Paw Draw"
 			}
 		]
 	},

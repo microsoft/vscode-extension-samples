@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { getNonce } from './util';
 import { Disposable, disposeAll } from './dispose';
+import { getNonce } from './util';
 
 /**
  * Define the type of edits used in paw draw files.
@@ -27,8 +27,15 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 	): Promise<PawDrawDocument | PromiseLike<PawDrawDocument>> {
 		// If we have a backup, read that. Otherwise read the resource from the workspace
 		const dataFile = typeof backupId === 'string' ? vscode.Uri.parse(backupId) : uri;
-		const fileData = await vscode.workspace.fs.readFile(dataFile);
+		const fileData = await PawDrawDocument.readFile(dataFile);
 		return new PawDrawDocument(uri, fileData, delegate);
+	}
+
+	private static async readFile(uri: vscode.Uri): Promise<Uint8Array> {
+		if (uri.scheme === 'untitled') {
+			return new Uint8Array();
+		}
+		return vscode.workspace.fs.readFile(uri);
 	}
 
 	private readonly _uri: vscode.Uri;
@@ -139,7 +146,7 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 	 * Called by VS Code when the user calls `revert` on a document.
 	 */
 	async revert(_cancellation: vscode.CancellationToken): Promise<void> {
-		const diskContent = await vscode.workspace.fs.readFile(this.uri);
+		const diskContent = await PawDrawDocument.readFile(this.uri);
 		this._documentData = diskContent;
 		this._edits = this._savedEdits;
 		this._onDidChangeDocument.fire({
@@ -186,7 +193,22 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
  */
 export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDrawDocument> {
 
+	private static newPawDrawFileId = 1;
+
 	public static register(context: vscode.ExtensionContext): vscode.Disposable {
+		vscode.commands.registerCommand('catCustoms.pawDraw.new', () => {
+			const workspaceFolders = vscode.workspace.workspaceFolders;
+			if (!workspaceFolders) {
+				vscode.window.showErrorMessage("Creating new Paw Draw files currently requires opening a workspace");
+				return;
+			}
+
+			const uri = vscode.Uri.joinPath(workspaceFolders[0].uri, `new-${PawDrawEditorProvider.newPawDrawFileId++}.pawdraw`)
+				.with({ scheme: 'untitled' });
+
+			vscode.commands.executeCommand('vscode.openWith', uri, PawDrawEditorProvider.viewType);
+		});
+
 		return vscode.window.registerCustomEditorProvider(
 			PawDrawEditorProvider.viewType,
 			new PawDrawEditorProvider(context),
@@ -275,9 +297,15 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 		// Wait for the webview to be properly ready before we init
 		webviewPanel.webview.onDidReceiveMessage(e => {
 			if (e.type === 'ready') {
-				this.postMessage(webviewPanel, 'init', {
-					value: document.documentData
-				});
+				if (document.uri.scheme === 'untitled') {
+					this.postMessage(webviewPanel, 'init', {
+						untitled: true
+					});
+				} else {
+					this.postMessage(webviewPanel, 'init', {
+						value: document.documentData
+					});
+				}
 			}
 		});
 	}
