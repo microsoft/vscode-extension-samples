@@ -182,9 +182,9 @@
 		 */
 		async resetUntitled(strokes = []) {
 			const size = 100;
-			this.initialCanvas.width = size;
-			this.initialCanvas.height = size;
-			
+			this.initialCanvas.width = this.drawingCanvas.width = size;
+			this.initialCanvas.height = this.drawingCanvas.height = size;
+
 			this.initialCtx.save();
 			{
 				this.initialCtx.fillStyle = 'white';
@@ -245,7 +245,7 @@
 				{
 					// Get the image data for the canvas and post it back to the extension.
 					editor.getImageData().then(data => {
-						vscode.postMessage({ type: 'response', requestId, body: data });
+						vscode.postMessage({ type: 'response', requestId, body: Array.from(data) });
 					});
 					return;
 				}

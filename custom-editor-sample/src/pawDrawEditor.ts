@@ -248,8 +248,8 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 					throw new Error('Could not find webview to save for');
 				}
 				const panel = webviewsForDocument[0];
-				const response = await this.postMessageWithResponse<{ data: number[] }>(panel, 'getFileData', {});
-				return new Uint8Array(response.data);
+				const response = await this.postMessageWithResponse<number[]>(panel, 'getFileData', {});
+				return new Uint8Array(response);
 			}
 		});
 
