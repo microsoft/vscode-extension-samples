@@ -209,7 +209,7 @@
 			outCtx.drawImage(this.drawingCanvas, 0, 0);
 
 			const blob = await new Promise(resolve => {
-				outCanvas.toBlob(resolve, 'image/jpeg')
+				outCanvas.toBlob(resolve, 'image/png')
 			});
 
 			return new Uint8Array(await blob.arrayBuffer());

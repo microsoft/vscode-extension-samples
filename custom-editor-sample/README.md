@@ -5,7 +5,7 @@
 Demonstrates VS Code's [custom editor API](https://code.visualstudio.com/api/extension-guides/custom-editors) using two custom editors:
 
 - Cat Scratch — Uses the finalized custom text editor api to provide a custom editor for `.cscratch` files (which are just json files)
-- Paw Draw - Uses the binary custom editor api to provide a custom editor for `.pawdraw` files (which are just jpeg files with a different file extension).
+- Paw Draw - Uses the binary custom editor api to provide a custom editor for `.pawdraw` files (which are just png files with a different file extension).
 
 ## VS Code API
 
