@@ -1,0 +1,40 @@
+{
+	"name": "github-authentication-sample",
+	"displayName": "github-authentication-sample",
+	"description": "Example of using the GitHub Authentication Provider",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.48.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.getGitHubUser",
+				"title": "Get GitHub User"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"postinstall": "cd typings && npx vscode-dts master",
+		"compile": "tsc -p ./",
+		"lint": "tslint -p ./",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^10.14.17",
+		"tslint": "^5.16.0",
+		"typescript": "^3.5.1"
+	},
+	"dependencies": {
+		"@octokit/rest": "^18.0.0"
+	}
+}
