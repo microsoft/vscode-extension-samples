@@ -18,7 +18,8 @@
 		"commands": [
 			{
 				"command": "extension.getGitHubUser",
-				"title": "Get GitHub User"
+				"title": "Get GitHub User",
+				"category": "GitHub Authentication Sample"
 			}
 		]
 	},
