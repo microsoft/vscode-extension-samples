@@ -1,6 +1,6 @@
 # GitHub Authentication Sample
 
-This is a GitHub authentication example that shows you how to use VS Code API authentication API.
+This is a GitHub authentication example that shows you how to use the VS Code API authentication API.
 
 ## Demo
 
