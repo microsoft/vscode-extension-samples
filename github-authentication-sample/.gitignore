@@ -2,4 +2,4 @@ out
 node_modules
 .vscode-test/
 *.vsix
-typings/vscode.d.ts
+vscode.d.ts

@@ -24,7 +24,7 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"postinstall": "cd typings && npx vscode-dts master",
+		"postinstall": "npx vscode-dts master",
 		"compile": "tsc -p ./",
 		"lint": "tslint -p ./",
 		"watch": "tsc -watch -p ./"
