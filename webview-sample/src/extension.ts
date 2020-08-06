@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
- 
+
 const cats = {
 	'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
 	'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
@@ -167,30 +167,30 @@ class CatCodingPanel {
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
-		// Use a nonce to whitelist which scripts can be run
+		// Use a nonce to only allow specific scripts to be run
 		const nonce = getNonce();
 
 		return `<!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
 
-                <!--
-                Use a content security policy to only allow loading images from https or from our extension directory,
-                and only allow scripts that have a specific nonce.
-                -->
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
+				<!--
+					Use a content security policy to only allow loading images from https or from our extension directory,
+					and only allow scripts that have a specific nonce.
+				-->
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
 
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Cat Coding</title>
-            </head>
-            <body>
-                <img src="${catGifPath}" width="300" />
-                <h1 id="lines-of-code-counter">0</h1>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Cat Coding</title>
+			</head>
+			<body>
+				<img src="${catGifPath}" width="300" />
+				<h1 id="lines-of-code-counter">0</h1>
 
-                <script nonce="${nonce}" src="${scriptUri}"></script>
-            </body>
-            </html>`;
+				<script nonce="${nonce}" src="${scriptUri}"></script>
+			</body>
+			</html>`;
 	}
 }
 
