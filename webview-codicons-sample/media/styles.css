@@ -1,0 +1,60 @@
+html {
+	box-sizing: border-box;
+	font-size: 16px;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+	margin: 0;
+	padding: 0;
+	font-weight: normal;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* Demo Styles */
+
+body {
+	font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+	margin: 0;
+	padding: 10px 20px;
+	text-align: center;
+	color: var(--vscode-foreground);
+	background-color: var(--vscode-editor-background);
+}
+
+h1 {
+	font-weight: bold;
+	margin: 24px;
+}
+
+#icons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+    justify-content: center;
+}
+
+#icons .icon {
+	width: 140px;
+	padding: 20px;
+	font-size: 14px;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+}
+
+#icons .icon .codicon {
+	font-size: 32px;
+	padding-bottom: 16px;
+}

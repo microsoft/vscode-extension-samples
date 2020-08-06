@@ -1,0 +1,52 @@
+{
+	"name": "cat-coding",
+	"description": "Cat Coding - A Webview API Sample",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.47.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:catCoding.start",
+		"onCommand:catCoding.doRefactor",
+		"onWebviewPanel:catCoding"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/microsoft/vscode-extension-samples.git"
+	},
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "catCoding.start",
+				"title": "Start cat coding session",
+				"category": "Cat Coding"
+			},
+			{
+				"command": "catCoding.doRefactor",
+				"title": "Do some refactoring",
+				"category": "Cat Coding"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
+		"watch": "tsc -w -p ./"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "^12.12.0",
+		"@types/vscode": "^1.47.0",
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"eslint": "^7.1.0",
+		"typescript": "^3.9.4",
+		"vscode-codicons": "0.0.7"
+	}
+}
