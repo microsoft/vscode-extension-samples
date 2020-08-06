@@ -1,6 +1,6 @@
 {
-	"name": "cat-coding",
-	"description": "Cat Coding - A Webview API Sample",
+	"name": "cat-codicons",
+	"description": "Cat Codicons - Using codicons in webviews",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
@@ -10,9 +10,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:catCoding.start",
-		"onCommand:catCoding.doRefactor",
-		"onWebviewPanel:catCoding"
+		"onCommand:catCodicons.show"
 	],
 	"repository": {
 		"type": "git",
@@ -22,14 +20,9 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "catCoding.start",
-				"title": "Start cat coding session",
-				"category": "Cat Coding"
-			},
-			{
-				"command": "catCoding.doRefactor",
-				"title": "Do some refactoring",
-				"category": "Cat Coding"
+				"command": "catCodicons.show",
+				"title": "Show Cat Codicons",
+				"category": "Cat Codicons"
 			}
 		]
 	},
