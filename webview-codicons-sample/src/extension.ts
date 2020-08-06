@@ -1,10 +1,9 @@
-import * as path from 'path';
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('catCodicons.show', () => {
-			CatCodiconsPanel.show(context.extensionPath);
+			CatCodiconsPanel.show(context.extensionUri);
 		})
 	);
 }
@@ -14,7 +13,7 @@ class CatCodiconsPanel {
 
 	public static readonly viewType = 'catCodicons';
 
-	public static show(extensionPath: string) {
+	public static show(extensionUri: vscode.Uri) {
 		const column = vscode.window.activeTextEditor
 			? vscode.window.activeTextEditor.viewColumn
 			: undefined;
@@ -25,25 +24,15 @@ class CatCodiconsPanel {
 			column || vscode.ViewColumn.One
 		);
 
-		panel.webview.html = this._getHtmlForWebview(panel.webview, extensionPath);
+		panel.webview.html = this._getHtmlForWebview(panel.webview, extensionUri);
 	}
 
-	private static _getHtmlForWebview(webview: vscode.Webview, extensionPath: string) {
+	private static _getHtmlForWebview(webview: vscode.Webview, extensionUri: vscode.Uri) {
 
-		// Use a nonce to only allow specific resources
-		const nonce = getNonce();
-
-		const styleUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(extensionPath, "media", "styles.css")
-		));
-
-		const codiconsUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(extensionPath, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css')
-		));
-
-		const codiconsFontUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(extensionPath, 'node_modules', 'vscode-codicons', 'dist', 'codicon.ttf')
-		));
+		// Get resource paths
+		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'styles.css'));
+		const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css'));
+		const codiconsFontUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.ttf'));
 
 		return `<!DOCTYPE html>
 			<html lang="en">
@@ -54,7 +43,7 @@ class CatCodiconsPanel {
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} blob:; font-src ${codiconsFontUri}; style-src ${webview.cspSource} ${codiconsUri}; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconsFontUri}; style-src ${webview.cspSource} ${codiconsUri};">
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<title>Cat Coding</title>
@@ -396,11 +385,3 @@ class CatCodiconsPanel {
 	}
 }
 
-function getNonce() {
-	let text = '';
-	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-	for (let i = 0; i < 32; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
-	}
-	return text;
-}
