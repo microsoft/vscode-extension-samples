@@ -1,6 +1,5 @@
-import * as path from 'path';
 import * as vscode from 'vscode';
-
+ 
 const cats = {
 	'Coding Cat': 'https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif',
 	'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
@@ -10,7 +9,7 @@ const cats = {
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('catCoding.start', () => {
-			CatCodingPanel.createOrShow(context.extensionPath);
+			CatCodingPanel.createOrShow(context.extensionUri);
 		})
 	);
 
@@ -27,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
 			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
 				console.log(`Got state: ${state}`);
-				CatCodingPanel.revive(webviewPanel, context.extensionPath);
+				CatCodingPanel.revive(webviewPanel, context.extensionUri);
 			}
 		});
 	}
@@ -45,10 +44,10 @@ class CatCodingPanel {
 	public static readonly viewType = 'catCoding';
 
 	private readonly _panel: vscode.WebviewPanel;
-	private readonly _extensionPath: string;
+	private readonly _extensionUri: vscode.Uri;
 	private _disposables: vscode.Disposable[] = [];
 
-	public static createOrShow(extensionPath: string) {
+	public static createOrShow(extensionUri: vscode.Uri) {
 		const column = vscode.window.activeTextEditor
 			? vscode.window.activeTextEditor.viewColumn
 			: undefined;
@@ -69,20 +68,20 @@ class CatCodingPanel {
 				enableScripts: true,
 
 				// And restrict the webview to only loading content from our extension's `media` directory.
-				localResourceRoots: [vscode.Uri.file(path.join(extensionPath, 'media'))]
+				localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')]
 			}
 		);
 
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
+		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
 	}
 
-	public static revive(panel: vscode.WebviewPanel, extensionPath: string) {
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
+	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
 	}
 
-	private constructor(panel: vscode.WebviewPanel, extensionPath: string) {
+	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
 		this._panel = panel;
-		this._extensionPath = extensionPath;
+		this._extensionUri = extensionUri;
 
 		// Set the webview's initial html content
 		this._update();
@@ -163,9 +162,7 @@ class CatCodingPanel {
 
 	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
 		// Local path to main script run in the webview
-		const scriptPathOnDisk = vscode.Uri.file(
-			path.join(this._extensionPath, 'media', 'main.js')
-		);
+		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js');
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);

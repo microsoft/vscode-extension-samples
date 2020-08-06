@@ -4,7 +4,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.38.0"
+		"vscode": "^1.47.0"
 	},
 	"categories": [
 		"Other"
@@ -41,11 +41,10 @@
 	},
 	"dependencies": {},
 	"devDependencies": {
-		"@types/node": "^12.12.0",
 		"@typescript-eslint/eslint-plugin": "^3.0.2",
 		"@typescript-eslint/parser": "^3.0.2",
 		"eslint": "^7.1.0",
 		"typescript": "^3.9.4",
-		"@types/vscode": "^1.38.0"
+		"@types/vscode": "^1.47.0"
 	}
 }
