@@ -127,6 +127,17 @@ export function activate(context: vscode.ExtensionContext) {
 		selectTerminal();
 	}));
 
+	// ExtensionContext.environmentVariableCollection
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.updateEnvironment', () => {
+		const collection = context.environmentVariableCollection;
+		collection.replace('FOO', 'BAR');
+		collection.append('PATH', '/test/path');
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.clearEnvironment', () => {
+		context.environmentVariableCollection.clear();
+	}));
+
 	// vvv Proposed APIs below vvv
 
 	// vscode.window.onDidWriteTerminalData
@@ -143,17 +154,6 @@ export function activate(context: vscode.ExtensionContext) {
 		(<any>vscode.window).onDidChangeTerminalDimensions((event: any) => {
 			console.log(`onDidChangeTerminalDimensions: terminal:${event.terminal.name}, columns=${event.dimensions.columns}, rows=${event.dimensions.rows}`);
 		});
-	}));
-
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.updateEnvironment', () => {
-		const collection = (context as any).environmentVariableCollection;
-		collection.replace('FOO', 'BAR');
-		collection.append('PATH', '/test/path');
-	}));
-
-	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.clearEnvironment', () => {
-		const collection = (context as any).environmentVariableCollection;
-		collection.clear();
 	}));
 }
 
