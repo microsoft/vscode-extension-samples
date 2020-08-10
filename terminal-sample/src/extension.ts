@@ -155,6 +155,31 @@ export function activate(context: vscode.ExtensionContext) {
 			console.log(`onDidChangeTerminalDimensions: terminal:${event.terminal.name}, columns=${event.dimensions.columns}, rows=${event.dimensions.rows}`);
 		});
 	}));
+
+	// vscode.window.registerTerminalLinkProvider
+	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.registerTerminalLinkProvider', () => {
+		(<any>vscode.window).registerTerminalLinkProvider({
+			provideTerminalLinks: (context: any, token: vscode.CancellationToken) => {
+				// Detect the first instance of the word "link" if it exists and linkify it
+				const startIndex = (context.line as string).indexOf('link');
+				if (startIndex === -1) {
+					return [];
+				}
+				return [
+					{
+						startIndex,
+						length: 'link'.length,
+						tooltip: 'Show a notification',
+						// You can return data in this object to access inside handleTerminalLink
+						data: 'Example data'
+					}
+				];
+			},
+			handleTerminalLink: (link: any) => {
+				vscode.window.showInformationMessage(`Link activated (data = ${link.data})`);
+			}
+		});
+	}));
 }
 
 function colorText(text: string): string {

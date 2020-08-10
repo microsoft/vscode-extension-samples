@@ -22,6 +22,7 @@
 		"onCommand:terminalTest.onDidChangeTerminalDimensions",
 		"onCommand:terminalTest.onDidWriteTerminalData",
 		"onCommand:terminalTest.processId",
+		"onCommand:terminalTest.registerTerminalLinkProvider",
 		"onCommand:terminalTest.sendText",
 		"onCommand:terminalTest.sendTextNoNewLine",
 		"onCommand:terminalTest.show",
@@ -100,6 +101,10 @@
 			{
 				"command": "terminalTest.clearEnvironment",
 				"title": "Terminal API: Clear environment"
+			},
+			{
+				"command": "terminalTest.registerTerminalLinkProvider",
+				"title": "Terminal API: Register link provider"
 			}
 		]
 	},
