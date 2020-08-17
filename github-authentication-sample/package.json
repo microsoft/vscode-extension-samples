@@ -25,13 +25,13 @@
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
-		"postinstall": "npx vscode-dts master",
 		"compile": "tsc -p ./",
 		"lint": "tslint -p ./",
 		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
 		"@types/node": "^10.14.17",
+		"@types/vscode": "1.48.0",
 		"tslint": "^5.16.0",
 		"typescript": "^3.5.1"
 	},
