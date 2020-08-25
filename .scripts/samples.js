@@ -16,6 +16,13 @@ const samples = [
     description: 'Webview Sample',
     path: 'webview-sample',
     guide: '/api/extension-guides/webview',
+    apis: ['window.registerWebviewViewProvider'],
+    contributions: []
+  },
+  {
+    description: 'Webview View Sample',
+    path: 'webview-view-sample',
+    guide: '/api/extension-guides/webview',
     apis: ['window.createWebviewPanel', 'window.registerWebviewPanelSerializer'],
     contributions: []
   },
