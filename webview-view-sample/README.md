@@ -11,8 +11,7 @@ Demonstrates VS Code's proposed [webview view API](https://github.com/microsoft/
 
 ### `vscode` module
 
-- [`window.createWebviewPanel`](https://code.visualstudio.com/api/references/vscode-api#window.createWebviewPanel)
-
+- [`window.registerWebviewViewProvider`](https://code.visualstudio.com/api/references/vscode-api#window.registerWebviewViewProvider)
 
 ## Running the example
 
