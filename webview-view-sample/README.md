@@ -6,6 +6,7 @@ Demonstrates VS Code's proposed [webview view API](https://github.com/microsoft/
 - Posting messages from an extension to a webview view
 - Posting message from a webview to an extension  
 - Persisting state in the view.
+- Contributing commands to the view title.
 
 ## VS Code API
 

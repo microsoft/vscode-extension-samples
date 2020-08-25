@@ -12,7 +12,8 @@
 	],
 	"activationEvents": [
 		"onView:calicoColors.colorsView",
-		"onCommand:calicoColors.addColor"
+		"onCommand:calicoColors.addColor",
+		"onCommand:calicoColors.clearColors"
 	],
 	"repository": {
 		"type": "git",
@@ -34,8 +35,23 @@
 				"command": "calicoColors.addColor",
 				"category": "Calico Colors",
 				"title": "Add Color"
+			},
+			{
+				"command": "calicoColors.clearColors",
+				"category": "Calico Colors",
+				"title": "Clear Colors",
+				"icon": "$(clear-all)"
 			}
-		]
+		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "calicoColors.clearColors",
+					"group": "navigation",
+					"when": "view == calicoColors.colorsView"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

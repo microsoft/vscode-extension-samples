@@ -13,6 +13,11 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.commands.registerCommand('calicoColors.addColor', () => {
 			provider.addColor();
 		}));
+
+	context.subscriptions.push(
+		vscode.commands.registerCommand('calicoColors.clearColors', () => {
+			provider.clearColors();
+		}));
 }
 
 class ColorsViewProvider implements vscode.WebviewViewProvider {
@@ -59,6 +64,12 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 
 		if (this._view) {
 			this._view.webview.postMessage({ type: 'addColor' });
+		}
+	}
+
+	public clearColors() {
+		if (this._view) {
+			this._view.webview.postMessage({ type: 'clearColors' });
 		}
 	}
 

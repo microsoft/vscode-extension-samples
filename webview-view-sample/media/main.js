@@ -13,7 +13,7 @@
     updateColorList(colors);
 
     document.querySelector('.add-color-button').addEventListener('click', () => {
-        addColor(colors, getNewCalicoColor, updateColorList);
+        addColor();
     });
 
     // Handle messages sent from the extension to the webview
@@ -21,8 +21,17 @@
         const message = event.data; // The json data that the extension sent
         switch (message.type) {
             case 'addColor':
-                addColor();
-                break;
+                {
+                    addColor();
+                    break;
+                }
+            case 'clearColors':
+                {
+                    colors = [];
+                    updateColorList(colors);
+                    break;
+                }
+
         }
     });
 
@@ -81,10 +90,11 @@
         const colors = ['020202', 'f1eeee', 'a85b20', 'daab70', 'efcb99'];
         return colors[Math.floor(Math.random() * colors.length)];
     }
+
+    function addColor() {
+        colors.push({ value: getNewCalicoColor() });
+        updateColorList(colors);
+    }
 }());
 
-function addColor(colors, getNewCalicoColor, updateColorList) {
-    colors.push({ value: getNewCalicoColor() });
-    updateColorList(colors);
-}
 
