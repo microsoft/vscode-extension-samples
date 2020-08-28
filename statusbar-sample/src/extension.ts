@@ -44,7 +44,7 @@ function updateStatusBarItem(): void {
 function getNumberOfSelectedLines(editor: vscode.TextEditor | undefined): number {
 	let lines = 0;
 	if (editor) {
-		lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line), 0);
+		lines = editor.selections.reduce((prev, curr) => prev + (curr.end.line - curr.start.line + 1), 0);
 	}
 	return lines;
 }
