@@ -1,7 +1,5 @@
 import * as vscode from 'vscode';
 
-const simpleColorRegularExpression = /#?([0-9a-f]{3}|[0-9a-f]{6})/gi;
-
 export function activate(context: vscode.ExtensionContext) {
 
 	const provider = new ColorsViewProvider(context.extensionUri);
