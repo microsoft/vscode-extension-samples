@@ -314,7 +314,7 @@ async function openDocumentInColumn(fileName: string, column: vscode.ViewColumn)
 }
 
 abstract class WorkspaceFolderPick implements vscode.QuickPickItem {
-	label: string;
+	abstract get label(): string;
 	constructor(public folderOpeningMode: FolderOpeningMode) { }
 }
 

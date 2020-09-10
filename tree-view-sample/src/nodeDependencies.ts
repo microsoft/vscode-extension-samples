@@ -84,19 +84,14 @@ export class Dependency extends vscode.TreeItem {
 
 	constructor(
 		public readonly label: string,
-		private version: string,
+		private readonly version: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
 		public readonly command?: vscode.Command
 	) {
 		super(label, collapsibleState);
-	}
 
-	get tooltip(): string {
-		return `${this.label}-${this.version}`;
-	}
-
-	get description(): string {
-		return this.version;
+		this.tooltip = `${this.label}-${this.version}`;
+		this.description = this.version;
 	}
 
 	iconPath = {
@@ -105,5 +100,4 @@ export class Dependency extends vscode.TreeItem {
 	};
 
 	contextValue = 'dependency';
-
 }
