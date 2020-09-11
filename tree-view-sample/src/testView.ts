@@ -19,7 +19,8 @@ export class TestView {
 	}
 }
 
-const tree = {
+type Tree = { [key: string]: {} | Tree };
+const tree: Tree = {
 	'a': {
 		'aa': {
 			'aaa': {
@@ -39,26 +40,26 @@ const tree = {
 		'bb': {}
 	}
 };
-const nodes = {};
-
-function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }> {
+const nodes = {} as { [key: string]: Key };
+type DataItem = { key: string };
+function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<DataItem> {
 	return {
-		getChildren: (element: { key: string }): { key: string }[] => {
+		getChildren: (element: DataItem): DataItem[] => {
 			return getChildren(element ? element.key : undefined).map(key => getNode(key));
 		},
-		getTreeItem: (element: { key: string }): vscode.TreeItem => {
+		getTreeItem: (element: DataItem): vscode.TreeItem => {
 			const treeItem = getTreeItem(element.key);
 			treeItem.id = element.key;
 			return treeItem;
 		},
-		getParent: ({ key }: { key: string }): { key: string } => {
+		getParent: ({ key }: DataItem): DataItem | undefined => {
 			const parentKey = key.substring(0, key.length - 1);
 			return parentKey ? new Key(parentKey) : void 0;
 		}
 	};
 }
 
-function getChildren(key: string): string[] {
+function getChildren(key?: string): string[] {
 	if (!key) {
 		return Object.keys(tree);
 	}
@@ -69,16 +70,16 @@ function getChildren(key: string): string[] {
 	return [];
 }
 
-function getTreeItem(key: string): vscode.TreeItem2 {
+function getTreeItem(key: string): vscode.TreeItem {
 	const treeElement = getTreeElement(key);
 	return {
-		label: <vscode.TreeItemLabel>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0},
+		label: key,
 		tooltip: `Tooltip for ${key}`,
 		collapsibleState: treeElement && Object.keys(treeElement).length ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None
 	};
 }
 
-function getTreeElement(element): any {
+function getTreeElement(element: string): any {
 	let parent = tree;
 	for (let i = 0; i < element.length; i++) {
 		parent = parent[element.substring(0, i + 1)];
@@ -89,7 +90,7 @@ function getTreeElement(element): any {
 	return parent;
 }
 
-function getNode(key: string): { key: string } {
+function getNode(key: string): DataItem {
 	if (!nodes[key]) {
 		nodes[key] = new Key(key);
 	}
