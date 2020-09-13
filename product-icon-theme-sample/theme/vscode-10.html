@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>vscode-10 preview</title>
+	<style>
+		body {
+			font-family: sans-serif;
+			margin: 0;
+			padding: 10px 20px;
+		}
+
+		.preview {
+			line-height: 2em;
+		}
+
+		.preview_icon {
+			display: inline-block;
+			width: 32px;
+			text-align: center;
+		}
+
+		.icon {
+			display: inline-block;
+			font-size: 16px;
+			line-height: 1;
+		}
+
+		@font-face {
+			font-family: "vscode-10";
+			src: url("vscode-10.woff?7e4c98247e0da9c800233af089778d2a") format("woff");
+		}
+
+		.icon:before {
+			font-family: vscode-10 !important;
+			font-style: normal;
+			font-weight: normal !important;
+			vertical-align: top;
+		}
+	</style>
+	<script>
+		window.addEventListener("load", function () {
+			let htmContent = [];
+			let cssContent = [];
+			for (let i = 0; i < 40; i++) {
+				let hexString = (0xe000 + i).toString(16);
+				cssContent.push('.icon-' + hexString + ':before { content: "\\' + hexString + '"; }');
+				htmContent.push('<div class="preview"><span class="preview_icon"><span class="icon icon-' + hexString + '"></span></span><span>' + hexString + '</span></div>');
+			}
+			let style = document.createElement('style');
+			style.type = 'text/css';
+			style.media = 'screen';
+			style.innerHTML = cssContent.join('\n');
+			document.head.appendChild(style);
+
+			document.body.innerHTML += htmContent.join('\n');
+		});
+	</script>
+</head>
+
+<body>
+	vscode-10
+</body>
+
+</html>

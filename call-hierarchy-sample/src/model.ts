@@ -76,12 +76,12 @@ export class FoodRelation {
 	}
 
 	involves(noun: string): boolean {
-		let needle = noun.toLowerCase();
+		const needle = noun.toLowerCase();
 		return this._subject === needle || this._object === needle;
 	}
 
 	getRangeOf(word: string): vscode.Range {
-		let indexOfWord = new RegExp("\\b" + word + "\\b", "i").exec(this.originalText)!.index;
+		const indexOfWord = new RegExp("\\b" + word + "\\b", "i").exec(this.originalText)!.index;
 		return new vscode.Range(this.range.start.translate({ characterDelta: indexOfWord }),
 			this.range.start.translate({ characterDelta: indexOfWord + word.length }));
 	}

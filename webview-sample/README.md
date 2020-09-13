@@ -26,7 +26,7 @@ Demonstrates VS Code's [webview API](https://code.visualstudio.com/api/extension
 
 ## Running the example
 
-- Open this example in VS Code 1.25+
+- Open this example in VS Code 1.47+
 - `npm install`
 - `npm run watch` or `npm run compile`
 - `F5` to start debugging

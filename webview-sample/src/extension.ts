@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as vscode from 'vscode';
 
 const cats = {
@@ -10,7 +9,7 @@ const cats = {
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('catCoding.start', () => {
-			CatCodingPanel.createOrShow(context.extensionPath);
+			CatCodingPanel.createOrShow(context.extensionUri);
 		})
 	);
 
@@ -27,7 +26,7 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
 			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
 				console.log(`Got state: ${state}`);
-				CatCodingPanel.revive(webviewPanel, context.extensionPath);
+				CatCodingPanel.revive(webviewPanel, context.extensionUri);
 			}
 		});
 	}
@@ -45,10 +44,10 @@ class CatCodingPanel {
 	public static readonly viewType = 'catCoding';
 
 	private readonly _panel: vscode.WebviewPanel;
-	private readonly _extensionPath: string;
+	private readonly _extensionUri: vscode.Uri;
 	private _disposables: vscode.Disposable[] = [];
 
-	public static createOrShow(extensionPath: string) {
+	public static createOrShow(extensionUri: vscode.Uri) {
 		const column = vscode.window.activeTextEditor
 			? vscode.window.activeTextEditor.viewColumn
 			: undefined;
@@ -69,20 +68,20 @@ class CatCodingPanel {
 				enableScripts: true,
 
 				// And restrict the webview to only loading content from our extension's `media` directory.
-				localResourceRoots: [vscode.Uri.file(path.join(extensionPath, 'media'))]
+				localResourceRoots: [vscode.Uri.joinPath(extensionUri, 'media')]
 			}
 		);
 
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
+		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
 	}
 
-	public static revive(panel: vscode.WebviewPanel, extensionPath: string) {
-		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionPath);
+	public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+		CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
 	}
 
-	private constructor(panel: vscode.WebviewPanel, extensionPath: string) {
+	private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
 		this._panel = panel;
-		this._extensionPath = extensionPath;
+		this._extensionUri = extensionUri;
 
 		// Set the webview's initial html content
 		this._update();
@@ -163,37 +162,35 @@ class CatCodingPanel {
 
 	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
 		// Local path to main script run in the webview
-		const scriptPathOnDisk = vscode.Uri.file(
-			path.join(this._extensionPath, 'media', 'main.js')
-		);
+		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js');
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
-		// Use a nonce to whitelist which scripts can be run
+		// Use a nonce to only allow specific scripts to be run
 		const nonce = getNonce();
 
 		return `<!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
+			<html lang="en">
+			<head>
+				<meta charset="UTF-8">
 
-                <!--
-                Use a content security policy to only allow loading images from https or from our extension directory,
-                and only allow scripts that have a specific nonce.
-                -->
-                <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
+				<!--
+					Use a content security policy to only allow loading images from https or from our extension directory,
+					and only allow scripts that have a specific nonce.
+				-->
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} https:; script-src 'nonce-${nonce}';">
 
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Cat Coding</title>
-            </head>
-            <body>
-                <img src="${catGifPath}" width="300" />
-                <h1 id="lines-of-code-counter">0</h1>
+				<meta name="viewport" content="width=device-width, initial-scale=1.0">
+				<title>Cat Coding</title>
+			</head>
+			<body>
+				<img src="${catGifPath}" width="300" />
+				<h1 id="lines-of-code-counter">0</h1>
 
-                <script nonce="${nonce}" src="${scriptUri}"></script>
-            </body>
-            </html>`;
+				<script nonce="${nonce}" src="${scriptUri}"></script>
+			</body>
+			</html>`;
 	}
 }
 

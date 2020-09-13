@@ -31,7 +31,3 @@ function updateDiagnostics(document: vscode.TextDocument, collection: vscode.Dia
 		collection.clear();
 	}
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() {
-}

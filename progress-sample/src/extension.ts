@@ -30,7 +30,7 @@ export function activate(context: ExtensionContext) {
 				progress.report({ increment: 50, message: "I am long running! - almost there..." });
 			}, 3000);
 
-			var p = new Promise(resolve => {
+			const p = new Promise(resolve => {
 				setTimeout(() => {
 					resolve();
 				}, 5000);

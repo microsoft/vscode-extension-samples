@@ -1,15 +1,15 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { ExtensionContext, languages, commands, Disposable, workspace, window, ConfigurationTarget } from 'vscode';
+import { ExtensionContext, languages, commands, Disposable, workspace, window } from 'vscode';
 import { CodelensProvider } from './CodelensProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
-var disposables: Disposable[] = [];
+let disposables: Disposable[] = [];
 
 export function activate(context: ExtensionContext) {
-    let codelensProvider = new CodelensProvider();
+    const codelensProvider = new CodelensProvider();
 
     languages.registerCodeLensProvider("*", codelensProvider);
 
@@ -21,7 +21,7 @@ export function activate(context: ExtensionContext) {
         workspace.getConfiguration("codelens-sample").update("enableCodeLens", false, true);
     });
 
-    commands.registerCommand("codelens-sample.codelensAction", (args) => {
+    commands.registerCommand("codelens-sample.codelensAction", (args: any) => {
         window.showInformationMessage(`CodeLens action clicked with args=${args}`);
     });
 }

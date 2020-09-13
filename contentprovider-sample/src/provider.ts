@@ -40,7 +40,7 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 	provideTextDocumentContent(uri: vscode.Uri): string | Thenable<string> {
 
 		// already loaded?
-		let document = this._documents.get(uri.toString());
+		const document = this._documents.get(uri.toString());
 		if (document) {
 			return document.value;
 		}
@@ -59,7 +59,7 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 			locations.push(...locations.splice(0, idx));
 
 			// create document and return its early state
-			let document = new ReferencesDocument(uri, locations, this._onDidChange);
+			const document = new ReferencesDocument(uri, locations, this._onDidChange);
 			this._documents.set(uri.toString(), document);
 			return document.value;
 		});
@@ -94,6 +94,6 @@ export function encodeLocation(uri: vscode.Uri, pos: vscode.Position): vscode.Ur
 }
 
 export function decodeLocation(uri: vscode.Uri): [vscode.Uri, vscode.Position] {
-	let [target, line, character] = <[string, number, number]>JSON.parse(uri.query);
+	const [target, line, character] = <[string, number, number]>JSON.parse(uri.query);
 	return [vscode.Uri.parse(target), new vscode.Position(line, character)];
 }

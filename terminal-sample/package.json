@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.33.0"
+		"vscode": "^1.47.0"
 	},
 	"enableProposedApi": true,
 	"categories": [
@@ -22,11 +22,14 @@
 		"onCommand:terminalTest.onDidChangeTerminalDimensions",
 		"onCommand:terminalTest.onDidWriteTerminalData",
 		"onCommand:terminalTest.processId",
+		"onCommand:terminalTest.registerTerminalLinkProvider",
 		"onCommand:terminalTest.sendText",
 		"onCommand:terminalTest.sendTextNoNewLine",
 		"onCommand:terminalTest.show",
 		"onCommand:terminalTest.showPreserveFocus",
-		"onCommand:terminalTest.terminals"
+		"onCommand:terminalTest.terminals",
+		"onCommand:terminalTest.updateEnvironment",
+		"onCommand:terminalTest.clearEnvironment"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -90,6 +93,18 @@
 			{
 				"command": "terminalTest.terminals",
 				"title": "Terminal API: View terminals"
+			},
+			{
+				"command": "terminalTest.updateEnvironment",
+				"title": "Terminal API: Update environment"
+			},
+			{
+				"command": "terminalTest.clearEnvironment",
+				"title": "Terminal API: Clear environment"
+			},
+			{
+				"command": "terminalTest.registerTerminalLinkProvider",
+				"title": "Terminal API: Register link provider"
 			}
 		]
 	},
@@ -97,12 +112,14 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"lint": "tslint -p ./"
+		"lint": "eslint . --ext .ts,.tsx"
 	},
 	"devDependencies": {
-		"@types/node": "^6.0.40",
-		"@types/vscode": "^1.33.0",
-		"tslint": "^5.16.0",
-		"typescript": "^3.5.1"
+		"@types/node": "^12.12.0",
+		"@types/vscode": "^1.47.0",
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"eslint": "^7.1.0",
+		"typescript": "^4.0.2"
 	}
 }

@@ -23,7 +23,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 		this.jsFiddleScm.quickDiffProvider = this.fiddleRepository;
 		this.jsFiddleScm.inputBox.placeholder = 'Message is ignored by JS Fiddle :-]';
 
-		let fileSystemWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(workspaceFolder, "*.*"));
+		const fileSystemWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(workspaceFolder, "*.*"));
 		fileSystemWatcher.onDidChange(uri => this.onResourceChange(uri), context.subscriptions);
 		fileSystemWatcher.onDidCreate(uri => this.onResourceChange(uri), context.subscriptions);
 		fileSystemWatcher.onDidDelete(uri => this.onResourceChange(uri), context.subscriptions);
@@ -42,7 +42,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	static async fromFiddleId(id: string, context: vscode.ExtensionContext, workspaceFolder: vscode.WorkspaceFolder, overwrite: boolean): Promise<FiddleSourceControl> {
-		let fiddleConfiguration = parseFiddleId(id);
+		const fiddleConfiguration = parseFiddleId(id);
 
 		return await FiddleSourceControl.fromConfiguration(fiddleConfiguration, workspaceFolder, context, overwrite);
 	}
@@ -52,8 +52,8 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	private static async fromFiddle(fiddleSlug: string, fiddleVersion: number, workspaceFolder: vscode.WorkspaceFolder, context: vscode.ExtensionContext, overwrite: boolean): Promise<FiddleSourceControl> {
-		let fiddle = await downloadFiddle(fiddleSlug, fiddleVersion);
-		let workspacePath = workspaceFolder.uri.fsPath;
+		const fiddle = await downloadFiddle(fiddleSlug, fiddleVersion);
+		const workspacePath = workspaceFolder.uri.fsPath;
 		return new FiddleSourceControl(context, workspaceFolder, fiddle, overwrite);
 	}
 
@@ -76,13 +76,13 @@ export class FiddleSourceControl implements vscode.Disposable {
 			vscode.window.showErrorMessage("Checkout the latest fiddle version before committing your changes.");
 		}
 		else {
-			let html = await this.getLocalResourceText('html');
-			let js = await this.getLocalResourceText('js');
-			let css = await this.getLocalResourceText('css');
+			const html = await this.getLocalResourceText('html');
+			const js = await this.getLocalResourceText('js');
+			const css = await this.getLocalResourceText('css');
 
 			// here we assume nobody updated the Fiddle on the server since we refreshed the list of versions
 			try {
-				let newFiddle = await uploadFiddle(this.fiddle.slug, this.fiddle.version + 1, html, js, css);
+				const newFiddle = await uploadFiddle(this.fiddle.slug, this.fiddle.version + 1, html, js, css);
 				if (!newFiddle) { return; }
 				this.setFiddle(newFiddle, false);
 				this.jsFiddleScm.inputBox.value = '';
@@ -93,7 +93,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	private async getLocalResourceText(extension: string) {
-		let document = await vscode.workspace.openTextDocument(this.fiddleRepository.createLocalResourcePath(extension));
+		const document = await vscode.workspace.openTextDocument(this.fiddleRepository.createLocalResourcePath(extension));
 		return document.getText();
 	}
 
@@ -108,7 +108,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 
 	/** Resets the given local file content to the checked-out version. */
 	private async resetFile(extension: string): Promise<void> {
-		let filePath = this.fiddleRepository.createLocalResourcePath(extension);
+		const filePath = this.fiddleRepository.createLocalResourcePath(extension);
 		await afs.writeFile(filePath, this.fiddle.data[extension]);
 	}
 
@@ -116,9 +116,9 @@ export class FiddleSourceControl implements vscode.Disposable {
 		if (!Number.isFinite(this.latestFiddleVersion)) { return; }
 
 		if (newVersion === undefined) {
-			let allVersions = [...Array(this.latestFiddleVersion + 1).keys()]
+			const allVersions = [...Array(this.latestFiddleVersion + 1).keys()]
 				.map(ver => new VersionQuickPickItem(ver, ver === this.fiddle.version));
-			let newVersionPick = await vscode.window.showQuickPick(allVersions, { canPickMany: false, placeHolder: 'Select a version...' });
+			const newVersionPick = await vscode.window.showQuickPick(allVersions, { canPickMany: false, placeHolder: 'Select a version...' });
 			if (newVersionPick) {
 				newVersion = newVersionPick.version;
 			}
@@ -130,12 +130,12 @@ export class FiddleSourceControl implements vscode.Disposable {
 		if (newVersion === this.fiddle.version) { return; } // the same version was selected
 
 		if (this.changedResources.resourceStates.length) {
-			let changedResourcesCount = this.changedResources.resourceStates.length;
+			const changedResourcesCount = this.changedResources.resourceStates.length;
 			vscode.window.showErrorMessage(`There is one or more changed resources. Discard or commit your local changes before checking out another version.`);
 		}
 		else {
 			try {
-				let newFiddle = await downloadFiddle(this.fiddle.slug, newVersion);
+				const newFiddle = await downloadFiddle(this.fiddle.slug, newVersion);
 				this.setFiddle(newFiddle, true);
 			} catch (ex) {
 				vscode.window.showErrorMessage(ex);
@@ -171,7 +171,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 
 	/** save configuration for later VS Code sessions */
 	private saveCurrentConfiguration(): void {
-		let fiddleConfiguration: FiddleConfiguration = {
+		const fiddleConfiguration: FiddleConfiguration = {
 			slug: this.fiddle.slug,
 			version: this.fiddle.version,
 			downloaded: true
@@ -181,7 +181,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	}
 
 	static saveConfiguration(workspaceFolderUri: vscode.Uri, fiddleConfiguration: FiddleConfiguration): void {
-		let fiddleConfigurationString = JSON.stringify(fiddleConfiguration);
+		const fiddleConfigurationString = JSON.stringify(fiddleConfiguration);
 		afs.writeFile(path.join(workspaceFolderUri.fsPath, CONFIGURATION_FILE), Buffer.from(fiddleConfigurationString, UTF8));
 	}
 
@@ -206,18 +206,18 @@ export class FiddleSourceControl implements vscode.Disposable {
 	/** This is where the source control determines, which documents were updated, removed, and theoretically added. */
 	async updateChangedGroup(): Promise<void> {
 		// for simplicity we ignore which document was changed in this event and scan all of them
-		let changedResources: vscode.SourceControlResourceState[] = [];
+		const changedResources: vscode.SourceControlResourceState[] = [];
 
-		let uris = this.fiddleRepository.provideSourceControlledResources();
+		const uris = this.fiddleRepository.provideSourceControlledResources();
 
 		for (const uri of uris) {
 			let isDirty: boolean;
 			let wasDeleted: boolean;
 
-			let pathExists = await afs.exists(uri.fsPath);
+			const pathExists = await afs.exists(uri.fsPath);
 
 			if (pathExists) {
-				let document = await vscode.workspace.openTextDocument(uri);
+				const document = await vscode.workspace.openTextDocument(uri);
 				isDirty = this.isDirty(document);
 				wasDeleted = false;
 			}
@@ -227,7 +227,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 			}
 
 			if (isDirty) {
-				let resourceState = this.toSourceControlResourceState(uri, wasDeleted);
+				const resourceState = this.toSourceControlResourceState(uri, wasDeleted);
 				changedResources.push(resourceState);
 			}
 		}
@@ -240,17 +240,17 @@ export class FiddleSourceControl implements vscode.Disposable {
 
 	/** Determines whether the resource is different, regardless of line endings. */
 	isDirty(doc: vscode.TextDocument): boolean {
-		let originalText = this.fiddle.data[toExtension(doc.uri)];
+		const originalText = this.fiddle.data[toExtension(doc.uri)];
 		return originalText.replace('\r', '') !== doc.getText().replace('\r', '');
 	}
 
 	toSourceControlResourceState(docUri: vscode.Uri, deleted: boolean): vscode.SourceControlResourceState {
 
-		let repositoryUri = this.fiddleRepository.provideOriginalResource(docUri, null);
+		const repositoryUri = this.fiddleRepository.provideOriginalResource(docUri, null);
 
 		const fiddlePart = toExtension(docUri).toUpperCase();
 
-		let command: vscode.Command = !deleted
+		const command: vscode.Command = !deleted
 			? {
 				title: "Show changes",
 				command: "vscode.diff",
@@ -259,7 +259,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 			}
 			: null;
 
-		let resourceState: vscode.SourceControlResourceState = {
+		const resourceState: vscode.SourceControlResourceState = {
 			resourceUri: docUri,
 			command: command,
 			decorations: {
@@ -279,7 +279,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 		let latestVersion = this.fiddle.version || 0;
 		while (true) {
 			try {
-				let latestFiddle = await downloadFiddle(this.fiddle.slug, latestVersion);
+				const latestFiddle = await downloadFiddle(this.fiddle.slug, latestVersion);
 				this.latestFiddleVersion = latestVersion;
 				latestVersion++;
 			} catch (ex) {
@@ -303,7 +303,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 		let currentFiddle: Fiddle | undefined = undefined;
 		while (true) {
 			try {
-				let latestFiddle = await downloadFiddle(this.fiddle.slug, version);
+				const latestFiddle = await downloadFiddle(this.fiddle.slug, version);
 				latestVersion = version;
 				version++;
 				if (areIdentical(this.fiddle.data, latestFiddle.data)) {
@@ -325,7 +325,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 
 	/** Opens the fiddle in the default browser. */
 	openInBrowser() {
-		let url = "https://jsfiddle.net/" + toFiddleId(this.fiddle.slug, this.fiddle.version);
+		const url = "https://jsfiddle.net/" + toFiddleId(this.fiddle.slug, this.fiddle.version);
 		vscode.env.openExternal(vscode.Uri.parse(url));
 	}
 

@@ -43,10 +43,12 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 	}
 
 	private _encodeTokenType(tokenType: string): number {
-		if (!tokenTypes.has(tokenType)) {
-			return 0;
+		if (tokenTypes.has(tokenType)) {
+			return tokenTypes.get(tokenType)!;
+		} else if (tokenType === 'notInLegend') {
+			return tokenTypes.size + 2;
 		}
-		return tokenTypes.get(tokenType)!;
+		return 0;
 	}
 
 	private _encodeTokenModifiers(strTokenModifiers: string[]): number {
@@ -55,14 +57,16 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 			const tokenModifier = strTokenModifiers[i];
 			if (tokenModifiers.has(tokenModifier)) {
 				result = result | (1 << tokenModifiers.get(tokenModifier)!);
+			} else if (tokenModifier === 'notInLegend') {
+				result = result | (1 << tokenModifiers.size + 2);
 			}
 		}
 		return result;
 	}
 
 	private _parseText(text: string): IParsedToken[] {
-		let r: IParsedToken[] = [];
-		let lines = text.split(/\r\n|\r|\n/);
+		const r: IParsedToken[] = [];
+		const lines = text.split(/\r\n|\r|\n/);
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i];
 			let currentOffset = 0;
@@ -75,7 +79,7 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 				if (closeOffset === -1) {
 					break;
 				}
-				let tokenData = this._parseTextToken(line.substring(openOffset + 1, closeOffset));
+				const tokenData = this._parseTextToken(line.substring(openOffset + 1, closeOffset));
 				r.push({
 					line: i,
 					startCharacter: openOffset + 1,
@@ -90,7 +94,7 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 	}
 
 	private _parseTextToken(text: string): { tokenType: string; tokenModifiers: string[]; } {
-		let parts = text.split('.');
+		const parts = text.split('.');
 		return {
 			tokenType: parts[0],
 			tokenModifiers: parts.slice(1)

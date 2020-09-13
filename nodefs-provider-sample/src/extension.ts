@@ -130,8 +130,6 @@ class DateiFileSystemProvider implements vscode.FileSystemProvider {
     // TODO can implement a fast copy() method with node.js 8.x new fs.copy method
 }
 
-export function deactivate() { }
-
 //#region Utilities
 
 export interface IStatAndLink {

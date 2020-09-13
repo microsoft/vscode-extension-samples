@@ -7,6 +7,7 @@
  * @property {string | null} guide - Link to the guide on https://code.visualstudio.com
  * @property {string[]} apis - Listing of VS Code API that is being illustrated. For example, "TextDocumentContentProvider"
  * @property {string[]} contributions - Listing of Contribution Points that are being used. For example,
+ * @property {boolean} [excludeFromReadme] - Don't generate a readme entry for this extension
  */
 
 /** @type {Sample[]} */
@@ -16,6 +17,13 @@ const samples = [
     path: 'webview-sample',
     guide: '/api/extension-guides/webview',
     apis: ['window.createWebviewPanel', 'window.registerWebviewPanelSerializer'],
+    contributions: []
+  },
+  {
+    description: 'Webview View Sample',
+    path: 'webview-view-sample',
+    guide: null,
+    apis: ['window.registerWebviewViewProvider'],
     contributions: []
   },
   {
@@ -67,8 +75,6 @@ const samples = [
     apis: ['workspace.registerFileSystemProvider'],
     contributions: []
   },
-  // { description: 'configuration-sample', path: 'configuration-sample', guide: null, apis: [], contributions: [] },
-  // { description: 'contentprovider-sample', path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
   {
     description: 'Editor Decoractor Sample',
     path: 'decorator-sample',
@@ -83,7 +89,6 @@ const samples = [
     ],
     contributions: ['colors']
   },
-  // { description: 'extension-deps-sample', path: 'extension-deps-sample', guide: null, apis: [], contributions: [] },
   {
     description: 'I18n Sample',
     path: 'i18n-sample',
@@ -91,11 +96,6 @@ const samples = [
     apis: [],
     contributions: []
   },
-  // { description: 'multi-diagnostics-sample', path: 'multi-diagnostics-sample', guide: null, apis: [], contributions: [] },
-  // { description: 'nodefs-provider-sample', path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
-  // { description: 'progress-sample', path: 'progress-sample', guide: null, apis: [], contributions: [] },
-  // { description: 'quickinput-sample', path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
-  // { description: 'smart-template-strings-sample', path: 'smart-template-strings-sample', guide: null, apis: [], contributions: [] },
   {
     description: 'Terminal Sample',
     path: 'terminal-sample',
@@ -121,7 +121,20 @@ const samples = [
     ],
     contributions: []
   },
-  // { description: 'theme-sample', path: 'theme-sample', guide: null, apis: [], contributions: [] },
+  {
+    description: 'Color Theme Sample',
+    path: 'theme-sample',
+    guide: '/api/extension-guides/color-theme',
+    apis: [],
+    contributions: ['themes']
+  },
+  {
+    description: 'Product Icon Theme Sample',
+    path: 'theme-sample',
+    guide: '/api/extension-guides/product-icon-theme',
+    apis: [],
+    contributions: ['productIconThemes']
+  },
   {
     description: 'Vim Sample',
     path: 'vim-sample',
@@ -141,7 +154,13 @@ const samples = [
     ],
     contributions: []
   },
-  // { description: 'webpack-sample', path: 'webpack-sample', guide: null, apis: [], contributions: [] },
+  {
+    description: 'webpack-sample',
+    path: 'webpack-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
   {
     description: 'Source Control Sample',
     path: 'source-control-sample',
@@ -199,6 +218,21 @@ const samples = [
     apis: ['window.registerCustomEditorProvider', 'CustomTextEditorProvider'],
     contributions: ["customEditors"]
   },
+  {
+    description: 'Semantic tokens',
+    path: 'semantic-tokens-sample',
+    guide: '/api/language-extensions/semantic-highlight-guide',
+    apis: ['languages.registerDocumentSemanticTokensProvider', 'vscode.DocumentSemanticTokensProvider'],
+    contributions: []
+  },
+  { description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
+  { description: 'contentprovider-sample', excludeFromReadme: true, path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
+  { description: 'nodefs-provider-sample', excludeFromReadme: true, path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
+  { description: 'progress-sample', excludeFromReadme: true, path: 'progress-sample', guide: null, apis: [], contributions: [] },
+  { description: 'quickinput-sample', excludeFromReadme: true, path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
+  { description: 'diagnostic-related-information-sample', excludeFromReadme: true, path: 'diagnostic-related-information-sample', guide: null, apis: [], contributions: [] },
+  { description: 'fsconsumer-sample', excludeFromReadme: true, path: 'fsconsumer-sample', guide: null, apis: [], contributions: [] },
+ 
 ]
 
 /** LSP specific samples */
@@ -246,6 +280,7 @@ const lspSamples = [
  * DO NOT add non-LSP items here. Add it to `samples` list.
  */
 
+// eslint-disable-next-line no-undef
 module.exports = {
   samples,
   lspSamples

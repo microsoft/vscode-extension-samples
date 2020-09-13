@@ -10,11 +10,11 @@ import { IController, Command, AbstractCommandDescriptor, ModifierKeys } from '.
 
 const CHAR_TO_BINDING: { [char: string]: any; } = {};
 function defineBinding(char: string, value: any, modifierKeys: ModifierKeys): void {
-	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
+	const key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
 	CHAR_TO_BINDING[key] = value;
 }
 function getBinding(char: string, modifierKeys: ModifierKeys): any {
-	let key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
+	const key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
 	return CHAR_TO_BINDING[key];
 }
 
@@ -128,7 +128,7 @@ export interface IFoundOperator {
 export class Mappings {
 
 	public static findMotion(input: string): Motion {
-		let parsed = _parseNumberAndString(input);
+		const parsed = _parseNumberAndString(input);
 		let motion = getMotion(parsed.input.substr(0, 1));
 		if (!motion) {
 			motion = getMotion(parsed.input.substr(0, 2));
@@ -167,12 +167,12 @@ export class Mappings {
 	}
 
 	public static findOperator(input: string, modifierKeys: ModifierKeys): IFoundOperator {
-		let parsed = _parseNumberAndString(input);
-		let operator = getOperator(parsed.input.substr(0, 1), modifierKeys);
+		const parsed = _parseNumberAndString(input);
+		const operator = getOperator(parsed.input.substr(0, 1), modifierKeys);
 		if (!operator) {
 			return null;
 		}
-		let operatorArgs = parsed.input.substr(1);
+		const operatorArgs = parsed.input.substr(1);
 		return {
 			runNormal: (controller: IController, editor: TextEditor) => {
 				return operator.runNormalMode(controller, editor, parsed.repeatCount, operatorArgs);
@@ -198,9 +198,9 @@ export class Mappings {
 	}
 }
 
-function _parseNumberAndString(input: string, numberAtBeginning: boolean = true): INumberAndString {
+function _parseNumberAndString(input: string, numberAtBeginning = true): INumberAndString {
 	if (numberAtBeginning) {
-		let repeatCountMatch = input.match(/^([1-9]\d*)/);
+		const repeatCountMatch = input.match(/^([1-9]\d*)/);
 		if (repeatCountMatch) {
 			return {
 				hasRepeatCount: true,
@@ -209,7 +209,7 @@ function _parseNumberAndString(input: string, numberAtBeginning: boolean = true)
 			};
 		}
 	} else {
-		let repeatCountMatch = input.match(/(\d+)$/);
+		const repeatCountMatch = input.match(/(\d+)$/);
 		if (repeatCountMatch) {
 			return {
 				hasRepeatCount: true,

@@ -117,14 +117,14 @@ export function activate(context: vscode.ExtensionContext) {
 				if (target.target === vscode.ConfigurationTarget.WorkspaceFolder) {
 
 					// 3) Getting the workspace folder
-					let workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' });
+					const workspaceFolder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Pick Workspace Folder to which this setting should be applied' });
 					if (workspaceFolder) {
 
 						// 4) Get the configuration for the workspace folder
-						const configuration = vscode.workspace.getConfiguration('', workspaceFolder);
+						const configuration = vscode.workspace.getConfiguration('', workspaceFolder.uri);
 
 						// 5) Get the current value
-						const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
+									const currentValue = configuration.get<{}>('conf.resource.insertEmptyLastLine');
 
 						const newValue = { ...currentValue, ...{ [value]: true } };
 
@@ -137,7 +137,7 @@ export function activate(context: vscode.ExtensionContext) {
 					const configuration = vscode.workspace.getConfiguration();
 
 					// 4) Get the current value
-					const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
+							const currentValue = configuration.get<{}>('conf.resource.insertEmptyLastLine');
 
 					const newValue = { ...currentValue, ...(value ? { [value]: true } : {}) };
 
@@ -151,7 +151,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const configuration = vscode.workspace.getConfiguration();
 
 			// 3) Get the current value
-			const currentValue = configuration.get('conf.resource.insertEmptyLastLine');
+			const currentValue = configuration.get<{}>('conf.resource.insertEmptyLastLine');
 
 			const newValue = { ...currentValue, ...(value ? { [value]: true } : {}) };
 
@@ -167,7 +167,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (statusSizeDisposable) {
 			statusSizeDisposable.dispose();
 		}
-
+ 
 		// 1) Check if showing size is configured for current file
 		const showSize: any = vscode.workspace.getConfiguration('', e).get('conf.language.showSize');
 
@@ -185,7 +185,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const languageId = await vscode.window.showInputBox({ placeHolder: 'Enter the language id' });
 
 		// 2) Update
-		vscode.workspace.getConfiguration('', { languageId }).update('conf.language.showSize', true, false, true);
+		vscode.workspace.getConfiguration('', { languageId: languageId! }).update('conf.language.showSize', true, false, true);
 
 	}));
 
@@ -211,13 +211,13 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		// Check if a language configuration is changed for a text document
-		if (e.affectsConfiguration('conf.language.showSize', vscode.window.activeTextEditor)) {
-
+		if (e.affectsConfiguration('conf.language.showSize', vscode.window.activeTextEditor?.document)) {
+			// noop 
 		}
 
 		// Check if a language configuration is changed for a language
 		if (e.affectsConfiguration('conf.language.showSize', { languageId: 'typescript' })) {
-
+			// noop 
 		}
 
 	}));

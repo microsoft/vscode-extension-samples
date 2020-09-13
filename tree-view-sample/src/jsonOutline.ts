@@ -10,7 +10,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 	private tree: json.Node;
 	private text: string;
 	private editor: vscode.TextEditor;
-	private autoRefresh: boolean = true;
+	private autoRefresh = true;
 
 	constructor(private context: vscode.ExtensionContext) {
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
@@ -28,7 +28,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 		if (offset) {
 			this._onDidChangeTreeData.fire(offset);
 		} else {
-			this._onDidChangeTreeData.fire();
+			this._onDidChangeTreeData.fire(undefined);
 		}
 	}
 
@@ -115,8 +115,8 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 		const path = json.getLocation(this.text, offset).path;
 		const valueNode = json.findNodeAtLocation(this.tree, path);
 		if (valueNode) {
-			let hasChildren = valueNode.type === 'object' || valueNode.type === 'array';
-			let treeItem: vscode.TreeItem = new vscode.TreeItem(this.getLabel(valueNode), hasChildren ? valueNode.type === 'object' ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
+			const hasChildren = valueNode.type === 'object' || valueNode.type === 'array';
+			const treeItem: vscode.TreeItem = new vscode.TreeItem(this.getLabel(valueNode), hasChildren ? valueNode.type === 'object' ? vscode.TreeItemCollapsibleState.Expanded : vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None);
 			treeItem.command = {
 				command: 'extension.openJsonSelection',
 				title: '',
@@ -134,7 +134,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 	}
 
 	private getIcon(node: json.Node): any {
-		let nodeType = node.type;
+		const nodeType = node.type;
 		if (nodeType === 'boolean') {
 			return {
 				light: this.context.asAbsolutePath(path.join('resources', 'light', 'boolean.svg')),
@@ -158,7 +158,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 
 	private getLabel(node: json.Node): string {
 		if (node.parent.type === 'array') {
-			let prefix = node.parent.children.indexOf(node).toString();
+			const prefix = node.parent.children.indexOf(node).toString();
 			if (node.type === 'object') {
 				return prefix + ':{ }';
 			}
