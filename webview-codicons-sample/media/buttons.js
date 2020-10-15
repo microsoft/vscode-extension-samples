@@ -4,14 +4,14 @@
 // It cannot access the main VS Code APIs directly.
 
 function play() {
-	document.getElementById('play').disabled = true;
-	document.getElementById('stop').disabled = false;
+	document.getElementById('play2').disabled = true;
+	document.getElementById('stop2').disabled = false;
 }
 
 function stop() {
-	document.getElementById('play').disabled = false;
-	document.getElementById('stop').disabled = true;	
+	document.getElementById('play2').disabled = false;
+	document.getElementById('stop2').disabled = true;	
 }
 
-document.getElementById('play').onclick = play;
-document.getElementById('stop').onclick = stop;
+document.getElementById('play2').onclick = play;
+document.getElementById('stop2').onclick = stop;

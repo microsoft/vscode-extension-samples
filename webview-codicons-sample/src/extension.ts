@@ -40,7 +40,8 @@ class WebviewCodiconsPanel {
 
 		// Get resource paths
 		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'styles.css'));
-		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'buttons.js'));
+		const scriptMouseEventsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'mouseEvents.js'));
+		const scriptButtonsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'buttons.js'));
 		const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css'));
 		const codiconsFontUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.ttf'));
 
@@ -70,13 +71,22 @@ class WebviewCodiconsPanel {
 
 				<div class="styledIcon" title="This icon is styled with green foreground"><i class="codicon codicon-archive"></i></div>
 
-				<h1>codicons in buttons</h1>
-				<div id="iconButtonBar">
-					<button class="iconButton" id="play"><i class="codicon codicon-play-circle"></i></button>
-					<button class="iconButton" id="stop" disabled><i class="codicon codicon-stop-circle"></i></button>
+				<h1>codicons mouse events</h1>
+				<div class="iconBar">
+					<i id="play1" class="codicon codicon-play-circle"></i>
+					<i id="stop1" class="codicon disabled codicon-stop-circle"></i>
+					<div id=iconBarStatus>Click on the icon above</div>
 				</div>
 
-				<script nonce="${nonce}" src="${scriptUri}"></script>
+				<script nonce="${nonce}" src="${scriptMouseEventsUri}"></script>
+
+				<h1>codicons in buttons</h1>
+				<div class="iconButtonBar">
+					<button class="iconButton" id="play2"><i class="codicon codicon-play-circle"></i></button>
+					<button class="iconButton" id="stop2" disabled><i class="codicon codicon-stop-circle"></i></button>
+				</div>
+
+				<script nonce="${nonce}" src="${scriptButtonsUri}"></script>
 
 				<h1>codicons</h1>
 				<div id="icons">

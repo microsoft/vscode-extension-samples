@@ -59,7 +59,19 @@ h1 {
 	padding-bottom: 16px;
 }
 
-#iconButtonBar .iconButton .codicon {
+/* Codicon mouse events demo */
+
+div.iconBar .codicon {
+	font-size: 60px;
+}
+
+div.iconBar .disabled {
+	opacity: 0.3;
+}
+
+/* Codicons in buttons demo */
+
+div.iconButtonBar .iconButton .codicon {
 	font-size: 40px;
 	padding: 3px;
 }
