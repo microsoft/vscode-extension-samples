@@ -58,3 +58,14 @@ h1 {
 	font-size: 32px;
 	padding-bottom: 16px;
 }
+
+#iconButtonBar .iconButton .codicon {
+	font-size: 40px;
+	padding: 3px;
+}
+
+div.styledIcon .codicon {
+	font-size: 50px;
+	color: green;
+	padding: 3px;
+}
