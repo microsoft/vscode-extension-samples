@@ -63,10 +63,12 @@ h1 {
 
 div.iconBar .codicon {
 	font-size: 60px;
+	cursor: pointer;
 }
 
 div.iconBar .disabled {
 	opacity: 0.3;
+	cursor: not-allowed;
 }
 
 /* Codicons in buttons demo */
