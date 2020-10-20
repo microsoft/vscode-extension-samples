@@ -6,6 +6,10 @@
 	"engines": {
 		"vscode": "^1.50.0"
 	},
+	"extensionKind": [
+		"ui",
+		"workspace"
+	],
 	"categories": [
 		"Other"
 	],
