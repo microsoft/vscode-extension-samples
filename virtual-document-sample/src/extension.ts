@@ -26,7 +26,7 @@ export function activate({ subscriptions }: vscode.ExtensionContext) {
 	subscriptions.push(vscode.commands.registerCommand('cowsay.say', async () => {
 		const what = await vscode.window.showInputBox({ placeHolder: 'cowsay...' });
 		if (what) {
-			const uri = vscode.Uri.parse('cowsay:' + what + '.png');
+			const uri = vscode.Uri.parse('cowsay:' + what);
 			const doc = await vscode.workspace.openTextDocument(uri); // calls back into the provider
 			await vscode.window.showTextDocument(doc, { preview: false });
 		}
