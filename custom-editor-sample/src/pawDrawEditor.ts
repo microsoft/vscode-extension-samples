@@ -338,8 +338,13 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 		// Local path to script and css for the webview
 		const scriptUri = webview.asWebviewUri(vscode.Uri.file(
 			path.join(this._context.extensionPath, 'media', 'pawDraw.js')
+		)); const styleResetUri = webview.asWebviewUri(vscode.Uri.file(
+			path.join(this._context.extensionPath, 'media', 'reset.css')
 		));
-		const styleUri = webview.asWebviewUri(vscode.Uri.file(
+		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.file(
+			path.join(this._context.extensionPath, 'media', 'vscode.css')
+		));
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.file(
 			path.join(this._context.extensionPath, 'media', 'pawDraw.css')
 		));
 
@@ -360,7 +365,9 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-				<link href="${styleUri}" rel="stylesheet" />
+				<link href="${styleResetUri}" rel="stylesheet" />
+				<link href="${styleVSCodeUri}" rel="stylesheet" />
+				<link href="${styleMainUri}" rel="stylesheet" />
 
 				<title>Paw Draw</title>
 			</head>

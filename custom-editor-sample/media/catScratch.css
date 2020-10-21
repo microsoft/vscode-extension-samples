@@ -49,10 +49,6 @@ body.vscode-dark {
 	align-items: center;
 }
 
-.add-button button {
-	background-color: var(--vscode-button-foreground);
-}
-
 .delete-button {
 	position: absolute;
 	top: 0;

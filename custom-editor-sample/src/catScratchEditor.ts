@@ -16,7 +16,7 @@ import { getNonce } from './util';
  */
 export class CatScratchEditorProvider implements vscode.CustomTextEditorProvider {
 
-	public static register(context: vscode.ExtensionContext): vscode.Disposable { 
+	public static register(context: vscode.ExtensionContext): vscode.Disposable {
 		const provider = new CatScratchEditorProvider(context);
 		const providerRegistration = vscode.window.registerCustomEditorProvider(CatScratchEditorProvider.viewType, provider);
 		return providerRegistration;
@@ -96,7 +96,13 @@ export class CatScratchEditorProvider implements vscode.CustomTextEditorProvider
 		const scriptUri = webview.asWebviewUri(vscode.Uri.file(
 			path.join(this.context.extensionPath, 'media', 'catScratch.js')
 		));
-		const styleUri = webview.asWebviewUri(vscode.Uri.file(
+		const styleResetUri = webview.asWebviewUri(vscode.Uri.file(
+			path.join(this.context.extensionPath, 'media', 'reset.css')
+		));
+		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.file(
+			path.join(this.context.extensionPath, 'media', 'vscode.css')
+		));
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.file(
 			path.join(this.context.extensionPath, 'media', 'catScratch.css')
 		));
 
@@ -117,7 +123,9 @@ export class CatScratchEditorProvider implements vscode.CustomTextEditorProvider
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-				<link href="${styleUri}" rel="stylesheet" />
+				<link href="${styleResetUri}" rel="stylesheet" />
+				<link href="${styleVSCodeUri}" rel="stylesheet" />
+				<link href="${styleMainUri}" rel="stylesheet" />
 
 				<title>Cat Scratch</title>
 			</head>
@@ -193,7 +201,7 @@ export class CatScratchEditorProvider implements vscode.CustomTextEditorProvider
 			document.uri,
 			new vscode.Range(0, 0, document.lineCount, 0),
 			JSON.stringify(json, null, 2));
-		
+
 		return vscode.workspace.applyEdit(edit);
 	}
 }
