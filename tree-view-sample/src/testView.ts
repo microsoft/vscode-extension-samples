@@ -4,6 +4,7 @@ export class TestView {
 
 	constructor(context: vscode.ExtensionContext) {
 		const view = vscode.window.createTreeView('testView', { treeDataProvider: aNodeWithIdTreeDataProvider(), showCollapseAll: true });
+		context.subscriptions.push(view);
 		vscode.commands.registerCommand('testView.reveal', async () => {
 			const key = await vscode.window.showInputBox({ placeHolder: 'Type the label of the item to reveal' });
 			if (key) {

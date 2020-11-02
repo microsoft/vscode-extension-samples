@@ -15,9 +15,6 @@ export interface FtpNode {
 }
 
 export class FtpModel {
-
-	private nodes: Map<string, FtpNode> = new Map<string, FtpNode>();
-
 	constructor(readonly host: string, private user: string, private password: string) {
 	}
 
