@@ -1,9 +1,12 @@
 .vscode/**
 .vscode-test/**
-out/test/**
+dist/test/**
 test/**
 src/**
 **/*.map
 .gitignore
+i18n/**
 tsconfig.json
-vsc-extension-quickstart.md
+gulpfile.js
+webpack.config.js
+.eslintignore
