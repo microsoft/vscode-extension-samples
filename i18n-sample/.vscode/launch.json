@@ -10,8 +10,25 @@
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
 			"stopOnEntry": false,
 			"sourceMaps": true,
-			"outFiles": [ "${workspaceRoot}/out/src/**/*.js" ],
-			"preLaunchTask": "npm: watch"
+			"outFiles": [ "${workspaceRoot}/dist/**/*.js" ],
+			"preLaunchTask": {
+				"type":"npm",
+				"script":"compile-dev"
+			}
+		},
+		{
+			"name": "Launch Extension with nls",
+			"type": "extensionHost",
+			"request": "launch",
+			"runtimeExecutable": "${execPath}",
+			"args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
+			"stopOnEntry": false,
+			"sourceMaps": true,
+			"outFiles": [ "${workspaceRoot}/dist/**/*.js" ],
+			"preLaunchTask": {
+				"type":"npm",
+				"script":"compile-nls"
+			}
 		}
 	]
 }

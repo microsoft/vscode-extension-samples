@@ -1,57 +1,59 @@
 {
-	"name": "i18n-sample",
-	"private": true,
-	"displayName": "i18n-sample",
-	"description": "Sample that shows how to localize an extension",
-	"repository": "https://github.com/Microsoft/vscode-extension-samples/i18n-sample",
-	"version": "0.1.0",
-	"publisher": "vscode-i18n-sample",
-	"engines": {
-		"vscode": "^1.32.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onCommand:extension.sayHello",
-		"onCommand:extension.sayBye"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.sayHello",
-				"title": "%extension.sayHello.title%"
-			},
-			{
-				"command": "extension.sayBye",
-				"title": "%extension.sayBye.title%"
-			}
-		]
-	},
-	"scripts": {
-		"watch": "tsc -b -w",
-		"compile": "tsc -b",
-		"clean": "gulp clean"
-	},
-	"devDependencies": {
-		"@types/node": "^12.12.0",
-		"@types/vscode": "^1.34.0",
-		"@typescript-eslint/eslint-plugin": "^3.0.2",
-		"@typescript-eslint/parser": "^3.0.2",
-		"del": "^4.1.1",
-		"eslint": "^7.1.0",
-		"event-stream": "^4.0.1",
-		"gulp": "^4.0.2",
-		"gulp-filter": "^5.1.0",
-		"gulp-sourcemaps": "^2.6.5",
-		"gulp-typescript": "^5.0.1",
-		"run-sequence": "^2.2.1",
-		"typescript": "^4.0.2",
-		"vsce": "^1.79.5",
-		"vscode-nls-dev": "^3.3.2"
-	},
-	"dependencies": {
-		"vscode-nls": "^3.2.5"
-	}
+  "name": "i18n-sample",
+  "private": true,
+  "displayName": "i18n-sample",
+  "description": "Sample that shows how to localize an extension",
+  "repository": "https://github.com/Microsoft/vscode-extension-samples/i18n-sample",
+  "version": "0.1.0",
+  "publisher": "vscode-i18n-sample",
+  "engines": {
+    "vscode": "^1.32.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.sayHello",
+    "onCommand:extension.sayBye"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.sayHello",
+        "title": "%extension.sayHello.title%"
+      },
+      {
+        "command": "extension.sayBye",
+        "title": "%extension.sayBye.title%"
+      }
+    ]
+  },
+  "scripts": {
+    "watch": "tsc -b -w",
+    "compile": "gulp translations-generate && webpack --mode production --vscode-nls",
+    "compile-dev": " webpack --mode development",
+    "compile-nls": "gulp translations-generate && webpack --mode development --vscode-nls",
+    "clean": "gulp clean",
+    "vscode:prepublish": "npm run compile",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "devDependencies": {
+    "@types/node": "^12.19.3",
+    "@types/vscode": "^1.50.0",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "del": "^4.1.1",
+    "eslint": "^7.12.1",
+    "gulp": "^4.0.2",
+    "gulp-filter": "^5.1.0",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^5.0.1",
+    "ts-loader": "^7.0.5",
+    "typescript": "^3.9.4",
+    "vscode-nls": "^4.1.1",
+    "vscode-nls-dev": "^3.2.6",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^3.3.12"
+  }
 }

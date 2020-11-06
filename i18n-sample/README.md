@@ -1,13 +1,13 @@
-# I18n Sample
+# use Webpack to bundle the I18n Sample
 
-This folder contains a sample VS code extension that shows how to use the package.nls.json and the vscode-nls library for localization. For this sample, it shows two commands: Hello and Bye in English and Japanese.
+This folder contains a sample VS code extension that shows how to use the package.nls.json and the vscode-nls library for localization. Besides it also shows how to use webpack to bundle your code. For this sample, it shows two commands: Hello and Bye in English, Japanese and chinese.
 
-**Assumptions**
+## Assumptions
 
 * All localization files are under the i18n folder.
 * You could have created this folder by hand, or you could have used the `vscode-nls-dev` tool to extract it.
 * Under the i18n folder, you have sub-folders that represent the language you want to localize. These names follow the ISO 639-3 convention.
-* Under the language names folder you will create json files that mirror the structure of the source code for your extension (e.g., out/src). The json files are key:value pairs of the text that you want to localize. The naming convention is `<file_name>.i18n.json`.
+* Under the language names folder you will create json files that mirror the structure of the source code for your extension (e.g., out/src,NOTE: The "mirror" is related to your typescript option `rootDir`). The json files are key:value pairs of the text that you want to localize. The naming convention is `<file_name>.i18n.json`.
 * If you have a top-level package.nls.json file in your extension, you should have one for each language following the naming convention of `package.i18n.json`.
 
 ## Demo
@@ -16,16 +16,16 @@ This folder contains a sample VS code extension that shows how to use the packag
 
 ## Running the Sample
 
-Localization values are only applied when running the gulp `build` task. During normally development which uses `tsc -watch` to compile no localization post processing happends. This speeds up development time.
+Localization values are only applied when running the gulp `build` task. 
 
 1. Ensure that you have `gulp-cli` installed globally using `npm install --global gulp-cli`.
-1. Run `npm install` to bring in the dependencies.
-1. Follow the steps at https://code.visualstudio.com/api/working-with-extensions/publishing-extension to ensure that you have installed vsce and have a publisher account.
-1. Run `gulp package` to produce a .vsix file.
-1. Install the .vsix file following the instructions at https://code.visualstudio.com/docs/editor/extension-gallery#_install-from-a-vsix
-1. Change your locale to Japanese by invoking "Configure Language" from the Command Palette.
+2. Run `npm install` to bring in the dependencies.
+3. Run the `Launch Extension with nls` in debug.
+4. Ensure that you have `vsce` installed globally using `npm install --global vsce`.
+5. Run `vsce package` to produce a .vsix file.
+6. Change your locale to Japanese or Chinese by invoking `Configure Language` from the Command Palette.
 
-See the demo.gif file in this repository for a screencast.
+See the demo.gif file in this repository for a screencast.To speed up development time, use the launch configuration `Launch Extension`.
 
 ## How to translate our extension
 

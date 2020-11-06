@@ -5,7 +5,8 @@
 import * as nls from 'vscode-nls';
 
 // The example uses the file message format.
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+nls.config({ messageFormat: nls.MessageFormat.bundle, bundleFormat: nls.BundleFormat.standalone })();
+const localize: nls.LocalizeFunc = nls.loadMessageBundle();
 
 import * as vscode from 'vscode';
 import { sayByeCommand } from './command/sayBye';
