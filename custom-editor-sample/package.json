@@ -3,7 +3,6 @@
 	"displayName": "Cat Customs",
 	"description": "Custom Editor API Samples",
 	"version": "0.0.1",
-	"enableProposedApi": true,
 	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.46.0"
