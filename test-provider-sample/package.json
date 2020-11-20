@@ -19,10 +19,34 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"command": "test-provider-sample.runTests",
+				"title": "Run Tests",
+				"icon": "$(debug-start)"
 			}
-		]
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "test-provider-sample.runTests",
+					"when": "false"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "test-provider-sample.runTests",
+					"when": "view == sampleTestExplorerView && viewItem =~ /runnable/",
+					"group": "inline"
+				}
+			]
+		},
+		"views": {
+			"explorer": [
+				{
+					"id": "sampleTestExplorerView",
+					"name": "Sample Test Explorer"
+				}
+			]
+		}
 	},
 	"prettier": {
 		"printWidth": 120,

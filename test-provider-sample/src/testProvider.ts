@@ -48,6 +48,7 @@ export class MathTestProvider implements vscode.TestProvider {
     const listener = vscode.workspace.onDidChangeTextDocument(evt => {
       if (evt.document === document) {
         file.updateTestsFromText(document.getText(), changeTestEmitter);
+        changeTestEmitter.fire(file);
       }
     });
 
@@ -66,17 +67,23 @@ export class MathTestProvider implements vscode.TestProvider {
    * @inheritdoc
    */
   public async runTests(options: vscode.TestRunOptions) {
-    await this.runTestTree(options.tests);
+    const queue: (() => Promise<void>)[] = [];
+    await this.gatherTestTree(options.tests, queue);
+
+    for (const runTest of queue) {
+      await runTest();
+    }
   }
 
-  private async runTestTree(tests: vscode.TestItem[]) {
+  private async gatherTestTree(tests: vscode.TestItem[], queue: (() => Promise<void>)[]) {
     for (const test of tests) {
       if (test instanceof TestCase) {
-        await test.run();
+        test.markQueued();
+        queue.push(() => test.run());
       }
 
       if (test.children) {
-        this.runTestTree(test.children);
+        this.gatherTestTree(test.children, queue);
       }
     }
   }
@@ -187,6 +194,11 @@ class TestCase implements vscode.TestItem {
     public readonly location: vscode.Location,
     private readonly updateEmitter: vscode.EventEmitter<vscode.TestItem>
   ) {}
+
+  async markQueued() {
+    this.state = new vscode.TestState(vscode.TestRunState.Running);
+    this.updateEmitter.fire(this);
+  }
 
   async run() {
     this.state = new vscode.TestState(vscode.TestRunState.Running);
