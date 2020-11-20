@@ -65,7 +65,7 @@ export class TestTreeDataProvider implements vscode.TreeDataProvider<vscode.Test
       this.observers = [];
       for (const folder of vscode.workspace.workspaceFolders ?? []) {
         const observer = vscode.test.createWorkspaceTestObserver(folder);
-        observer.onDidChangeTest(item => this.didChangeEmitter.fire(item));
+        observer.onDidChangeTest(evt => this.didChangeEmitter.fire(evt.commonChangeAncestor));
         this.observers.push(observer);
       }
     }
