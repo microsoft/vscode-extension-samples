@@ -69,7 +69,10 @@ class WebviewCodiconsPanel {
 
 				<h1>styled codicons</h1>
 
-				<div class="styledIcon" title="This icon is styled with green foreground"><i class="codicon codicon-archive"></i></div>
+				<div id="icons">
+					<div class="styledIcon" title="This icon is styled with green foreground"><i class="codicon codicon-archive"></i></div>
+					<div class="icon" title="This icon is styled with continuous rotation"><i class="codicon codicon-loading rotate"></i></div>
+				</div>
 
 				<h1>codicons mouse events</h1>
 				<div class="iconBar">

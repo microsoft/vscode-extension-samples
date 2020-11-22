@@ -56,7 +56,6 @@ h1 {
 
 #icons .icon .codicon {
 	font-size: 32px;
-	padding-bottom: 16px;
 }
 
 /* Codicon mouse events demo */
@@ -82,4 +81,19 @@ div.styledIcon .codicon {
 	font-size: 50px;
 	color: green;
 	padding: 3px;
+}
+
+/* Rotating the 'loading' Codicon to indicate _progress_. */
+
+.rotate {
+	animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+from {
+	transform: rotate(0deg);
+}
+to {
+	transform: rotate(359deg);
+}
 }
