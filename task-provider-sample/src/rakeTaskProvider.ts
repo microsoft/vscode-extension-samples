@@ -33,7 +33,7 @@ export class RakeTaskProvider implements vscode.TaskProvider {
 		if (task) {
 			// resolveTask requires that the same definition object be used.
 			const definition: RakeTaskDefinition = <any>_task.definition;
-			return new vscode.Task(definition, definition.task, 'rake', new vscode.ShellExecution(`rake ${definition.task}`));
+			return new vscode.Task(definition, _task.scope ?? vscode.TaskScope.Workspace, definition.task, 'rake', new vscode.ShellExecution(`rake ${definition.task}`));
 		}
 		return undefined;
 	}

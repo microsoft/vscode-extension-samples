@@ -75,7 +75,9 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js'));
 
 		// Do the same for the stylesheet.
-		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
+		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
 
 		// Use a nonce to only allow a specific script to be run.
 		const nonce = getNonce();
@@ -93,7 +95,9 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-				<link href="${styleUri}" rel="stylesheet">
+				<link href="${styleResetUri}" rel="stylesheet">
+				<link href="${styleVSCodeUri}" rel="stylesheet">
+				<link href="${styleMainUri}" rel="stylesheet">
 				
 				<title>Cat Colors</title>
 			</head>

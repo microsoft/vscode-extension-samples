@@ -31,12 +31,6 @@
 
 .add-color-button {
 	display: block;
-	color: var(--vscode-button-foreground);
-	background: var(--vscode-button-background);
 	border: none;
 	margin: 0 auto;
-}
-
-.add-color-button:hover {
-	background: var(--vscode-button-hoverBackground);
 }

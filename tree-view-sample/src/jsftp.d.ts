@@ -5,7 +5,6 @@ import { EventEmitter } from 'events';
 
 declare namespace JSFtp {
 
-
     interface JSFtpOptions {
         host: string;
         port?: number | 21;
@@ -17,7 +16,6 @@ declare namespace JSFtp {
     interface Callback<T> {
         (err: any, result: T): void;
     }
-
 
     interface Entry {
         name: string;
