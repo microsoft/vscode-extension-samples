@@ -13,16 +13,19 @@
 		}
 	],
 	"iconDefinitions": {
-		"files": {
+		"explorer-view-icon": {
 			"fontCharacter": "\\e000"
 		},
-		"search": {
+		"search-view-icon": {
 			"fontCharacter": "\\e001"
 		},
-		"debug-alt-2": {
+		"run-view-icon": {
 			"fontCharacter": "\\e002"
 		},
-		"source-control": {
+		"extensions-view-icon": {
+			"fontCharacter": "\\e004"
+		},
+		"source-control-view-icon": {
 			"fontCharacter": "\\e003"
 		},
 		"tree-item-expanded": {
@@ -37,8 +40,6 @@
 		"feedback": {
 			"fontCharacter": "\\e005"
 		},
-		"extensions": {
-			"fontCharacter": "\\e004"
-		}
+
 	}
 }
