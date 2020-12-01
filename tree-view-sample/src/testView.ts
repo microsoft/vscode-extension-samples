@@ -70,10 +70,10 @@ function getChildren(key: string): string[] {
 	return [];
 }
 
-function getTreeItem(key: string): vscode.TreeItem2 {
+function getTreeItem(key: string): vscode.TreeItem {
 	const treeElement = getTreeElement(key);
 	return {
-		label: <vscode.TreeItemLabel>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0},
+		label: /**vscode.TreeItemLabel**/<any>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0},
 		tooltip: `Tooltip for ${key}`,
 		collapsibleState: treeElement && Object.keys(treeElement).length ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None
 	};
