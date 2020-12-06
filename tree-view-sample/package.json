@@ -6,7 +6,7 @@
 	"publisher": "vscode-samples",
 	"enableProposedApi": true,
 	"engines": {
-		"vscode": "^1.46.0"
+		"vscode": "^1.52.0"
 	},
 	"categories": [
 		"Other"
