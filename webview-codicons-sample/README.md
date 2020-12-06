@@ -57,7 +57,7 @@ Last, add any Codicon into your HTML:
 <i class="codicon codicon-check"></i>
 ```
 
-## Styling codicons
+## Styling and interacting with codicons
 
 Icons can be styled as any other HTML content:
 
@@ -67,8 +67,17 @@ Icons can be styled as any other HTML content:
 
 ```css
 div.styledIcon .codicon {
-	font-size: 50px;
-	color: green;
-	padding: 3px;
+    font-size: 50px;
+    color: green;
+    padding: 3px;
 }
 ```
+
+However, it is recommended to use CSS variable to reference a VS Code color token,
+rather than hard-coding any concrete color.
+
+```css
+    color: var(--vscode-debugIcon-startForeground);
+```
+
+![demo styling and interacting with codicons](demo_styling.gif)

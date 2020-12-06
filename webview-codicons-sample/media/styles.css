@@ -58,7 +58,7 @@ h1 {
 	font-size: 32px;
 }
 
-/* Codicon mouse events demo */
+/* Codicon styling and interaction demo */
 
 div.iconBar .codicon {
 	font-size: 60px;
@@ -70,18 +70,13 @@ div.iconBar .disabled {
 	cursor: not-allowed;
 }
 
-/* Codicons in buttons demo */
-
-div.iconButtonBar .iconButton .codicon {
-	font-size: 40px;
-	padding: 3px;
-}
-
-div.styledIcon .codicon {
-	font-size: 50px;
+#play {
 	/* Use CSS variable to reference a VS Code color token, rather than any concrete color. */
 	color: var(--vscode-debugIcon-startForeground);
-	padding: 3px;
+}
+
+#stop {
+	color: var(--vscode-debugIcon-stopForeground);
 }
 
 /* Rotating the 'loading' Codicon to indicate _progress_. 

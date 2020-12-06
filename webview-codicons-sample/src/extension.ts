@@ -40,8 +40,6 @@ class WebviewCodiconsPanel {
 
 		// Get resource paths
 		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'styles.css'));
-		const scriptMouseEventsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'mouseEvents.js'));
-		const scriptButtonsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'media', 'buttons.js'));
 		const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css'));
 		const codiconsFontUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.ttf'));
 
@@ -66,30 +64,6 @@ class WebviewCodiconsPanel {
 				<link href="${codiconsUri}" rel="stylesheet" />
 			</head>
 			<body>
-
-				<h1>styled codicons</h1>
-
-				<div id="icons">
-					<div class="styledIcon" title="This icon is styled with green foreground"><i class="codicon codicon-archive"></i></div>
-					<div class="icon" title="This icon is styled with continuous rotation"><i class="codicon codicon-loading codicon-animation-spin"></i></div>
-				</div>
-
-				<h1>codicons mouse events</h1>
-				<div class="iconBar">
-					<i id="play1" class="codicon codicon-play-circle"></i>
-					<i id="stop1" class="codicon disabled codicon-stop-circle"></i>
-					<div id=iconBarStatus>Click on the icon above</div>
-				</div>
-
-				<script nonce="${nonce}" src="${scriptMouseEventsUri}"></script>
-
-				<h1>codicons in buttons</h1>
-				<div class="iconButtonBar">
-					<button class="iconButton" id="play2"><i class="codicon codicon-play-circle"></i></button>
-					<button class="iconButton" id="stop2" disabled><i class="codicon codicon-stop-circle"></i></button>
-				</div>
-
-				<script nonce="${nonce}" src="${scriptButtonsUri}"></script>
 
 				<h1>codicons</h1>
 				<div id="icons">
@@ -419,6 +393,34 @@ class WebviewCodiconsPanel {
 					<div class="icon"><i class="codicon codicon-zoom-in"></i> zoom-in</div>
 					<div class="icon"><i class="codicon codicon-zoom-out"></i> zoom-out</div>
 				</div>
+					
+				<h1>styling and interacting with codicons</h1>
+				<div class="iconBar">
+					<i id="play" class="codicon disabled codicon-play-circle"></i>
+					<i id="stop" class="codicon codicon-stop-circle"></i>
+					<i id="loading" class="codicon codicon-loading codicon-animation-spin" title="This icon is styled with continuous rotation"></i>
+				</div>
+
+				<script nonce="${nonce}">
+					function play() {
+						if (!document.getElementById('play').classList.contains('disabled')) {
+							document.getElementById('play').classList.add('disabled');
+							document.getElementById('stop').classList.remove('disabled');
+							document.getElementById('loading').classList.add('codicon-animation-spin');
+						}
+					}
+
+					function stop() {
+						if (!document.getElementById('stop').classList.contains('disabled')) {
+							document.getElementById('play').classList.remove('disabled');
+							document.getElementById('stop').classList.add('disabled');
+							document.getElementById('loading').classList.remove('codicon-animation-spin');
+						}
+					}
+
+					document.getElementById('play').onclick = play;
+					document.getElementById('stop').onclick = stop;
+				</script>
 			</body>
 			</html>`;
 	}
