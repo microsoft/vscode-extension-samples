@@ -79,7 +79,8 @@ div.iconButtonBar .iconButton .codicon {
 
 div.styledIcon .codicon {
 	font-size: 50px;
-	color: green;
+	/* Use CSS variable to reference a VS Code color token, rather than any concrete color. */
+	color: var(--vscode-debugIcon-startForeground);
 	padding: 3px;
 }
 
