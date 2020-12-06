@@ -84,17 +84,17 @@ div.styledIcon .codicon {
 	padding: 3px;
 }
 
-/* Rotating the 'loading' Codicon to indicate _progress_. */
-
-.rotate {
-	animation: rotation 2s infinite linear;
+/* Rotating the 'loading' Codicon to indicate _progress_. 
+Same implementation as what VS Code is using in the user interface.
+https://github.com/microsoft/vscode/blob/master/src/vs/base/browser/ui/codicons/codicon/codicon-animations.css
+*/
+@keyframes codicon-spin {
+	100% {
+		transform:rotate(360deg);
+	}
 }
 
-@keyframes rotation {
-from {
-	transform: rotate(0deg);
-}
-to {
-	transform: rotate(359deg);
-}
+.codicon-animation-spin {
+	/* Use steps to throttle FPS to reduce CPU usage */
+	animation: codicon-spin 1.5s steps(30) infinite;
 }
