@@ -66,26 +66,31 @@ export class MathTestProvider implements vscode.TestProvider {
   /**
    * @inheritdoc
    */
-  public async runTests(options: vscode.TestRunOptions) {
-    const queue: (() => Promise<void>)[] = [];
-    await this.gatherTestTree(options.tests, queue);
+  public async runTests(options: vscode.TestRunOptions, cancellation: vscode.CancellationToken) {
+    const queue = await this.gatherTestTree(options.tests);
 
-    for (const runTest of queue) {
-      await runTest();
+    while (queue.length && !cancellation.isCancellationRequested) {
+      await queue.shift()!.run();
+    }
+
+    while (queue.length) {
+      queue.shift()!.cancel();
     }
   }
 
-  private async gatherTestTree(tests: vscode.TestItem[], queue: (() => Promise<void>)[]) {
+  private async gatherTestTree(tests: vscode.TestItem[], queue: ({ run(): Promise<void>; cancel(): void; })[] = []) {
     for (const test of tests) {
       if (test instanceof TestCase) {
         test.markQueued();
-        queue.push(() => test.run());
+        queue.push({ run: () => test.run(), cancel: () => test.markCancelled() });
       }
 
       if (test.children) {
         this.gatherTestTree(test.children, queue);
       }
     }
+
+    return queue;
   }
 }
 
@@ -99,11 +104,14 @@ const updateTestsInFile = async (root: TestRoot, uri: vscode.Uri, emitter: vscod
   if (!testFile) {
     testFile = new TestFile(uri);
     root.children.push(testFile);
-    await new Promise(resolve => setTimeout(resolve, Math.random() * 300 + 200));
   }
 
-  await testFile.updateTestsFromFs(emitter);
-  emitter.fire(changeTarget);
+  if (await testFile.updateTestsFromFs(emitter) === 0) {
+    removeTestsForFile(root, uri);
+    emitter.fire(root);
+  } else {
+    emitter.fire(changeTarget);
+  }
 };
 
 const testRe = /^([0-9]+)\s*\+\s*([0-9]+)\s*=\s*([0-9]+)/;
@@ -133,12 +141,13 @@ class TestFile implements vscode.TestItem {
       return;
     }
 
-    this.updateTestsFromText(text, updateEmitter);
+    return this.updateTestsFromText(text, updateEmitter);
   }
 
   public updateTestsFromText(text: string, updateEmitter: vscode.EventEmitter<vscode.TestItem>) {
     const lines = text.split('\n');
     const ancestors: (TestFile | TestHeading)[] = [this];
+    let discovered = 0;
     this.children = [];
 
     for (let lineNo = 0; lineNo < lines.length; lineNo++) {
@@ -151,6 +160,7 @@ class TestFile implements vscode.TestItem {
         const range = new vscode.Range(new vscode.Position(lineNo, 0), new vscode.Position(lineNo, test[0].length));
         const tcase = new TestCase(a, b, expected, new vscode.Location(this.uri, range), updateEmitter);
         ancestors[ancestors.length - 1].children.push(tcase);
+        discovered++;
         continue;
       }
 
@@ -165,6 +175,8 @@ class TestFile implements vscode.TestItem {
         continue;
       }
     }
+
+    return discovered;
   }
 }
 
@@ -195,8 +207,13 @@ class TestCase implements vscode.TestItem {
     private readonly updateEmitter: vscode.EventEmitter<vscode.TestItem>
   ) {}
 
-  async markQueued() {
-    this.state = new vscode.TestState(vscode.TestRunState.Running);
+  markQueued() {
+    this.state = new vscode.TestState(vscode.TestRunState.Queued);
+    this.updateEmitter.fire(this);
+  }
+
+  markCancelled() {
+    this.state = new vscode.TestState(vscode.TestRunState.Skipped);
     this.updateEmitter.fire(this);
   }
 

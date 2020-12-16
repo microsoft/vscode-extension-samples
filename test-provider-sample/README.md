@@ -23,4 +23,4 @@ todo
 - Run the `Run Extension` target in the Debug View. This will:
 	- Start a task `npm: watch` to compile the code
 	- Run the extension in a new VS Code window
-- Create a `test.txt` file containing the given content
+- Create a `test.md` file containing the given content
