@@ -171,7 +171,9 @@ class TestFile implements vscode.TestItem {
           ancestors.pop();
         }
         const range = new vscode.Range(new vscode.Position(lineNo, 0), new vscode.Position(lineNo, line.length));
-        ancestors.push(new TestHeading(level, name, new vscode.Location(this.uri, range)));
+        const thead = new TestHeading(level, name, new vscode.Location(this.uri, range));
+        ancestors[ancestors.length - 1].children.push(thead);
+        ancestors.push(thead);
         continue;
       }
     }
