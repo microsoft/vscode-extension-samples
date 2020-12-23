@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"module": "CommonJS",
+		"target": "es2019",
+		"lib": ["ES2019"],
+		"outDir": "dist",
+		"sourceMap": true,
+		"strict": true,
+		"rootDir": "./src"
+	},
+	"include": [
+		"./src/**/*.ts",
+		"./node_modules/vscode/vscode.d.ts",
+		"./node_modules/vscode/lib/*"
+	]
+}

@@ -1,0 +1,45 @@
+{
+	"name": "rollup-sample",
+	"displayName": "rollup-sample",
+	"description": "",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"engines": {
+		"vscode": "^1.53.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:extension.helloRollup"
+	],
+	"main": "./dist/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.helloRollup",
+				"title": "Hello Rollup"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "rollup --environment NODE_ENV:production -c rollup.config.js",
+		"rollup": "rollup -c rollup.config.js",
+		"watch": "rollup -c rollup.config.js --watch",
+		"test-compile": "tsc -p ./",
+		"lint": "eslint . --ext .ts,.tsx"
+	},
+	"devDependencies": {
+		"@types/node": "^14.14.14",
+		"@types/vscode": "^1.52.0",
+		"@typescript-eslint/eslint-plugin": "^4.10.0",
+		"@typescript-eslint/parser": "^4.10.0",
+		"@rollup/plugin-typescript": "^8.1.0",
+		"eslint": "^7.16.0",
+		"typescript": "^4.1.3",
+		"rollup": "^2.35.1"
+	},
+	"dependencies": {
+		"rollup-plugin-terser": "^7.0.2"
+	}
+}
