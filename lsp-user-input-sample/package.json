@@ -9,7 +9,7 @@
 		"multi-root ready"
 	],
 	"engines": {
-		"vscode": "^1.41.0"
+		"vscode": "^1.52.0"
 	},
 	"activationEvents": [
 		"onLanguage:plaintext"

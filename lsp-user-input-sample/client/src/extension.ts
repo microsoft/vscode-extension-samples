@@ -6,7 +6,7 @@
 
 import * as path from 'path';
 import { ExtensionContext, window as Window } from 'vscode';
-import { LanguageClient, LanguageClientOptions, RevealOutputChannelOn, ServerOptions, TransportKind } from 'vscode-languageclient';
+import { LanguageClient, LanguageClientOptions, RevealOutputChannelOn, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 
 export function activate(context: ExtensionContext): void {
 	const serverModule = context.asAbsolutePath(path.join('server', 'out', 'sampleServer.js'));

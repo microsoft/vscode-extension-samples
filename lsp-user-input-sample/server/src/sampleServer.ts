@@ -7,7 +7,7 @@
 import {
 	CodeAction, CodeActionKind, Command, createConnection, Diagnostic, DiagnosticSeverity, Position, Range, TextDocumentEdit,
 	TextDocuments, TextDocumentSyncKind, TextEdit
-} from 'vscode-languageserver';
+} from 'vscode-languageserver/node';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
 const connection = createConnection();
