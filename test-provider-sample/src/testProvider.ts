@@ -1,5 +1,6 @@
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
+import { states } from './stateRegistry';
 
 const textDecoder = new TextDecoder('utf-8');
 
@@ -20,17 +21,18 @@ export class MathTestProvider implements vscode.TestProvider {
       changeTestEmitter.fire(root);
     });
 
-    const onDidDiscoverInitialTests = new vscode.EventEmitter<void>();
-    vscode.workspace
+    const discoveredInitialTests = vscode.workspace
       .findFiles(pattern, undefined, undefined)
-      .then(files => Promise.all(files.map(file => updateTestsInFile(root, file, changeTestEmitter))))
-      .then(() => onDidDiscoverInitialTests.fire());
+      .then(files => Promise.all(files.map(file => updateTestsInFile(root, file, changeTestEmitter))));
 
     return {
       root,
       onDidChangeTest: changeTestEmitter.event,
-      onDidDiscoverInitialTests: onDidDiscoverInitialTests.event,
-      dispose: () => watcher.dispose(),
+      discoveredInitialTests,
+      dispose: () => {
+        watcher.dispose();
+        root.dispose();
+      },
     };
   }
 
@@ -52,14 +54,14 @@ export class MathTestProvider implements vscode.TestProvider {
       }
     });
 
-    const onDidDiscoverInitialTests = new vscode.EventEmitter<void>();
-    setTimeout(() => onDidDiscoverInitialTests.fire(), 0);
-
     return {
       root,
       onDidChangeTest: changeTestEmitter.event,
-      onDidDiscoverInitialTests: onDidDiscoverInitialTests.event,
-      dispose: () => listener.dispose(),
+      discoveredInitialTests: Promise.resolve(),
+      dispose: () => {
+        listener.dispose();
+        root.dispose();
+      },
     };
   }
 
@@ -78,7 +80,7 @@ export class MathTestProvider implements vscode.TestProvider {
     }
   }
 
-  private async gatherTestTree(tests: vscode.TestItem[], queue: ({ run(): Promise<void>; cancel(): void; })[] = []) {
+  private async gatherTestTree(tests: vscode.TestItem[], queue: { run(): Promise<void>; cancel(): void }[] = []) {
     for (const test of tests) {
       if (test instanceof TestCase) {
         test.markQueued();
@@ -106,7 +108,7 @@ const updateTestsInFile = async (root: TestRoot, uri: vscode.Uri, emitter: vscod
     root.children.push(testFile);
   }
 
-  if (await testFile.updateTestsFromFs(emitter) === 0) {
+  if ((await testFile.updateTestsFromFs(emitter)) === 0) {
     removeTestsForFile(root, uri);
     emitter.fire(root);
   } else {
@@ -121,6 +123,12 @@ class TestRoot implements vscode.TestItem {
   public readonly label = 'Markdown Tests';
   public readonly state = new vscode.TestState(vscode.TestRunState.Unset);
   public children = [] as TestFile[];
+
+  public dispose() {
+    for (const child of this.children) {
+      child.dispose();
+    }
+  }
 }
 
 class TestFile implements vscode.TestItem {
@@ -180,6 +188,12 @@ class TestFile implements vscode.TestItem {
 
     return discovered;
   }
+
+  public dispose() {
+    for (const child of this.children) {
+      child.dispose();
+    }
+  }
 }
 
 class TestHeading implements vscode.TestItem {
@@ -192,6 +206,12 @@ class TestHeading implements vscode.TestItem {
     public readonly label: string,
     public readonly location: vscode.Location
   ) {}
+
+  public dispose() {
+    for (const child of this.children) {
+      child.dispose();
+    }
+  }
 }
 
 class TestCase implements vscode.TestItem {
@@ -199,7 +219,16 @@ class TestCase implements vscode.TestItem {
     return `${this.a} + ${this.b} = ${this.expected}`;
   }
 
-  public state = new vscode.TestState(vscode.TestRunState.Unset);
+  public get id() {
+    return `${this.location.uri.toString()}: ${this.label}`;
+  }
+
+  public state = states.current(this.id);
+
+  private stateListener = states.listen(this.id, state => {
+    this.state = state;
+    this.updateEmitter.fire(this);
+  });
 
   constructor(
     private readonly a: number,
@@ -210,34 +239,36 @@ class TestCase implements vscode.TestItem {
   ) {}
 
   markQueued() {
-    this.state = new vscode.TestState(vscode.TestRunState.Queued);
-    this.updateEmitter.fire(this);
+    states.update(this.id, new vscode.TestState(vscode.TestRunState.Queued));
   }
 
   markCancelled() {
-    this.state = new vscode.TestState(vscode.TestRunState.Skipped);
-    this.updateEmitter.fire(this);
+    states.update(this.id, new vscode.TestState(vscode.TestRunState.Skipped));
   }
 
   async run() {
-    this.state = new vscode.TestState(vscode.TestRunState.Running);
-    this.updateEmitter.fire(this);
+    states.update(this.id, new vscode.TestState(vscode.TestRunState.Running));
 
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 3000));
     const actual = this.a + this.b;
     if (actual === this.expected) {
-      this.state = new vscode.TestState(vscode.TestRunState.Passed);
+      states.update(this.id, new vscode.TestState(vscode.TestRunState.Passed));
     } else {
-      this.state = new vscode.TestState(vscode.TestRunState.Failed, [
-        {
-          message: `Expected ${this.label}`,
-          expectedOutput: String(this.expected),
-          actualOutput: String(actual),
-          location: this.location,
-        },
-      ]);
+      states.update(
+        this.id,
+        new vscode.TestState(vscode.TestRunState.Failed, [
+          {
+            message: `Expected ${this.label}`,
+            expectedOutput: String(this.expected),
+            actualOutput: String(actual),
+            location: this.location,
+          },
+        ])
+      );
     }
+  }
 
-    this.updateEmitter.fire(this);
+  public dispose() {
+    this.stateListener.dispose();
   }
 }
