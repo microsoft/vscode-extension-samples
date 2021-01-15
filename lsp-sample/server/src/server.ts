@@ -15,7 +15,7 @@ import {
 	TextDocumentPositionParams,
 	TextDocumentSyncKind,
 	InitializeResult
-} from 'vscode-languageserver';
+} from 'vscode-languageserver/node';
 
 import {
 	TextDocument
@@ -25,7 +25,7 @@ import {
 // Also include all preview / proposed LSP features.
 let connection = createConnection(ProposedFeatures.all);
 
-// Create a simple text document manager. 
+// Create a simple text document manager.
 let documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 let hasConfigurationCapability: boolean = false;
