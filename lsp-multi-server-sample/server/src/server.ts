@@ -5,13 +5,18 @@
 
 import {
 	createConnection, TextDocuments, ProposedFeatures, TextDocumentSyncKind
-} from 'vscode-languageserver';
+} from 'vscode-languageserver/node';
+
+import {
+	TextDocument
+} from 'vscode-languageserver-textdocument';
+
 
 // Creates the LSP connection
 const connection = createConnection(ProposedFeatures.all);
 
 // Create a manager for open text documents
-const documents = new TextDocuments();
+let documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 // The workspace folder this server is operating on
 let workspaceFolder: string | null;
