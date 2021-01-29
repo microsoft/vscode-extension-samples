@@ -116,7 +116,9 @@ const updateTestsInFile = async (root: TestRoot, uri: vscode.Uri, emitter: vscod
   }
 };
 
-const testRe = /^([0-9]+)\s*\+\s*([0-9]+)\s*=\s*([0-9]+)/;
+type Operator = '+' | '-' | '*' | '/';
+
+const testRe = /^([0-9]+)\s*([+*/-])\s*([0-9]+)\s*=\s*([0-9]+)/;
 const headingRe = /^(#+)\s*(.+)$/;
 
 class TestRoot implements vscode.TestItem {
@@ -164,9 +166,9 @@ class TestFile implements vscode.TestItem {
 
       const test = testRe.exec(line);
       if (test) {
-        const [, a, b, expected] = test!.map(Number);
+        const [, a, operator, b, expected] = test;
         const range = new vscode.Range(new vscode.Position(lineNo, 0), new vscode.Position(lineNo, test[0].length));
-        const tcase = new TestCase(a, b, expected, new vscode.Location(this.uri, range), updateEmitter);
+        const tcase = new TestCase(Number(a), operator as Operator, Number(b), Number(expected), new vscode.Location(this.uri, range), updateEmitter);
         ancestors[ancestors.length - 1].children.push(tcase);
         discovered++;
         continue;
@@ -232,6 +234,7 @@ class TestCase implements vscode.TestItem {
 
   constructor(
     private readonly a: number,
+    private readonly operator: Operator,
     private readonly b: number,
     private readonly expected: number,
     public readonly location: vscode.Location,
@@ -250,7 +253,7 @@ class TestCase implements vscode.TestItem {
     states.update(this.id, new vscode.TestState(vscode.TestRunState.Running));
 
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 3000));
-    const actual = this.a + this.b;
+    const actual = this.evaluate();
     if (actual === this.expected) {
       states.update(this.id, new vscode.TestState(vscode.TestRunState.Passed));
     } else {
@@ -265,6 +268,19 @@ class TestCase implements vscode.TestItem {
           },
         ])
       );
+    }
+  }
+
+  private evaluate() {
+    switch (this.operator) {
+      case '-':
+        return this.a - this.b;
+      case '+':
+        return this.a + this.b;
+      case '/':
+        return Math.floor(this.a / this.b);
+      case '*':
+        return this.a * this.b;
     }
   }
 
