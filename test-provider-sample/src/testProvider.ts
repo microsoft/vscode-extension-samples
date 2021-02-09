@@ -1,6 +1,5 @@
 import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
-import { states } from './stateRegistry';
 
 const textDecoder = new TextDecoder('utf-8');
 
@@ -29,10 +28,7 @@ export class MathTestProvider implements vscode.TestProvider {
       root,
       onDidChangeTest: changeTestEmitter.event,
       discoveredInitialTests,
-      dispose: () => {
-        watcher.dispose();
-        root.dispose();
-      },
+      dispose: () => watcher.dispose(),
     };
   }
 
@@ -45,11 +41,11 @@ export class MathTestProvider implements vscode.TestProvider {
     root.children.push(file);
 
     const changeTestEmitter = new vscode.EventEmitter<vscode.TestItem>();
-    file.updateTestsFromText(document.getText(), changeTestEmitter);
+    file.updateTestsFromText(document.getText());
 
     const listener = vscode.workspace.onDidChangeTextDocument(evt => {
       if (evt.document === document) {
-        file.updateTestsFromText(document.getText(), changeTestEmitter);
+        file.updateTestsFromText(document.getText());
         changeTestEmitter.fire(file);
       }
     });
@@ -58,41 +54,32 @@ export class MathTestProvider implements vscode.TestProvider {
       root,
       onDidChangeTest: changeTestEmitter.event,
       discoveredInitialTests: Promise.resolve(),
-      dispose: () => {
-        listener.dispose();
-        root.dispose();
-      },
+      dispose: () => listener.dispose(),
     };
   }
 
   /**
    * @inheritdoc
    */
-  public async runTests(options: vscode.TestRunOptions, cancellation: vscode.CancellationToken) {
-    const queue = await this.gatherTestTree(options.tests);
+  public async runTests(run: vscode.TestRun, cancellation: vscode.CancellationToken) {
+    const runTests = async (tests: Iterable<vscode.TestItem>) => {
+      for (const test of tests) {
+        if (test instanceof TestCase) {
+          if (cancellation.isCancellationRequested) {
+            run.setState(test, { state: vscode.TestRunState.Skipped });
+          } else {
+            run.setState(test, { state: vscode.TestRunState.Running });
+            run.setState(test, await test.run());
+          }
+        }
 
-    while (queue.length && !cancellation.isCancellationRequested) {
-      await queue.shift()!.run();
-    }
-
-    while (queue.length) {
-      queue.shift()!.cancel();
-    }
-  }
-
-  private async gatherTestTree(tests: vscode.TestItem[], queue: { run(): Promise<void>; cancel(): void }[] = []) {
-    for (const test of tests) {
-      if (test instanceof TestCase) {
-        test.markQueued();
-        queue.push({ run: () => test.run(), cancel: () => test.markCancelled() });
+        if (test.children) {
+          await runTests(test.children);
+        }
       }
+    };
 
-      if (test.children) {
-        this.gatherTestTree(test.children, queue);
-      }
-    }
-
-    return queue;
+    await runTests(run.tests);
   }
 }
 
@@ -108,7 +95,7 @@ const updateTestsInFile = async (root: TestRoot, uri: vscode.Uri, emitter: vscod
     root.children.push(testFile);
   }
 
-  if ((await testFile.updateTestsFromFs(emitter)) === 0) {
+  if ((await testFile.updateTestsFromFs()) === 0) {
     removeTestsForFile(root, uri);
     emitter.fire(root);
   } else {
@@ -123,25 +110,15 @@ const headingRe = /^(#+)\s*(.+)$/;
 
 class TestRoot implements vscode.TestItem {
   public readonly label = 'Markdown Tests';
-  public readonly state = new vscode.TestState(vscode.TestRunState.Unset);
   public children = [] as TestFile[];
-
-  public dispose() {
-    for (const child of this.children) {
-      child.dispose();
-    }
-  }
 }
 
 class TestFile implements vscode.TestItem {
   public readonly label = this.uri.path.split('/').pop()!;
   public children: (TestHeading | TestCase)[] = [];
-
-  public state = new vscode.TestState(vscode.TestRunState.Unset);
-
   constructor(public readonly uri: vscode.Uri) {}
 
-  public async updateTestsFromFs(updateEmitter: vscode.EventEmitter<vscode.TestItem>) {
+  public async updateTestsFromFs() {
     let text: string;
     try {
       const rawContent = await vscode.workspace.fs.readFile(this.uri);
@@ -151,10 +128,10 @@ class TestFile implements vscode.TestItem {
       return;
     }
 
-    return this.updateTestsFromText(text, updateEmitter);
+    return this.updateTestsFromText(text);
   }
 
-  public updateTestsFromText(text: string, updateEmitter: vscode.EventEmitter<vscode.TestItem>) {
+  public updateTestsFromText(text: string) {
     const lines = text.split('\n');
     const ancestors: (TestFile | TestHeading)[] = [this];
     let discovered = 0;
@@ -168,7 +145,7 @@ class TestFile implements vscode.TestItem {
       if (test) {
         const [, a, operator, b, expected] = test;
         const range = new vscode.Range(new vscode.Position(lineNo, 0), new vscode.Position(lineNo, test[0].length));
-        const tcase = new TestCase(Number(a), operator as Operator, Number(b), Number(expected), new vscode.Location(this.uri, range), updateEmitter);
+        const tcase = new TestCase(Number(a), operator as Operator, Number(b), Number(expected), new vscode.Location(this.uri, range));
         ancestors[ancestors.length - 1].children.push(tcase);
         discovered++;
         continue;
@@ -190,30 +167,16 @@ class TestFile implements vscode.TestItem {
 
     return discovered;
   }
-
-  public dispose() {
-    for (const child of this.children) {
-      child.dispose();
-    }
-  }
 }
 
 class TestHeading implements vscode.TestItem {
   public readonly children: (TestHeading | TestCase)[] = [];
-
-  public state = new vscode.TestState(vscode.TestRunState.Unset);
 
   constructor(
     public readonly level: number,
     public readonly label: string,
     public readonly location: vscode.Location
   ) {}
-
-  public dispose() {
-    for (const child of this.children) {
-      child.dispose();
-    }
-  }
 }
 
 class TestCase implements vscode.TestItem {
@@ -225,49 +188,28 @@ class TestCase implements vscode.TestItem {
     return `${this.location.uri.toString()}: ${this.label}`;
   }
 
-  public state = states.current(this.id);
-
-  private stateListener = states.listen(this.id, state => {
-    this.state = state;
-    this.updateEmitter.fire(this);
-  });
-
   constructor(
     private readonly a: number,
     private readonly operator: Operator,
     private readonly b: number,
     private readonly expected: number,
     public readonly location: vscode.Location,
-    private readonly updateEmitter: vscode.EventEmitter<vscode.TestItem>
   ) {}
 
-  markQueued() {
-    states.update(this.id, new vscode.TestState(vscode.TestRunState.Queued));
-  }
-
-  markCancelled() {
-    states.update(this.id, new vscode.TestState(vscode.TestRunState.Skipped));
-  }
-
-  async run() {
-    states.update(this.id, new vscode.TestState(vscode.TestRunState.Running));
-
+  async run(): Promise<vscode.TestState> {
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 3000));
     const actual = this.evaluate();
     if (actual === this.expected) {
-      states.update(this.id, new vscode.TestState(vscode.TestRunState.Passed));
+      return { state: vscode.TestRunState.Passed};
     } else {
-      states.update(
-        this.id,
-        new vscode.TestState(vscode.TestRunState.Failed, [
+      return { state: vscode.TestRunState.Failed, messages: [
           {
             message: `Expected ${this.label}`,
             expectedOutput: String(this.expected),
             actualOutput: String(actual),
             location: this.location,
           },
-        ])
-      );
+      ]};
     }
   }
 
@@ -282,9 +224,5 @@ class TestCase implements vscode.TestItem {
       case '*':
         return this.a * this.b;
     }
-  }
-
-  public dispose() {
-    this.stateListener.dispose();
   }
 }
