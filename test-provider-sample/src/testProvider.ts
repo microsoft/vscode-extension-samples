@@ -71,9 +71,7 @@ export class MathTestProvider implements vscode.TestProvider {
             run.setState(test, { state: vscode.TestRunState.Running });
             run.setState(test, await test.run());
           }
-        }
-
-        if (test.children) {
+        } else if (test.children) {
           await runTests(test.children);
         }
       }
