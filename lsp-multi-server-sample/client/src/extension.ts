@@ -9,7 +9,7 @@ import {
 
 import {
 	LanguageClient, LanguageClientOptions, TransportKind
-} from 'vscode-languageclient';
+} from 'vscode-languageclient/node';
 
 let defaultClient: LanguageClient;
 let clients: Map<string, LanguageClient> = new Map();

@@ -1,0 +1,73 @@
+{
+	"enableProposedApi": true,
+	"name": "test-provider-sample",
+	"displayName": "test-provider-sample",
+	"description": "Sample showing how to use Proposed API",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples",
+	"engines": {
+		"vscode": "^1.51.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "test-provider-sample.runTests",
+				"title": "Run Tests",
+				"icon": "$(debug-start)"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "test-provider-sample.runTests",
+					"when": "false"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "test-provider-sample.runTests",
+					"when": "view == sampleTestExplorerView && viewItem =~ /runnable/",
+					"group": "inline"
+				}
+			]
+		},
+		"views": {
+			"explorer": [
+				{
+					"id": "sampleTestExplorerView",
+					"name": "Sample Test Explorer"
+				}
+			]
+		}
+	},
+	"prettier": {
+		"printWidth": 120,
+		"singleQuote": true,
+		"arrowParens": "avoid"
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
+		"watch": "tsc -watch -p ./",
+		"download-api": "vscode-dts dev",
+		"postdownload-api": "vscode-dts master",
+		"postinstall": "npm run download-api"
+	},
+	"devDependencies": {
+		"@types/node": "^12.12.0",
+		"@typescript-eslint/eslint-plugin": "^3.0.2",
+		"@typescript-eslint/parser": "^3.0.2",
+		"eslint": "^7.1.0",
+		"typescript": "^4.0.2",
+		"vscode-dts": "^0.3.1"
+	}
+}
