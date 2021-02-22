@@ -64,6 +64,10 @@ export class MathTestProvider implements vscode.TestProvider {
   public async runTests(run: vscode.TestRun, cancellation: vscode.CancellationToken) {
     const runTests = async (tests: Iterable<vscode.TestItem>) => {
       for (const test of tests) {
+        if (run.exclude?.includes(test)) {
+          continue;
+        }
+
         if (test instanceof TestCase) {
           if (cancellation.isCancellationRequested) {
             run.setState(test, { state: vscode.TestRunState.Skipped });
@@ -108,11 +112,13 @@ const headingRe = /^(#+)\s*(.+)$/;
 
 class TestRoot implements vscode.TestItem {
   public readonly label = 'Markdown Tests';
+  public readonly id = 'markdown';
   public children = [] as TestFile[];
 }
 
 class TestFile implements vscode.TestItem {
   public readonly label = this.uri.path.split('/').pop()!;
+  public readonly id = `markdown/${this.uri.toString()}`;
   public children: (TestHeading | TestCase)[] = [];
   constructor(public readonly uri: vscode.Uri) {}
 
@@ -168,12 +174,13 @@ class TestFile implements vscode.TestItem {
 }
 
 class TestHeading implements vscode.TestItem {
+  public readonly id = `markdown/${this.location.uri.toString()}/${this.label}`;
   public readonly children: (TestHeading | TestCase)[] = [];
 
   constructor(
     public readonly level: number,
     public readonly label: string,
-    public readonly location: vscode.Location
+    public readonly location: vscode.Location,
   ) {}
 }
 
@@ -183,7 +190,7 @@ class TestCase implements vscode.TestItem {
   }
 
   public get id() {
-    return `${this.location.uri.toString()}: ${this.label}`;
+    return `markdown/${this.location.uri.toString()}/${this.label}`;
   }
 
   constructor(
