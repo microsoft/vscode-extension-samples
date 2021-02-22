@@ -8,7 +8,7 @@ It is not intended as a product quality extension.
 - Run "Show Progress"
 - Observe the running task in the notification area
 
-![Show progress in notification area](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/progress-sample/preview.gif)
+![Show progress in notification area](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/main/progress-sample/preview.gif)
 
 # How it works, what it shows?
 

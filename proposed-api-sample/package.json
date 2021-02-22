@@ -30,7 +30,7 @@
 		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -watch -p ./",
 		"download-api": "vscode-dts dev",
-		"postdownload-api": "vscode-dts master",
+		"postdownload-api": "vscode-dts main",
 		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {

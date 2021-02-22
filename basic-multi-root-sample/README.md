@@ -6,7 +6,7 @@ This extension adds an entry to the status bar that shows the name of the curren
 - updates when there are changes to the number of `WorkspaceFolder` via the `workspace.onDidChangeWorkspaceFolders()` API
 - registers a setting `multiRootSample.statusColor` with a scope of `resource` to configure a color per `WorkspaceFolder` to use for the status bar item
 
-![Show the folder of the active file](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/basic-multi-root-sample/preview.gif)
+![Show the folder of the active file](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/main/basic-multi-root-sample/preview.gif)
 
 ## Running the example
 
