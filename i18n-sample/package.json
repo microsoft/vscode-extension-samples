@@ -47,7 +47,7 @@
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
 		"run-sequence": "^2.2.1",
-		"typescript": "^4.0.2",
+		"typescript": "^4.2.2",
 		"vsce": "^1.79.5",
 		"vscode-nls-dev": "^3.3.2"
 	},
