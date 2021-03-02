@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as vscode from 'vscode';
 import { getNonce } from './util';
 
@@ -93,18 +92,17 @@ export class CatScratchEditorProvider implements vscode.CustomTextEditorProvider
 	 */
 	private getHtmlForWebview(webview: vscode.Webview): string {
 		// Local path to script and css for the webview
-		const scriptUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this.context.extensionPath, 'media', 'catScratch.js')
-		));
-		const styleResetUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this.context.extensionPath, 'media', 'reset.css')
-		));
-		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this.context.extensionPath, 'media', 'vscode.css')
-		));
-		const styleMainUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this.context.extensionPath, 'media', 'catScratch.css')
-		));
+		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'media', 'catScratch.js'));
+
+		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'media', 'reset.css'));
+
+		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'media', 'vscode.css'));
+
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this.context.extensionUri, 'media', 'catScratch.css'));
 
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();
