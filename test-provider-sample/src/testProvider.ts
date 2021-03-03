@@ -7,7 +7,7 @@ export class MathTestProvider implements vscode.TestProvider {
   /**
    * @inheritdoc
    */
-  public createWorkspaceTestHierarchy(workspaceFolder: vscode.WorkspaceFolder): vscode.TestHierarchy<vscode.TestItem> {
+  public provideWorkspaceTestHierarchy(workspaceFolder: vscode.WorkspaceFolder, token: vscode.CancellationToken): vscode.TestHierarchy<vscode.TestItem> {
     const root = new TestRoot();
     const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.md');
 
@@ -19,6 +19,7 @@ export class MathTestProvider implements vscode.TestProvider {
       removeTestsForFile(root, uri);
       changeTestEmitter.fire(root);
     });
+    token.onCancellationRequested(() => watcher.dispose());
 
     const discoveredInitialTests = vscode.workspace
       .findFiles(pattern, undefined, undefined)
@@ -28,14 +29,13 @@ export class MathTestProvider implements vscode.TestProvider {
       root,
       onDidChangeTest: changeTestEmitter.event,
       discoveredInitialTests,
-      dispose: () => watcher.dispose(),
     };
   }
 
   /**
    * @inheritdoc
    */
-  public createDocumentTestHierarchy(document: vscode.TextDocument): vscode.TestHierarchy<vscode.TestItem> {
+  public provideDocumentTestHierarchy(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.TestHierarchy<vscode.TestItem> {
     const root = new TestRoot();
     const file = new TestFile(document.uri);
     root.children.push(file);
@@ -49,12 +49,12 @@ export class MathTestProvider implements vscode.TestProvider {
         changeTestEmitter.fire(file);
       }
     });
+    token.onCancellationRequested(() => listener.dispose());
 
     return {
       root,
       onDidChangeTest: changeTestEmitter.event,
       discoveredInitialTests: Promise.resolve(),
-      dispose: () => listener.dispose(),
     };
   }
 
