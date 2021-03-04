@@ -7,7 +7,7 @@ export class MathTestProvider implements vscode.TestProvider {
   /**
    * @inheritdoc
    */
-  public createWorkspaceTestHierarchy(workspaceFolder: vscode.WorkspaceFolder): vscode.TestHierarchy<vscode.TestItem> {
+  public provideWorkspaceTestHierarchy(workspaceFolder: vscode.WorkspaceFolder, token: vscode.CancellationToken): vscode.TestHierarchy<vscode.TestItem> {
     const root = new TestRoot();
     const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.md');
 
@@ -19,6 +19,7 @@ export class MathTestProvider implements vscode.TestProvider {
       removeTestsForFile(root, uri);
       changeTestEmitter.fire(root);
     });
+    token.onCancellationRequested(() => watcher.dispose());
 
     const discoveredInitialTests = vscode.workspace
       .findFiles(pattern, undefined, undefined)
@@ -28,14 +29,13 @@ export class MathTestProvider implements vscode.TestProvider {
       root,
       onDidChangeTest: changeTestEmitter.event,
       discoveredInitialTests,
-      dispose: () => watcher.dispose(),
     };
   }
 
   /**
    * @inheritdoc
    */
-  public createDocumentTestHierarchy(document: vscode.TextDocument): vscode.TestHierarchy<vscode.TestItem> {
+  public provideDocumentTestHierarchy(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.TestHierarchy<vscode.TestItem> {
     const root = new TestRoot();
     const file = new TestFile(document.uri);
     root.children.push(file);
@@ -49,12 +49,12 @@ export class MathTestProvider implements vscode.TestProvider {
         changeTestEmitter.fire(file);
       }
     });
+    token.onCancellationRequested(() => listener.dispose());
 
     return {
       root,
       onDidChangeTest: changeTestEmitter.event,
       discoveredInitialTests: Promise.resolve(),
-      dispose: () => listener.dispose(),
     };
   }
 
@@ -64,16 +64,18 @@ export class MathTestProvider implements vscode.TestProvider {
   public async runTests(run: vscode.TestRun, cancellation: vscode.CancellationToken) {
     const runTests = async (tests: Iterable<vscode.TestItem>) => {
       for (const test of tests) {
-        if (test instanceof TestCase) {
-          if (cancellation.isCancellationRequested) {
-            run.setState(test, { state: vscode.TestRunState.Skipped });
-          } else {
-            run.setState(test, { state: vscode.TestRunState.Running });
-            run.setState(test, await test.run());
-          }
+        if (run.exclude?.includes(test)) {
+          continue;
         }
 
-        if (test.children) {
+        if (test instanceof TestCase) {
+          if (cancellation.isCancellationRequested) {
+            run.setState(test, new vscode.TestState(vscode.TestResult.Skipped));
+          } else {
+            run.setState(test, new vscode.TestState(vscode.TestResult.Running));
+            run.setState(test, await test.run());
+          }
+        } else if (test.children) {
           await runTests(test.children);
         }
       }
@@ -108,15 +110,20 @@ type Operator = '+' | '-' | '*' | '/';
 const testRe = /^([0-9]+)\s*([+*/-])\s*([0-9]+)\s*=\s*([0-9]+)/;
 const headingRe = /^(#+)\s*(.+)$/;
 
-class TestRoot implements vscode.TestItem {
-  public readonly label = 'Markdown Tests';
-  public children = [] as TestFile[];
+class TestRoot extends vscode.TestItem {
+  public children: TestFile[] = [];
+
+  constructor() {
+    super('markdown', 'Markdown Tests');
+  }
 }
 
-class TestFile implements vscode.TestItem {
-  public readonly label = this.uri.path.split('/').pop()!;
+class TestFile extends vscode.TestItem {
   public children: (TestHeading | TestCase)[] = [];
-  constructor(public readonly uri: vscode.Uri) {}
+
+  constructor(public readonly uri: vscode.Uri) {
+    super(`markdown/${uri.toString()}`, uri.path.split('/').pop()!);
+  }
 
   public async updateTestsFromFs() {
     let text: string;
@@ -169,47 +176,40 @@ class TestFile implements vscode.TestItem {
   }
 }
 
-class TestHeading implements vscode.TestItem {
+class TestHeading extends vscode.TestItem {
   public readonly children: (TestHeading | TestCase)[] = [];
 
   constructor(
     public readonly level: number,
-    public readonly label: string,
-    public readonly location: vscode.Location
-  ) {}
+     label: string,
+    public readonly location: vscode.Location,
+  ) {
+    super(`markdown/${location.uri.toString()}/${label}`, label);
+  }
 }
 
-class TestCase implements vscode.TestItem {
-  public get label() {
-    return `${this.a} + ${this.b} = ${this.expected}`;
-  }
-
-  public get id() {
-    return `${this.location.uri.toString()}: ${this.label}`;
-  }
-
+class TestCase extends vscode.TestItem {
   constructor(
     private readonly a: number,
     private readonly operator: Operator,
     private readonly b: number,
     private readonly expected: number,
     public readonly location: vscode.Location,
-  ) {}
+  ) {
+    super( `markdown/${location.uri.toString()}/${a} + ${b} = ${expected}`, `${a} + ${b} = ${expected}`);
+  }
 
   async run(): Promise<vscode.TestState> {
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 3000));
     const actual = this.evaluate();
     if (actual === this.expected) {
-      return { state: vscode.TestRunState.Passed};
+      return new vscode.TestState(vscode.TestResult.Passed);
     } else {
-      return { state: vscode.TestRunState.Failed, messages: [
-          {
-            message: `Expected ${this.label}`,
-            expectedOutput: String(this.expected),
-            actualOutput: String(actual),
-            location: this.location,
-          },
-      ]};
+      const state = new vscode.TestState(vscode.TestResult.Failed);
+      const message = vscode.TestMessage.diff(`Expected ${this.label}`, String(this.expected), String(actual));
+      message.location = this.location;
+      state.messages.push(message);
+      return state;
     }
   }
 

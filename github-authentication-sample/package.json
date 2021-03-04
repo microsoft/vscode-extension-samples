@@ -33,7 +33,7 @@
 		"@types/node": "^10.14.17",
 		"@types/vscode": "1.48.0",
 		"tslint": "^5.16.0",
-		"typescript": "^3.5.1"
+		"typescript": "^4.2.2"
 	},
 	"dependencies": {
 		"@octokit/rest": "^18.0.0"

@@ -1,6 +1,6 @@
 # LSP Example for Log Streaming
 
-This is a repository adapted from [lsp-sample](https://github.com/Microsoft/vscode-extension-samples/tree/master/lsp-sample) to demonstrate
+This is a repository adapted from [lsp-sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/lsp-sample) to demonstrate
 
 - Usage of the JSON output
 - Streaming the JSON into [LSP Inspector](https://github.com/Microsoft/language-server-protocol-inspector)

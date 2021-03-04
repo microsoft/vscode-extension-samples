@@ -1,4 +1,3 @@
-import * as path from 'path';
 import * as vscode from 'vscode';
 import { Disposable, disposeAll } from './dispose';
 import { getNonce } from './util';
@@ -299,11 +298,15 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 			if (e.type === 'ready') {
 				if (document.uri.scheme === 'untitled') {
 					this.postMessage(webviewPanel, 'init', {
-						untitled: true
+						untitled: true,
+						editable: true,
 					});
 				} else {
+					const editable = vscode.workspace.fs.isWritableFileSystem(document.uri.scheme);
+
 					this.postMessage(webviewPanel, 'init', {
-						value: document.documentData
+						value: document.documentData,
+						editable,
 					});
 				}
 			}
@@ -336,17 +339,17 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 	 */
 	private getHtmlForWebview(webview: vscode.Webview): string {
 		// Local path to script and css for the webview
-		const scriptUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this._context.extensionPath, 'media', 'pawDraw.js')
-		)); const styleResetUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this._context.extensionPath, 'media', 'reset.css')
-		));
-		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this._context.extensionPath, 'media', 'vscode.css')
-		));
-		const styleMainUri = webview.asWebviewUri(vscode.Uri.file(
-			path.join(this._context.extensionPath, 'media', 'pawDraw.css')
-		));
+		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this._context.extensionUri, 'media', 'pawDraw.js'));
+
+		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this._context.extensionUri, 'media', 'reset.css'));
+
+		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this._context.extensionUri, 'media', 'vscode.css'));
+
+		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(
+			this._context.extensionUri, 'media', 'pawDraw.css'));
 
 		// Use a nonce to whitelist which scripts can be run
 		const nonce = getNonce();

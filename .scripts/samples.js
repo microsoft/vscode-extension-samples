@@ -76,7 +76,7 @@ const samples = [
     contributions: []
   },
   {
-    description: 'Editor Decoractor Sample',
+    description: 'Editor Decorator Sample',
     path: 'decorator-sample',
     guide: null,
     apis: [
@@ -232,7 +232,8 @@ const samples = [
   { description: 'quickinput-sample', excludeFromReadme: true, path: 'quickinput-sample', guide: null, apis: [], contributions: [] },
   { description: 'diagnostic-related-information-sample', excludeFromReadme: true, path: 'diagnostic-related-information-sample', guide: null, apis: [], contributions: [] },
   { description: 'fsconsumer-sample', excludeFromReadme: true, path: 'fsconsumer-sample', guide: null, apis: [], contributions: [] },
- 
+  { description: 'github-authentication-sample', excludeFromReadme: true, path: 'github-authentication-sample', guide: null, apis: [], contributions: [] },
+
 ]
 
 /** LSP specific samples */

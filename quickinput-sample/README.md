@@ -10,7 +10,7 @@ It is not intended as a production quality extension.
 
 ## Demo
 
-![Multi-step sample](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/master/quickinput-sample/preview.gif)
+![Multi-step sample](https://raw.githubusercontent.com/Microsoft/vscode-extension-samples/main/quickinput-sample/preview.gif)
 
 ## How it works
 

@@ -19,21 +19,21 @@
 	],
 	"main": "./client/out/extension",
 	"contributes": {
-    "languages": [
-      {
-        "id": "html1",
-        "extensions": [
+		"languages": [
+			{
+				"id": "html1",
+				"extensions": [
 					".html1"
 				]
 			}
 		],
-    "grammars": [
-      {
+		"grammars": [
+			{
 				"language": "html1",
-        "scopeName": "text.html1.basic",
-        "path": "./syntaxes/html1.tmLanguage.json"
-      }
-    ]
+				"scopeName": "text.html1.basic",
+				"path": "./syntaxes/html1.tmLanguage.json"
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "cd client && npm install && cd .. && npm run compile",
@@ -45,7 +45,9 @@
 	"devDependencies": {
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^12.12.0",
-"@typescript-eslint/eslint-plugin": "^3.0.2", "@typescript-eslint/parser": "^3.0.2", "eslint": "^7.1.0",
-		"typescript": "^4.0.2"
+		"@typescript-eslint/eslint-plugin": "^4.16.0",
+		"@typescript-eslint/parser": "^4.16.0",
+		"eslint": "^7.21.0",
+		"typescript": "^4.2.2"
 	}
 }

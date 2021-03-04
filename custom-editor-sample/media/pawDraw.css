@@ -33,8 +33,12 @@ html, body {
 	outline: none;
 }
 
-.drawing-controls button.active,
-.drawing-controls button:hover {
+.drawing-controls button:disabled {
+	opacity: 0.5;
+}
+
+.drawing-controls button.active:not(:disabled),
+.drawing-controls button:hover:not(:disabled) {
 	transform: translateY(10%);
 }
 

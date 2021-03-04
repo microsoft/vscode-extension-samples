@@ -45,6 +45,8 @@
 		constructor( /** @type {HTMLElement} */ parent) {
 			this.ready = false;
 
+			this.editable = false;
+
 			this.drawingColor = 'black';
 
 			/** @type {Array<Stroke>} */
@@ -73,6 +75,14 @@
 			return previous;
 		}
 
+		setEditable(editable) {
+			this.editable = editable;
+			const colorButtons = /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('.drawing-controls button'));
+			for (const colorButton of colorButtons) {
+				colorButton.disabled = !editable;
+			}
+		}
+
 		_initElements(/** @type {HTMLElement} */ parent) {
 			const colorButtons = /** @type {NodeListOf<HTMLButtonElement>} */ (document.querySelectorAll('.drawing-controls button'));
 			for (const colorButton of colorButtons) {
@@ -99,10 +109,10 @@
 			this.drawingCtx = this.drawingCanvas.getContext('2d');
 			this.wrapper.append(this.drawingCanvas);
 
-			let isDrawing = false
+			let isDrawing = false;
 
 			parent.addEventListener('mousedown', () => {
-				if (!this.ready) {
+				if (!this.ready || !this.editable) {
 					return;
 				}
 
@@ -115,7 +125,7 @@
 			});
 
 			document.body.addEventListener('mouseup', async () => {
-				if (!isDrawing || !this.ready) {
+				if (!isDrawing || !this.ready || !this.editable) {
 					return;
 				}
 
@@ -135,7 +145,7 @@
 			});
 
 			parent.addEventListener('mousemove', e => {
-				if (!isDrawing || !this.ready) {
+				if (!isDrawing || !this.ready || !this.editable) {
 					return;
 				}
 				const rect = this.wrapper.getBoundingClientRect();
@@ -224,6 +234,7 @@
 		switch (type) {
 			case 'init':
 				{
+					editor.setEditable(body.editable);
 					if (body.untitled) {
 						await editor.resetUntitled();
 						return;

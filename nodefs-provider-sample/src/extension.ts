@@ -139,11 +139,11 @@ export interface IStatAndLink {
 
 namespace _ {
 
-    function handleResult<T>(resolve: (result: T) => void, reject: (error: Error) => void, error: Error | null | undefined, result: T): void {
+    function handleResult<T>(resolve: (result: T) => void, reject: (error: Error) => void, error: Error | null | undefined, result: T | undefined): void {
         if (error) {
             reject(massageError(error));
         } else {
-            resolve(result);
+            resolve(result!);
         }
     }
 
@@ -236,7 +236,7 @@ namespace _ {
     }
 
     export function statLink(path: string): Promise<IStatAndLink> {
-        return new Promise((resolve, reject) => {
+        return new Promise<IStatAndLink>((resolve, reject) => {
             fs.lstat(path, (error, lstat) => {
                 if (error || lstat.isSymbolicLink()) {
                     fs.stat(path, (error, stat) => {

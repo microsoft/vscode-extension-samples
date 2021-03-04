@@ -12,7 +12,7 @@ const LSP_TABLE_HEAD = `<!-- LSP_SAMPLES_BEGIN -->
 const LSP_TABLE_END = `<!-- LSP_SAMPLES_END -->`
 
 const getTableRow = sample => {
-  const descriptionCell = `[${sample.description}](https://github.com/Microsoft/vscode-extension-samples/tree/master/${sample.path})`
+  const descriptionCell = `[${sample.description}](https://github.com/Microsoft/vscode-extension-samples/tree/main/${sample.path})`
   let guideCell
   if (!sample.guide) {
     guideCell = 'N/A'

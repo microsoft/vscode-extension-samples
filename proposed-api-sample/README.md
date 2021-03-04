@@ -2,7 +2,7 @@
 
 This sample demonstrates usage of [Proposed API](https://code.visualstudio.com/api/advanced-topics/using-proposed-api).
 
-The `postinstall` script uses `vscode-dts dev && vscode-dts master` to download latest version of [`vscode.d.ts`](https://github.com/microsoft/vscode/blob/master/src/vs/vscode.d.ts) and [`vscode.proposed.d.ts`](https://github.com/microsoft/vscode/blob/master/src/vs/vscode.proposed.d.ts) from the master branch of [microsoft/vscode](https://github.com/microsoft/vscode).
+The `postinstall` script uses `vscode-dts dev && vscode-dts main` to download latest version of [`vscode.d.ts`](https://github.com/microsoft/vscode/blob/main/src/vs/vscode.d.ts) and [`vscode.proposed.d.ts`](https://github.com/microsoft/vscode/blob/main/src/vs/vscode.proposed.d.ts) from the master branch of [microsoft/vscode](https://github.com/microsoft/vscode).
 
 You can read more about `vscode-dts` at: https://github.com/microsoft/vscode-dts.
 
