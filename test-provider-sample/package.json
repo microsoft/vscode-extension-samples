@@ -20,25 +20,10 @@
 		"commands": [
 			{
 				"command": "test-provider-sample.runTests",
-				"title": "Run Tests",
+				"title": "Custom Run Tests",
 				"icon": "$(debug-start)"
 			}
 		],
-		"menus": {
-			"commandPalette": [
-				{
-					"command": "test-provider-sample.runTests",
-					"when": "false"
-				}
-			],
-			"view/item/context": [
-				{
-					"command": "test-provider-sample.runTests",
-					"when": "view == sampleTestExplorerView && viewItem =~ /runnable/",
-					"group": "inline"
-				}
-			]
-		},
 		"views": {
 			"explorer": [
 				{
