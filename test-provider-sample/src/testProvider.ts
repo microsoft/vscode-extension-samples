@@ -210,7 +210,7 @@ class TestCase extends vscode.TestItem {
     public generation: number,
     public readonly parent: TestHeading | TestFile,
   ) {
-    super(`markdown/${location.uri.toString()}/${a} + ${b} = ${expected}`, `${a} + ${b} = ${expected}`, false);
+    super(`markdown/${location.uri.toString()}/${a} ${operator} ${b} = ${expected}`, `${a} ${operator} ${b} = ${expected}`, false);
   }
 
   async run(): Promise<vscode.TestState> {
