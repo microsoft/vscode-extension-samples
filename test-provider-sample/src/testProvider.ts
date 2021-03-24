@@ -11,14 +11,14 @@ export class MathTestProvider implements vscode.TestProvider<MarkdownTestItem> {
    * @inheritdoc
    */
   public provideWorkspaceTestRoot(workspaceFolder: vscode.WorkspaceFolder) {
-    return new WorkspaceTestRoot(workspaceFolder, `${workspaceFolder.uri.toString()}: `);
+    return new WorkspaceTestRoot(workspaceFolder);
   }
 
   /**
    * @inheritdoc
    */
   public provideDocumentTestRoot(document: vscode.TextDocument) {
-    return new DocumentTestRoot(document, `${document.uri.toString()}: `);
+    return new DocumentTestRoot(document);
   }
 
   /**
@@ -32,13 +32,17 @@ export class MathTestProvider implements vscode.TestProvider<MarkdownTestItem> {
         }
 
         if (test instanceof TestCase) {
-        if (cancellation.isCancellationRequested) {
+          if (cancellation.isCancellationRequested) {
             run.setState(test, new vscode.TestState(vscode.TestResult.Skipped));
           } else {
             run.setState(test, new vscode.TestState(vscode.TestResult.Running));
             run.setState(test, await test.run());
           }
-        } else if (test.children) {
+        } else  {
+          if (test instanceof TestFile && test.children.size === 0) {
+            await test.refresh();
+          }
+
           await runTests(test.children);
         }
       }
@@ -51,8 +55,8 @@ export class MathTestProvider implements vscode.TestProvider<MarkdownTestItem> {
 class WorkspaceTestRoot extends vscode.TestItem<TestFile> {
   public readonly parent = undefined;
 
-  constructor(private readonly workspaceFolder: vscode.WorkspaceFolder, prefix = '') {
-    super(prefix + 'markdown', 'Markdown Tests', true);
+  constructor(private readonly workspaceFolder: vscode.WorkspaceFolder) {
+    super('markdowntests', 'Markdown Tests', workspaceFolder.uri, true);
   }
 
   public discoverChildren(progress: vscode.Progress<{ busy: boolean }>, token: vscode.CancellationToken) {
@@ -78,8 +82,8 @@ class WorkspaceTestRoot extends vscode.TestItem<TestFile> {
 class DocumentTestRoot extends vscode.TestItem<TestFile> {
   public readonly parent = undefined;
 
-  constructor(private readonly document: vscode.TextDocument, prefix = '') {
-    super(prefix + 'markdown', 'Markdown Tests', true);
+  constructor(private readonly document: vscode.TextDocument) {
+    super('markdowntests', 'Markdown Tests', document.uri, true);
   }
 
   public discoverChildren(progress: vscode.Progress<{ busy: boolean }>, token: vscode.CancellationToken) {
@@ -115,11 +119,11 @@ type Operator = '+' | '-' | '*' | '/';
 
 class TestFile extends vscode.TestItem<TestHeading | TestCase> {
   constructor(
-    public readonly uri: vscode.Uri,
+    uri: vscode.Uri,
     public parent: WorkspaceTestRoot | DocumentTestRoot,
     private readonly getContent: (uri: vscode.Uri) => Promise<string>,
   ) {
-    super(uri.toString(), uri.path.split('/').pop()!, true);
+    super(uri.toString(), uri.path.split('/').pop()!, uri, true);
   }
 
   public discoverChildren(progress: vscode.Progress<{ busy: boolean }>, token: vscode.CancellationToken) {
@@ -137,7 +141,7 @@ class TestFile extends vscode.TestItem<TestHeading | TestCase> {
     parseMarkdown(await this.getContent(this.uri), {
       onTest: (range, a, operator, b, expected) => {
         const parent = ancestors[ancestors.length - 1];
-        const tcase = new TestCase(Number(a), operator as Operator, Number(b), Number(expected), new vscode.Location(this.uri, range), thisGeneration, parent);
+        const tcase = new TestCase(Number(a), operator as Operator, Number(b), Number(expected), range, thisGeneration, parent);
 
         const existing = parent.children.get(tcase.id);
         if (existing) {
@@ -152,7 +156,7 @@ class TestFile extends vscode.TestItem<TestHeading | TestCase> {
         }
 
         const parent = ancestors[ancestors.length - 1];
-        const thead = new TestHeading(name, new vscode.Location(this.uri, range), thisGeneration, parent);
+        const thead = new TestHeading(name, range, thisGeneration, parent);
         const existing = parent.children.get(thead.id);
         if (existing instanceof TestHeading) {
           ancestors.push(existing);
@@ -191,12 +195,12 @@ class TestHeading extends vscode.TestItem<TestHeading | TestCase> {
   public readonly level: number = this.parent instanceof TestFile ? 1 : this.parent.level + 1;
 
   constructor(
-     label: string,
-    public readonly location: vscode.Location,
+    label: string,
+    range: vscode.Range,
     public generation: number,
     public readonly parent: TestFile | TestHeading,
   ) {
-    super(`markdown/${location.uri.toString()}/${label}`, label, true);
+    super(`markdown/${parent.uri.toString()}/${label}`, label, parent.uri, true);
   }
 }
 
@@ -206,11 +210,11 @@ class TestCase extends vscode.TestItem {
     private readonly operator: Operator,
     private readonly b: number,
     private readonly expected: number,
-    public readonly location: vscode.Location,
+    public readonly range: vscode.Range,
     public generation: number,
     public readonly parent: TestHeading | TestFile,
   ) {
-    super(`markdown/${location.uri.toString()}/${a} ${operator} ${b} = ${expected}`, `${a} ${operator} ${b} = ${expected}`, false);
+    super(`markdown/${parent.uri.toString()}/${a} ${operator} ${b} = ${expected}`, `${a} ${operator} ${b} = ${expected}`, parent.uri, false);
   }
 
   async run(): Promise<vscode.TestState> {
@@ -221,7 +225,7 @@ class TestCase extends vscode.TestItem {
     } else {
       const state = new vscode.TestState(vscode.TestResult.Failed);
       const message = vscode.TestMessage.diff(`Expected ${this.label}`, String(this.expected), String(actual));
-      message.location = this.location;
+      message.location = new vscode.Location(this.uri, this.range);
       state.messages.push(message);
       return state;
     }
