@@ -4,9 +4,9 @@ import { parseMarkdown } from './parser';
 
 const textDecoder = new TextDecoder('utf-8');
 
-type MarkdownTestItem = WorkspaceTestRoot | TestFile | TestHeading | TestCase;
+type MarkdownTestItem = WorkspaceTestRoot | DocumentTestRoot | TestFile | TestHeading | TestCase;
 
-export class MathTestProvider implements vscode.TestProvider {
+export class MathTestProvider implements vscode.TestProvider<MarkdownTestItem> {
   /**
    * @inheritdoc
    */
