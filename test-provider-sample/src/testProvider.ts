@@ -24,7 +24,7 @@ export class MathTestProvider implements vscode.TestProvider<MarkdownTestItem> {
   /**
    * @inheritdoc
    */
-  public async runTests(run: vscode.TestRun<MarkdownTestItem>, cancellation: vscode.CancellationToken) {
+  public async runTests(run: vscode.TestRunOptions<MarkdownTestItem>, cancellation: vscode.CancellationToken) {
     const runTests = async (tests: Iterable<MarkdownTestItem>) => {
       for (const test of tests) {
         if (run.exclude?.includes(test)) {
@@ -33,12 +33,12 @@ export class MathTestProvider implements vscode.TestProvider<MarkdownTestItem> {
 
         if (test instanceof TestCase) {
           if (cancellation.isCancellationRequested) {
-            run.setState(test, new vscode.TestState(vscode.TestResult.Skipped));
+            run.setState(test, vscode.TestResultState.Skipped);
           } else {
-            run.setState(test, new vscode.TestState(vscode.TestResult.Running));
-            run.setState(test, await test.run());
+            run.setState(test, vscode.TestResultState.Running);
+            await test.run(run);
           }
-        } else  {
+        } else {
           if (test instanceof TestFile && test.children.size === 0) {
             await test.refresh();
           }
@@ -217,17 +217,19 @@ class TestCase extends vscode.TestItem {
     super(`markdown/${parent.uri.toString()}/${a} ${operator} ${b} = ${expected}`, `${a} ${operator} ${b} = ${expected}`, parent.uri, false);
   }
 
-  async run(): Promise<vscode.TestState> {
+  async run(options: vscode.TestRunOptions): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 3000));
+    const start = Date.now();
     const actual = this.evaluate();
+    const duration = Date.now() - start;
+
     if (actual === this.expected) {
-      return new vscode.TestState(vscode.TestResult.Passed);
+      options.setState(this, vscode.TestResultState.Passed);
     } else {
-      const state = new vscode.TestState(vscode.TestResult.Failed);
       const message = vscode.TestMessage.diff(`Expected ${this.label}`, String(this.expected), String(actual));
       message.location = new vscode.Location(this.uri, this.range);
-      state.messages.push(message);
-      return state;
+      options.appendMessage(this, message);
+      options.setState(this, vscode.TestResultState.Failed, duration);
     }
   }
 
