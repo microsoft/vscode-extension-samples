@@ -53,11 +53,12 @@
 		"test": "sh ./scripts/e2e.sh"
 	},
 	"devDependencies": {
-		"@types/mocha": "^8.0.3",
+		"@types/mocha": "^8.2.2",
 		"@types/node": "^12.12.0",
-		"@typescript-eslint/parser": "^2.3.0",
-		"eslint": "^6.4.0",
-		"mocha": "^8.1.1",
-		"typescript": "^4.2.2"
+		"@typescript-eslint/eslint-plugin": "^4.21.0",
+		"@typescript-eslint/parser": "^4.21.0",
+		"eslint": "^7.23.0",
+		"mocha": "^8.3.2",
+		"typescript": "^4.2.3"
 	}
 }
