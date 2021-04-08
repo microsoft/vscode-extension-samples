@@ -225,10 +225,10 @@
 		"typescript": "^4.2.2"
 	},
 	"dependencies": {
-		"jsonc-parser": "^0.4.2",
 		"ftp": "^0.3.10",
+		"jsonc-parser": "^0.4.2",
+		"minimist": "^0.2.1",
 		"mkdirp": "^0.5.1",
-		"rimraf": "^2.6.2",
-		"minimist": "^0.2.1"
+		"rimraf": "^2.6.2"
 	}
 }
