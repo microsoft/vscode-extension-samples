@@ -32,12 +32,14 @@ export class MathTestProvider implements vscode.TestProvider<MarkdownTestItem> {
         }
 
         if (test instanceof TestCase) {
+          run.appendOutput(`Running ${test.id}\r\n`);
           if (cancellation.isCancellationRequested) {
             run.setState(test, vscode.TestResultState.Skipped);
           } else {
             run.setState(test, vscode.TestResultState.Running);
             await test.run(run);
           }
+          run.appendOutput(`Completed ${test.id}\r\n`);
         } else {
           if (test instanceof TestFile && test.children.size === 0) {
             await test.refresh();
