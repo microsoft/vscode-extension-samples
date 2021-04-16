@@ -23,7 +23,7 @@ export const parseMarkdown = (text: string, events: {
     if (heading) {
       const [, pounds, name] = heading;
       const range = new vscode.Range(new vscode.Position(lineNo, 0), new vscode.Position(lineNo, line.length));
-      events.onHeading(range, name, Number(pounds));
+      events.onHeading(range, name, pounds.length);
     }
   }
 };

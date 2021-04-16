@@ -32,13 +32,13 @@ export class MathTestController implements vscode.TestController<MarkdownTestDat
           continue;
         }
 
-        if (test instanceof TestCase) {
+        if (test.data instanceof TestCase) {
           run.appendOutput(`Running ${test.id}\r\n`);
           if (cancellation.isCancellationRequested) {
             run.setState(test, vscode.TestResultState.Skipped);
           } else {
             run.setState(test, vscode.TestResultState.Running);
-            await test.run(run);
+            await test.data.run(run);
           }
           run.appendOutput(`Completed ${test.id}\r\n`);
         } else {
@@ -51,7 +51,7 @@ export class MathTestController implements vscode.TestController<MarkdownTestDat
       }
     };
 
-    runTests(request.tests);
+    runTests(request.tests).then(() => run.end());
   }
 }
 
@@ -208,10 +208,11 @@ class TestFile {
         const parent = ancestors[ancestors.length - 1];
         const thead = TestHeading.create(name, range, thisGeneration, parent);
         const existing = parent.children.get(thead.id);
-        if (existing instanceof TestHeading) {
+        if (existing && existing.data instanceof TestHeading) {
           ancestors.push(existing);
           existing.data.generation = thisGeneration;
         } else {
+          existing?.dispose();
           parent.addChild(thead);
           ancestors.push(thead);
         }
@@ -243,11 +244,14 @@ class TestFile {
 
 class TestHeading {
   public static create(label: string, range: vscode.Range, generation: number, parent: vscode.TestItem<TestFile | TestHeading>) {
-    return vscode.test.createTestItem<TestHeading, TestHeading | TestCase>({
+    const item = vscode.test.createTestItem<TestHeading, TestHeading | TestCase>({
       id: `mktests/${parent.uri.toString()}/${label}`,
       label,
       uri: parent.uri,
     }, new TestHeading(generation));
+
+    item.range = range;
+    return item;
   }
 
   protected constructor(public generation: number) { }
@@ -287,7 +291,7 @@ class TestCase {
   ) { }
 
   async run(options: vscode.TestRunTask<MarkdownTestData>): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 200 + Math.random() * 3000));
+    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
     const start = Date.now();
     const actual = this.evaluate();
     const duration = Date.now() - start;
