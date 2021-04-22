@@ -59,7 +59,7 @@ export class MathTestController implements vscode.TestController<MarkdownTestDat
 class WorkspaceTestRoot {
   public static create(workspaceFolder: vscode.WorkspaceFolder) {
     const item = vscode.test.createTestItem<WorkspaceTestRoot, TestFile>(
-      { id: 'mdtests', label: 'Markdown Tests', uri: workspaceFolder.uri },
+      { id: `mdtests ${workspaceFolder.uri}`, label: 'Markdown Tests', uri: workspaceFolder.uri },
       new WorkspaceTestRoot(workspaceFolder)
     );
 
@@ -97,7 +97,7 @@ class WorkspaceTestRoot {
 class DocumentTestRoot {
   public static create(document: vscode.TextDocument) {
     const item = vscode.test.createTestItem<DocumentTestRoot, TestFile>(
-      { id: 'mdtests', label: 'Markdown Tests', uri: document.uri },
+      { id: `mdtests ${document.uri}`, label: 'Markdown Tests', uri: document.uri },
       new DocumentTestRoot()
     );
 
