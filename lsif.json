@@ -1,0 +1,4 @@
+{
+	"project": ".lsif/tsconfig.json",
+	"out": "vscode-extension-samples.lsif"
+}
