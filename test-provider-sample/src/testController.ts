@@ -25,7 +25,7 @@ export class MathTestController implements vscode.TestController<MarkdownTestDat
    * @inheritdoc
    */
   public runTests(request: vscode.TestRunRequest<MarkdownTestData>, cancellation: vscode.CancellationToken) {
-    const run = vscode.test.createTestRunTask(request);
+    const run = vscode.test.createTestRun(request);
     const runTests = async (tests: Iterable<vscode.TestItem<MarkdownTestData>>) => {
       for (const test of tests) {
         if (request.exclude?.includes(test)) {
@@ -220,6 +220,7 @@ class TestFile {
     });
 
     this.prune(thisGeneration);
+    this.item.error = this.item.children.size === 0 ? new vscode.MarkdownString('No _tests_ were **found** in this file') : undefined;
   }
 
   /**
@@ -290,7 +291,7 @@ class TestCase {
     public generation: number,
   ) { }
 
-  async run(options: vscode.TestRunTask<MarkdownTestData>): Promise<void> {
+  async run(options: vscode.TestRun<MarkdownTestData>): Promise<void> {
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
     const start = Date.now();
     const actual = this.evaluate();
