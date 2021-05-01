@@ -114,6 +114,10 @@ class CatCodingPanel {
 					case 'alert':
 						vscode.window.showErrorMessage(message.text);
 						return;
+
+					case 'reply':
+						console.log('Hello from ext', message.message.data.constructor.toString());
+						return;
 				}
 			},
 			null,
@@ -124,7 +128,15 @@ class CatCodingPanel {
 	public doRefactor() {
 		// Send a message to the webview webview.
 		// You can send any JSON serializable data.
-		this._panel.webview.postMessage({ command: 'refactor' });
+
+		const len = 1000;
+		const arrayBuffer = new ArrayBuffer(len);
+		const data = new Uint8Array(arrayBuffer);
+
+		for (let i = 0; i < len; ++i) {
+			data[i] = i % 16;
+		}
+		this._panel.webview.postMessage({ command: 'refactor', data });
 	}
 
 	public dispose() {

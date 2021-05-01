@@ -1,10 +1,10 @@
 {
-	"name": "cat-coding",
-	"description": "Cat Coding - A Webview API Sample",
+	"name": "webview-test",
+	"description": "webview test",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
+	"publisher": "bierner",
 	"engines": {
-		"vscode": "^1.47.0"
+		"vscode": "^1.56.0"
 	},
 	"categories": [
 		"Other"
