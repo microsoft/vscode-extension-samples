@@ -62,7 +62,6 @@
 		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -w -p ./"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@types/vscode": "^1.50.0",
 		"@typescript-eslint/eslint-plugin": "^4.16.0",

@@ -32,7 +32,6 @@
 		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -w -p ./"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "^12.12.0",
 		"@types/vscode": "^1.47.0",
