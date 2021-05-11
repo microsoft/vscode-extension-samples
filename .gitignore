@@ -4,3 +4,5 @@ Thumbs.db
 */node_modules/
 */out/
 */.vs/
+*.lsif
+*.db

@@ -2,7 +2,7 @@
 	"name": "calico-colors",
 	"description": "Calico Colors - A Webview View API Sample",
 	"version": "0.0.1",
-	"publisher": "vscode-samplesa",
+	"publisher": "vscode-samples",
 	"engines": {
 		"vscode": "^1.50.0"
 	},

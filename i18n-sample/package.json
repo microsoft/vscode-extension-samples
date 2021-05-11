@@ -48,7 +48,7 @@
 		"gulp-typescript": "^5.0.1",
 		"run-sequence": "^2.2.1",
 		"typescript": "^4.2.2",
-		"vsce": "^1.79.5",
+		"vsce": "^1.88.0",
 		"vscode-nls-dev": "^3.3.2"
 	},
 	"dependencies": {

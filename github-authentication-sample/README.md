@@ -10,7 +10,7 @@ This is a GitHub authentication example that shows you how to use the VS Code au
 
 ### `vscode` module
 
-- [`authentication.getSession`](https://code.visualstudio.com/api/references/vscode-api#authentications.getSession)
+- [`authentication.getSession`](https://code.visualstudio.com/api/references/vscode-api#authentication.getSession)
 
 ## Running the Sample
 

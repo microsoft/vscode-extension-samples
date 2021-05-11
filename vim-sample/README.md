@@ -41,7 +41,7 @@ Motions:
 * `j` - down by `n` lines
 * `k` - up by `n` lines
 * `l` - right
-* `G` - go to line
+* `G` - go to last line
 * `gg` - go to first line
 * `g0` - go to start of screen line
 * `g^` - go to first non whitespace character of screen line

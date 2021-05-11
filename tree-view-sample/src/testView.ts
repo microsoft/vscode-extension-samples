@@ -72,9 +72,11 @@ function getChildren(key: string): string[] {
 
 function getTreeItem(key: string): vscode.TreeItem {
 	const treeElement = getTreeElement(key);
+	// An example of how to use codicons in a MarkdownString in a tree item tooltip.
+	const tooltip = new vscode.MarkdownString(`$(zap) Tooltip for ${key}`, true);
 	return {
-		label: /**vscode.TreeItemLabel**/<any>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0},
-		tooltip: `Tooltip for ${key}`,
+		label: /**vscode.TreeItemLabel**/<any>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0 },
+		tooltip,
 		collapsibleState: treeElement && Object.keys(treeElement).length ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None
 	};
 }
