@@ -18,6 +18,10 @@ export class MathTestController implements vscode.TestController<MarkdownTestDat
    * @inheritdoc
    */
   public createDocumentTestRoot(document: vscode.TextDocument) {
+    if (!document.uri.path.endsWith('.md')) {
+      return;
+    }
+
     return DocumentTestRoot.create(document);
   }
 
@@ -26,32 +30,42 @@ export class MathTestController implements vscode.TestController<MarkdownTestDat
    */
   public runTests(request: vscode.TestRunRequest<MarkdownTestData>, cancellation: vscode.CancellationToken) {
     const run = vscode.test.createTestRun(request);
-    const runTests = async (tests: Iterable<vscode.TestItem<MarkdownTestData>>) => {
+    const queue: vscode.TestItem<TestCase>[] = [];
+    const discoverTests = async (tests: Iterable<vscode.TestItem<MarkdownTestData>>) => {
       for (const test of tests) {
         if (request.exclude?.includes(test)) {
           continue;
         }
 
         if (test.data instanceof TestCase) {
-          run.appendOutput(`Running ${test.id}\r\n`);
-          if (cancellation.isCancellationRequested) {
-            run.setState(test, vscode.TestResultState.Skipped);
-          } else {
-            run.setState(test, vscode.TestResultState.Running);
-            await test.data.run(run);
-          }
-          run.appendOutput(`Completed ${test.id}\r\n`);
+          run.setState(test, vscode.TestResultState.Queued);
+          queue.push(test as vscode.TestItem<TestCase, any>);
         } else {
           if (test.data instanceof TestFile && test.children.size === 0) {
             await test.data.refresh();
           }
 
-          await runTests(test.children.values());
+          await discoverTests(test.children.values());
         }
       }
     };
 
-    runTests(request.tests).then(() => run.end());
+    const runTestQueue = async () => {
+      for (const test of queue) {
+        run.appendOutput(`Running ${test.id}\r\n`);
+        if (cancellation.isCancellationRequested) {
+          run.setState(test, vscode.TestResultState.Skipped);
+        } else {
+          run.setState(test, vscode.TestResultState.Running);
+          await test.data.run(run);
+        }
+        run.appendOutput(`Completed ${test.id}\r\n`);
+      }
+
+      run.end();
+    };
+
+    discoverTests(request.tests).then(runTestQueue);
   }
 }
 
@@ -220,7 +234,6 @@ class TestFile {
     });
 
     this.prune(thisGeneration);
-    this.item.error = this.item.children.size === 0 ? new vscode.MarkdownString('No _tests_ were **found** in this file') : undefined;
   }
 
   /**
@@ -246,7 +259,7 @@ class TestFile {
 class TestHeading {
   public static create(label: string, range: vscode.Range, generation: number, parent: vscode.TestItem<TestFile | TestHeading>) {
     const item = vscode.test.createTestItem<TestHeading, TestHeading | TestCase>({
-      id: `mktests/${parent.uri.toString()}/${label}`,
+      id: `mktests/${parent.uri!.toString()}/${label}`,
       label,
       uri: parent.uri,
     }, new TestHeading(generation));
@@ -272,7 +285,7 @@ class TestCase {
   ) {
     const label = `${a} ${operator} ${b} = ${expected}`;
     const item = vscode.test.createTestItem<TestCase, never>({
-      id: `mktests/${parent.uri.toString()}/${label}`,
+      id: `mktests/${parent.uri!.toString()}/${label}`,
       label,
       uri: parent.uri,
     });
@@ -292,16 +305,18 @@ class TestCase {
   ) { }
 
   async run(options: vscode.TestRun<MarkdownTestData>): Promise<void> {
-    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
     const start = Date.now();
+    await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
     const actual = this.evaluate();
     const duration = Date.now() - start;
 
+    console.log('run', this.item.label);
+
     if (actual === this.expected) {
-      options.setState(this.item, vscode.TestResultState.Passed);
+      options.setState(this.item, vscode.TestResultState.Passed, duration);
     } else {
       const message = vscode.TestMessage.diff(`Expected ${this.item.label}`, String(this.expected), String(actual));
-      message.location = new vscode.Location(this.item.uri, this.item.range!);
+      message.location = new vscode.Location(this.item.uri!, this.item.range!);
       options.appendMessage(this.item, message);
       options.setState(this.item, vscode.TestResultState.Failed, duration);
     }

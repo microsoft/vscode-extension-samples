@@ -1,8 +1,7 @@
 {
-	"enableProposedApi": true,
 	"name": "test-provider-sample",
 	"displayName": "test-provider-sample",
-	"description": "Sample showing how to use Proposed API",
+	"description": "Sample showing how to use the test APIs",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples",
@@ -13,15 +12,14 @@
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"workspaceContains:*.md"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
 				"command": "test-provider-sample.runTests",
-				"title": "Custom Run Tests",
-				"icon": "$(debug-start)"
+				"title": "Custom Run Tests"
 			}
 		],
 		"views": {
