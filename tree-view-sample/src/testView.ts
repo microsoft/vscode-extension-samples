@@ -88,7 +88,7 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 	_getLocalRoots(nodes: Node[]): Node[] {
 		let localRoots = [];
 		for (let i = 0; i < nodes.length; i++) {
-			let parent = this._getParent(nodes[i].key);
+			let parent = this._buildParentNode(nodes[i].key);
 			if (parent) {
 				let isInList = nodes.find(n => n.key === parent.key);
 				if (isInList === undefined) {
@@ -118,7 +118,7 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		let parent = tree ? tree : this.tree;
 		for (const prop in parent) {
 			if (prop === element.key) {
-				let parentObject = this.getParent(element);
+				let parentObject = this._buildParentNode(element.key);
 				if (parentObject) {
 					delete parentObject[parentKey][prop];
 				} else {
@@ -169,7 +169,7 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		}
 	}
 
-	_getParent(element: string, parent? : string, tree?): any {
+	_buildParentNode(element: string, parent? : string, tree?): any {
 		let toReturn = undefined;
 		let currentNode = tree ?? this.tree;
 		for (const prop in currentNode) {
@@ -177,6 +177,21 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 				let tmp = {};
 				tmp[parent] = currentNode;
 				return tmp;
+			} else {
+				toReturn = this._buildParentNode(element, prop, currentNode[prop]);
+				if (toReturn) {
+					return toReturn;
+				}
+			}
+		}
+	}
+
+	_getParent(element: string, parent? : string, tree?): any {
+		let toReturn = undefined;
+		let currentNode = tree ?? this.tree;
+		for (const prop in currentNode) {
+			if (prop === element && parent) {
+				return new Key(parent);
 			} else {
 				toReturn = this._getParent(element, prop, currentNode[prop]);
 				if (toReturn) {
