@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 
 export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDropController<Node> {
-	private _onDidChangeTreeData: vscode.EventEmitter<Node | undefined> = new vscode.EventEmitter<Node | undefined>();
-	public onDidChangeTreeData: vscode.Event<Node | undefined> = this._onDidChangeTreeData.event;
+	private _onDidChangeTreeData: vscode.EventEmitter<Node[] | undefined> = new vscode.EventEmitter<Node[] | undefined>();
+	public onDidChangeTreeData: vscode.Event<Node[] | undefined> = this._onDidChangeTreeData.event;
 	public tree: any = {
 		'a': {
 			'aa': {
@@ -59,7 +59,7 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		roots = roots.filter(r => !this._isChild(this._getTreeElement(r.key), target));
 		if (roots.length > 0) {
 			// add nodes to target node
-			roots.forEach(r => this._addNode(r, target));
+			roots.forEach(r => this._modifyTree(r, target));
 			this._onDidChangeTreeData.fire(undefined);
 		}
 	}
@@ -85,10 +85,11 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		return false;
 	}
 
+	// From the given nodes, keep the common parent
 	_getLocalRoots(nodes: Node[]): Node[] {
 		let localRoots = [];
 		for (let i = 0; i < nodes.length; i++) {
-			let parent = this._buildParentNode(nodes[i].key);
+			let parent = this.getParent(nodes[i]);
 			if (parent) {
 				let isInList = nodes.find(n => n.key === parent.key);
 				if (isInList === undefined) {
@@ -101,7 +102,8 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		return localRoots;
 	}
 
-	_addNode(node: Node, target: Node): void {
+	// Remove node from current position and add node to new target element
+	_modifyTree(node: Node, target: Node): void {
 		let element = {};
 		element[node.key] = this._getTreeElement(node.key);
 		const elementCopy = { ...element };
@@ -114,19 +116,20 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		}
 	}
 
-	_removeNode(element: Node, tree?: any, parentKey?: string): void {
+	// Remove node from tree
+	_removeNode(element: Node, tree?: any): void {
 		let parent = tree ? tree : this.tree;
 		for (const prop in parent) {
 			if (prop === element.key) {
-				let parentObject = this._buildParentNode(element.key);
-				if (parentObject) {
-					delete parentObject[parentKey][prop];
+				let parent = this.getParent(element);
+				if (parent) {
+					let parentObject = this._getTreeElement(parent.key);
+					delete parentObject[prop];
 				} else {
 					delete this.tree[prop];
 				}
-
 			} else {
-				this._removeNode(element, parent[prop], prop);
+				this._removeNode(element, parent[prop]);
 			}
 		}
 	}
@@ -162,23 +165,6 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 				return currentNode[prop];
 			} else {
 				toReturn = this._getTreeElement(element, currentNode[prop]);
-				if (toReturn) {
-					return toReturn;
-				}
-			}
-		}
-	}
-
-	_buildParentNode(element: string, parent? : string, tree?): any {
-		let toReturn = undefined;
-		let currentNode = tree ?? this.tree;
-		for (const prop in currentNode) {
-			if (prop === element) {
-				let tmp = {};
-				tmp[parent] = currentNode;
-				return tmp;
-			} else {
-				toReturn = this._buildParentNode(element, prop, currentNode[prop]);
 				if (toReturn) {
 					return toReturn;
 				}
