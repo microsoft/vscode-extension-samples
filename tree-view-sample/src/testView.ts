@@ -58,9 +58,10 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		// remove nodes that are already target's parent nodes
 		roots = roots.filter(r => !this._isChild(this._getTreeElement(r.key), target));
 		if (roots.length > 0) {
-			// add nodes to target node
+			// Reload parents of the moving elements
+			let parents = roots.map(r => this.getParent(r));
 			roots.forEach(r => this._modifyTree(r, target));
-			this._onDidChangeTreeData.fire(undefined);
+			this._onDidChangeTreeData.fire([...parents, target]);
 		}
 	}
 
@@ -177,7 +178,7 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 		let currentNode = tree ?? this.tree;
 		for (const prop in currentNode) {
 			if (prop === element && parent) {
-				return new Key(parent);
+				return this._getNode(parent);
 			} else {
 				toReturn = this._getParent(element, prop, currentNode[prop]);
 				if (toReturn) {
