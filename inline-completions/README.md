@@ -26,5 +26,5 @@ Not documented, as the used API is not finalized.
 
 Make sure that `showInlineCompletions` is enabled in your settings!
 ```
-"editor.suggest.showInlineCompletions": true
+"editor.inlineSuggest.enabled": true
 ```
