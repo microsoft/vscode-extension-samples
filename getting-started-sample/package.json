@@ -1,0 +1,113 @@
+{
+	"name": "getting-started-sample",
+	"displayName": "getting-started-sample",
+	"description": "Example extension contribution to Getting Started page",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples/getting-started-sample",
+	"engines": {
+		"vscode": "^1.57.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:getting-started-sample.runCommand",
+		"onCommand:getting-started-sample.changeSetting",
+		"onCommand:getting-started-sample.setContext",
+		"onCommand:getting-started-sample.sayHello"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"walkthroughs": [
+			{
+				"id": "sample",
+				"title": "Sample",
+				"description": "A sample walkthrough",
+				"steps": [
+					{
+						"id": "runcommand",
+						"title": "Run Command",
+						"description": "This step will run a command and check off once it has been run.\n[Run Command](command:getting-started-sample.runCommand)",
+						"media": { "image": "media/image.png", "altText": "Empty image" },
+						"completionEvents": ["onCommand:getting-started-sample.runCommand"]
+					},
+					{
+						"id": "changesetting",
+						"title": "Change Setting",
+						"description": "This step will change a setting and check off when the setting has changed\n[Change Setting](command:getting-started-sample.changeSetting)",
+						"media": { "image": "media/image.png", "altText": "Empty image" },
+						"completionEvents": ["onSettingChanged:getting-started-sample.sampleSetting"]
+					},
+					{
+						"id": "setcontext",
+						"title": "Set Context",
+						"description": "This step will set a context key, and check off when that context has been set\n[Set Context](command:getting-started-sample.setContext)",
+						"media": { "image": "media/image.png", "altText": "Empty image" },
+						"completionEvents": ["onContext:gettingStartedContextKey"]
+					},
+					{
+						"id": "install python extension",
+						"title": "Install Python Extension",
+						"description": "Click here to install the Python Extension. This step will complete once it has been installed.\n[Here](command:workbench.extensions.installExtension?%22ms-python.python%22)",
+						"media": { "image": "media/image.png", "altText": "Empty image" },
+						"completionEvents": ["extensionInstalled:ms-python.python"]
+					},
+					{
+						"id": "open terminal view",
+						"title": "Open Terminal",
+						"description": "Click [here](command:workbench.action.terminal.toggleTerminal) to open terminal. This step will complete once the terminal has been opened.",
+						"media": { "image": "media/image.png", "altText": "Empty image" },
+						"completionEvents": ["onView:terminal"]
+					},
+					{
+						"id": "mac",
+						"title": "Platform: Mac",
+						"description": "This step will only show on a Mac.",
+						"when": "isMac",
+						"media": { "markdown": "media/mac.md"}
+					},
+					{
+						"id": "windows",
+						"title": "Platform: Windows",
+						"description": "This step will only show on Windows",
+						"when": "isWindows",
+						"media": { "markdown": "media/windows.md" }
+					},
+					{
+						"id": "linux",
+						"title": "Platform: Linux",
+						"description": "This step will only show on Linux",
+						"when": "isLinux",
+						"media": { "markdown": "media/linux.md" }
+					}
+				]
+			}
+		],
+		"configuration":{
+			"title": "Getting Started Sample",
+			"properties": {
+				"getting-started-sample.sampleSetting":{
+					"description": "Sample setting",
+					"type": "boolean"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint src --ext ts",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/node": "^12.12.0",
+		"@types/vscode": "^1.32.0",
+		"@typescript-eslint/eslint-plugin": "^4.16.0",
+		"@typescript-eslint/parser": "^4.16.0",
+		"eslint": "^7.21.0",
+		"typescript": "^4.2.2"
+	}
+}
