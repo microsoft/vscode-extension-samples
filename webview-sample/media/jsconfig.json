@@ -3,6 +3,8 @@
 		"module": "commonjs",
 		"target": "es2020",
 		"jsx": "preserve",
+		"checkJs": true,
+		"strict": true,
 		"strictFunctionTypes": true,
 		"lib": [
 			"dom"
