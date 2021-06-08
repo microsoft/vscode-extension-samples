@@ -2,16 +2,16 @@ import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('catCodicons.show', () => {
-			CatCodiconsPanel.show(context.extensionUri);
+		vscode.commands.registerCommand('webviewCodicons.show', () => {
+			WebviewCodiconsPanel.show(context.extensionUri);
 		})
 	);
 }
 
 
-class CatCodiconsPanel {
+class WebviewCodiconsPanel {
 
-	public static readonly viewType = 'catCodicons';
+	public static readonly viewType = 'webviewCodicons';
 
 	public static show(extensionUri: vscode.Uri) {
 		const column = vscode.window.activeTextEditor
@@ -19,10 +19,19 @@ class CatCodiconsPanel {
 			: undefined;
 
 		const panel = vscode.window.createWebviewPanel(
-			CatCodiconsPanel.viewType,
-			"Cat Codicons",
+			WebviewCodiconsPanel.viewType,
+			"Webview Codicons",
 			column || vscode.ViewColumn.One
 		);
+
+		panel.webview.options = {
+			// Allow scripts in the webview
+			enableScripts: true,
+
+			localResourceRoots: [
+				extensionUri
+			]			
+		}
 
 		panel.webview.html = this._getHtmlForWebview(panel.webview, extensionUri);
 	}
@@ -34,6 +43,9 @@ class CatCodiconsPanel {
 		const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css'));
 		const codiconsFontUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', 'vscode-codicons', 'dist', 'codicon.ttf'));
 
+		// Use a nonce to only allow a specific script to be run.
+		const nonce = getNonce();
+
 		return `<!DOCTYPE html>
 			<html lang="en">
 			<head>
@@ -43,15 +55,16 @@ class CatCodiconsPanel {
 					Use a content security policy to only allow loading images from https or from our extension directory,
 					and only allow scripts that have a specific nonce.
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconsFontUri}; style-src ${webview.cspSource} ${codiconsUri};">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${codiconsFontUri}; style-src ${webview.cspSource} ${codiconsUri}; script-src 'nonce-${nonce}'">
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>Cat Coding</title>
+				<title>Webview Coding</title>
 
 				<link href="${styleUri}" rel="stylesheet" />
 				<link href="${codiconsUri}" rel="stylesheet" />
 			</head>
 			<body>
+
 				<h1>codicons</h1>
 				<div id="icons">
 					<div class="icon"><i class="codicon codicon-account"></i> account</div>
@@ -380,8 +393,44 @@ class CatCodiconsPanel {
 					<div class="icon"><i class="codicon codicon-zoom-in"></i> zoom-in</div>
 					<div class="icon"><i class="codicon codicon-zoom-out"></i> zoom-out</div>
 				</div>
+					
+				<h1>styling and interacting with codicons</h1>
+				<div class="iconBar">
+					<i id="play" class="codicon disabled codicon-play-circle"></i>
+					<i id="stop" class="codicon codicon-stop-circle"></i>
+					<i id="loading" class="codicon codicon-loading codicon-animation-spin" title="This icon is styled with continuous rotation"></i>
+				</div>
+
+				<script nonce="${nonce}">
+					function play() {
+						if (!document.getElementById('play').classList.contains('disabled')) {
+							document.getElementById('play').classList.add('disabled');
+							document.getElementById('stop').classList.remove('disabled');
+							document.getElementById('loading').classList.add('codicon-animation-spin');
+						}
+					}
+
+					function stop() {
+						if (!document.getElementById('stop').classList.contains('disabled')) {
+							document.getElementById('play').classList.remove('disabled');
+							document.getElementById('stop').classList.add('disabled');
+							document.getElementById('loading').classList.remove('codicon-animation-spin');
+						}
+					}
+
+					document.getElementById('play').onclick = play;
+					document.getElementById('stop').onclick = stop;
+				</script>
 			</body>
 			</html>`;
 	}
 }
 
+function getNonce() {
+	let text = '';
+	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+	for (let i = 0; i < 32; i++) {
+		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
+	return text;
+}

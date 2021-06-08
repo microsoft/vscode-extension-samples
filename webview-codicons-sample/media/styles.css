@@ -56,5 +56,40 @@ h1 {
 
 #icons .icon .codicon {
 	font-size: 32px;
-	padding-bottom: 16px;
+}
+
+/* Codicon styling and interaction demo */
+
+div.iconBar .codicon {
+	font-size: 60px;
+	cursor: pointer;
+}
+
+div.iconBar .disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
+#play {
+	/* Use CSS variable to reference a VS Code color token, rather than any concrete color. */
+	color: var(--vscode-debugIcon-startForeground);
+}
+
+#stop {
+	color: var(--vscode-debugIcon-stopForeground);
+}
+
+/* Rotating the 'loading' Codicon to indicate _progress_. 
+Same implementation as what VS Code is using in the user interface.
+https://github.com/microsoft/vscode/blob/master/src/vs/base/browser/ui/codicons/codicon/codicon-animations.css
+*/
+@keyframes codicon-spin {
+	100% {
+		transform:rotate(360deg);
+	}
+}
+
+.codicon-animation-spin {
+	/* Use steps to throttle FPS to reduce CPU usage */
+	animation: codicon-spin 1.5s steps(30) infinite;
 }
