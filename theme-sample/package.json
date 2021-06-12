@@ -23,6 +23,6 @@
 		"tslint": "^5.16.0"
 	},
 	"dependencies": {
-		"typescript": "^4.2.2"
+		"typescript": "^4.3.2"
 	}
 }
