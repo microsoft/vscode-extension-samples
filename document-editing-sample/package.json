@@ -4,6 +4,12 @@
     "description": "Reverse a word",
     "version": "0.0.1",
     "publisher": "rebornix",
+    "private": true,
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Microsoft/vscode-extension-samples"
+    },
     "engines": {
         "vscode": "^1.32.0"
     },

@@ -3,12 +3,11 @@
 	"displayName": "Completion Item Provider Sample",
 	"version": "0.0.2",
 	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
-	},
-	"bugs": {
-		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
 	},
 	"engines": {
 		"vscode": "^1.32.0"

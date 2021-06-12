@@ -3,6 +3,12 @@
 	"description": "Cat Coding - A Webview API Sample",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
 	"engines": {
 		"vscode": "^1.47.0"
 	},
@@ -14,10 +20,6 @@
 		"onCommand:catCoding.doRefactor",
 		"onWebviewPanel:catCoding"
 	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/microsoft/vscode-extension-samples.git"
-	},
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [

@@ -4,7 +4,12 @@
 	"description": "Call hierarchy provider sample",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
-	"repository": "https://github.com/Microsoft/vscode-extension-samples/call-hierarchy-sample",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
 	"engines": {
 		"vscode": "^1.40.0"
 	},
