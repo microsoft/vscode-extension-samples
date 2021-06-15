@@ -180,6 +180,15 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		});
 	}));
+
+	context.subscriptions.push(vscode.window.registerTerminalProfileProvider('terminalTest.profile', {
+		provideProfileOptions(token: vscode.CancellationToken): vscode.ProviderResult<vscode.TerminalOptions> {
+			return {
+				name: 'Terminal API Profile',
+				shellPath: process.env.shell || 'C:/Windows/System32/cmd.exe'
+			};
+		}
+	}));
 }
 
 function colorText(text: string): string {
