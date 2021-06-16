@@ -117,7 +117,7 @@
 		"terminal": {
 			"profiles": [
 				{
-					"id": "terminalTest.profile",
+					"id": "terminalTest.terminal-profile",
 					"icon": "terminal",
 					"title": "Terminal API Profile"
 				}
