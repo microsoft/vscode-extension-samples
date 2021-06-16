@@ -36,7 +36,7 @@
 		"onCommand:terminalTest.terminals",
 		"onCommand:terminalTest.updateEnvironment",
 		"onCommand:terminalTest.clearEnvironment",
-		"onTerminalProfile:terminalTest.profile"
+		"onTerminalProfile:terminalTest.terminal-profile"
 	],
 	"main": "./out/extension.js",
 	"contributes": {

@@ -181,7 +181,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	}));
 
-	context.subscriptions.push(vscode.window.registerTerminalProfileProvider('terminalTest.profile', {
+	context.subscriptions.push(vscode.window.registerTerminalProfileProvider('terminalTest.terminal-profile', {
 		provideTerminalProfile(token: vscode.CancellationToken): vscode.ProviderResult<vscode.TerminalOptions> {
 			return {
 				name: 'Terminal API Profile',
