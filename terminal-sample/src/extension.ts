@@ -186,7 +186,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return {
 				options: {
 					name: 'Terminal API',
-					shellPath: process.env.shell || 'C:/Windows/System32/cmd.exe'
+					shellPath: process.title || 'C:/Windows/System32/cmd.exe'
 				}
 			};
 		}
