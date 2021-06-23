@@ -22,15 +22,7 @@
 				"command": "test-provider-sample.runTests",
 				"title": "Custom Run Tests"
 			}
-		],
-		"views": {
-			"explorer": [
-				{
-					"id": "sampleTestExplorerView",
-					"name": "Sample Test Explorer"
-				}
-			]
-		}
+		]
 	},
 	"prettier": {
 		"printWidth": 120,

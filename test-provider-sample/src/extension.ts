@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
   // We'll give it a label, and set its status so that VS Code will call
   // `resolveChildrenHandler` when the test explorer is opened.
   ctrl.root.label = 'Markdown Math';
-  ctrl.root.status = vscode.TestItemStatus.Pending;
+  ctrl.root.canResolveChildren = true;
 
   ctrl.runHandler = (request: vscode.TestRunRequest<MarkdownTestData>, cancellation: vscode.CancellationToken) => {
     const queue: vscode.TestItem<TestCase>[] = [];
@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
           run.setState(test, vscode.TestResultState.Queued);
           queue.push(test as vscode.TestItem<TestCase>);
         } else {
-          if (test.data instanceof TestFile && test.status === vscode.TestItemStatus.Pending) {
+          if (test.data instanceof TestFile && test.children.size === 0) {
             await test.data.updateFromDisk(ctrl, test);
           }
 
@@ -51,11 +51,12 @@ export function activate(context: vscode.ExtensionContext) {
     discoverTests(request.tests).then(runTestQueue);
   };
 
-  ctrl.resolveChildrenHandler = (item, token) => {
+  ctrl.resolveChildrenHandler = async item => {
     if (item === ctrl.root) {
-      startWatchingWorkspace(ctrl, token);
+      const disposables = await startWatchingWorkspace(ctrl);
+      context.subscriptions.push(...disposables);
     } else if (item.data instanceof TestFile) {
-      item.data.updateFromDisk(ctrl, item);
+      await item.data.updateFromDisk(ctrl, item);
     }
   };
 
@@ -92,34 +93,31 @@ function getOrCreateFile(controller: vscode.TestController, uri: vscode.Uri): vs
     new TestFile()
   );
 
-  file.status = vscode.TestItemStatus.Pending;
+  file.canResolveChildren = true;
   return file;
 }
 
-function startWatchingWorkspace(controller: vscode.TestController, token: vscode.CancellationToken) {
+function startWatchingWorkspace(controller: vscode.TestController) {
   if (!vscode.workspace.workspaceFolders) {
-    return;
+    return [];
   }
 
-  for (const workspaceFolder of vscode.workspace.workspaceFolders) {
-    const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.md');
-    const watcher = vscode.workspace.createFileSystemWatcher(pattern);
-    const contentChange = new vscode.EventEmitter<vscode.Uri>();
+  return Promise.all(
+    vscode.workspace.workspaceFolders.map(async workspaceFolder => {
+      const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.md');
+      const watcher = vscode.workspace.createFileSystemWatcher(pattern);
+      const contentChange = new vscode.EventEmitter<vscode.Uri>();
 
-    watcher.onDidCreate(uri => getOrCreateFile(controller, uri));
-    watcher.onDidChange(uri => contentChange.fire(uri));
-    watcher.onDidDelete(uri => controller.root.children.get(uri.toString())?.dispose());
-    token.onCancellationRequested(() => {
-      controller.root.status = vscode.TestItemStatus.Pending;
-      watcher.dispose();
-    });
+      watcher.onDidCreate(uri => getOrCreateFile(controller, uri));
+      watcher.onDidChange(uri => contentChange.fire(uri));
+      watcher.onDidDelete(uri => controller.root.children.get(uri.toString())?.dispose());
 
-    vscode.workspace.findFiles(pattern).then(files => {
+      const files = await vscode.workspace.findFiles(pattern);
       for (const file of files) {
         getOrCreateFile(controller, file);
       }
 
-      controller.root.status = vscode.TestItemStatus.Resolved;
-    });
-  }
+      return watcher;
+    })
+  );
 }

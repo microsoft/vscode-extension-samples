@@ -76,7 +76,6 @@ export class TestFile {
     });
 
     this.prune(item, thisGeneration);
-    item.status = vscode.TestItemStatus.Resolved;
   }
 
   /**
