@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
-import { MarkdownTestData, TestCase, TestFile } from './testTree';
+import { MarkdownTestData, TestCase, testData, TestFile } from './testTree';
 
 export function activate(context: vscode.ExtensionContext) {
-  const ctrl = vscode.test.createTestController<MarkdownTestData>('mathTestController');
+  const ctrl = vscode.test.createTestController('mathTestController');
   context.subscriptions.push(ctrl);
 
   // All VS Code tests are in a tree, starting at the automatically created "root".
@@ -11,21 +11,22 @@ export function activate(context: vscode.ExtensionContext) {
   ctrl.root.label = 'Markdown Math';
   ctrl.root.canResolveChildren = true;
 
-  ctrl.runHandler = (request: vscode.TestRunRequest<MarkdownTestData>, cancellation: vscode.CancellationToken) => {
-    const queue: vscode.TestItem<TestCase>[] = [];
+  ctrl.runHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
+    const queue: { test: vscode.TestItem; data: TestCase }[] = [];
     const run = ctrl.createTestRun(request);
-    const discoverTests = async (tests: Iterable<vscode.TestItem<MarkdownTestData>>) => {
+    const discoverTests = async (tests: Iterable<vscode.TestItem>) => {
       for (const test of tests) {
         if (request.exclude?.includes(test)) {
           continue;
         }
 
-        if (test.data instanceof TestCase) {
+        const data = testData.get(test);
+        if (data instanceof TestCase) {
           run.setState(test, vscode.TestResultState.Queued);
-          queue.push(test as vscode.TestItem<TestCase>);
+          queue.push({ test, data });
         } else {
-          if (test.data instanceof TestFile && test.children.size === 0) {
-            await test.data.updateFromDisk(ctrl, test);
+          if (data instanceof TestFile && test.children.size === 0) {
+            await data.updateFromDisk(ctrl, test);
           }
 
           await discoverTests(test.children.values());
@@ -34,13 +35,13 @@ export function activate(context: vscode.ExtensionContext) {
     };
 
     const runTestQueue = async () => {
-      for (const test of queue) {
+      for (const { test, data } of queue) {
         run.appendOutput(`Running ${test.id}\r\n`);
         if (cancellation.isCancellationRequested) {
           run.setState(test, vscode.TestResultState.Skipped);
         } else {
           run.setState(test, vscode.TestResultState.Running);
-          await test.data.run(test, run);
+          await data.run(test, run);
         }
         run.appendOutput(`Completed ${test.id}\r\n`);
       }
@@ -55,8 +56,12 @@ export function activate(context: vscode.ExtensionContext) {
     if (item === ctrl.root) {
       const disposables = await startWatchingWorkspace(ctrl);
       context.subscriptions.push(...disposables);
-    } else if (item.data instanceof TestFile) {
-      await item.data.updateFromDisk(ctrl, item);
+      return;
+    }
+
+    const data = testData.get(item);
+    if (data instanceof TestFile) {
+      await data.updateFromDisk(ctrl, item);
     }
   };
 
@@ -65,8 +70,8 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
 
-    const node = getOrCreateFile(ctrl, e.uri);
-    node.data.updateFromContents(ctrl, e.getText(), node);
+    const { file, data } = getOrCreateFile(ctrl, e.uri);
+    data.updateFromContents(ctrl, e.getText(), file);
   }
 
   for (const document of vscode.workspace.textDocuments) {
@@ -79,22 +84,19 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-function getOrCreateFile(controller: vscode.TestController, uri: vscode.Uri): vscode.TestItem<TestFile> {
+function getOrCreateFile(controller: vscode.TestController, uri: vscode.Uri) {
   const existing = controller.root.children.get(uri.toString());
   if (existing) {
-    return existing;
+    return { file: existing, data: testData.get(existing) as TestFile };
   }
 
-  const file = controller.createTestItem(
-    uri.toString(),
-    uri.path.split('/').pop()!,
-    controller.root,
-    uri,
-    new TestFile()
-  );
+  const file = controller.createTestItem(uri.toString(), uri.path.split('/').pop()!, controller.root, uri);
+
+  const data = new TestFile();
+  testData.set(file, data);
 
   file.canResolveChildren = true;
-  return file;
+  return { file, data };
 }
 
 function startWatchingWorkspace(controller: vscode.TestController) {

@@ -6,6 +6,8 @@ const textDecoder = new TextDecoder('utf-8');
 
 export type MarkdownTestData = TestFile | TestHeading | TestCase;
 
+export const testData = new WeakMap<vscode.TestItem, MarkdownTestData>();
+
 let generationCounter = 0;
 
 const getContentFromFilesystem = async (uri: vscode.Uri) => {
@@ -34,7 +36,7 @@ export class TestFile {
    * by this file to be those from the text,
    */
   public updateFromContents(controller: vscode.TestController, content: string, item: vscode.TestItem) {
-    const ancestors: (vscode.TestItem<TestFile> | vscode.TestItem<TestHeading>)[] = [item];
+    const ancestors: vscode.TestItem[] = [item];
     const thisGeneration = generationCounter++;
 
     parseMarkdown(content, {
@@ -45,10 +47,11 @@ export class TestFile {
 
         const existing = parent.children.get(id);
         if (existing) {
-          existing.data.generation = thisGeneration;
+          (testData.get(existing) as TestHeading).generation = thisGeneration;
           existing.range = range;
         } else {
-          const tcase = controller.createTestItem(id, data.getLabel(), parent, item.uri, data);
+          const tcase = controller.createTestItem(id, data.getLabel(), parent, item.uri);
+          testData.set(tcase, data);
           tcase.range = range;
         }
       },
@@ -61,15 +64,17 @@ export class TestFile {
         const parent = ancestors[ancestors.length - 1];
         const id = `${item.uri}/${name}`;
         const existing = parent.children.get(id);
+        const data = existing && testData.get(existing);
 
-        if (existing && existing.data instanceof TestHeading) {
+        if (existing && data instanceof TestHeading) {
           ancestors.push(existing);
-          existing.data.generation = thisGeneration;
+          data.generation = thisGeneration;
           existing.range = range;
         } else {
           existing?.dispose();
-          const thead = controller.createTestItem(id, name, parent, item.uri, new TestHeading(thisGeneration));
+          const thead = controller.createTestItem(id, name, parent, item.uri);
           thead.range = range;
+          testData.set(thead, new TestHeading(thisGeneration));
           ancestors.push(thead);
         }
       },
@@ -85,12 +90,13 @@ export class TestFile {
    * longer in this generation.
    */
   private prune(item: vscode.TestItem, thisGeneration: number) {
-    const queue: vscode.TestItem<TestHeading | TestCase | TestFile>[] = [item];
+    const queue: vscode.TestItem[] = [item];
     for (const parent of queue) {
       for (const child of parent.children.values()) {
-        if (child.data.generation < thisGeneration) {
+        const data = testData.get(child) as TestCase | TestHeading;
+        if (data.generation < thisGeneration) {
           child.dispose();
-        } else if (child.data instanceof TestHeading) {
+        } else if (data instanceof TestHeading) {
           queue.push(child);
         }
       }
@@ -117,7 +123,7 @@ export class TestCase {
     return `${this.a} ${this.operator} ${this.b} = ${this.expected}`;
   }
 
-  async run(item: vscode.TestItem, options: vscode.TestRun<MarkdownTestData>): Promise<void> {
+  async run(item: vscode.TestItem, options: vscode.TestRun): Promise<void> {
     const start = Date.now();
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
     const actual = this.evaluate();
