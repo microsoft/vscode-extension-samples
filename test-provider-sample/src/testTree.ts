@@ -21,6 +21,8 @@ const getContentFromFilesystem = async (uri: vscode.Uri) => {
 };
 
 export class TestFile {
+  public didResolve = false;
+
   public async updateFromDisk(controller: vscode.TestController, item: vscode.TestItem) {
     try {
       const content = await getContentFromFilesystem(item.uri!);
@@ -38,6 +40,7 @@ export class TestFile {
   public updateFromContents(controller: vscode.TestController, content: string, item: vscode.TestItem) {
     const ancestors: vscode.TestItem[] = [item];
     const thisGeneration = generationCounter++;
+    this.didResolve = true;
 
     parseMarkdown(content, {
       onTest: (range, a, operator, b, expected) => {

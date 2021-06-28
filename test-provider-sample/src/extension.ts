@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
           run.setState(test, vscode.TestResultState.Queued);
           queue.push({ test, data });
         } else {
-          if (data instanceof TestFile && test.children.size === 0) {
+          if (data instanceof TestFile && !data.didResolve) {
             await data.updateFromDisk(ctrl, test);
           }
 
@@ -108,10 +108,14 @@ function startWatchingWorkspace(controller: vscode.TestController) {
     vscode.workspace.workspaceFolders.map(async workspaceFolder => {
       const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.md');
       const watcher = vscode.workspace.createFileSystemWatcher(pattern);
-      const contentChange = new vscode.EventEmitter<vscode.Uri>();
 
       watcher.onDidCreate(uri => getOrCreateFile(controller, uri));
-      watcher.onDidChange(uri => contentChange.fire(uri));
+      watcher.onDidChange(uri => {
+        const { file, data } = getOrCreateFile(controller, uri);
+        if (data.didResolve) {
+          data.updateFromDisk(controller, file);
+        }
+      });
       watcher.onDidDelete(uri => controller.root.children.get(uri.toString())?.dispose());
 
       const files = await vscode.workspace.findFiles(pattern);
