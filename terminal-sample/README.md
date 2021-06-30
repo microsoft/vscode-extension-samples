@@ -19,10 +19,12 @@ This sample provides several commands that demonstrates how to utilize the integ
 
 - `window.createTerminalRenderer`
 - `window.TerminalRenderer`
+- `window.registerTerminalProfileProvider`
 
 ### Contribution Points
 
 - [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
+- [`contributes.terminal`](https://code.visualstudio.com/updates/v1_57#_terminal-profile-contributions)
 
 ## Running the Sample
 

@@ -35,7 +35,8 @@
 		"onCommand:terminalTest.showPreserveFocus",
 		"onCommand:terminalTest.terminals",
 		"onCommand:terminalTest.updateEnvironment",
-		"onCommand:terminalTest.clearEnvironment"
+		"onCommand:terminalTest.clearEnvironment",
+		"onTerminalProfile:terminalTest.terminal-profile"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -112,7 +113,16 @@
 				"command": "terminalTest.registerTerminalLinkProvider",
 				"title": "Terminal API: Register link provider"
 			}
-		]
+		],
+		"terminal": {
+			"profiles": [
+				{
+					"id": "terminalTest.terminal-profile",
+					"icon": "terminal",
+					"title": "Terminal API Profile"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
