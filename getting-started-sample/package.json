@@ -19,6 +19,13 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"startEntries": [
+			{
+				"category": "file",
+				"command": "getting-started-sample.sayHello",
+				"title": "Say Hello"
+			}
+		],
 		"walkthroughs": [
 			{
 				"id": "sample",
