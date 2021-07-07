@@ -82,14 +82,14 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 	}>());
 	/**
 	 * Fired to tell VS Code that an edit has occured in the document.
-	 * 
+	 *
 	 * This updates the document's dirty indicator.
 	 */
 	public readonly onDidChange = this._onDidChange.event;
 
 	/**
 	 * Called by VS Code when there are no more references to the document.
-	 * 
+	 *
 	 * This happens when all editors for it have been closed.
 	 */
 	dispose(): void {
@@ -99,7 +99,7 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 
 	/**
 	 * Called when the user edits the document in a webview.
-	 * 
+	 *
 	 * This fires an event to notify VS Code that the document has been edited.
 	 */
 	makeEdit(edit: PawDrawEdit) {
@@ -156,7 +156,7 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 
 	/**
 	 * Called by VS Code to backup the edited document.
-	 * 
+	 *
 	 * These backups are used to implement hot exit.
 	 */
 	async backup(destination: vscode.Uri, cancellation: vscode.CancellationToken): Promise<vscode.CustomDocumentBackup> {
@@ -177,11 +177,11 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 
 /**
  * Provider for paw draw editors.
- * 
+ *
  * Paw draw editors are used for `.pawDraw` files, which are just `.png` files with a different file extension.
- * 
+ *
  * This provider demonstrates:
- * 
+ *
  * - How to implement a custom editor for binary files.
  * - Setting up the initial webview for a custom editor.
  * - Loading scripts and styles in a custom editor.
@@ -212,7 +212,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 			PawDrawEditorProvider.viewType,
 			new PawDrawEditorProvider(context),
 			{
-				// For this demo extension, we enable `retainContextWhenHidden` which keeps the 
+				// For this demo extension, we enable `retainContextWhenHidden` which keeps the
 				// webview alive even when it is not visible. You should avoid using this setting
 				// unless is absolutely required as it does have memory overhead.
 				webviewOptions: {
@@ -384,7 +384,7 @@ export class PawDrawEditorProvider implements vscode.CustomEditorProvider<PawDra
 					<button data-color="green" class="green" title="Green"></button>
 					<button data-color="blue" class="blue" title="Blue"></button>
 				</div>
-				
+
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;

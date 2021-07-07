@@ -30,6 +30,9 @@
 	function updateContent(/** @type {string} */ text) {
 		let json;
 		try {
+			if (!text) {
+				text = '{}';
+			}
 			json = JSON.parse(text);
 		} catch {
 			notesContainer.style.display = 'none';
