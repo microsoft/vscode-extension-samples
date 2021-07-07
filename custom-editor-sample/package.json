@@ -19,7 +19,8 @@
 	"activationEvents": [
 		"onCustomEditor:catCustoms.catScratch",
 		"onCustomEditor:catCustoms.pawDraw",
-		"onCommand:catCustoms.pawDraw.new"
+		"onCommand:catCustoms.pawDraw.new",
+		"onCommand:catCustoms.catScratch.new"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -48,6 +49,11 @@
 				"command": "catCustoms.pawDraw.new",
 				"title": "Create new Paw Draw Document",
 				"category": "Paw Draw"
+			},
+			{
+				"command": "catCustoms.catScratch.new",
+				"title": "Create new Cat Scratch Document",
+				"category": "Cat Scratch"
 			}
 		]
 	},
