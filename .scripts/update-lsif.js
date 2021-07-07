@@ -11,7 +11,7 @@ async function main() {
 		try {
 			const stat = await fs.stat(path.join(root, sample.path, 'tsconfig.json'));
 			if (stat.isFile()) {
-				references.push(`../${sample.path}/tsconfig.json`);
+				references.push(`./${sample.path}/tsconfig.json`);
 			}
 		} catch (error) {
 			// Ignore error of stat call.
@@ -24,7 +24,7 @@ async function main() {
 		],
 		references: references.map(reference => { return { path: reference }})
 	}
-	await fs.writeFile(path.join(root, '.lsif', 'tsconfig.json'), JSON.stringify(tsconfig, undefined, '\t'), { encoding: 'utf8' });
+	await fs.writeFile(path.join(root, 'tsconfig.lsif.json'), JSON.stringify(tsconfig, undefined, '\t'), { encoding: 'utf8' });
 }
 
 main().catch(console.error);
