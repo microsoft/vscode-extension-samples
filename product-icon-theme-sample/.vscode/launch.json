@@ -9,6 +9,15 @@
 			"runtimeExecutable": "${execPath}",
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}" ],
 			"stopOnEntry": false
+		},
+		{
+			"name": "Update Font",
+			"program": "${workspaceFolder}/build/updateFont.js",
+			"request": "launch",
+			"skipFiles": [
+				"<node_internals>/**"
+			],
+			"type": "pwa-node"
 		}
 	]
 }

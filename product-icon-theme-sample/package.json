@@ -5,7 +5,6 @@
 	"engines": {
 		"vscode": "*"
 	},
-	"enableProposedApi": true,
 	"contributes": {
 		"productIconThemes": [
 			{
@@ -21,6 +20,6 @@
 	},
 	"devDependencies": {
 		"open": "^7.0.3",
-		"webfonts-generator": "^0.4.0"
+		"webfont": "^11.2.4"
 	}
 }
