@@ -10,7 +10,7 @@ export const testData = new WeakMap<vscode.TestItem, MarkdownTestData>();
 
 let generationCounter = 0;
 
-const getContentFromFilesystem = async (uri: vscode.Uri) => {
+export const getContentFromFilesystem = async (uri: vscode.Uri) => {
   try {
     const rawContent = await vscode.workspace.fs.readFile(uri);
     return textDecoder.decode(rawContent);
