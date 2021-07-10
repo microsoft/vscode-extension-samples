@@ -10,7 +10,7 @@ For more background on semantic highlighting read [here](https://code.visualstud
 
 Launch the extension and open the file `sample/sample.semanticLanguage` and use the following settings:
 
-```json
+```jsonc
 "editor.semanticTokenColorCustomizations": {
 	"enabled": true, // enable for all themes
 	"rules": {
