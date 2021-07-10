@@ -16,4 +16,4 @@ To *get started* you need this:
 * 'F1 > [MemFS] Add "file.txt', observe that the editor content is reset and the '(delete)' annotation disappeared
 * select 'F1 > [MemFs] Delete Files' or reload to restart
 
-![sample screenshot](https://github.com/Microsoft/vscode-extension-samples/raw/master/fsprovider-sample/sample.png)
+![sample screenshot](https://github.com/Microsoft/vscode-extension-samples/raw/main/fsprovider-sample/sample.png)
