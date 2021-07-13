@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { getContentFromFilesystem, MarkdownTestData, TestCase, testData, TestFile } from './testTree';
 
 export function activate(context: vscode.ExtensionContext) {
-  const ctrl = vscode.test.createTestController('mathTestController');
+  const ctrl = vscode.test.createTestController('mathTestController', 'Markdown Math');
   context.subscriptions.push(ctrl);
 
   // All VS Code tests are in a tree, starting at the automatically created "root".
@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
   ctrl.root.label = 'Markdown Math';
   ctrl.root.canResolveChildren = true;
 
-  ctrl.runHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
+  const runHandler: vscode.TestRunHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
     const queue: { test: vscode.TestItem; data: TestCase }[] = [];
     const run = ctrl.createTestRun(request);
     // map of file uris to statments on each line:
@@ -91,6 +91,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     discoverTests(request.tests).then(runTestQueue);
   };
+  
+  ctrl.createRunConfiguration('Run Tests', vscode.TestRunConfigurationGroup.Run, runHandler, true);
 
   ctrl.resolveChildrenHandler = async item => {
     if (item === ctrl.root) {
