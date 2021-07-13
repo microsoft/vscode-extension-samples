@@ -39,8 +39,7 @@ class CatCodiconsPanel {
 				<meta charset="UTF-8">
 
 				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
+					Use a content security policy to only allow loading specific resources in the webview
 				-->
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${webview.cspSource}; style-src ${webview.cspSource};">
 
