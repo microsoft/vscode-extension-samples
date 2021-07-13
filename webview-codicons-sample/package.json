@@ -38,8 +38,8 @@
 		"@types/vscode": "^1.47.0",
 		"@typescript-eslint/eslint-plugin": "^4.16.0",
 		"@typescript-eslint/parser": "^4.16.0",
+		"@vscode/codicons": "0.0.20",
 		"eslint": "^7.21.0",
-		"typescript": "^4.2.2",
-		"vscode-codicons": "0.0.7"
+		"typescript": "^4.2.2"
 	}
 }
