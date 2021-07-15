@@ -23,11 +23,11 @@ export const getContentFromFilesystem = async (uri: vscode.Uri) => {
 export class TestFile {
   public didResolve = false;
 
-  public async updateFromDisk(controller: vscode.TestController, item: vscode.TestItem) {
+  public async updateFromDisk(item: vscode.TestItem) {
     try {
       const content = await getContentFromFilesystem(item.uri!);
       item.error = undefined;
-      this.updateFromContents(controller, content, item);
+      this.updateFromContents(content, item);
     } catch (e) {
       item.error = e.stack;
     }
@@ -37,10 +37,17 @@ export class TestFile {
    * Parses the tests from the input text, and updates the tests contained
    * by this file to be those from the text,
    */
-  public updateFromContents(controller: vscode.TestController, content: string, item: vscode.TestItem) {
-    const ancestors: vscode.TestItem[] = [item];
+  public updateFromContents(content: string, item: vscode.TestItem) {
+    const ancestors = [{ item, children: [] as vscode.TestItem[]}];
     const thisGeneration = generationCounter++;
     this.didResolve = true;
+
+    const ascend = (depth: number) => {
+      while (ancestors.length > depth) {
+        const finished = ancestors.pop()!;
+        finished.item.children.all = finished.children;
+      }
+    };
 
     parseMarkdown(content, {
       onTest: (range, a, operator, b, expected) => {
@@ -48,62 +55,27 @@ export class TestFile {
         const data = new TestCase(a, operator as Operator, b, expected, thisGeneration);
         const id = `${item.uri}/${data.getLabel()}`;
 
-        const existing = parent.children.get(id);
-        if (existing) {
-          (testData.get(existing) as TestHeading).generation = thisGeneration;
-          existing.range = range;
-        } else {
-          const tcase = controller.createTestItem(id, data.getLabel(), parent, item.uri);
-          testData.set(tcase, data);
-          tcase.range = range;
-        }
+        
+        const tcase = vscode.test.createTestItem(id, data.getLabel(), item.uri);
+        testData.set(tcase, data);
+        tcase.range = range;
+        parent.children.push(tcase);
       },
 
       onHeading: (range, name, depth) => {
-        while (ancestors.length > depth) {
-          ancestors.pop();
-        }
-
+        ascend(depth);
         const parent = ancestors[ancestors.length - 1];
         const id = `${item.uri}/${name}`;
-        const existing = parent.children.get(id);
-        const data = existing && testData.get(existing);
 
-        if (existing && data instanceof TestHeading) {
-          ancestors.push(existing);
-          data.generation = thisGeneration;
-          existing.range = range;
-        } else {
-          existing?.dispose();
-          const thead = controller.createTestItem(id, name, parent, item.uri);
-          thead.range = range;
-          testData.set(thead, new TestHeading(thisGeneration));
-          ancestors.push(thead);
-        }
+        const thead = vscode.test.createTestItem(id, name, item.uri);
+        thead.range = range;
+        testData.set(thead, new TestHeading(thisGeneration));
+        parent.children.push(thead);
+        ancestors.push({ item: thead, children: [] });
       },
     });
 
-    this.prune(item, thisGeneration);
-  }
-
-  /**
-   * Removes tests that were deleted from the source. Each test suite and case
-   * has a 'generation' counter which is updated each time we discover it. This
-   * is called after discovery is finished to remove any children who are no
-   * longer in this generation.
-   */
-  private prune(item: vscode.TestItem, thisGeneration: number) {
-    const queue: vscode.TestItem[] = [item];
-    for (const parent of queue) {
-      for (const child of parent.children.values()) {
-        const data = testData.get(child) as TestCase | TestHeading;
-        if (data.generation < thisGeneration) {
-          child.dispose();
-        } else if (data instanceof TestHeading) {
-          queue.push(child);
-        }
-      }
-    }
+    ascend(0); // finish and assign children for all remaining items
   }
 }
 

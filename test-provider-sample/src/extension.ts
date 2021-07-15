@@ -1,15 +1,9 @@
 import * as vscode from 'vscode';
 import { getContentFromFilesystem, MarkdownTestData, TestCase, testData, TestFile } from './testTree';
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   const ctrl = vscode.test.createTestController('mathTestController', 'Markdown Math');
   context.subscriptions.push(ctrl);
-
-  // All VS Code tests are in a tree, starting at the automatically created "root".
-  // We'll give it a label, and set its status so that VS Code will call
-  // `resolveChildrenHandler` when the test explorer is opened.
-  ctrl.root.label = 'Markdown Math';
-  ctrl.root.canResolveChildren = true;
 
   const runHandler: vscode.TestRunHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
     const queue: { test: vscode.TestItem; data: TestCase }[] = [];
@@ -29,10 +23,10 @@ export function activate(context: vscode.ExtensionContext) {
           queue.push({ test, data });
         } else {
           if (data instanceof TestFile && !data.didResolve) {
-            await data.updateFromDisk(ctrl, test);
+            await data.updateFromDisk(test);
           }
 
-          await discoverTests(test.children.values());
+          await discoverTests(test.children.all);
         }
 
         if (test.uri && !coveredLines.has(test.uri.toString())) {
@@ -89,31 +83,29 @@ export function activate(context: vscode.ExtensionContext) {
       },
     };
 
-    discoverTests(request.tests).then(runTestQueue);
+    discoverTests(request.include ?? ctrl.items.all).then(runTestQueue);
   };
   
   ctrl.createRunConfiguration('Run Tests', vscode.TestRunConfigurationGroup.Run, runHandler, true);
 
   ctrl.resolveChildrenHandler = async item => {
-    if (item === ctrl.root) {
-      const disposables = await startWatchingWorkspace(ctrl);
-      context.subscriptions.push(...disposables);
-      return;
-    }
-
     const data = testData.get(item);
     if (data instanceof TestFile) {
-      await data.updateFromDisk(ctrl, item);
+      await data.updateFromDisk(item);
     }
   };
 
   function updateNodeForDocument(e: vscode.TextDocument) {
+    if (e.uri.scheme !== 'file') {
+      return;
+    }
+    
     if (!e.uri.path.endsWith('.md')) {
       return;
     }
 
     const { file, data } = getOrCreateFile(ctrl, e.uri);
-    data.updateFromContents(ctrl, e.getText(), file);
+    data.updateFromContents(e.getText(), file);
   }
 
   for (const document of vscode.workspace.textDocuments) {
@@ -122,17 +114,19 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument(updateNodeForDocument),
-    vscode.workspace.onDidChangeTextDocument(e => updateNodeForDocument(e.document))
+    vscode.workspace.onDidChangeTextDocument(e => updateNodeForDocument(e.document)),
+    ...(await startWatchingWorkspace(ctrl))
   );
 }
 
 function getOrCreateFile(controller: vscode.TestController, uri: vscode.Uri) {
-  const existing = controller.root.children.get(uri.toString());
+  const existing = controller.items.get(uri.toString());
   if (existing) {
     return { file: existing, data: testData.get(existing) as TestFile };
   }
 
-  const file = controller.createTestItem(uri.toString(), uri.path.split('/').pop()!, controller.root, uri);
+  const file = vscode.test.createTestItem(uri.toString(), uri.path.split('/').pop()!, uri);
+  controller.items.add(file);
 
   const data = new TestFile();
   testData.set(file, data);
@@ -155,10 +149,10 @@ function startWatchingWorkspace(controller: vscode.TestController) {
       watcher.onDidChange(uri => {
         const { file, data } = getOrCreateFile(controller, uri);
         if (data.didResolve) {
-          data.updateFromDisk(controller, file);
+          data.updateFromDisk(file);
         }
       });
-      watcher.onDidDelete(uri => controller.root.children.get(uri.toString())?.dispose());
+      watcher.onDidDelete(uri => controller.items.remove(uri.toString()));
 
       const files = await vscode.workspace.findFiles(pattern);
       for (const file of files) {
