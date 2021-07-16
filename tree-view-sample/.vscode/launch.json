@@ -8,7 +8,9 @@
             "request": "launch",
             "runtimeExecutable": "${execPath}",
             "args": [
-                "--extensionDevelopmentPath=${workspaceRoot}"
+                "--extensionDevelopmentPath=${workspaceRoot}",
+                "--enable-proposed-api",
+                "vscode-samples.custom-view-samples"
             ],
             "stopOnEntry": false,
             "sourceMaps": true,
