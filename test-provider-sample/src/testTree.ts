@@ -45,7 +45,7 @@ export class TestFile {
     const ascend = (depth: number) => {
       while (ancestors.length > depth) {
         const finished = ancestors.pop()!;
-        finished.item.children.all = finished.children;
+        finished.item.children.set(finished.children);
       }
     };
 

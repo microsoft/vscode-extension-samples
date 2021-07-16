@@ -26,7 +26,7 @@ export async function activate(context: vscode.ExtensionContext) {
             await data.updateFromDisk(test);
           }
 
-          await discoverTests(test.children.all);
+          await discoverTests(test.children);
         }
 
         if (test.uri && !coveredLines.has(test.uri.toString())) {
@@ -83,10 +83,10 @@ export async function activate(context: vscode.ExtensionContext) {
       },
     };
 
-    discoverTests(request.include ?? ctrl.items.all).then(runTestQueue);
+    discoverTests(request.include ?? ctrl.items).then(runTestQueue);
   };
   
-  ctrl.createRunConfiguration('Run Tests', vscode.TestRunConfigurationGroup.Run, runHandler, true);
+  ctrl.createRunProfile('Run Tests', vscode.TestRunProfileGroup.Run, runHandler, true);
 
   ctrl.resolveChildrenHandler = async item => {
     const data = testData.get(item);
@@ -152,7 +152,7 @@ function startWatchingWorkspace(controller: vscode.TestController) {
           data.updateFromDisk(file);
         }
       });
-      watcher.onDidDelete(uri => controller.items.remove(uri.toString()));
+      watcher.onDidDelete(uri => controller.items.delete(uri.toString()));
 
       const files = await vscode.workspace.findFiles(pattern);
       for (const file of files) {
