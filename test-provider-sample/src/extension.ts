@@ -2,10 +2,10 @@ import * as vscode from 'vscode';
 import { getContentFromFilesystem, MarkdownTestData, TestCase, testData, TestFile } from './testTree';
 
 export async function activate(context: vscode.ExtensionContext) {
-  const ctrl = vscode.test.createTestController('mathTestController', 'Markdown Math');
+  const ctrl = vscode.tests.createTestController('mathTestController', 'Markdown Math');
   context.subscriptions.push(ctrl);
 
-  const runHandler: vscode.TestRunHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
+  const runHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
     const queue: { test: vscode.TestItem; data: TestCase }[] = [];
     const run = ctrl.createTestRun(request);
     // map of file uris to statments on each line:
@@ -23,10 +23,10 @@ export async function activate(context: vscode.ExtensionContext) {
           queue.push({ test, data });
         } else {
           if (data instanceof TestFile && !data.didResolve) {
-            await data.updateFromDisk(test);
+            await data.updateFromDisk(ctrl, test);
           }
 
-          await discoverTests(test.children);
+          await discoverTests(gatherTestItems(test.children));
         }
 
         if (test.uri && !coveredLines.has(test.uri.toString())) {
@@ -83,15 +83,20 @@ export async function activate(context: vscode.ExtensionContext) {
       },
     };
 
-    discoverTests(request.include ?? ctrl.items).then(runTestQueue);
+    discoverTests(request.include ?? gatherTestItems(ctrl.items)).then(runTestQueue);
   };
   
-  ctrl.createRunProfile('Run Tests', vscode.TestRunProfileGroup.Run, runHandler, true);
+  ctrl.createRunProfile('Run Tests', vscode.TestRunProfileKind.Run, runHandler, true);
 
   ctrl.resolveChildrenHandler = async item => {
+    if (!item) {
+      context.subscriptions.push(...startWatchingWorkspace(ctrl));
+      return;
+    }
+
     const data = testData.get(item);
     if (data instanceof TestFile) {
-      await data.updateFromDisk(item);
+      await data.updateFromDisk(ctrl, item);
     }
   };
 
@@ -105,7 +110,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     const { file, data } = getOrCreateFile(ctrl, e.uri);
-    data.updateFromContents(e.getText(), file);
+    data.updateFromContents(ctrl, e.getText(), file);
   }
 
   for (const document of vscode.workspace.textDocuments) {
@@ -115,7 +120,6 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.workspace.onDidOpenTextDocument(updateNodeForDocument),
     vscode.workspace.onDidChangeTextDocument(e => updateNodeForDocument(e.document)),
-    ...(await startWatchingWorkspace(ctrl))
   );
 }
 
@@ -125,7 +129,7 @@ function getOrCreateFile(controller: vscode.TestController, uri: vscode.Uri) {
     return { file: existing, data: testData.get(existing) as TestFile };
   }
 
-  const file = vscode.test.createTestItem(uri.toString(), uri.path.split('/').pop()!, uri);
+  const file = controller.createTestItem(uri.toString(), uri.path.split('/').pop()!, uri);
   controller.items.add(file);
 
   const data = new TestFile();
@@ -135,31 +139,36 @@ function getOrCreateFile(controller: vscode.TestController, uri: vscode.Uri) {
   return { file, data };
 }
 
+function gatherTestItems(collection: vscode.TestItemCollection) {
+  const items: vscode.TestItem[] = [];
+  collection.forEach(item => items.push(item));
+  return items;
+}
+
 function startWatchingWorkspace(controller: vscode.TestController) {
   if (!vscode.workspace.workspaceFolders) {
     return [];
   }
 
-  return Promise.all(
-    vscode.workspace.workspaceFolders.map(async workspaceFolder => {
-      const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.md');
-      const watcher = vscode.workspace.createFileSystemWatcher(pattern);
+  return vscode.workspace.workspaceFolders.map(workspaceFolder => {
+    const pattern = new vscode.RelativePattern(workspaceFolder, '**/*.md');
+    const watcher = vscode.workspace.createFileSystemWatcher(pattern);
 
-      watcher.onDidCreate(uri => getOrCreateFile(controller, uri));
-      watcher.onDidChange(uri => {
-        const { file, data } = getOrCreateFile(controller, uri);
-        if (data.didResolve) {
-          data.updateFromDisk(file);
-        }
-      });
-      watcher.onDidDelete(uri => controller.items.delete(uri.toString()));
+    watcher.onDidCreate(uri => getOrCreateFile(controller, uri));
+    watcher.onDidChange(uri => {
+      const { file, data } = getOrCreateFile(controller, uri);
+      if (data.didResolve) {
+        data.updateFromDisk(controller, file);
+      }
+    });
+    watcher.onDidDelete(uri => controller.items.delete(uri.toString()));
 
-      const files = await vscode.workspace.findFiles(pattern);
+    vscode.workspace.findFiles(pattern).then(files => {
       for (const file of files) {
         getOrCreateFile(controller, file);
       }
+    });
 
-      return watcher;
-    })
-  );
+    return watcher;
+  });
 }
