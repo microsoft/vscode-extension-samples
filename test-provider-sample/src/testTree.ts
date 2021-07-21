@@ -105,12 +105,11 @@ export class TestCase {
     const duration = Date.now() - start;
 
     if (actual === this.expected) {
-      options.setState(item, vscode.TestResultState.Passed, duration);
+      options.passed(item, duration);
     } else {
       const message = vscode.TestMessage.diff(`Expected ${item.label}`, String(this.expected), String(actual));
       message.location = new vscode.Location(item.uri!, item.range!);
-      options.appendMessage(item, message);
-      options.setState(item, vscode.TestResultState.Failed, duration);
+      options.failed(item, message, duration);
     }
   }
 

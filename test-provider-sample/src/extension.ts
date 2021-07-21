@@ -19,7 +19,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         const data = testData.get(test);
         if (data instanceof TestCase) {
-          run.setState(test, vscode.TestResultState.Queued);
+          run.enqueued(test);
           queue.push({ test, data });
         } else {
           if (data instanceof TestFile && !data.didResolve) {
@@ -49,9 +49,9 @@ export async function activate(context: vscode.ExtensionContext) {
       for (const { test, data } of queue) {
         run.appendOutput(`Running ${test.id}\r\n`);
         if (cancellation.isCancellationRequested) {
-          run.setState(test, vscode.TestResultState.Skipped);
+          run.skipped(test);
         } else {
-          run.setState(test, vscode.TestResultState.Running);
+          run.started(test);
           await data.run(test, run);
         }
 
@@ -88,7 +88,7 @@ export async function activate(context: vscode.ExtensionContext) {
   
   ctrl.createRunProfile('Run Tests', vscode.TestRunProfileKind.Run, runHandler, true);
 
-  ctrl.resolveChildrenHandler = async item => {
+  ctrl.resolveHandler = async item => {
     if (!item) {
       context.subscriptions.push(...startWatchingWorkspace(ctrl));
       return;
