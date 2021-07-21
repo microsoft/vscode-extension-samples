@@ -1,0 +1,12 @@
+{
+	"compilerOptions": {
+		"target": "es2019",
+		"lib": ["ES2019", "webworker"],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"strict": true
+	},
+	"include": ["src"],
+	"exclude": ["node_modules", ".vscode-test-web"]
+}

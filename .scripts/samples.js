@@ -274,7 +274,14 @@ const lspSamples = [
       'https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server',
     apis: [],
     contributions: []
-  }
+  },
+  {
+    description: 'LSP Web Extension Sample',
+    path: 'lsp-web-extension-sample',
+    guide: '/api/language-extensions/language-server-extension-guide',
+    apis: [],
+    contributions: []
+  },
 ]
 /**
  * LSP specific samples
