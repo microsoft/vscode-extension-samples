@@ -1,12 +1,10 @@
-import { render } from './render';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './style.css';
+
+import { IssuesList } from './render';
 import errorOverlay from 'vscode-notebook-error-overlay';
 import type { ActivationFunction } from 'vscode-notebook-renderer';
-
-// Fix the public path so that any async import()'s work as expected.
-declare const __webpack_relative_entrypoint_to_root__: string;
-declare const scriptUrl: string;
-
-__webpack_public_path__ = new URL(scriptUrl.replace(/[^/]+$/, '') + __webpack_relative_entrypoint_to_root__).toString();
 
 // ----------------------------------------------------------------------------
 // This is the entrypoint to the notebook renderer's webview client-side code.
@@ -31,7 +29,7 @@ export const activate: ActivationFunction = context => {
         const node = document.createElement('div');
         root.appendChild(node);
 
-        render({ container: node, mime: outputItem.mime, value: outputItem.json(), context });
+        ReactDOM.render(<IssuesList info={{ container: node, mime: outputItem.mime, value: outputItem.json(), context }} />, root);
       });
     },
     disposeOutputItem(outputId) {

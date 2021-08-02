@@ -8,7 +8,7 @@ const devServerPort = 8111;
 module.exports = (env, argv) => ({
   mode: argv.mode,
   devtool: argv.mode === 'production' ? false : 'inline-source-map',
-  entry: './src/client/index.ts',
+  entry: './src/client/index.tsx',
   output: {
     path: path.join(__dirname, 'out', 'client'),
     filename: outputFilename,
