@@ -16,7 +16,22 @@ interface GitHubIssuesValue {
 }
 
 export const IssuesList: React.FC<{info: IRenderInfo}> = ({info}) => {
-    return <div><h1>Hello from Create React App</h1><p>I am in a React Component!</p></div>;
+    const issues = info.value.map(item => {
+      return <tr>
+          <td><a href={item.url}>{item.title}</a></td>
+          <td>{item.body}</td>
+        </tr>;
+    });
+    
+    return <div>
+      <table>
+        <tr>
+          <th>Issue</th>
+          <th>Description</th>
+        </tr>
+        {issues}
+      </table>
+    </div>;
 };
 
 if (module.hot) {
