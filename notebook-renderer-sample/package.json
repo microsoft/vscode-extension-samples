@@ -1,7 +1,7 @@
 {
   "name": "notebook-renderer-sample",
   "displayName": "notebook-renderer-sample",
-  "description": "Example of a Notebook renderer (visualizer) that doesn't use frontend frameworks",
+  "description": "Example of a Notebook renderer (visualizer) for GitHub Issues Notebook that doesn't use any frontend frameworks.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.58.0"
@@ -14,10 +14,10 @@
   "contributes": {
     "notebookRenderer": [
       {
-        "id": "notebook-renderer-sample",
+        "id": "notebook-renderer-github-issues",
         "entrypoint": "./out/client/index.js",
-        "displayName": "notebook-renderer-sample",
-        "mimeTypes": ["x-application/sample-json-renderer"]
+        "displayName": "GitHub Issues Plain Renderer",
+        "mimeTypes": ["x-application/github-issues"]
       }
     ]
   },
