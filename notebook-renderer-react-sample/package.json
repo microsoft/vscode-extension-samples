@@ -9,8 +9,6 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
-  "main": "./out/extension/extension.js",
   "contributes": {
     "notebookRenderer": [
       {
