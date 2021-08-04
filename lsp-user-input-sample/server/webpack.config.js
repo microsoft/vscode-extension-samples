@@ -13,10 +13,10 @@ const path = require('path');
 module.exports = withDefaults({
 	context: path.join(__dirname),
 	entry: {
-		extension: './src/eslintServer.ts',
+		extension: './src/sampleServer.ts',
 	},
 	output: {
-		filename: 'eslintServer.js',
+		filename: 'sampleServer.js',
 		path: path.join(__dirname, 'out')
 	}
 });
