@@ -19,7 +19,7 @@ let client: LanguageClient;
 export function activate(context: ExtensionContext) {
 	const socketPort = workspace.getConfiguration('languageServerExample').get('port', 7000);
 	let socket: WebSocket | null = null;
-	
+
 	commands.registerCommand('languageServerExample.startStreaming', () => {
 		// Establish websocket connection
 		socket = new WebSocket(`ws://localhost:${socketPort}`);
@@ -68,7 +68,7 @@ export function activate(context: ExtensionContext) {
 	};
 
 	// Options to control the language client
-	let clientOptions: LanguageClientOptions = {
+	const clientOptions: LanguageClientOptions = {
 		// Register the server for plain text documents
 		documentSelector: [{ scheme: 'file', language: 'plaintext' }],
 		synchronize: {
