@@ -6,6 +6,7 @@ import { DepNodeProvider, Dependency } from './nodeDependencies';
 import { JsonOutlineProvider } from './jsonOutline';
 import { FtpExplorer } from './ftpExplorer';
 import { FileExplorer } from './fileExplorer';
+import { TestViewDragAndDrop } from './testViewDragAndDrop';
 import { TestView } from './testView';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -34,4 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Test View
 	new TestView(context);
+
+	// Drag and Drop sample
+	new TestViewDragAndDrop(context);
 }
