@@ -18,7 +18,8 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 ## Usage
 
 - `git clone https://github.com/Microsoft/vscode-extension-samples`
-- `code <any-sample-folder>`
+- `cd vscode-extension-sample`
+- `cd <any-sample-folder>`
 - `npm install` in the terminal, then `F5` to run the sample
 - Alternatively, follow the instructions in each sample's README for setting up and running the sample
 
