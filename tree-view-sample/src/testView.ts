@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
 export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDropController<Node> {
+	supportedTypes = ['text/treeitems'];
 	private _onDidChangeTreeData: vscode.EventEmitter<Node[] | undefined> = new vscode.EventEmitter<Node[] | undefined>();
 	// We want to use an array as the event type, so we use the proposed onDidChangeTreeData2.
 	public onDidChangeTreeData2: vscode.Event<Node[] | undefined> = this._onDidChangeTreeData.event;
@@ -60,12 +61,13 @@ export class TestView implements vscode.TreeDataProvider<Node>, vscode.DragAndDr
 	}
 
 	dispose(): void {
+		// nothing to dispose
 	}
 
 	// Drag and drop controller
 
 	public async onDrop(sources: vscode.TreeDataTransfer, target: Node): Promise<void> {
-		let treeItems = JSON.parse(await sources.items.get('text/treeitems')!.asString());
+		const treeItems = JSON.parse(await sources.items.get('text/treeitems')!.asString());
 		let roots = this._getLocalRoots(treeItems);
 		// Remove nodes that are already target's parent nodes
 		roots = roots.filter(r => !this._isChild(this._getTreeElement(r.key), target));
