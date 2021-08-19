@@ -2,7 +2,7 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-import { createConnection, BrowserMessageReader, BrowserMessageWriter, } from 'vscode-languageserver/browser';
+import { createConnection, BrowserMessageReader, BrowserMessageWriter } from 'vscode-languageserver/browser';
 
 import { Color, ColorInformation, Range, InitializeParams, InitializeResult, ServerCapabilities, TextDocuments, ColorPresentation, TextEdit, TextDocumentIdentifier } from 'vscode-languageserver';
 import { TextDocument } from 'vscode-languageserver-textdocument';
