@@ -16,14 +16,6 @@
 		"workspaceContains:*.md"
 	],
 	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "test-provider-sample.runTests",
-				"title": "Custom Run Tests"
-			}
-		]
-	},
 	"prettier": {
 		"printWidth": 120,
 		"singleQuote": true,
