@@ -10,7 +10,8 @@ let rakeTaskProvider: vscode.Disposable | undefined;
 let customTaskProvider: vscode.Disposable | undefined;
 
 export function activate(_context: vscode.ExtensionContext): void {
-	const workspaceRoot = vscode.workspace.rootPath;
+	const workspaceRoot = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
+		? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
 	if (!workspaceRoot) {
 		return;
 	}

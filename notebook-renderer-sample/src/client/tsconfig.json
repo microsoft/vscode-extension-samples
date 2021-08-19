@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    // noEmit prevents the default tsc from building this--we use webpack instead
+    "noEmit": true,
+    "rootDir": ".",
+    "module": "esnext",
+    "lib": ["ES2019", "dom"],
+    "types": ["webpack-env", "vscode-notebook-renderer"],
+  }
+}

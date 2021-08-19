@@ -60,7 +60,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [Semantic tokens](https://github.com/Microsoft/vscode-extension-samples/tree/main/semantic-tokens-sample) | [/api/language-extensions/semantic-highlight-guide](https://code.visualstudio.com/api/language-extensions/semantic-highlight-guide) | [languages.registerDocumentSemanticTokensProvider](https://code.visualstudio.com/api/references/vscode-api#languages.registerDocumentSemanticTokensProvider)<br>[vscode.DocumentSemanticTokensProvider](https://code.visualstudio.com/api/references/vscode-api#vscode.DocumentSemanticTokensProvider) |
 <!-- SAMPLES_END -->
 
-### Language Protocol Server Samples
+### Language Server Protocol Samples
 
 <!-- LSP_SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |

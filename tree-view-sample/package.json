@@ -23,6 +23,7 @@
 		"onView:jsonOutline",
 		"onView:fileExplorer",
 		"onView:testView",
+		"onView:testViewDragAndDrop",
 		"onLanguage:json",
 		"onLanguage:jsonc",
 		"onCommand:testView.reveal"
@@ -64,6 +65,10 @@
 				{
 					"id": "testView",
 					"name": "Test View"
+				},
+				{
+					"id": "testViewDragAndDrop",
+					"name": "Test View Drag and Drop"
 				}
 			]
 		},

@@ -81,7 +81,7 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 		redo(): void,
 	}>());
 	/**
-	 * Fired to tell VS Code that an edit has occured in the document.
+	 * Fired to tell VS Code that an edit has occurred in the document.
 	 *
 	 * This updates the document's dirty indicator.
 	 */

@@ -20,8 +20,8 @@
 		"source.fixAll.eslint": true
 	},
 	"eslint.workingDirectories": [
-		{ "directory": "./client", "changeProcessCWD": true },
-		{ "directory": "./server", "changeProcessCWD": true }
+		"./client",
+		"./server"
 	],
 	"eslint.trace.server": "off",
 	"eslint.lintTask.enable": false,
