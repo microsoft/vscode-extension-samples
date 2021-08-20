@@ -1,0 +1,52 @@
+{
+	"name": "helloworld-web-sample",
+	"displayName": "helloworld-web-sample",
+	"description": "HelloWorld example for VS Code in the browser",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"repository": "https://github.com/microsoft/vscode-extension-samples/helloworld-web-sample",
+	"engines": {
+		"vscode": "^1.59.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:helloworld-web-sample.helloWorld"
+	],
+	"browser": "./dist/web/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "helloworld-web-sample.helloWorld",
+				"title": "Hello World"
+			}
+		]
+	},
+	"scripts": {
+		"test": "vscode-test-web --browserType=chromium --extensionDevelopmentPath=. --extensionTestsPath=dist/web/test/suite/index.js",
+		"pretest": "npm run compile-web",
+		"vscode:prepublish": "npm run package-web",
+		"compile-web": "webpack --config ./build/web-extension.webpack.config.js",
+		"watch-web": "webpack --watch --config ./build/web-extension.webpack.config.js",
+		"package-web": "webpack --mode production --devtool hidden-source-map --config ./build/web-extension.webpack.config.js",
+		"lint": "eslint src --ext ts"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.59.0",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "14.x",
+		"eslint": "^7.27.0",
+		"@typescript-eslint/eslint-plugin": "^4.26.0",
+		"@typescript-eslint/parser": "^4.26.0",
+		"mocha": "^8.4.0",
+		"typescript": "^4.3.2",
+		"@vscode/test-web": "^0.0.8",
+		"ts-loader": "^9.2.2",
+		"webpack": "^5.38.1",
+		"webpack-cli": "^4.7.0",
+		"@types/webpack-env": "^1.16.0",
+		"assert": "^2.0.0",
+		"process": "^0.11.10"
+	}
+}

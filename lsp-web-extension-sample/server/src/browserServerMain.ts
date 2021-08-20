@@ -17,7 +17,7 @@ const messageWriter = new BrowserMessageWriter(self);
 
 const connection = createConnection(messageReader, messageWriter);
 
-/* non-browser specific code */
+/* from here on, all code is non-browser specific and could be shared with a regular extension */
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
 	const capabilities: ServerCapabilities = {

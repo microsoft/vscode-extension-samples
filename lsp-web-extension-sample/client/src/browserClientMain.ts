@@ -13,6 +13,10 @@ export function activate(context: ExtensionContext) {
 
 	console.log('lsp-web-extension-sample activated!');
 
+	/* 
+	 * all except the code to create the language client in not browser specific
+	 * and couuld be shared with a regular (Node) extension
+	 */
 	const documentSelector = [{ language: 'plaintext' }];
 
 	// Options to control the language client
@@ -22,17 +26,21 @@ export function activate(context: ExtensionContext) {
 		initializationOptions: {}
 	};
 
+	const client = createWorkerLanguageClient(context, clientOptions);
+
+	const disposable = client.start();
+	context.subscriptions.push(disposable);
+
+	client.onReady().then(() => {
+		console.log('lsp-web-extension-sample server is ready');
+	});
+}
+
+function createWorkerLanguageClient(context: ExtensionContext, clientOptions: LanguageClientOptions) {
 	// Create a worker. The worker main file implements the language server.
 	const serverMain = Uri.joinPath(context.extensionUri, 'server/dist/browserServerMain.js');
 	const worker = new Worker(serverMain.toString());
 
 	// create the language server client to communicate with the server running in the worker
-	const client = new LanguageClient('lsp-web-extension-sample', 'LSP Web Extension Sample', clientOptions, worker);
-	
-	const disposable = client.start();
-	context.subscriptions.push(disposable);
-	
-	client.onReady().then(() => {
-		console.log('lsp-web-extension-sample server is ready');
-	});
+	return new LanguageClient('lsp-web-extension-sample', 'LSP Web Extension Sample', clientOptions, worker);
 }
