@@ -69,23 +69,51 @@
 					},
 					{
 						"id": "mac",
-						"title": "Platform: Mac",
+						"title": "UI Platform: Mac",
 						"description": "This step will only show on a Mac.",
 						"when": "isMac",
 						"media": { "markdown": "media/mac.md"}
 					},
 					{
 						"id": "windows",
-						"title": "Platform: Windows",
+						"title": "UI Platform: Windows",
 						"description": "This step will only show on Windows",
 						"when": "isWindows",
 						"media": { "markdown": "media/windows.md" }
 					},
 					{
 						"id": "linux",
-						"title": "Platform: Linux",
+						"title": "UI Platform: Linux",
 						"description": "This step will only show on Linux",
 						"when": "isLinux",
+						"media": { "markdown": "media/linux.md" }
+					},
+					{
+						"id": "macRemote",
+						"title": "Workspace Platform: Mac",
+						"description": "This step will only show on Mac remotes.",
+						"when": "workspacePlatform == 'mac'",
+						"media": { "markdown": "media/mac.md"}
+					},
+					{
+						"id": "windowsRemote",
+						"title": "Workspace Platform: Windows",
+						"description": "This step will only show on Windows remotes",
+						"when": "workspacePlatform == 'windows'",
+						"media": { "markdown": "media/windows.md" }
+					},
+					{
+						"id": "linuxRemote",
+						"title": "Workspace Platform: Linux",
+						"description": "This step will only show on Linux remotes",
+						"when": "workspacePlatform == 'linux'",
+						"media": { "markdown": "media/linux.md" }
+					},
+					{
+						"id": "webRemote",
+						"title": "Workspace Platform: Web",
+						"description": "This step will only show on webworker remotes",
+						"when": "workspacePlatform == 'webworker'",
 						"media": { "markdown": "media/linux.md" }
 					}
 				]
