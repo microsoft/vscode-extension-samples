@@ -7,8 +7,8 @@ import {
 	LanguageMode,
 	LanguageService as HTMLLanguageService,
 	Position,
-	TextDocument
 } from '../languageModes';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 
 export function getHTMLMode(htmlLanguageService: HTMLLanguageService): LanguageMode {
 	return {
@@ -22,7 +22,7 @@ export function getHTMLMode(htmlLanguageService: HTMLLanguageService): LanguageM
 				htmlLanguageService.parseHTMLDocument(document)
 			);
 		},
-		onDocumentRemoved(_document: TextDocument) {},
-		dispose() {}
+		onDocumentRemoved(_document: TextDocument) { /* nothing to do */ },
+		dispose() { /* nothing to do */ }
 	};
 }

@@ -17,11 +17,11 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 
 // Create a connection for the server. The connection uses Node's IPC as a transport.
 // Also include all preview / proposed LSP features.
-let connection = createConnection(ProposedFeatures.all);
+const connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager. The text document manager
 // supports full document sync only
-let documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
 let languageModes: LanguageModes;
 
@@ -45,8 +45,6 @@ connection.onInitialize((_params: InitializeParams) => {
 		}
 	};
 });
-
-connection.onInitialized(() => {});
 
 connection.onDidChangeConfiguration(_change => {
 	// Revalidate all open text documents
@@ -80,7 +78,7 @@ async function validateTextDocument(textDocument: TextDocument) {
 		}
 	} catch (e) {
 		connection.console.error(`Error while validating ${textDocument.uri}`);
-		connection.console.error(e);
+		connection.console.error(String(e));
 	}
 }
 

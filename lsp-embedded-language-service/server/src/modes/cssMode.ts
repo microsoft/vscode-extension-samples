@@ -6,7 +6,8 @@
 import { LanguageService as CSSLanguageService } from 'vscode-css-languageservice';
 import { HTMLDocumentRegions } from '../embeddedSupport';
 import { LanguageModelCache } from '../languageModelCache';
-import { LanguageMode, Position, TextDocument } from '../languageModes';
+import { LanguageMode, Position } from '../languageModes';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 
 export function getCSSMode(
 	cssLanguageService: CSSLanguageService,
@@ -28,7 +29,7 @@ export function getCSSMode(
 			const stylesheet = cssLanguageService.parseStylesheet(embedded);
 			return cssLanguageService.doComplete(embedded, position, stylesheet);
 		},
-		onDocumentRemoved(_document: TextDocument) {},
-		dispose() {}
+		onDocumentRemoved(_document: TextDocument) { /* nothing to do */ },
+		dispose() { /* nothing to do */ }
 	};
 }

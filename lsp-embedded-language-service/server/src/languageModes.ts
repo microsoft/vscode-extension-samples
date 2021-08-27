@@ -10,8 +10,8 @@ import {
 	getLanguageService as getHTMLLanguageService,
 	Position,
 	Range,
-	TextDocument
 } from 'vscode-html-languageservice';
+import { TextDocument } from 'vscode-languageserver-textdocument';
 import { getCSSMode } from './modes/cssMode';
 import { getDocumentRegions, HTMLDocumentRegions } from './embeddedSupport';
 import { getHTMLMode } from './modes/htmlMode';
@@ -46,7 +46,7 @@ export function getLanguageModes(): LanguageModes {
 	const htmlLanguageService = getHTMLLanguageService();
 	const cssLanguageService = getCSSLanguageService();
 
-	let documentRegions = getLanguageModelCache<HTMLDocumentRegions>(10, 60, document =>
+	const documentRegions = getLanguageModelCache<HTMLDocumentRegions>(10, 60, document =>
 		getDocumentRegions(htmlLanguageService, document)
 	);
 
@@ -62,7 +62,7 @@ export function getLanguageModes(): LanguageModes {
 			document: TextDocument,
 			position: Position
 		): LanguageMode | undefined {
-			let languageId = documentRegions.get(document).getLanguageAtPosition(position);
+			const languageId = documentRegions.get(document).getLanguageAtPosition(position);
 			if (languageId) {
 				return modes[languageId];
 			}
@@ -82,9 +82,9 @@ export function getLanguageModes(): LanguageModes {
 				});
 		},
 		getAllModesInDocument(document: TextDocument): LanguageMode[] {
-			let result = [];
-			for (let languageId of documentRegions.get(document).getLanguagesInDocument()) {
-				let mode = modes[languageId];
+			const result = [];
+			for (const languageId of documentRegions.get(document).getLanguagesInDocument()) {
+				const mode = modes[languageId];
 				if (mode) {
 					result.push(mode);
 				}
@@ -92,9 +92,9 @@ export function getLanguageModes(): LanguageModes {
 			return result;
 		},
 		getAllModes(): LanguageMode[] {
-			let result = [];
-			for (let languageId in modes) {
-				let mode = modes[languageId];
+			const result = [];
+			for (const languageId in modes) {
+				const mode = modes[languageId];
 				if (mode) {
 					result.push(mode);
 				}
@@ -106,14 +106,14 @@ export function getLanguageModes(): LanguageModes {
 		},
 		onDocumentRemoved(document: TextDocument) {
 			modelCaches.forEach(mc => mc.onDocumentRemoved(document));
-			for (let mode in modes) {
+			for (const mode in modes) {
 				modes[mode].onDocumentRemoved(document);
 			}
 		},
 		dispose(): void {
 			modelCaches.forEach(mc => mc.dispose());
 			modelCaches = [];
-			for (let mode in modes) {
+			for (const mode in modes) {
 				modes[mode].dispose();
 			}
 			modes = {};
