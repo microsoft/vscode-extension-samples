@@ -30,7 +30,7 @@ const browserClientConfig = /** @type WebpackConfig */ {
 		extensions: ['.ts', '.js'], // support ts-files and js-files
 		alias: {},
 		fallback: {
-			path: require.resolve("path-browserify")
+			path: require.resolve('path-browserify'),
 		},
 	},
 	module: {
@@ -66,7 +66,7 @@ const browserServerConfig = /** @type WebpackConfig */ {
 		filename: '[name].js',
 		path: path.join(__dirname, 'server', 'dist'),
 		libraryTarget: 'var',
-		library: 'serverExportVar'
+		library: 'serverExportVar',
 	},
 	resolve: {
 		mainFields: ['module', 'main'],
@@ -95,7 +95,7 @@ const browserServerConfig = /** @type WebpackConfig */ {
 	performance: {
 		hints: false,
 	},
-	devtool: 'source-map'
+	devtool: 'source-map',
 };
 
 module.exports = [browserClientConfig, browserServerConfig];

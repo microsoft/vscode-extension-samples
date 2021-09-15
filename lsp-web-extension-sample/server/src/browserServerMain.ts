@@ -94,10 +94,10 @@ function parseHexDigit(charCode: CharCode): number {
 		return charCode - CharCode.Digit0;
 	}
 	if (charCode >= CharCode.A && charCode <= CharCode.F) {
-		return charCode - CharCode.A;
+		return charCode - CharCode.A + 10;
 	}
 	if (charCode >= CharCode.a && charCode <= CharCode.f) {
-		return charCode - CharCode.a;
+		return charCode - CharCode.a + 10;
 	}
 	return 0;
 }
