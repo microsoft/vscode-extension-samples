@@ -33,7 +33,7 @@ Explains how to test this extension in an Empty workspace
 - Open a different file. No message is shown.
 - Run the command `Configure empty last line for current file`
 - Value in User settings is updated. Message is shown now
-- Run the command `Configure empty last line for files` and provide abosoulte path of another file
+- Run the command `Configure empty last line for files` and provide absolute path of another file
 - Value should be updated in User Settings
 
 ### Testing Language Specific configuration
@@ -66,7 +66,7 @@ Explains how to test this extension in a Folder workspace
 - Open a different file from the opened folder. No message is shown.
 - Run the command `Configure empty last line for current file`
 - Value in Workspace settings is updated. Message is shown now.
-- Run the command `Configure empty last line for files` and provide abosoulte path of another file.
+- Run the command `Configure empty last line for files` and provide absolute path of another file.
 - Pick the target `User Settings` or `Workspace Settings` into which the value should be updated
 - Value should be updated in selected target
 
@@ -101,7 +101,7 @@ Explains how to test this extension in a Multiroot workspace
 - Open a different file from one of the root folders. No message is shown.
 - Run the command `Configure empty last line for current file`
 - Value in Folder Settings of the root folder of the current file is updated. Message is shown now.
-- Run the command `Configure empty last line for files` and provide abosoulte path of another file.
+- Run the command `Configure empty last line for files` and provide absolute path of another file.
 - Pick the target `User Settings` or `Workspace Settings` or `Workspace Folder Settings` into which the value should be updated
 - Selecting User or Workspace Settings should update the value in respective targets.
 - Selecting Workspace Folder Settings will show a Workspace Folder Picker
