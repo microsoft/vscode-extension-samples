@@ -23,5 +23,5 @@ This Language Server works for `html1` file. HTML1 is like HTML file but has fil
 - If you want to debug the server as well use the launch configuration `Attach to Server`
 - In the [Extension Development Host] instance of VSCode, open a HTML document
   - Type `<d|` to try HTML completion
-  - Type `<style>.foo { c| }</style>` to try CSS completino
+  - Type `<style>.foo { c| }</style>` to try CSS completion
   - Have `<style>.foo { }</style>` to see CSS Diagnostics
