@@ -28,7 +28,51 @@
 	"contributes": {
 		"configuration": [
 			{
+				"title": "Settings Editor Widget Samples",
+				"order": 2,
+				"properties": {
+					"conf.settingsEditor.boolObjectSetting": {
+						"type": "object",
+						"description": "An example bool object setting.",
+						"properties": {
+							"prop1": {
+								"type": "boolean",
+								"description": "Property 1"
+							},
+							"prop2": {
+								"type": "boolean",
+								"description": "Property 2"
+							}
+						},
+						"additionalProperties": false,
+						"default": {
+							"prop1": true,
+							"prop2": false
+						}
+					},
+					"conf.settingsEditor.uniqueEnumArraySetting": {
+						"type": "array",
+						"description": "An example enum array setting.",
+						"items": {
+							"type": "string",
+							"enum": [
+								"red",
+								"yellow",
+								"blue"
+							]
+						},
+						"uniqueItems": true
+					},
+					"conf.settingsEditor.multilineSetting": {
+						"type": "string",
+						"description": "An example multiline setting.",
+						"editPresentation": "multilineText"
+					}
+				}
+			},
+			{
 				"title": "Configuration Samples",
+				"order": 1,
 				"properties": {
 					"conf.view.showOnWindowOpen": {
 						"type": "string",
