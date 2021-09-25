@@ -67,7 +67,7 @@ export class AzureDevOpsAuthenticationProvider implements AuthenticationProvider
 		}
 	}
 
-	// This is a crutial function that handles whether or not the token has changed in
+	// This is a crucial function that handles whether or not the token has changed in
 	// a different window of VS Code and sends the necessary event if it has.
 	private async checkForUpdates(): Promise<void> {
 		const added: AuthenticationSession[] = [];
