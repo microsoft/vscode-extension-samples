@@ -21,7 +21,7 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 	static CustomBuildScriptType = 'custombuildscript';
 	private tasks: vscode.Task[] | undefined;
 
-	// We use a CustomExecution task when state needs to be shared accross runs of the task or when 
+	// We use a CustomExecution task when state needs to be shared across runs of the task or when 
 	// the task requires use of some VS Code API to run.
 	// If you don't need to share state between runs and if you don't need to execute VS Code API in your task, 
 	// then a simple ShellExecution or ProcessExecution should be enough.
