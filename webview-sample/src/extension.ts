@@ -168,7 +168,7 @@ class CatCodingPanel {
 
 	private _getHtmlForWebview(webview: vscode.Webview, catGifPath: string) {
 		// Local path to main script run in the webview
-		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'ma in.js');
+		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js');
 
 		// And the uri we use to load this script in the webview
 		const scriptUri = (scriptPathOnDisk).with({ 'scheme': 'vscode-resource' });
