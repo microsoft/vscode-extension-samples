@@ -5,7 +5,7 @@ This is the source code for the [Language Configuration Guide](https://code.visu
 - Comment toggling
 - Brackets definition
 - Autoclosing
-- Autosurronding
+- Autosurrounding
 - Folding
 - Word pattern
 - Indentation Rules

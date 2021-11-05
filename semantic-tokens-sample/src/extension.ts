@@ -7,7 +7,7 @@ const legend = (function () {
 	const tokenTypesLegend = [
 		'comment', 'string', 'keyword', 'number', 'regexp', 'operator', 'namespace',
 		'type', 'struct', 'class', 'interface', 'enum', 'typeParameter', 'function',
-		'method', 'macro', 'variable', 'parameter', 'property', 'label'
+		'method', 'decorator', 'macro', 'variable', 'parameter', 'property', 'label'
 	];
 	tokenTypesLegend.forEach((tokenType, index) => tokenTypes.set(tokenType, index));
 

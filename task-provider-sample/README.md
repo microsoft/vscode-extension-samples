@@ -10,7 +10,7 @@ This is the source code for the [Task Provider Guide](https://code.visualstudio.
 
 ### Contribution Points
 
-- [`contributes.taskdefinitions`](https://code.visualstudio.com/api/references/contribution-points#contributes.taskDefinitions)
+- [`contributes.taskDefinitions`](https://code.visualstudio.com/api/references/contribution-points#contributes.taskDefinitions)
 
 
 ## Running the example

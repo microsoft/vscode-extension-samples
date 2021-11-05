@@ -13,7 +13,8 @@
 
 const path = require('path');
 
-const browserClientConfig = /** @type WebpackConfig */ {
+/** @type WebpackConfig */
+const browserClientConfig = {
 	context: path.join(__dirname, 'client'),
 	mode: 'none',
 	target: 'webworker', // web extensions run in a webworker context
@@ -55,7 +56,8 @@ const browserClientConfig = /** @type WebpackConfig */ {
 	devtool: 'source-map',
 };
 
-const browserServerConfig = /** @type WebpackConfig */ {
+/** @type WebpackConfig */
+const browserServerConfig = {
 	context: path.join(__dirname, 'server'),
 	mode: 'none',
 	target: 'webworker', // web extensions run in a webworker context

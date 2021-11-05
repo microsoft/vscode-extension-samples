@@ -1,0 +1,50 @@
+{
+  "name": "vscode-authenticationprovider-sample",
+  "displayName": "AuthenticationProvider API Sample",
+  "description": "AuthenticationProvider API Sample",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:vscode-authenticationprovider-sample.login",
+    "onAuthenticationRequest:AzureDevOpsPAT"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-authenticationprovider-sample.login",
+        "title": "Login with Azure DevOps"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/isomorphic-fetch": "^0.0.35",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "14.x",
+    "@types/vscode": "^1.60.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.27.0",
+    "glob": "^7.1.7",
+    "mocha": "^8.4.0",
+    "typescript": "^4.4.3",
+    "vscode-test": "^1.5.2"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^3.0.0"
+  }
+}

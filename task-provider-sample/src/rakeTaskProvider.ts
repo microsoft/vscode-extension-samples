@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as cp from 'child_process';
 import * as vscode from 'vscode';
+import { error } from 'console';
 
 export class RakeTaskProvider implements vscode.TaskProvider {
 	static RakeType = 'rake';
@@ -146,7 +147,7 @@ async function getRakeTasks(): Promise<vscode.Task[]> {
 					}
 				}
 			}
-		} catch (err) {
+		} catch (err: any) {
 			const channel = getOutputChannel();
 			if (err.stderr) {
 				channel.appendLine(err.stderr);

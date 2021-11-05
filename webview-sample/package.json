@@ -41,7 +41,6 @@
 		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -w -p ./"
 	},
-	"dependencies": {},
 	"devDependencies": {
 		"@types/node": "^12.12.0",
 		"@types/vscode": "^1.47.0",
@@ -49,6 +48,6 @@
 		"@typescript-eslint/eslint-plugin": "^4.16.0",
 		"@typescript-eslint/parser": "^4.16.0",
 		"eslint": "^7.21.0",
-		"typescript": "^4.3.5"
+		"typescript": "^4.4.3"
 	}
 }

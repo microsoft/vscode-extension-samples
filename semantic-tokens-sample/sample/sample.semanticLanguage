@@ -1,7 +1,7 @@
 Available token types:
     [comment] [string] [keyword] [number] [regexp] [operator] [namespace]
     [type] [struct] [class] [interface] [enum] [typeParameter] [function]
-    [method] [macro] [variable] [parameter] [property] [label]
+    [method] [macro] [variable] [parameter] [property] [label] [decorator]
 
 Available token modifiers:
     [type.declaration] [type.documentation] [type.readonly] [type.static]

@@ -12,7 +12,8 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const webExtensionConfig = /** @type WebpackConfig */ {
+/** @type WebpackConfig */
+const webExtensionConfig = {
 	mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 	target: 'webworker', // extensions run in a webworker context
 	entry: {
