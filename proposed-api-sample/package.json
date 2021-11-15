@@ -1,5 +1,5 @@
 {
-	"enableProposedApi": true,
+	"enabledApiProposals": [],
 	"name": "proposed-api-sample",
 	"displayName": "proposed-api-sample",
 	"description": "Sample showing how to use Proposed API",
@@ -39,6 +39,6 @@
 		"@typescript-eslint/parser": "^4.16.0",
 		"eslint": "^7.21.0",
 		"typescript": "^4.2.2",
-		"vscode-dts": "^0.3.1"
+		"vscode-dts": "^0.3.2"
 	}
 }

@@ -5,7 +5,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	/**
 	 * You can use proposed API here. `vscode.` should start auto complete
-	 * Proposed API as defined in vscode.proposed.d.ts.
+	 * Proposed API as defined in vscode.proposed.<proposalName>.d.ts.
 	 */
 
 	const disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
