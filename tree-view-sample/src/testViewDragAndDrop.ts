@@ -55,7 +55,11 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	// Drag and drop controller
 
 	public async onDrop(sources: vscode.TreeDataTransfer, target: Node): Promise<void> {
-		const treeItems = JSON.parse(await sources.items.get('text/treeitems')!.asString());
+		const transferItem = sources.items.get('text/treeitems');
+		if (!transferItem) {
+			return;
+		}
+		const treeItems = JSON.parse(await transferItem.asString());
 		let roots = this._getLocalRoots(treeItems);
 		// Remove nodes that are already target's parent nodes
 		roots = roots.filter(r => !this._isChild(this._getTreeElement(r.key), target));
@@ -65,6 +69,14 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 			roots.forEach(r => this._reparentNode(r, target));
 			this._onDidChangeTreeData.fire([...parents, target]);
 		}
+	}
+
+	public async onWillDrop(source: Node[]): Promise<vscode.TreeDataTransfer> {
+		const items = new Map<string, vscode.TreeDataTransferItem>();
+		items.set('text/treeitems', {asString: async () => JSON.stringify(source)});
+		return {
+			items
+		};
 	}
 
 	// Helper methods

@@ -4,7 +4,9 @@
 	"description": "Samples for VSCode's view API",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
-	"enableProposedApi": true,
+	"enabledApiProposals": [
+		"treeViewDragAndDrop"
+	],
 	"private": true,
 	"license": "MIT",
 	"repository": {
