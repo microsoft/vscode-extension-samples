@@ -18,7 +18,7 @@ export default class ReferencesDocument {
 		this._locations = locations;
 
 		// The ReferencesDocument has access to the event emitter from
-		// the containg provider. This allows it to signal changes
+		// the containing provider. This allows it to signal changes
 		this._emitter = emitter;
 
 		// Start with printing a header and start resolving
@@ -37,7 +37,7 @@ export default class ReferencesDocument {
 
 	private async _populate() {
 
-		// group all locations by files containg them
+		// group all locations by files containing them
 		const groups: vscode.Location[][] = [];
 		let group: vscode.Location[] = [];
 		for (const loc of this._locations) {
