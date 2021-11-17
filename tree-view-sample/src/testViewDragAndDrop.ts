@@ -1,7 +1,17 @@
 import * as vscode from 'vscode';
 
+class TestViewObjectTransferItem extends vscode.TreeDataTransferItem {
+	constructor(private _nodes: Node[]) {
+		super(_nodes);
+	}
+
+	asObject(): Node[] {
+		return this._nodes;
+	}
+}
+
 export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscode.DragAndDropController<Node> {
-	supportedTypes = ['text/treeitems'];
+	supportedMimeTypes = ['text/treeitems'];
 	private _onDidChangeTreeData: vscode.EventEmitter<Node[] | undefined> = new vscode.EventEmitter<Node[] | undefined>();
 	// We want to use an array as the event type, so we use the proposed onDidChangeTreeData2.
 	public onDidChangeTreeData2: vscode.Event<Node[] | undefined> = this._onDidChangeTreeData.event;
@@ -55,11 +65,11 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	// Drag and drop controller
 
 	public async onDrop(sources: vscode.TreeDataTransfer, target: Node): Promise<void> {
-		const transferItem = sources.items.get('text/treeitems');
-		if (!transferItem) {
+		const transferItem = sources.get('text/treeitems');
+		if (!transferItem || !(transferItem instanceof TestViewObjectTransferItem)) {
 			return;
 		}
-		const treeItems = JSON.parse(await transferItem.asString());
+		const treeItems = transferItem.asObject();
 		let roots = this._getLocalRoots(treeItems);
 		// Remove nodes that are already target's parent nodes
 		roots = roots.filter(r => !this._isChild(this._getTreeElement(r.key), target));
@@ -72,11 +82,9 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	}
 
 	public async onWillDrop(source: Node[]): Promise<vscode.TreeDataTransfer> {
-		const items = new Map<string, vscode.TreeDataTransferItem>();
-		items.set('text/treeitems', {asString: async () => JSON.stringify(source)});
-		return {
-			items
-		};
+		const dataTransfer = new vscode.TreeDataTransfer<TestViewObjectTransferItem>();
+		dataTransfer.set('text/treeitems', new TestViewObjectTransferItem(source));
+		return dataTransfer;
 	}
 
 	// Helper methods
