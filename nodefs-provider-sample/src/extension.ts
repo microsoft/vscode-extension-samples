@@ -3,11 +3,11 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path';
 import * as mkdirp from 'mkdirp';
+import * as path from 'path';
 import * as rimraf from 'rimraf';
+import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
     vscode.workspace.registerFileSystemProvider('datei', new DateiFileSystemProvider(), {
@@ -141,13 +141,13 @@ namespace _ {
 
     function handleResult<T>(resolve: (result: T) => void, reject: (error: Error) => void, error: Error | null | undefined, result: T | undefined): void {
         if (error) {
-            reject(massageError(error));
+            reject(messageError(error));
         } else {
             resolve(result!);
         }
     }
 
-    function massageError(error: Error & { code?: string }): Error {
+    function messageError(error: Error & { code?: string }): Error {
         if (error.code === 'ENOENT') {
             return vscode.FileSystemError.FileNotFound();
         }
