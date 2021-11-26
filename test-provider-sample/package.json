@@ -6,6 +6,9 @@
 	"publisher": "vscode-samples",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples",
 	"enableProposedApi": true,
+	"enabledApiProposals": [
+		"testCoverage"
+	],
 	"engines": {
 		"vscode": "^1.51.0"
 	},
@@ -36,6 +39,6 @@
 		"@typescript-eslint/parser": "^4.16.0",
 		"eslint": "^7.21.0",
 		"typescript": "^4.2.2",
-		"vscode-dts": "^0.3.1"
+		"vscode-dts": "^0.3.2"
 	}
 }
