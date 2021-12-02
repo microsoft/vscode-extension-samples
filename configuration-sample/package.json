@@ -31,8 +31,25 @@
 				"title": "Settings Editor Widget Samples",
 				"order": 2,
 				"properties": {
+					"conf.settingsEditor.numericObjectSetting": {
+						"type": "object",
+						"order": 2,
+						"description": "An example numeric object setting.",
+						"properties": {
+							"intprop": {
+								"type": "integer",
+								"description": "Integer property"
+							},
+							"numprop": {
+								"type": "number",
+								"description": "Numeric property"
+							}
+						},
+						"additionalProperties": false
+					},
 					"conf.settingsEditor.boolObjectSetting": {
 						"type": "object",
+						"order": 1,
 						"description": "An example bool object setting.",
 						"properties": {
 							"prop1": {
@@ -71,7 +88,7 @@
 				}
 			},
 			{
-				"title": "Configuration Samples",
+				"title": "Configuration Sample",
 				"order": 1,
 				"properties": {
 					"conf.view.showOnWindowOpen": {
