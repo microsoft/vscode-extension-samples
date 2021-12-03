@@ -55,12 +55,16 @@ export function activate(context: vscode.ExtensionContext) {
 		activeEditor.setDecorations(largeNumberDecorationType, largeNumbers);
 	}
 
-	function triggerUpdateDecorations() {
+	function triggerUpdateDecorations(throttle: boolean = false) {
 		if (timeout) {
 			clearTimeout(timeout);
 			timeout = undefined;
 		}
-		timeout = setTimeout(updateDecorations, 500);
+		if (throttle) {
+			timeout = setTimeout(updateDecorations, 500);
+		} else {
+			updateDecorations();
+		}
 	}
 
 	if (activeEditor) {
@@ -76,7 +80,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.workspace.onDidChangeTextDocument(event => {
 		if (activeEditor && event.document === activeEditor.document) {
-			triggerUpdateDecorations();
+			triggerUpdateDecorations(true);
 		}
 	}, null, context.subscriptions);
 
