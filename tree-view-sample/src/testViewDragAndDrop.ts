@@ -1,6 +1,16 @@
 import * as vscode from 'vscode';
 
-class TestViewObjectTransferItem extends vscode.TreeDataTransferItem {
+// TestTreeDataTransferItem is for older versions of VS Code that don't have the most up-to-date tree drag and drop API proposal.
+const TestTreeDataTransferItem = (typeof vscode.TreeDataTransferItem === 'function') ? vscode.TreeDataTransferItem : class MockItem {
+	async asString(): Promise<string> {
+		return 'mock';
+	}
+
+	constructor(_value: any) { /* this is a mock constructor */ }
+};
+
+
+class TestViewObjectTransferItem extends TestTreeDataTransferItem {
 	constructor(private _nodes: Node[]) {
 		super(_nodes);
 	}
