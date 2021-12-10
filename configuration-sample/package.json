@@ -28,6 +28,7 @@
 	"contributes": {
 		"configuration": [
 			{
+				"id": "widgetSamples",
 				"title": "Settings Editor Widget Samples",
 				"order": 2,
 				"properties": {
@@ -88,8 +89,8 @@
 				}
 			},
 			{
+				"id": "configurationSamples",
 				"title": "Configuration Sample",
-				"order": 1,
 				"properties": {
 					"conf.view.showOnWindowOpen": {
 						"type": "string",
@@ -115,6 +116,18 @@
 						"default": false,
 						"description": "Shows the size of the document",
 						"scope": "language-overridable"
+					}
+				}
+			},
+			{
+				"id": "anotherCategory",
+				"title": "Another category",
+				"properties": {
+					"conf.settingsEditor.firstMisc": {
+						"type": "string"
+					},
+					"conf.settingsEditor.secondMisc": {
+						"type": "string"
 					}
 				}
 			}
