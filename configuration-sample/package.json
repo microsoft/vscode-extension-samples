@@ -121,7 +121,8 @@
 			},
 			{
 				"id": "anotherCategory",
-				"title": "Another category",
+				"title": "Misc Category",
+				"order": 1,
 				"properties": {
 					"conf.settingsEditor.firstMisc": {
 						"type": "string"
