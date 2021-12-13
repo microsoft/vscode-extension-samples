@@ -4,4 +4,4 @@ node_modules
 *.vsix
 
 /vscode.d.ts
-/vscode.proposed.d.ts
+/vscode.proposed.testCoverage.d.ts
