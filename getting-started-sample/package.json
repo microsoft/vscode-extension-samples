@@ -15,7 +15,8 @@
 		"onCommand:getting-started-sample.runCommand",
 		"onCommand:getting-started-sample.changeSetting",
 		"onCommand:getting-started-sample.setContext",
-		"onCommand:getting-started-sample.sayHello"
+		"onCommand:getting-started-sample.sayHello",
+		"onCommand:getting-started-sample.viewSources"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -26,10 +27,10 @@
 				}
 			]
 		},
-		"commands":[
+		"commands": [
 			{
-				"category": "file",
-				"title": "Say Hello",
+				"title": "Getting Started Sample: Say Hello",
+				"shortTitle": "Say Hello (This is the name used in the New File quick pick)",
 				"command": "getting-started-sample.sayHello"
 			}
 		],
@@ -169,6 +170,15 @@
 						"when": "workspacePlatform == 'webworker'",
 						"media": {
 							"markdown": "media/linux.md"
+						}
+					},
+					{
+						"id": "showSources",
+						"title": "View Sources",
+						"description": "Open a folder containg the sources of this extension.\n[View Sources](command:getting-started-sample.viewSources)",
+						"media": {
+							"image": "media/image.png",
+							"altText": "Empty image"
 						}
 					}
 				]
