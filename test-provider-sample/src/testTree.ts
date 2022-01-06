@@ -29,7 +29,7 @@ export class TestFile {
       item.error = undefined;
       this.updateFromContents(controller, content, item);
     } catch (e) {
-      item.error = e.stack;
+      item.error = (e as Error).stack;
     }
   }
 
