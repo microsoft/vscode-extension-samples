@@ -20,7 +20,7 @@ class TestViewObjectTransferItem extends TestTreeDataTransferItem {
 	}
 }
 
-export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscode.DragAndDropController<Node> {
+export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscode.TreeDragAndDropController<Node> {
 	supportedMimeTypes = ['text/treeitems'];
 	private _onDidChangeTreeData: vscode.EventEmitter<Node[] | undefined> = new vscode.EventEmitter<Node[] | undefined>();
 	// We want to use an array as the event type, so we use the proposed onDidChangeTreeData2.
@@ -74,7 +74,7 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 
 	// Drag and drop controller
 
-	public async onDrop(sources: vscode.TreeDataTransfer, target: Node): Promise<void> {
+	public async handleDrop(sources: vscode.TreeDataTransfer, target: Node): Promise<void> {
 		const transferItem = sources.get('text/treeitems');
 		if (!transferItem || !(transferItem instanceof TestViewObjectTransferItem)) {
 			return;
@@ -91,7 +91,7 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		}
 	}
 
-	public async onWillDrop(source: Node[]): Promise<vscode.TreeDataTransfer> {
+	public async handleDrag(source: Node[]): Promise<vscode.TreeDataTransfer> {
 		const dataTransfer = new vscode.TreeDataTransfer<TestViewObjectTransferItem>();
 		dataTransfer.set('text/treeitems', new TestViewObjectTransferItem(source));
 		return dataTransfer;
