@@ -91,10 +91,8 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		}
 	}
 
-	public async handleDrag(source: Node[]): Promise<vscode.TreeDataTransfer> {
-		const dataTransfer = new vscode.TreeDataTransfer<TestViewObjectTransferItem>();
-		dataTransfer.set('text/treeitems', new TestViewObjectTransferItem(source));
-		return dataTransfer;
+	public async handleDrag(source: Node[], treeDataTransfer: vscode.TreeDataTransfer): Promise<void> {
+		treeDataTransfer.set('text/treeitems', new TestViewObjectTransferItem(source));
 	}
 
 	// Helper methods
