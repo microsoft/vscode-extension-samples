@@ -7,6 +7,7 @@ let commentId = 1;
 class NoteComment implements vscode.Comment {
 	id: number;
 	label: string | undefined;
+	savedBody: string | vscode.MarkdownString; // for the Cancel button
 	constructor(
 		public body: string | vscode.MarkdownString,
 		public mode: vscode.CommentMode,
@@ -15,6 +16,7 @@ class NoteComment implements vscode.Comment {
 		public contextValue?: string
 	) {
 		this.id = ++commentId;
+		this.savedBody = this.body;
 	}
 }
 
@@ -89,6 +91,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		comment.parent.comments = comment.parent.comments.map(cmt => {
 			if ((cmt as NoteComment).id === comment.id) {
+				cmt.body = (cmt as NoteComment).savedBody;
 				cmt.mode = vscode.CommentMode.Preview;
 			}
 
@@ -103,6 +106,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		comment.parent.comments = comment.parent.comments.map(cmt => {
 			if ((cmt as NoteComment).id === comment.id) {
+				(cmt as NoteComment).savedBody = cmt.body;
 				cmt.mode = vscode.CommentMode.Preview;
 			}
 
