@@ -1,27 +1,10 @@
 import * as vscode from 'vscode';
 
-// TestTreeDataTransferItem is for older versions of VS Code that don't have the most up-to-date tree drag and drop API proposal.
-const TestTreeDataTransferItem = (typeof vscode.TreeDataTransferItem === 'function') ? vscode.TreeDataTransferItem : class MockItem {
-	async asString(): Promise<string> {
-		return 'mock';
-	}
 
-	constructor(_value: any) { /* this is a mock constructor */ }
-};
-
-
-class TestViewObjectTransferItem extends TestTreeDataTransferItem {
-	constructor(private _nodes: Node[]) {
-		super(_nodes);
-	}
-
-	asObject(): Node[] {
-		return this._nodes;
-	}
-}
 
 export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscode.TreeDragAndDropController<Node> {
-	supportedMimeTypes = ['text/treeitems'];
+	dropMimeTypes = ['text/treeitems'];
+	dragMimeTypes = [];
 	private _onDidChangeTreeData: vscode.EventEmitter<Node[] | undefined> = new vscode.EventEmitter<Node[] | undefined>();
 	// We want to use an array as the event type, so we use the proposed onDidChangeTreeData2.
 	public onDidChangeTreeData2: vscode.Event<Node[] | undefined> = this._onDidChangeTreeData.event;
@@ -74,12 +57,12 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 
 	// Drag and drop controller
 
-	public async handleDrop(sources: vscode.TreeDataTransfer, target: Node): Promise<void> {
+	public async handleDrop(sources: vscode.TreeDataTransfer, target: Node, token: vscode.CancellationToken): Promise<void> {
 		const transferItem = sources.get('text/treeitems');
-		if (!transferItem || !(transferItem instanceof TestViewObjectTransferItem)) {
+		if (!transferItem) {
 			return;
 		}
-		const treeItems = transferItem.asObject();
+		const treeItems: Node[] = transferItem.value;
 		let roots = this._getLocalRoots(treeItems);
 		// Remove nodes that are already target's parent nodes
 		roots = roots.filter(r => !this._isChild(this._getTreeElement(r.key), target));
@@ -91,8 +74,8 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		}
 	}
 
-	public async handleDrag(source: Node[], treeDataTransfer: vscode.TreeDataTransfer): Promise<void> {
-		treeDataTransfer.set('text/treeitems', new TestViewObjectTransferItem(source));
+	public async handleDrag(source: Node[], treeDataTransfer: vscode.TreeDataTransfer, token: vscode.CancellationToken): Promise<void> {
+		treeDataTransfer.set('text/treeitems', new vscode.TreeDataTransferItem(source));
 	}
 
 	// Helper methods
