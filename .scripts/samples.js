@@ -27,6 +27,13 @@ const samples = [
     contributions: []
   },
   {
+    description: 'Webview Codicons Sample',
+    path: 'webview-codicons-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
     description: 'Status Bar Sample',
     path: 'statusbar-sample',
     guide: null,
@@ -225,6 +232,20 @@ const samples = [
     apis: ['languages.registerDocumentSemanticTokensProvider', 'vscode.DocumentSemanticTokensProvider'],
     contributions: []
   },
+  {
+    description: 'Test Provider Sample',
+    path: 'test-provider-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'Getting Started Sample',
+    path: 'getting-started-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
   { description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
   { description: 'contentprovider-sample', excludeFromReadme: true, path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
   { description: 'nodefs-provider-sample', excludeFromReadme: true, path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
@@ -233,7 +254,12 @@ const samples = [
   { description: 'diagnostic-related-information-sample', excludeFromReadme: true, path: 'diagnostic-related-information-sample', guide: null, apis: [], contributions: [] },
   { description: 'fsconsumer-sample', excludeFromReadme: true, path: 'fsconsumer-sample', guide: null, apis: [], contributions: [] },
   { description: 'github-authentication-sample', excludeFromReadme: true, path: 'github-authentication-sample', guide: null, apis: [], contributions: [] },
-
+  { description: 'helloworld-web-sample', excludeFromReadme: true, path: 'helloworld-web-sample', guide: null, apis: [], contributions: [] },
+  { description: 'inline-completions', excludeFromReadme: true, path: 'inline-completions', guide: null, apis: [], contributions: [] },
+  { description: 'notebook-renderer-react-sample', excludeFromReadme: true, path: 'notebook-renderer-react-sample', guide: null, apis: [], contributions: [] },
+  { description: 'proposed-api-sample', excludeFromReadme: true, path: 'proposed-api-sample', guide: null, apis: [], contributions: [] },
+  { description: 'virtual-document-sample', excludeFromReadme: true, path: 'virtual-document-sample', guide: null, apis: [], contributions: [] },
+  { description: 'webpack-sample', excludeFromReadme: true, path: 'webpack-sample', guide: null, apis: [], contributions: [] },
 ]
 
 /** LSP specific samples */
