@@ -40,6 +40,6 @@
 		"@typescript-eslint/parser": "^4.16.0",
 		"@vscode/codicons": "0.0.20",
 		"eslint": "^7.21.0",
-		"typescript": "^4.2.2"
+		"typescript": "^4.5.5"
 	}
 }
