@@ -33,19 +33,19 @@
 		"lint": "eslint src --ext ts"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.59.0",
 		"@types/mocha": "^9.0.0",
-		"eslint": "^7.32.0",
+		"@types/vscode": "^1.59.0",
+		"@types/webpack-env": "^1.16.2",
 		"@typescript-eslint/eslint-plugin": "^4.31.1",
 		"@typescript-eslint/parser": "^4.31.1",
-		"mocha": "^9.1.1",
-		"typescript": "^4.5.5",
 		"@vscode/test-web": "^0.0.12",
-		"ts-loader": "^9.2.5",
-		"webpack": "^5.52.1",
-		"webpack-cli": "^4.8.0",
-		"@types/webpack-env": "^1.16.2",
 		"assert": "^2.0.0",
-		"process": "^0.11.10"
+		"eslint": "^7.32.0",
+		"mocha": "^9.2.0",
+		"process": "^0.11.10",
+		"ts-loader": "^9.2.5",
+		"typescript": "^4.5.5",
+		"webpack": "^5.52.1",
+		"webpack-cli": "^4.8.0"
 	}
 }
