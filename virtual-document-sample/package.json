@@ -4,6 +4,8 @@
 	"description": "A sample for virtual document",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-extension-samples"

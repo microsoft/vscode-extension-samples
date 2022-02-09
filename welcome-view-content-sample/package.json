@@ -3,6 +3,8 @@
   "publisher": "vscode-samples",
   "description": "Uri Handler Sample",
   "version": "0.0.1",
+  "private": true,
+	"license": "MIT",
   "engines": {
     "vscode": "^1.46.0"
   },

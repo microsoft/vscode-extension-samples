@@ -3,6 +3,8 @@
   "displayName": "notebook-renderer-react-sample",
   "description": "Example of a Notebook renderer (visualizer) for GitHub Issues Notebook built with React.",
   "version": "0.0.1",
+  "private": true,
+  "license": "MIT",
   "engines": {
     "vscode": "^1.58.0"
   },

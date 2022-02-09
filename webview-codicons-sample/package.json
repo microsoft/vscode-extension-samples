@@ -3,6 +3,8 @@
 	"description": "Cat Codicons - Using codicons in webviews",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
 	"engines": {
 		"vscode": "^1.47.0"
 	},

@@ -3,6 +3,8 @@
   "displayName": "notebook-renderer-sample",
   "description": "Example of a Notebook renderer (visualizer) for GitHub Issues Notebook that doesn't use any frontend frameworks.",
   "version": "0.0.1",
+  "private": true,
+	"license": "MIT",
   "engines": {
     "vscode": "^1.58.0"
   },

@@ -4,6 +4,8 @@
 	"description": "Example extension contribution to Getting Started page",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples/getting-started-sample",
 	"engines": {
 		"vscode": "^1.57.0"

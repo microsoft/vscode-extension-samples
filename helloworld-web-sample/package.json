@@ -4,6 +4,8 @@
 	"description": "HelloWorld example for VS Code in the browser",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
 	"repository": "https://github.com/microsoft/vscode-extension-samples/helloworld-web-sample",
 	"engines": {
 		"vscode": "^1.59.0"
