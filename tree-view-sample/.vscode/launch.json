@@ -10,6 +10,7 @@
             "args": [
                 "--extensionDevelopmentPath=${workspaceRoot}",
                 "--enable-proposed-api",
+                "--disable-extensions",
                 "vscode-samples.custom-view-samples"
             ],
             "stopOnEntry": false,
