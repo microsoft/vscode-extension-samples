@@ -39,7 +39,7 @@ export function activate(context: ExtensionContext) {
 function createWorkerLanguageClient(context: ExtensionContext, clientOptions: LanguageClientOptions) {
 	// Create a worker. The worker main file implements the language server.
 	const serverMain = Uri.joinPath(context.extensionUri, 'server/dist/browserServerMain.js');
-	const worker = new Worker(serverMain.toString());
+	const worker = new Worker(serverMain.toString(true));
 
 	// create the language server client to communicate with the server running in the worker
 	return new LanguageClient('lsp-web-extension-sample', 'LSP Web Extension Sample', clientOptions, worker);
