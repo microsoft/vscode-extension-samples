@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "es6",
+		"target": "es2020",
 		"outDir": "dist",
 		"lib": [
 			"es6", "WebWorker"

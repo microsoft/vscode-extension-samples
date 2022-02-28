@@ -1,7 +1,7 @@
 {
 	"extends": "../tsconfig.base.json",
 	"compilerOptions": {
-		"target": "es2017",
+		"target": "es2020",
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"sourceMap": true,

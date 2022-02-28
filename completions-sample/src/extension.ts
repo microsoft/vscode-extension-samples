@@ -18,7 +18,9 @@ export function activate(context: vscode.ExtensionContext) {
 			// honored by the editor.
 			const snippetCompletion = new vscode.CompletionItem('Good part of the day');
 			snippetCompletion.insertText = new vscode.SnippetString('Good ${1|morning,afternoon,evening|}. It is ${1}, right?');
-			snippetCompletion.documentation = new vscode.MarkdownString("Inserts a snippet that lets you select the _appropriate_ part of the day for your greeting.");
+			const docs : any = new vscode.MarkdownString("Inserts a snippet that lets you select [link](x.ts).");
+			snippetCompletion.documentation = docs;
+			docs.baseUri = vscode.Uri.parse('http://example.com/a/b/c/');
 
 			// a completion item that can be accepted by a commit character,
 			// the `commitCharacters`-property is set which means that the completion will
