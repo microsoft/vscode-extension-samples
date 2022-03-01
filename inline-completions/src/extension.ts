@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+// Try it out in `playground.js`
+
 export function activate(context: vscode.ExtensionContext) {
 	const disposable = vscode.commands.registerCommand(
 		'extension.inline-completion-settings',
