@@ -11,7 +11,7 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.55.0"
+		"vscode": "^1.63.0"
 	},
 	"categories": [
 		"Other"
@@ -40,22 +40,22 @@
 	},
 	"devDependencies": {
 		"@types/node": "^14.17.0",
-		"@types/vscode": "^1.55.0",
-		"@typescript-eslint/eslint-plugin": "^4.29.0",
-		"@typescript-eslint/parser": "^4.29.0",
+		"@types/vscode": "^1.63.0",
+		"@typescript-eslint/eslint-plugin": "^5.13.0",
+		"@typescript-eslint/parser": "^5.13.0",
 		"del": "^6.0.0",
-		"eslint": "^7.32.0",
+		"eslint": "^8.10.0",
 		"event-stream": "^4.0.1",
 		"gulp": "^4.0.2",
-		"gulp-filter": "^5.1.0",
-		"gulp-sourcemaps": "^2.6.5",
+		"gulp-filter": "^7.0.0",
+		"gulp-sourcemaps": "^3.0.0",
 		"gulp-typescript": "^5.0.1",
 		"run-sequence": "^2.2.1",
-		"typescript": "^4.5.5",
-		"vsce": "^1.96.1",
-		"vscode-nls-dev": "^3.3.2"
+		"typescript": "^4.6.2",
+		"vsce": "^2.6.7",
+		"vscode-nls-dev": "^4.0.0"
 	},
 	"dependencies": {
-		"vscode-nls": "^3.2.5"
+		"vscode-nls": "^5.0.0"
 	}
 }

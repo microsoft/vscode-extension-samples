@@ -29,7 +29,7 @@ See the demo.gif file in this repository for a screencast.
 
 ## How to translate our extension
 
-VS Code itself uses [Transifex](https://www.transifex.com/) to manage its translations. This might be an option for your extension as well, however none of the nls tooling provided by `vscode-nls` or `vscode-nls-dev` requires Transifex as its translation platform. So you are free to choose a different one.
+VS Code doesn't recommend a translation platform. None of the nls tooling provided by `vscode-nls` or `vscode-nls-dev` requires a specific translation platform. So you are free to choose the one you like.
 
 ## What happens behind the scenes
 
