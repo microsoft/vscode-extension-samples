@@ -9,67 +9,46 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(disposable);
+	let someTrackingIdCounter = 0;
 
-	const allSuggestions = [
-		'helloworld1',
-		`if (n < 2) {
-	return 1;
-}
-return fib(n - 1) + fib(n - 2);`,
-		`if (n < 3) {
-	if (n < 2) {
-		return 1;
-	}
-	return 1;
-}
-return fib(n - 1) + fib(n - 2);`,
-	];
-
-	function longestSuffixPrefixLength(a: string, b: string): number {
-		for (let i = Math.min(a.length, b.length); i > 0; i--) {
-			if (a.substr(-i) == b.substr(0, i)) {
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	interface CustomInlineCompletionItem extends vscode.InlineCompletionItem {
-		trackingId: string;
-	}
-
-	const provider: vscode.InlineCompletionItemProvider<CustomInlineCompletionItem> = {
+	const provider: vscode.InlineCompletionItemProvider = {
 		provideInlineCompletionItems: async (document, position, context, token) => {
-			const textBeforeCursor = document.getText(
-				new vscode.Range(position.with(undefined, 0), position)
-			);
+			console.log('provideInlineCompletionItems triggered');
 
-			const suggestions = [...allSuggestions];
-
-			if (context.triggerKind === vscode.InlineCompletionTriggerKind.Explicit) {
-				suggestions.push('if (n < 1000) {\n}', 'helloworld2');
-				await new Promise((r) => setTimeout(r, 1000));
+			const regexp = /\/\/ \[(.+),(.+)\)\:(.*)/;
+			if (position.line <= 0) {
+				return;
 			}
 
-			const items = new Array<CustomInlineCompletionItem>();
-			for (const s of suggestions) {
-				const l = longestSuffixPrefixLength(textBeforeCursor, s);
-				if (l > 0) {
-					items.push({
-						text: s,
-						range: new vscode.Range(position.translate(0, -l), position),
-						trackingId: 'some-id',
-					});
-				}
+			const lineBefore = document.lineAt(position.line - 1).text;
+			const matches = lineBefore.match(regexp);
+			if (matches) {
+				const start = matches[1];
+				const startInt = parseInt(start, 10);
+				const end = matches[2];
+				const endInt =
+					end === '*' ? document.lineAt(position.line).text.length : parseInt(end, 10);
+				const text = matches[3].replace(/\\n/g, '\n');
+
+				return [
+					{
+						text,
+						range: new vscode.Range(position.line, startInt, position.line, endInt),
+						someTrackingId: someTrackingIdCounter++,
+					},
+				] as MyInlineCompletionItem[];
 			}
-			return { items };
 		},
 	};
 
-	vscode.languages.registerInlineCompletionItemProvider({ pattern: "**" }, provider);
+	vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, provider);
 
 	// Be aware that the API around `getInlineCompletionItemController` will not be finalized as is!
-	vscode.window.getInlineCompletionItemController(provider).onDidShowCompletionItem(e => {
-		const id = e.completionItem.trackingId;
+	vscode.window.getInlineCompletionItemController(provider).onDidShowCompletionItem((e) => {
+		const id = (e.completionItem as MyInlineCompletionItem).someTrackingId;
 	});
+}
+
+interface MyInlineCompletionItem extends vscode.InlineCompletionItem {
+	someTrackingId: number;
 }
