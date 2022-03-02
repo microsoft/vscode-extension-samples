@@ -38,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Drag and Drop proposed API sample
 	// This check is for older versions of VS Code that don't have the most up-to-date tree drag and drop API proposal.
-	if (typeof vscode.TreeDataTransferItem === 'function') {
+	if (typeof vscode.DataTransferItem === 'function') {
 		new TestViewDragAndDrop(context);
 	}
 }
