@@ -5,6 +5,39 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 
+let sharedState = '';
+
+export function command(workspaceRoot: string) {
+	console.log('command:', workspaceRoot);
+	const flavor = '32';
+	const flags = ['incremental'];
+
+	const definition = {
+		type: CustomBuildTaskProvider.CustomBuildScriptType,
+		flavor,
+		flags,
+	};
+
+	vscode.tasks.executeTask(
+		new vscode.Task(
+			definition,
+			vscode.TaskScope.Workspace,
+			`${flavor} ${flags.join(' ')}`,
+			CustomBuildTaskProvider.CustomBuildScriptType,
+			new vscode.CustomExecution(async (): Promise<vscode.Pseudoterminal> => {
+				// When the task is executed, this callback will run. Here, we setup for running the task.
+				return new CustomBuildTaskTerminal(
+					workspaceRoot,
+					flavor,
+					flags,
+					() => sharedState + ' command',
+					(state: string) => (sharedState = state)
+				);
+			})
+		)
+	);
+}
+
 interface CustomBuildTaskDefinition extends vscode.TaskDefinition {
 	/**
 	 * The build flavor. Should be either '32' or '64'.
@@ -21,24 +54,30 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 	static CustomBuildScriptType = 'custombuildscript';
 	private tasks: vscode.Task[] | undefined;
 
-	// We use a CustomExecution task when state needs to be shared across runs of the task or when 
+	// We use a CustomExecution task when state needs to be shared across runs of the task or when
 	// the task requires use of some VS Code API to run.
-	// If you don't need to share state between runs and if you don't need to execute VS Code API in your task, 
+	// If you don't need to share state between runs and if you don't need to execute VS Code API in your task,
 	// then a simple ShellExecution or ProcessExecution should be enough.
 	// Since our build has this shared state, the CustomExecution is used below.
 	private sharedState: string | undefined;
 
-	constructor(private workspaceRoot: string) { }
+	constructor(private workspaceRoot: string) {}
 
 	public async provideTasks(): Promise<vscode.Task[]> {
+		console.log('provideTasks');
 		return this.getTasks();
 	}
 
 	public resolveTask(_task: vscode.Task): vscode.Task | undefined {
+		console.log('resolveTask');
 		const flavor: string = _task.definition.flavor;
 		if (flavor) {
 			const definition: CustomBuildTaskDefinition = <any>_task.definition;
-			return this.getTask(definition.flavor, definition.flags ? definition.flags : [], definition);
+			return this.getTask(
+				definition.flavor,
+				definition.flags ? definition.flags : [],
+				definition
+			);
 		}
 		return undefined;
 	}
@@ -53,27 +92,43 @@ export class CustomBuildTaskProvider implements vscode.TaskProvider {
 		const flags: string[][] = [['watch', 'incremental'], ['incremental'], []];
 
 		this.tasks = [];
-		flavors.forEach(flavor => {
-			flags.forEach(flagGroup => {
+		flavors.forEach((flavor) => {
+			flags.forEach((flagGroup) => {
 				this.tasks!.push(this.getTask(flavor, flagGroup));
 			});
 		});
 		return this.tasks;
 	}
 
-	private getTask(flavor: string, flags: string[], definition?: CustomBuildTaskDefinition): vscode.Task {
+	private getTask(
+		flavor: string,
+		flags: string[],
+		definition?: CustomBuildTaskDefinition
+	): vscode.Task {
 		if (definition === undefined) {
 			definition = {
 				type: CustomBuildTaskProvider.CustomBuildScriptType,
 				flavor,
-				flags
+				flags,
 			};
 		}
-		return new vscode.Task(definition, vscode.TaskScope.Workspace, `${flavor} ${flags.join(' ')}`,
-			CustomBuildTaskProvider.CustomBuildScriptType, new vscode.CustomExecution(async (): Promise<vscode.Pseudoterminal> => {
+
+		return new vscode.Task(
+			definition,
+			vscode.TaskScope.Workspace,
+			`${flavor} ${flags.join(' ')}`,
+			CustomBuildTaskProvider.CustomBuildScriptType,
+			new vscode.CustomExecution(async (): Promise<vscode.Pseudoterminal> => {
 				// When the task is executed, this callback will run. Here, we setup for running the task.
-				return new CustomBuildTaskTerminal(this.workspaceRoot, flavor, flags, () => this.sharedState, (state: string) => this.sharedState = state);
-			}));
+				return new CustomBuildTaskTerminal(
+					this.workspaceRoot,
+					flavor,
+					flags,
+					() => this.sharedState + ' getTask',
+					(state: string) => (this.sharedState = state)
+				);
+			})
+		);
 	}
 }
 
@@ -85,8 +140,13 @@ class CustomBuildTaskTerminal implements vscode.Pseudoterminal {
 
 	private fileWatcher: vscode.FileSystemWatcher | undefined;
 
-	constructor(private workspaceRoot: string, private flavor: string, private flags: string[], private getSharedState: () => string | undefined, private setSharedState: (state: string) => void) {
-	}
+	constructor(
+		private workspaceRoot: string,
+		private flavor: string,
+		private flags: string[],
+		private getSharedState: () => string | undefined,
+		private setSharedState: (state: string) => void
+	) {}
 
 	open(initialDimensions: vscode.TerminalDimensions | undefined): void {
 		// At this point we can start using the terminal.
@@ -113,23 +173,30 @@ class CustomBuildTaskTerminal implements vscode.Pseudoterminal {
 			let isIncremental = this.flags.indexOf('incremental') > -1;
 			if (isIncremental) {
 				if (this.getSharedState()) {
-					this.writeEmitter.fire('Using last build results: ' + this.getSharedState() + '\r\n');
+					this.writeEmitter.fire(
+						'Using last build results: ' + this.getSharedState() + '\r\n'
+					);
 				} else {
 					isIncremental = false;
-					this.writeEmitter.fire('No result from last build. Doing full build.\r\n');
+					this.writeEmitter.fire(
+						'No result from last build. Doing full build.\r\n'
+					);
 				}
 			}
 
 			// Since we don't actually build anything in this example set a timeout instead.
-			setTimeout(() => {
-				const date = new Date();
-				this.setSharedState(date.toTimeString() + ' ' + date.toDateString());
-				this.writeEmitter.fire('Build complete.\r\n\r\n');
-				if (this.flags.indexOf('watch') === -1) {
-					this.closeEmitter.fire(0);
-					resolve();
-				}
-			}, isIncremental ? 1000 : 4000);
+			setTimeout(
+				() => {
+					const date = new Date();
+					this.setSharedState(date.toTimeString() + ' ' + date.toDateString());
+					this.writeEmitter.fire('Build complete.\r\n\r\n');
+					if (this.flags.indexOf('watch') === -1) {
+						this.closeEmitter.fire(0);
+						resolve();
+					}
+				},
+				isIncremental ? 1000 : 4000
+			);
 		});
 	}
 }

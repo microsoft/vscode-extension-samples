@@ -4,20 +4,30 @@
  *--------------------------------------------------------------------------------------------*/
 import * as vscode from 'vscode';
 import { RakeTaskProvider } from './rakeTaskProvider';
-import { CustomBuildTaskProvider } from './customTaskProvider';
+import { CustomBuildTaskProvider, command } from './customTaskProvider';
 
 let rakeTaskProvider: vscode.Disposable | undefined;
 let customTaskProvider: vscode.Disposable | undefined;
 
 export function activate(_context: vscode.ExtensionContext): void {
-	const workspaceRoot = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
-		? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
+	const workspaceRoot =
+		vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length > 0
+			? vscode.workspace.workspaceFolders[0].uri.fsPath
+			: undefined;
 	if (!workspaceRoot) {
 		return;
 	}
-		
-	rakeTaskProvider = vscode.tasks.registerTaskProvider(RakeTaskProvider.RakeType, new RakeTaskProvider(workspaceRoot));
-	customTaskProvider = vscode.tasks.registerTaskProvider(CustomBuildTaskProvider.CustomBuildScriptType, new CustomBuildTaskProvider(workspaceRoot));
+
+	rakeTaskProvider = vscode.tasks.registerTaskProvider(
+		RakeTaskProvider.RakeType,
+		new RakeTaskProvider(workspaceRoot)
+	);
+	customTaskProvider = vscode.tasks.registerTaskProvider(
+		CustomBuildTaskProvider.CustomBuildScriptType,
+		new CustomBuildTaskProvider(workspaceRoot)
+	);
+
+	vscode.commands.registerCommand('run-custom-task', () => command(workspaceRoot));
 }
 
 export function deactivate(): void {

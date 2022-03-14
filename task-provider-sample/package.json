@@ -17,10 +17,18 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:workbench.action.tasks.runTask"
+		"*"
 	],
 	"main": "./out/extension",
 	"contributes": {
+		"commands": [
+			{
+				"command": "run-custom-task",
+				"title": "Custom task",
+				"category": "Example",
+				"icon": "$(add)"
+			}
+		],
 		"taskDefinitions": [
 			{
 				"type": "rake",
