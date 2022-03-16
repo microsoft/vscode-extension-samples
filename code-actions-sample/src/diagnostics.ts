@@ -32,7 +32,7 @@ export function refreshDiagnostics(doc: vscode.TextDocument, emojiDiagnostics: v
 }
 
 function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.TextLine, lineIndex: number): vscode.Diagnostic {
-	// find where in the line of thet the 'emoji' is mentioned
+	// find where in the line of that the 'emoji' is mentioned
 	const index = lineOfText.text.indexOf(EMOJI);
 
 	// create range that represents, where in the document the word is
