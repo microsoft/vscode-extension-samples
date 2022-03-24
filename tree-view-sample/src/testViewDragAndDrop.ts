@@ -57,7 +57,7 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 
 	// Drag and drop controller
 
-	public async handleDrop(target: Node, sources: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
+	public async handleDrop(target: Node | undefined, sources: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
 		const transferItem = sources.get('application/vnd.code.tree.testViewDragAndDrop');
 		if (!transferItem) {
 			return;
@@ -80,7 +80,10 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 
 	// Helper methods
 
-	_isChild(node: Node, child: Node): boolean {
+	_isChild(node: Node, child: Node | undefined): boolean {
+		if (!child) {
+			return false;
+		}
 		for (const prop in node) {
 			if (prop === child.key) {
 				return true;
@@ -112,12 +115,12 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	}
 
 	// Remove node from current position and add node to new target element
-	_reparentNode(node: Node, target: Node): void {
+	_reparentNode(node: Node, target: Node | undefined): void {
 		const element = {};
 		element[node.key] = this._getTreeElement(node.key);
 		const elementCopy = { ...element };
 		this._removeNode(node);
-		const targetElement = this._getTreeElement(target.key);
+		const targetElement = this._getTreeElement(target?.key);
 		if (Object.keys(element).length === 0) {
 			targetElement[node.key] = {};
 		} else {
@@ -166,7 +169,10 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		};
 	}
 
-	_getTreeElement(element: string, tree?: any): Node {
+	_getTreeElement(element: string | undefined, tree?: any): any {
+		if (!element) {
+			return this.tree;
+		}
 		const currentNode = tree ?? this.tree;
 		for (const prop in currentNode) {
 			if (prop === element) {
