@@ -19,7 +19,7 @@
         "urlFilter": "*notebookRenderer*"
       },
       "trace": true,
-      "preLaunchTask": "npm: dev"
+      "preLaunchTask": "NPM dev in background"
     },
     {
       "name": "Run Extension (no server)",
@@ -32,7 +32,7 @@
         "${workspaceFolder}/out/**/*.js"
       ],
       "debugWebviews": true,
-      "preLaunchTask": "npm: watch"
+      "preLaunchTask": "NPM watch in background"
     },
     {
       "name": "Extension Tests",

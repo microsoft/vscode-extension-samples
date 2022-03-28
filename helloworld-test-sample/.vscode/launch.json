@@ -12,7 +12,7 @@
 			"runtimeExecutable": "${execPath}",
 			"args": ["--extensionDevelopmentPath=${workspaceFolder}"],
 			"outFiles": ["${workspaceFolder}/out/**/*.js"],
-			"preLaunchTask": "npm: watch"
+			"preLaunchTask": "NPM watch in background"
 		},
 		{
 			"name": "Run Extension Tests",
@@ -24,7 +24,7 @@
 				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
 			],
 			"outFiles": ["${workspaceFolder}/out/test/**/*.js"],
-			"preLaunchTask": "npm: watch"
+			"preLaunchTask": "NPM watch in background"
 		}
 	]
 }

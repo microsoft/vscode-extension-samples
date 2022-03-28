@@ -4,6 +4,7 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "NPM watch in background",
 			"type": "npm",
 			"script": "watch",
 			"problemMatcher": "$tsc-watch",

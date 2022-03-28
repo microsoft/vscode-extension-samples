@@ -16,6 +16,7 @@
 			]
 		},
 		{
+			"label": "NPM watch-web in background",
 			"type": "npm",
 			"script": "watch-web",
 			"group": "build",

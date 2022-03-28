@@ -17,7 +17,7 @@
             "outFiles": [
                 "${workspaceRoot}/out/src/**/*.js"
             ],
-            "preLaunchTask": "npm: watch"
+            "preLaunchTask": "NPM watch in background"
         },
         {
             "type": "node",
