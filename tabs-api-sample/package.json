@@ -19,6 +19,17 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration":{
+			"title": "Tabs API Sample",
+			"id": "tabsSample",
+			"properties": {
+				"tabs.maxInactiveTime": {
+					"default": 30,
+					"description": "The number of seconds before closing inactive tabs",
+					"type": "number"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
