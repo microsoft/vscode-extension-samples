@@ -171,7 +171,7 @@ class CatCodingPanel {
 		const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, 'media', 'main.js');
 
 		// And the uri we use to load this script in the webview
-		const scriptUri = (scriptPathOnDisk).with({ 'scheme': 'vscode-resource' });
+		const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
 
 		// Local path to css styles
 		const styleResetPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css');
