@@ -4,7 +4,7 @@
   "description": "Uri Handler Sample",
   "version": "0.0.1",
   "private": true,
-	"license": "MIT",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.46.0"
   },
@@ -48,6 +48,6 @@
     "eslint": "^7.15.0",
     "glob": "^7.1.6",
     "mocha": "^8.1.3",
-    "typescript": "^4.5.5"
+    "typescript": "^4.6.3"
   }
 }
