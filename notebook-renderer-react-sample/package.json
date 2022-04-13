@@ -28,7 +28,7 @@
     "compile": "npm run compile:extension && npm run compile:client",
     "compile:extension": "tsc -b",
     "compile:client": "webpack --mode production",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint src --ext .ts,.tsx",
     "watch": "concurrently -r \"npm:watch:*\"",
     "watch:extension": "tsc -b --watch",
     "watch:client": "webpack --mode development --watch",
