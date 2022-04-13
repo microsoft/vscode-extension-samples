@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 		provideInlineCompletionItems: async (document, position, context, token) => {
 			console.log('provideInlineCompletionItems triggered');
 
-			const regexp = /\/\/ \[(.+),(.+)\)\:(.*)/;
+			const regexp = /\/\/ \[(.+),(.+)\):(.*)/;
 			if (position.line <= 0) {
 				return;
 			}

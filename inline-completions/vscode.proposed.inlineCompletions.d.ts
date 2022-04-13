@@ -146,7 +146,6 @@ declare module 'vscode' {
 		/**
 		 * Is fired when an inline completion item is shown to the user.
 		 */
-		// eslint-disable-next-line vscode-dts-event-naming
 		readonly onDidShowCompletionItem: Event<InlineCompletionItemDidShowEvent<T>>;
 	}
 

@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 		activeEditor.setDecorations(largeNumberDecorationType, largeNumbers);
 	}
 
-	function triggerUpdateDecorations(throttle: boolean = false) {
+	function triggerUpdateDecorations(throttle = false) {
 		if (timeout) {
 			clearTimeout(timeout);
 			timeout = undefined;
