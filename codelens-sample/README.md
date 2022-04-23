@@ -7,7 +7,7 @@ It is not intended as a production quality extension.
 - Create a new file
 - Write anything
 - Click on the CodeLens for action example
-- Can be enabled or disabled by command palete
+- Can be enabled or disabled by command palette
 
 ## Demo
 
