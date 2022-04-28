@@ -1,5 +1,9 @@
 import * as vscode from 'vscode';
 
+import * as os from 'os';
+import * as path from 'path';
+import * as fs from 'fs';
+
 
 
 export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscode.TreeDragAndDropController<Node> {
@@ -75,7 +79,13 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	}
 
 	public async handleDrag(source: Node[], treeDataTransfer: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
-		treeDataTransfer.set('application/vnd.code.tree.testViewDragAndDrop', new vscode.DataTransferItem(source));
+        const dir = os.tmpdir();
+        const filePath1 = vscode.Uri.file(path.join(dir, 'tree-drag-and-drop-1.md'));
+        fs.writeFileSync(filePath1.fsPath, '# Hello from tree drag and drop 1');
+        // const filePath2 = vscode.Uri.file(path.join(dir, 'tree-drag-and-drop-2.md'));
+        // fs.writeFileSync(filePath2.fsPath, '# Hello from tree drag and drop 2');
+        const text = [filePath1 /*, filePath2 */ ].map(uri => uri.toString()).join('\n');
+		treeDataTransfer.set('text/uri-list', new vscode.DataTransferItem(text));
 	}
 
 	// Helper methods
