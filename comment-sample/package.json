@@ -11,9 +11,8 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.35.0"
+		"vscode": "^1.65.0"
 	},
-	"enableProposedApi": true,
 	"categories": [
 		"Other"
 	],
@@ -161,7 +160,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^12.12.0",
-		"@types/vscode": "^1.35.0",
+		"@types/vscode": "~1.65.0",
 		"@typescript-eslint/eslint-plugin": "^5.19.0",
 		"@typescript-eslint/parser": "^5.19.0",
 		"eslint": "^8.13.0",

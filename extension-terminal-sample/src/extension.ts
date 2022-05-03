@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 				writeEmitter.fire(data);
 			}
 		};
-		const terminal = (<any>vscode.window).createTerminal({ name: `My Extension REPL`, pty });
+		const terminal = vscode.window.createTerminal({ name: `My Extension REPL`, pty });
 		terminal.show();
 	}));
 
