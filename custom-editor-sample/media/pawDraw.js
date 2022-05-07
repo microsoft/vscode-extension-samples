@@ -240,16 +240,14 @@
 						return;
 					} else {
 						// Load the initial image into the canvas.
-						const data = new Uint8Array(body.value.data);
-						await editor.reset(data);
+						await editor.reset(body.value);
 						return;
 					}
 				}
 			case 'update':
 				{
-					const data = body.content ? new Uint8Array(body.content.data) : undefined;
 					const strokes = body.edits.map(edit => new Stroke(edit.color, edit.stroke));
-					await editor.reset(data, strokes)
+					await editor.reset(body.content, strokes)
 					return;
 				}
 			case 'getFileData':
