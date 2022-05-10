@@ -34,7 +34,7 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 		if (uri.scheme === 'untitled') {
 			return new Uint8Array();
 		}
-		return vscode.workspace.fs.readFile(uri);
+		return new Uint8Array(await vscode.workspace.fs.readFile(uri));
 	}
 
 	private readonly _uri: vscode.Uri;
