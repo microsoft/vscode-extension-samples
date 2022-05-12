@@ -30,11 +30,11 @@ export function activate(context: vscode.ExtensionContext) {
 				const end = matches[2];
 				const endInt =
 					end === '*' ? document.lineAt(position.line).text.length : parseInt(end, 10);
-				const text = matches[3].replace(/\\n/g, '\n');
+				const insertText = matches[3].replace(/\\n/g, '\n');
 
 				return [
 					{
-						text,
+						insertText,
 						range: new vscode.Range(position.line, startInt, position.line, endInt),
 						someTrackingId: someTrackingIdCounter++,
 					},
@@ -45,10 +45,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, provider);
 
-	// Be aware that the API around `getInlineCompletionItemController` will not be finalized as is!
-	vscode.window.getInlineCompletionItemController(provider).onDidShowCompletionItem((e) => {
-		const id = (e.completionItem as MyInlineCompletionItem).someTrackingId;
-	});
 }
 
 interface MyInlineCompletionItem extends vscode.InlineCompletionItem {
