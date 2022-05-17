@@ -137,7 +137,7 @@ const samples = [
   },
   {
     description: 'Product Icon Theme Sample',
-    path: 'theme-sample',
+    path: 'product-icon-theme-sample',
     guide: '/api/extension-guides/product-icon-theme',
     apis: [],
     contributions: ['productIconThemes']
