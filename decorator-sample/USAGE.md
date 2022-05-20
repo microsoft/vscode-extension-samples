@@ -47,7 +47,7 @@ while (match = regEx.exec(text)) {
     const startPos = activeEditor.document.positionAt(match.index);
     const endPos = activeEditor.document.positionAt(match.index + match[0].length);
 
-const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Number **' + match[0] + '**' };
+    const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Number **' + match[0] + '**' };
     if (match[0].length < 3) {
         smallNumbers.push(decoration);
     }
