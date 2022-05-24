@@ -9,7 +9,7 @@ const uriListMime = 'text/uri-list';
  * Note this does not apply to text that is drag and dropped with-in the current editor,
  * only for text dropped from external apps.
  */
- class ReverseTextOnDropProvider implements vscode.DocumentOnDropProvider {
+ class ReverseTextOnDropProvider implements vscode.DocumentOnDropEditProvider {
 	async provideDocumentOnDropEdits(
 		_document: vscode.TextDocument,
 		position: vscode.Position,
@@ -45,7 +45,7 @@ const uriListMime = 'text/uri-list';
  * - The operating system
  * - The open editors view 
  */
-class FileNameListOnDropProvider implements vscode.DocumentOnDropProvider {
+class FileNameListOnDropProvider implements vscode.DocumentOnDropEditProvider {
 	async provideDocumentOnDropEdits(
 		_document: vscode.TextDocument,
 		position: vscode.Position,
@@ -100,6 +100,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const selector: vscode.DocumentSelector = { language: 'plaintext' };
 
 	// Register our providers
-	context.subscriptions.push(vscode.languages.registerDocumentOnDropProvider(selector, new ReverseTextOnDropProvider()));
-	context.subscriptions.push(vscode.languages.registerDocumentOnDropProvider(selector, new FileNameListOnDropProvider()));
+	context.subscriptions.push(vscode.languages.registerDocumentOnDropEditProvider(selector, new ReverseTextOnDropProvider()));
+	context.subscriptions.push(vscode.languages.registerDocumentOnDropEditProvider(selector, new FileNameListOnDropProvider()));
 }
