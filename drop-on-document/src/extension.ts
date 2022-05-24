@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import { TextDecoder } from 'util';
 
 const uriListMime = 'text/uri-list';
 
@@ -36,6 +37,8 @@ class ReverseTextOnDropProvider implements vscode.DocumentOnDropEditProvider {
 	}
 }
 
+const decoder = new TextDecoder();
+
 /**
  * Provider that inserts a numbered list of the names of dropped files.
  * 
@@ -52,6 +55,27 @@ class FileNameListOnDropProvider implements vscode.DocumentOnDropEditProvider {
 		dataTransfer: vscode.DataTransfer,
 		token: vscode.CancellationToken
 	): Promise<vscode.DocumentDropEdit | undefined> {
+		// Insert the file contents
+		const files: vscode.DataTransferFile[] = [];
+		dataTransfer.forEach((item) => {
+			const file = item.asFile();
+			if (file) {
+				files.push(file);
+			}
+		});
+ 
+		if (files.length) {
+			const snippet = new vscode.SnippetString();
+			for (const file of files) {
+				const data = await file.data();
+				const text = decoder.decode(data);
+				const fileContentsPreview = text.slice(0, 100);
+				snippet.appendText(file.name + '—' + fileContentsPreview + '\n');
+			}
+
+			return new vscode.DocumentDropEdit(snippet);
+		}
+
 		// Check the data transfer to see if we have dropped a list of uris
 		const dataTransferItem = dataTransfer.get(uriListMime);
 		if (!dataTransferItem) {
