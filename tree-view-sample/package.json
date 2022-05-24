@@ -226,7 +226,7 @@
 	},
 	"devDependencies": {
 		"@types/mkdirp": "^0.5.2",
-		"@types/node": "^12.12.0",
+		"@types/node": "^16.11.7",
 		"@types/rimraf": "^2.0.2",
 		"@types/vscode": "^1.67.0",
 		"@typescript-eslint/eslint-plugin": "^5.19.0",

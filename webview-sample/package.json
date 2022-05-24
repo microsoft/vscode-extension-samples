@@ -42,7 +42,7 @@
 		"watch": "tsc -w -p ./"
 	},
 	"devDependencies": {
-		"@types/node": "^12.12.0",
+		"@types/node": "^16.11.7",
 		"@types/vscode": "^1.47.0",
 		"@types/vscode-webview": "^1.57.0",
 		"@typescript-eslint/eslint-plugin": "^5.19.0",

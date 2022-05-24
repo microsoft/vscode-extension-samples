@@ -60,7 +60,7 @@
 		"cowsay": "^1.5.0"
 	},
 	"devDependencies": {
-		"@types/node": "^17.0.21",
+		"@types/node": "^16.11.7",
 		"@types/vscode": "^1.32.0",
 		"@typescript-eslint/eslint-plugin": "^5.19.0",
 		"@typescript-eslint/parser": "^5.19.0",
