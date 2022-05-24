@@ -16,7 +16,7 @@ const uriListMime = 'text/uri-list';
 		dataTransfer: vscode.DataTransfer,
 		token: vscode.CancellationToken
 	): Promise<vscode.SnippetTextEdit | undefined> {
-		// Check the uri list to see if we have some kind of text data
+		// Check the data transfer to see if we have some kind of text data
 		const dataTransferItem = dataTransfer.get('text') ?? dataTransfer.get('text/plain');
 		if (!dataTransferItem) {
 			return undefined;
