@@ -1,9 +1,11 @@
+import { TextDecoder } from 'util';
 import * as vscode from 'vscode';
 
+const decoder = new TextDecoder();
 
 
 export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscode.TreeDragAndDropController<Node> {
-	dropMimeTypes = ['application/vnd.code.tree.testViewDragAndDrop'];
+	dropMimeTypes = ['application/vnd.code.tree.testViewDragAndDrop', 'text/uri-list'];
 	dragMimeTypes = ['text/uri-list'];
 	private _onDidChangeTreeData: vscode.EventEmitter<Node[] | undefined> = new vscode.EventEmitter<Node[] | undefined>();
 	// We want to use an array as the event type, but the API for this is currently being finalized. Until it's finalized, use any.
@@ -58,6 +60,25 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	// Drag and drop controller
 
 	public async handleDrop(target: Node | undefined, sources: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
+		// Insert the file contents
+		const files: vscode.DataTransferFile[] = [];
+		sources.forEach((item) => {
+			const file = item.asFile();
+			if (file) {
+				files.push(file);
+			}
+		});
+
+
+		for (const file of files) {
+			const data = await file.data();
+			const text = decoder.decode(data);
+			const fileContentsPreview = text.slice(0, 100);
+			console.log(file.name + ' — ' + fileContentsPreview + '\n');
+		}
+
+
+
 		const transferItem = sources.get('application/vnd.code.tree.testViewDragAndDrop');
 		if (!transferItem) {
 			return;

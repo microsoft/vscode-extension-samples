@@ -70,7 +70,7 @@ class FileNameListOnDropProvider implements vscode.DocumentOnDropEditProvider {
 				const data = await file.data();
 				const text = decoder.decode(data);
 				const fileContentsPreview = text.slice(0, 100);
-				snippet.appendText(file.name + '—' + fileContentsPreview + '\n');
+				snippet.appendText(file.name + ' — ' + fileContentsPreview + '\n');
 			}
 
 			return new vscode.DocumentDropEdit(snippet);

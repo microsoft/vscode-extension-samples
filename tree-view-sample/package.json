@@ -16,6 +16,9 @@
 	"categories": [
 		"Other"
 	],
+	"enabledApiProposals": [
+		"dataTransferFiles"
+	],
 	"activationEvents": [
 		"onView:nodeDependencies",
 		"onView:ftpExplorer",
