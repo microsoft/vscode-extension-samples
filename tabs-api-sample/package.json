@@ -1,5 +1,4 @@
 {
-	"enabledApiProposals": ["tabs"],
 	"name": "tabs-api-sample",
 	"displayName": "tabs-api-sample",
 	"description": "Sample showing how to use the tabs api",
@@ -20,7 +19,7 @@
 	"main": "./out/extension.js",
 	"browser": "./out/extension.js",
 	"contributes": {
-		"configuration":{
+		"configuration": {
 			"title": "Tabs API Sample",
 			"id": "tabsSample",
 			"properties": {
@@ -36,17 +35,14 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint . --ext .ts,.tsx",
-		"watch": "tsc -watch -p ./",
-		"download-api": "vscode-dts dev",
-		"postdownload-api": "vscode-dts main",
-		"postinstall": "npm run download-api"
+		"watch": "tsc -watch -p ./"
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
+		"@types/vscode": "^1.67.0",
 		"@typescript-eslint/eslint-plugin": "^5.17.0",
 		"@typescript-eslint/parser": "^5.17.0",
 		"eslint": "^8.12.0",
-		"typescript": "^4.6.3",
-		"vscode-dts": "^0.3.3"
+		"typescript": "^4.6.3"
 	}
 }

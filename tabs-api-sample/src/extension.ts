@@ -17,11 +17,11 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 	context.subscriptions.push(vscode.window.tabGroups.onDidChangeTabs(tabChangeEvent => {
 		// If tabs are closed no longer track their activity
-		for (const removedTab of tabChangeEvent.removed) {
+		for (const removedTab of tabChangeEvent.closed) {
 			activityMap.delete(removedTab);
 		}
 		// Update activity map last active time on changed tabs
-		const changedTabs = [...tabChangeEvent.added, ...tabChangeEvent.changed];
+		const changedTabs = [...tabChangeEvent.opened, ...tabChangeEvent.changed];
 		for (const tab of changedTabs) {
 			// Reset the timer for the tabs last activity
 			activityMap.set(tab, Date.now());

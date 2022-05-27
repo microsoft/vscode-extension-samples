@@ -1,6 +1,6 @@
 # Tabs API Sample
 
-This sample demonstrates usage of [the tabs api](https://code.visualstudio.com/api/advanced-topics/using-proposed-api). This sample utilizes the tabs API to create a simple tab cleaner. Tabs will be closed after a configurable amount of inactivity. This threshold can be set via the `tabs.maxInactiveTime` setting.
+This sample demonstrates usage of [the tabs api](https://code.visualstudio.com/api/references/vscode-api#Tab) . This sample utilizes the tabs API to create a simple tab cleaner. Tabs will be closed after a configurable amount of inactivity. This threshold can be set via the `tabs.maxInactiveTime` setting.
 
 ## VS Code API
 
