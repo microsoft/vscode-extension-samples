@@ -20,6 +20,12 @@
         "command": "vscode-authenticationprovider-sample.login",
         "title": "Login with Azure DevOps"
       }
+    ],
+    "authentication": [
+      {
+        "id": "azuredevopspat",
+        "label": "Azure DevOps PAT"
+      }
     ]
   },
   "scripts": {
