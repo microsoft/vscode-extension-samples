@@ -1,0 +1,48 @@
+{
+	"name": "tabs-api-sample",
+	"displayName": "tabs-api-sample",
+	"description": "Sample showing how to use the tabs api",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples",
+	"engines": {
+		"vscode": "^1.67.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onStartupFinished"
+	],
+	"main": "./out/extension.js",
+	"browser": "./out/extension.js",
+	"contributes": {
+		"configuration": {
+			"title": "Tabs API Sample",
+			"id": "tabsSample",
+			"properties": {
+				"tabs.maxInactiveTime": {
+					"default": 30,
+					"description": "The number of seconds before closing inactive tabs",
+					"type": "number"
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint . --ext .ts,.tsx",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/node": "^16.11.7",
+		"@types/vscode": "^1.67.0",
+		"@typescript-eslint/eslint-plugin": "^5.17.0",
+		"@typescript-eslint/parser": "^5.17.0",
+		"eslint": "^8.12.0",
+		"typescript": "^4.6.3"
+	}
+}
