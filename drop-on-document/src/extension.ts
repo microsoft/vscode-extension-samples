@@ -9,13 +9,13 @@ const uriListMime = 'text/uri-list';
  * Note this does not apply to text that is drag and dropped with-in the current editor,
  * only for text dropped from external apps.
  */
- class ReverseTextOnDropProvider implements vscode.DocumentOnDropEditProvider {
+class ReverseTextOnDropProvider implements vscode.DocumentOnDropEditProvider {
 	async provideDocumentOnDropEdits(
 		_document: vscode.TextDocument,
 		position: vscode.Position,
 		dataTransfer: vscode.DataTransfer,
 		token: vscode.CancellationToken
-	): Promise<vscode.SnippetTextEdit | undefined> {
+	): Promise<vscode.DocumentDropEdit | undefined> {
 		// Check the data transfer to see if we have some kind of text data
 		const dataTransferItem = dataTransfer.get('text') ?? dataTransfer.get('text/plain');
 		if (!dataTransferItem) {
@@ -32,7 +32,7 @@ const uriListMime = 'text/uri-list';
 		// Adding the reversed text
 		snippet.appendText([...text].reverse().join(''));
 
-		return new vscode.SnippetTextEdit(new vscode.Range(position, position), snippet);
+		return { insertText: snippet };
 	}
 }
 
@@ -51,7 +51,7 @@ class FileNameListOnDropProvider implements vscode.DocumentOnDropEditProvider {
 		position: vscode.Position,
 		dataTransfer: vscode.DataTransfer,
 		token: vscode.CancellationToken
-	): Promise<vscode.SnippetTextEdit | undefined> {
+	): Promise<vscode.DocumentDropEdit | undefined> {
 		// Check the data transfer to see if we have dropped a list of uris
 		const dataTransferItem = dataTransfer.get(uriListMime);
 		if (!dataTransferItem) {
@@ -90,7 +90,7 @@ class FileNameListOnDropProvider implements vscode.DocumentOnDropEditProvider {
 			}
 		});
 
-		return new vscode.SnippetTextEdit(new vscode.Range(position, position), snippet);
+		return { insertText: snippet };
 	}
 }
 
