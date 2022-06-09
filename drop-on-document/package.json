@@ -14,7 +14,7 @@
 		"textEditorDrop"
 	],
 	"engines": {
-		"vscode": "^1.67.0"
+		"vscode": "^1.69.0"
 	},
 	"categories": [
 		"Other"
