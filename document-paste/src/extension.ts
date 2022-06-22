@@ -25,7 +25,7 @@ class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 		dataTransfer: vscode.DataTransfer,
 		_token: vscode.CancellationToken
 	): Promise<vscode.DocumentPasteEdit | undefined> {
-		const countDataTransferItem = dataTransfer.get(this.countMimeTypes)
+		const countDataTransferItem = dataTransfer.get(this.countMimeTypes);
 		if (!countDataTransferItem) {
 			return undefined;
 		}
@@ -42,7 +42,7 @@ class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 		const snippet = new vscode.SnippetString();
 		snippet.appendText(`(copy #${count}) ${text}`);
 
-		return { insertText: snippet }
+		return { insertText: snippet };
 	}
 }
 
