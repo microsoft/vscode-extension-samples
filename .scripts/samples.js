@@ -246,6 +246,20 @@ const samples = [
     apis: [],
     contributions: []
   },
+  {
+    description: 'notebook-renderer-sample',
+    path: 'notebook-renderer-sample',
+    guide: "/api/extension-guides/notebook#notebook-renderer",
+    apis: [],
+    contributions: ["notebookRenderer"]
+  },
+  {
+    description: 'notebook-extend-markdown-renderer-sample',
+    path: 'notebook-extend-markdown-renderer-sample',
+    guide: "/api/extension-guides/notebook#notebook-renderer",
+    apis: [],
+    contributions: ["notebookRenderer"]
+  },
   { description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
   { description: 'contentprovider-sample', excludeFromReadme: true, path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
   { description: 'nodefs-provider-sample', excludeFromReadme: true, path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
@@ -258,7 +272,6 @@ const samples = [
   { description: 'helloworld-test-sample', excludeFromReadme: true, path: 'helloworld-test-sample', guide: null, apis: [], contributions: [] },
   { description: 'helloworld-web-sample', excludeFromReadme: true, path: 'helloworld-web-sample', guide: null, apis: [], contributions: [] },
   { description: 'inline-completions', excludeFromReadme: true, path: 'inline-completions', guide: null, apis: [], contributions: [] },
-  { description: 'notebook-renderer-sample', excludeFromReadme: true, path: 'notebook-renderer-sample', guide: null, apis: [], contributions: [] },
   { description: 'notebook-renderer-react-sample', excludeFromReadme: true, path: 'notebook-renderer-react-sample', guide: null, apis: [], contributions: [] },
   { description: 'proposed-api-sample', excludeFromReadme: true, path: 'proposed-api-sample', guide: null, apis: [], contributions: [] },
   { description: 'virtual-document-sample', excludeFromReadme: true, path: 'virtual-document-sample', guide: null, apis: [], contributions: [] },
