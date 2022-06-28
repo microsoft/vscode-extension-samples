@@ -4,7 +4,7 @@
  * @typedef {Object} Sample
  * @property {string} description - A readable name for the sample
  * @property {string} path - Path to the sample's root
- * @property {string | null} guide - Link to the guide on 
+ * @property {string | null} guide - Link to the guide on https://code.visualstudio.com
  * @property {string[]} apis - Listing of VS Code API that is being illustrated. For example, "TextDocumentContentProvider"
  * @property {string[]} contributions - Listing of Contribution Points that are being used. For example,
  * @property {boolean} [excludeFromReadme] - Don't generate a readme entry for this extension
