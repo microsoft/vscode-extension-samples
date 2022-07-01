@@ -14,10 +14,10 @@
   "contributes": {
     "notebookRenderer": [
       {
-        "id": "markdownItRenderer-emoji",
+        "id": "vscode-samples.markdown-it.emoji-extension",
         "displayName": "Markdown it Emoji renderer",
         "entrypoint": {
-          "extends": "markdownItRenderer",
+          "extends": "vscode.markdown-it-renderer",
           "path": "./out/emoji.js"
         }
       }
