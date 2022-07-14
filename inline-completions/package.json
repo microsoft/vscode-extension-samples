@@ -1,6 +1,6 @@
 {
 	"enabledApiProposals": [
-		"inlineCompletions"
+		"inlineCompletionsAdditions"
 	],
 	"name": "inline-completion-sample",
 	"displayName": "Inline Completion Sample",
