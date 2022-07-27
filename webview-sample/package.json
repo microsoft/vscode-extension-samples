@@ -5,6 +5,9 @@
 	"publisher": "vscode-samples",
 	"private": true,
 	"license": "MIT",
+	"enabledApiProposals": [
+		"contribWebviewContext"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
@@ -18,10 +21,23 @@
 	"activationEvents": [
 		"onCommand:catCoding.start",
 		"onCommand:catCoding.doRefactor",
+		"onCommand:catCoding.foo",
 		"onWebviewPanel:catCoding"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"menus": {
+			"webview/context": [
+				{
+					"command": "catCoding.foo",
+					"when": "webview == 'catCoding' && webviewSection == nav"
+				},
+				{
+					"command": "catCoding.doRefactor",
+					"when": "webview == 'catCoding'"
+				}
+			]
+		},
 		"commands": [
 			{
 				"command": "catCoding.start",
@@ -31,6 +47,11 @@
 			{
 				"command": "catCoding.doRefactor",
 				"title": "Do some refactoring",
+				"category": "Cat Coding"
+			},
+			{
+				"command": "catCoding.foo",
+				"title": "Do some foo",
 				"category": "Cat Coding"
 			}
 		]

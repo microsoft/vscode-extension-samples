@@ -21,6 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
 		})
 	);
 
+	context.subscriptions.push(
+		vscode.commands.registerCommand('catCoding.foo', () => {
+			if (CatCodingPanel.currentPanel) {
+				CatCodingPanel.currentPanel.doRefactor();
+			}
+		})
+	);
+
 	if (vscode.window.registerWebviewPanelSerializer) {
 		// Make sure we register a serializer in activation event
 		vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
@@ -205,6 +213,12 @@ class CatCodingPanel {
 			<body>
 				<img src="${catGifPath}" width="300" />
 				<h1 id="lines-of-code-counter">0</h1>
+				<div class="menu" data-vscode-context='{"webviewSection": "menu", "countOfThing": 123}'>
+					<h1>Menu</h1>
+					<div class="nav" data-vscode-context='{"webviewSection: "nav", "preventDefaultContextMenuItems": true}'>
+						NavNavnavNav22
+					</div>
+				</div>
 
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
