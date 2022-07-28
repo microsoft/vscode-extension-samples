@@ -61,5 +61,3 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions);
 }
-
-export function deactivate() {}
