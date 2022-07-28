@@ -12,6 +12,7 @@
 	"activationEvents": [
 		"onCommand:notifications-sample.showInfo",
 		"onCommand:notifications-sample.showWarning",
+		"onCommand:notifications-sample.showWarningWithActions",
 		"onCommand:notifications-sample.showError",
 		"onCommand:notifications-sample.showProgress"
 	],
@@ -26,6 +27,11 @@
 			{
 				"command": "notifications-sample.showWarning",
 				"title": "Show Warning Notification",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showWarningWithActions",
+				"title": "Show Warning Notification With Actions",
 				"category": "Notifications Sample"
 			},
 			{

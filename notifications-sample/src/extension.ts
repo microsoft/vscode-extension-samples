@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
+
+	// Simple notifications
 	let showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
 		vscode.window.showInformationMessage('Info Notification');
 	});
@@ -13,7 +15,47 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showErrorMessage('Error Notification');
 	});
 
-	context.subscriptions.push(showInfoNotification, showWarningNotification, showErrorNotification);
+	// Notifcation with actions
+	let showWarningNotificationWithActions = vscode.commands.registerCommand('notifications-sample.showWarningWithActions', () => {
+		vscode.window.showWarningMessage('Warning Notification With Actions', 'Action 1', 'Action 2', 'Action 3').then(selection => { selection !== undefined ?? vscode.window.showInformationMessage(`You selected: ${selection}`, { modal: true }); });
+	});
+
+	// Progress notification with option to cancel
+	let showProgressNotification = vscode.commands.registerCommand('notifications-sample.showProgress', () => {
+		vscode.window.withProgress({
+			location: vscode.ProgressLocation.Notification,
+			title: "Progress Notification",
+			cancellable: true
+		}, (progress, token) => {
+			token.onCancellationRequested(() => {
+				console.log("User canceled the long running operation");
+			});
+
+			progress.report({ increment: 0 });
+
+			setTimeout(() => {
+				progress.report({ increment: 10, message: "Still going..." });
+			}, 1000);
+
+			setTimeout(() => {
+				progress.report({ increment: 40, message: "Still going even more..." });
+			}, 2000);
+
+			setTimeout(() => {
+				progress.report({ increment: 50, message: "I am long running! - almost there..." });
+			}, 3000);
+
+			const p = new Promise<void>(resolve => {
+				setTimeout(() => {
+					resolve();
+				}, 5000);
+			});
+
+			return p;
+		});
+	});
+
+	context.subscriptions.push(showInfoNotification, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions);
 }
 
 export function deactivate() {}
