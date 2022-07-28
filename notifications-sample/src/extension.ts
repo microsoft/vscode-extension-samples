@@ -7,6 +7,10 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Info Notification');
 	});
 
+	let showInfoNotificationAsModal = vscode.commands.registerCommand('notifications-sample.showInfoAsModal', () => {
+		vscode.window.showInformationMessage('Info Notification As Modal', { modal: true });
+	});
+
 	let showWarningNotification = vscode.commands.registerCommand('notifications-sample.showWarning', () => {
 		vscode.window.showWarningMessage('Warning Notification');
 	});
@@ -55,7 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 		});
 	});
 
-	context.subscriptions.push(showInfoNotification, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions);
+	context.subscriptions.push(showInfoNotification, showInfoNotificationAsModal, showWarningNotification, showErrorNotification, showProgressNotification, showWarningNotificationWithActions);
 }
 
 export function deactivate() {}

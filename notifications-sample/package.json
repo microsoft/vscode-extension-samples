@@ -11,6 +11,7 @@
 	],
 	"activationEvents": [
 		"onCommand:notifications-sample.showInfo",
+		"onCommand:notifications-sample.showInfoAsModal",
 		"onCommand:notifications-sample.showWarning",
 		"onCommand:notifications-sample.showWarningWithActions",
 		"onCommand:notifications-sample.showError",
@@ -22,6 +23,11 @@
 			{
 				"command": "notifications-sample.showInfo",
 				"title": "Show Info Notification",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showInfoAsModal",
+				"title": "Show Info Notification As Modal",
 				"category": "Notifications Sample"
 			},
 			{
