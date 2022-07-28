@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Notifcation with actions
 	let showWarningNotificationWithActions = vscode.commands.registerCommand('notifications-sample.showWarningWithActions', () => {
-		vscode.window.showWarningMessage('Warning Notification With Actions', 'Action 1', 'Action 2', 'Action 3').then(selection => { selection !== undefined ?? vscode.window.showInformationMessage(`You selected: ${selection}`, { modal: true }); });
+		vscode.window.showWarningMessage('Warning Notification With Actions', 'Action 1', 'Action 2', 'Action 3').then(selection => { vscode.window.showInformationMessage(`You selected: ${selection}`, { modal: true }); });
 	});
 
 	// Progress notification with option to cancel
