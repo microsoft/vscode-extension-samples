@@ -28,10 +28,11 @@ This sample showcases a handful of basic configurations for notifications in VS 
 ## Running the Sample
 
 - Run `npm install` in terminal to install dependencies
-- Run the `Run Extension` target in the Debug View. This will:
+- Press F5 or Run the `Run Extension` target in the Debug View. This will:
 	- Start a task `npm: watch` to compile the code
 	- Run the extension in a new VS Code window
 - Try running the commands to show the notifications:
+
 ```
 - Notifications Sample: Show Info Notification
 - Notifications Sample: Show Info Notification as Modal
@@ -39,6 +40,3 @@ This sample showcases a handful of basic configurations for notifications in VS 
 - Notifications Sample: Show Warning Notification with Actions
 - Notifications Sample: Show Progress Notification
 ```
-
-
-
