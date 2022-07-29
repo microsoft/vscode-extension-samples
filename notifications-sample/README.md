@@ -7,6 +7,8 @@ This sample showcases a handful of basic configurations for notifications in VS 
 - Warning Notification with Actions
 - Progress Notification
 
+Read the [Notifications UX Guidelines](https://code.visualstudio.com/api/ux-guidelines/notifications) to learn how to effectively use notifications in an extension.
+
 ## Demo
 
 ![demo](demo.gif)

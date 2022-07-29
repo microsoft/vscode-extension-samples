@@ -3,29 +3,34 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
 
 	// Simple notifications
-	let showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
+	const showInfoNotification = vscode.commands.registerCommand('notifications-sample.showInfo', () => {
 		vscode.window.showInformationMessage('Info Notification');
 	});
 
-	let showInfoNotificationAsModal = vscode.commands.registerCommand('notifications-sample.showInfoAsModal', () => {
+	const showInfoNotificationAsModal = vscode.commands.registerCommand('notifications-sample.showInfoAsModal', () => {
 		vscode.window.showInformationMessage('Info Notification As Modal', { modal: true });
 	});
 
-	let showWarningNotification = vscode.commands.registerCommand('notifications-sample.showWarning', () => {
+	const showWarningNotification = vscode.commands.registerCommand('notifications-sample.showWarning', () => {
 		vscode.window.showWarningMessage('Warning Notification');
 	});
 
-	let showErrorNotification = vscode.commands.registerCommand('notifications-sample.showError', () => {
+	const showErrorNotification = vscode.commands.registerCommand('notifications-sample.showError', () => {
 		vscode.window.showErrorMessage('Error Notification');
 	});
 
 	// Notifcation with actions
-	let showWarningNotificationWithActions = vscode.commands.registerCommand('notifications-sample.showWarningWithActions', () => {
-		vscode.window.showWarningMessage('Warning Notification With Actions', 'Action 1', 'Action 2', 'Action 3').then(selection => { vscode.window.showInformationMessage(`You selected: ${selection}`, { modal: true }); });
+	const showWarningNotificationWithActions = vscode.commands.registerCommand('notifications-sample.showWarningWithActions', async () => {
+		const selection = await vscode.window.showWarningMessage('Warning Notification With Actions', 'Action 1', 'Action 2', 'Action 3');
+		
+		if (selection !== undefined) {
+			vscode.window.showInformationMessage(`You selected: ${selection}`, { modal: true });
+		}
+		
 	});
 
 	// Progress notification with option to cancel
-	let showProgressNotification = vscode.commands.registerCommand('notifications-sample.showProgress', () => {
+	const showProgressNotification = vscode.commands.registerCommand('notifications-sample.showProgress', () => {
 		vscode.window.withProgress({
 			location: vscode.ProgressLocation.Notification,
 			title: "Progress Notification",
