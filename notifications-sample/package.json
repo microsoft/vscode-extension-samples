@@ -15,7 +15,9 @@
 		"onCommand:notifications-sample.showWarning",
 		"onCommand:notifications-sample.showWarningWithActions",
 		"onCommand:notifications-sample.showError",
-		"onCommand:notifications-sample.showProgress"
+		"onCommand:notifications-sample.showProgress",
+		"onCommand:notifications-sample.showAll"
+
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -48,6 +50,11 @@
 			{
 				"command": "notifications-sample.showProgress",
 				"title": "Show Progress Notification",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showAll",
+				"title": "Show All Notifications",
 				"category": "Notifications Sample"
 			}
 		]
