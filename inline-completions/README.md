@@ -1,30 +1,21 @@
 # Inline Completions Sample
 
-This sample demonstrates usage of the proposed inline completions API.
-
-The `postinstall` script uses `vscode-dts dev && vscode-dts main` to download latest version of [`vscode.d.ts`](https://github.com/microsoft/vscode/blob/main/src/vs/vscode.d.ts) and [`vscode.proposed.d.ts`](https://github.com/microsoft/vscode/blob/main/src/vs/vscode.proposed.d.ts) from the master branch of [microsoft/vscode](https://github.com/microsoft/vscode).
-
-You can read more about `vscode-dts` at: https://github.com/microsoft/vscode-dts.
-
-- ⚠️ This sample can only be used for extension development in [Insider release](https://code.visualstudio.com/insiders/). You cannot publish extensions using Proposed API.
-- You need `"enableProposedApi": true` in `package.json`.
+This sample demonstrates usage of the proposed inline completions API. It enables you to have suggestions of code within VSCode.
 
 ![Demo Video](./demo.gif)
 
 ## VS Code API
 
-Not documented, as the used API is not finalized.
+Read more about the inline completion API [here](https://code.visualstudio.com/api/references/vscode-api#InlineCompletionItemProvider)
 
+**Important**: Make sure to use `@types/vscode^1.69.0`
 
 ## Running the Sample
 
-- Run `npm install` in terminal to install dependencies
-- A `postinstall` script would download latest version of `vscode.proposed.d.ts`
-- Run the `Run Extension` target in the Debug View. This will:
-	- Start a task `npm: watch` to compile the code
-	- Run the extension in a new VS Code window
+The demo is very simple: you type `foo ` and the extension proposes `bar` or `baz`. It works for any language.
 
-Make sure that `showInlineCompletions` is enabled in your settings!
-```
-"editor.inlineSuggest.enabled": true
-```
+- Run `npm install` in terminal to install dependencies
+- Run the `Run Extension` target in the Debug View. This will:
+  - Start a task `npm: watch` to compile the code
+  - Run the extension in a new VS Code window
+- Open a text file and type `foo `, the extension suggests `bar` or `baz`
