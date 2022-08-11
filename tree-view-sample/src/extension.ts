@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 			offset = args;
 		}
 		if(offset){
-			jsonOutlineProvider.rename(offset)
+			jsonOutlineProvider.rename(offset);
 		}
 	});
 	vscode.commands.registerCommand('extension.openJsonSelection', range => jsonOutlineProvider.select(range));
