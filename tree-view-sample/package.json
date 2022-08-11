@@ -166,6 +166,10 @@
 					"group": "navigation"
 				},
 				{
+					"command": "jsonOutline.renameNode",
+					"when": "view == jsonOutline"
+				},
+				{
 					"command": "nodeDependencies.addEntry",
 					"when": "view == nodeDependencies"
 				},
