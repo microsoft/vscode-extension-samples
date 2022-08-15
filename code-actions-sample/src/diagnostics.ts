@@ -23,21 +23,25 @@ export function refreshDiagnostics(doc: vscode.TextDocument, emojiDiagnostics: v
 
 	for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
 		const lineOfText = doc.lineAt(lineIndex);
-		if (lineOfText.text.includes(EMOJI)) {
-			diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex));
+		const regex = RegExp(EMOJI, 'g');
+		let arr;
+		while ((arr = regex.exec(lineOfText.text)) !== null) {
+			diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex, arr.index));
 		}
 	}
 
 	emojiDiagnostics.set(doc.uri, diagnostics);
 }
 
-function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.TextLine, lineIndex: number): vscode.Diagnostic {
+function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.TextLine, lineIndex: number, startTextIndex: number): vscode.Diagnostic {
 	// find where in the line of that the 'emoji' is mentioned
-	const index = lineOfText.text.indexOf(EMOJI);
-
 	// create range that represents, where in the document the word is
-	const range = new vscode.Range(lineIndex, index, lineIndex, index + EMOJI.length);
-
+	const range = new vscode.Range(
+		lineIndex,
+		startTextIndex,
+		lineIndex,
+		startTextIndex + EMOJI.length
+	);
 	const diagnostic = new vscode.Diagnostic(range, "When you say 'emoji', do you want to find out more?",
 		vscode.DiagnosticSeverity.Information);
 	diagnostic.code = EMOJI_MENTION;
