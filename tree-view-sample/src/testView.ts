@@ -20,7 +20,7 @@ export class TestView {
 	}
 }
 
-const tree = {
+const tree: any = {
 	'a': {
 		'aa': {
 			'aaa': {
@@ -40,7 +40,7 @@ const tree = {
 		'bb': {}
 	}
 };
-const nodes = {};
+const nodes: any = {};
 
 function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }> {
 	return {
@@ -52,14 +52,14 @@ function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }>
 			treeItem.id = element.key;
 			return treeItem;
 		},
-		getParent: ({ key }: { key: string }): { key: string } => {
+		getParent: ({ key }: { key: string }): { key: string } | undefined => {
 			const parentKey = key.substring(0, key.length - 1);
-			return parentKey ? new Key(parentKey) : void 0;
+			return parentKey ? new Key(parentKey) : undefined;
 		}
 	};
 }
 
-function getChildren(key: string): string[] {
+function getChildren(key: string | undefined): string[] {
 	if (!key) {
 		return Object.keys(tree);
 	}
@@ -81,7 +81,7 @@ function getTreeItem(key: string): vscode.TreeItem {
 	};
 }
 
-function getTreeElement(element): any {
+function getTreeElement(element: string): any {
 	let parent = tree;
 	for (let i = 0; i < element.length; i++) {
 		parent = parent[element.substring(0, i + 1)];

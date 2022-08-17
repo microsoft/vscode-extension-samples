@@ -229,6 +229,7 @@
 		"lint": "eslint . --ext .ts,.tsx"
 	},
 	"devDependencies": {
+		"@types/ftp": "^0.3.33",
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^16.11.7",
 		"@types/rimraf": "^2.0.2",
