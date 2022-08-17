@@ -25,11 +25,11 @@ export function refreshDiagnostics(doc: vscode.TextDocument, emojiDiagnostics: v
 		const lineOfText = doc.lineAt(lineIndex);
 		const regex = RegExp(EMOJI, 'g');
 		const matches = lineOfText.text.matchAll(regex);
-    for (const arr of matches) {
+		for (const arr of matches) {
 			arr.index !== undefined && diagnostics.push(
 				createDiagnostic(doc, lineOfText, lineIndex, arr.index)
 			);
-    }
+		}
 	}
 
 	emojiDiagnostics.set(doc.uri, diagnostics);
