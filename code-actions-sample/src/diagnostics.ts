@@ -10,8 +10,10 @@ import * as vscode from 'vscode';
 export const EMOJI_MENTION = 'emoji_mention';
 
 /** String to detect in the text document. */
-const EMOJI = 'emoji';
-
+const EMOJI = '?emoji?';
+function escapeRegExp(string:string) {
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 /**
  * Analyzes the text document for problems. 
  * This demo diagnostic problem provider finds all mentions of 'emoji'.
@@ -23,7 +25,7 @@ export function refreshDiagnostics(doc: vscode.TextDocument, emojiDiagnostics: v
 
 	for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
 		const lineOfText = doc.lineAt(lineIndex);
-		const regex = RegExp(EMOJI, 'g');
+		const regex = new RegExp(escapeRegExp(EMOJI), 'g');
 		const matches = lineOfText.text.matchAll(regex);
 		for (const arr of matches) {
 			arr.index !== undefined && diagnostics.push(
