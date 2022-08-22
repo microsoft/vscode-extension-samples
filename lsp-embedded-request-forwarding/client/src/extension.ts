@@ -50,7 +50,7 @@ export function activate(context: ExtensionContext) {
 					return await next(document, position, context, token);
 				}
 
-				const originalUri = document.uri.toString();
+				const originalUri = document.uri.toString(true);
 				virtualDocumentContents.set(originalUri, getCSSVirtualContent(htmlLanguageService, document.getText()));
 
 				const vdocUriString = `embedded-content://css/${encodeURIComponent(
