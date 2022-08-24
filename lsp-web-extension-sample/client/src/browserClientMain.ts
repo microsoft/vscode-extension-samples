@@ -15,7 +15,7 @@ export function activate(context: ExtensionContext) {
 
 	/* 
 	 * all except the code to create the language client in not browser specific
-	 * and couuld be shared with a regular (Node) extension
+	 * and could be shared with a regular (Node) extension
 	 */
 	const documentSelector = [{ language: 'plaintext' }];
 

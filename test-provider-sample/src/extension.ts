@@ -8,7 +8,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const runHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
 		const queue: { test: vscode.TestItem; data: TestCase }[] = [];
 		const run = ctrl.createTestRun(request);
-		// map of file uris to statments on each line:
+		// map of file uris to statements on each line:
 		const coveredLines = new Map</* file uri */ string, (vscode.StatementCoverage | undefined)[]>();
 
 		const discoverTests = async (tests: Iterable<vscode.TestItem>) => {

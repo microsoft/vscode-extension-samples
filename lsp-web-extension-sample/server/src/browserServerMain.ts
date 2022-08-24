@@ -21,7 +21,7 @@ const connection = createConnection(messageReader, messageWriter);
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
 	const capabilities: ServerCapabilities = {
-		colorProvider: {} // provide a color providr
+		colorProvider: {} // provide a color provider
 	};
 	return { capabilities };
 });
