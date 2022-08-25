@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as json from 'jsonc-parser';
 import * as path from 'path';
-
+aaaaaaaaaaaaaaaaaa
 export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 
 	private _onDidChangeTreeData: vscode.EventEmitter<number | undefined> = new vscode.EventEmitter<number | undefined>();
