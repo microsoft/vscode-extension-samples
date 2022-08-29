@@ -36,8 +36,7 @@
 	"scripts": {
 		"watch": "tsc -b -w",
 		"compile": "tsc -b",
-		"clean": "gulp clean",
-		"aa": "gulp package"
+		"clean": "gulp clean"
 	},
 	"devDependencies": {
 		"@types/node": "^14.17.0",
