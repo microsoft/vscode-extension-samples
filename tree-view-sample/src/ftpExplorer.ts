@@ -31,7 +31,7 @@ export class FtpModel {
 
 			client.connect({
 				host: this.host,
-				username: this.user,
+				user: this.user,
 				password: this.password
 			});
 		});
@@ -137,9 +137,9 @@ export class FtpTreeDataProvider implements vscode.TreeDataProvider<FtpNode>, vs
 		return element ? this.model.getChildren(element) : this.model.roots;
 	}
 
-	public getParent(element: FtpNode): FtpNode {
+	public getParent(element: FtpNode): FtpNode | undefined{
 		const parent = element.resource.with({ path: dirname(element.resource.path) });
-		return parent.path !== '//' ? { resource: parent, isDirectory: true } : null;
+		return parent.path !== '//' ? { resource: parent, isDirectory: true } : undefined;
 	}
 
 	public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): vscode.ProviderResult<string> {
@@ -168,20 +168,19 @@ export class FtpExplorer {
 		vscode.window.showTextDocument(resource);
 	}
 
-	private reveal(): Thenable<void> {
+	private async reveal(): Promise<void> {
 		const node = this.getNode();
 		if (node) {
 			return this.ftpViewer.reveal(node);
 		}
-		return null;
 	}
 
-	private getNode(): FtpNode {
+	private getNode(): FtpNode | undefined {
 		if (vscode.window.activeTextEditor) {
 			if (vscode.window.activeTextEditor.document.uri.scheme === 'ftp') {
 				return { resource: vscode.window.activeTextEditor.document.uri, isDirectory: false };
 			}
 		}
-		return null;
+		return undefined;
 	}
 }

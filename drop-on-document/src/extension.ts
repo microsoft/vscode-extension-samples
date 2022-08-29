@@ -7,16 +7,16 @@ const uriListMime = 'text/uri-list';
  * Provider that reverses dropped text.
  * 
  * Note this does not apply to text that is drag and dropped with-in the current editor,
- * only for text dropped from external apps.
+ * only for text dropped from external apps. 
  */
- class ReverseTextOnDropProvider implements vscode.DocumentOnDropProvider {
-	async provideDocumentOnDropEdits(
+class ReverseTextOnDropProvider implements vscode.DocumentDropEditProvider {
+	async provideDocumentDropEdits(
 		_document: vscode.TextDocument,
 		position: vscode.Position,
 		dataTransfer: vscode.DataTransfer,
 		token: vscode.CancellationToken
-	): Promise<vscode.SnippetTextEdit | undefined> {
-		// Check the uri list to see if we have some kind of text data
+	): Promise<vscode.DocumentDropEdit | undefined> {
+		// Check the data transfer to see if we have some kind of text data
 		const dataTransferItem = dataTransfer.get('text') ?? dataTransfer.get('text/plain');
 		if (!dataTransferItem) {
 			return undefined;
@@ -32,7 +32,7 @@ const uriListMime = 'text/uri-list';
 		// Adding the reversed text
 		snippet.appendText([...text].reverse().join(''));
 
-		return new vscode.SnippetTextEdit(new vscode.Range(position, position), snippet);
+		return { insertText: snippet };
 	}
 }
 
@@ -45,13 +45,13 @@ const uriListMime = 'text/uri-list';
  * - The operating system
  * - The open editors view 
  */
-class FileNameListOnDropProvider implements vscode.DocumentOnDropProvider {
-	async provideDocumentOnDropEdits(
+class FileNameListOnDropProvider implements vscode.DocumentDropEditProvider {
+	async provideDocumentDropEdits(
 		_document: vscode.TextDocument,
 		position: vscode.Position,
 		dataTransfer: vscode.DataTransfer,
 		token: vscode.CancellationToken
-	): Promise<vscode.SnippetTextEdit | undefined> {
+	): Promise<vscode.DocumentDropEdit | undefined> {
 		// Check the data transfer to see if we have dropped a list of uris
 		const dataTransferItem = dataTransfer.get(uriListMime);
 		if (!dataTransferItem) {
@@ -90,7 +90,7 @@ class FileNameListOnDropProvider implements vscode.DocumentOnDropProvider {
 			}
 		});
 
-		return new vscode.SnippetTextEdit(new vscode.Range(position, position), snippet);
+		return { insertText: snippet };
 	}
 }
 
@@ -100,6 +100,6 @@ export function activate(context: vscode.ExtensionContext) {
 	const selector: vscode.DocumentSelector = { language: 'plaintext' };
 
 	// Register our providers
-	context.subscriptions.push(vscode.languages.registerDocumentOnDropProvider(selector, new ReverseTextOnDropProvider()));
-	context.subscriptions.push(vscode.languages.registerDocumentOnDropProvider(selector, new FileNameListOnDropProvider()));
+	context.subscriptions.push(vscode.languages.registerDocumentDropEditProvider(selector, new ReverseTextOnDropProvider()));
+	context.subscriptions.push(vscode.languages.registerDocumentDropEditProvider(selector, new FileNameListOnDropProvider()));
 }

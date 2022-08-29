@@ -1,0 +1,82 @@
+{
+	"name": "notifications-sample",
+	"displayName": "Notifications Sample",
+	"description": "Examples of notification types and various configurations",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.69.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onCommand:notifications-sample.showInfo",
+		"onCommand:notifications-sample.showInfoAsModal",
+		"onCommand:notifications-sample.showWarning",
+		"onCommand:notifications-sample.showWarningWithActions",
+		"onCommand:notifications-sample.showError",
+		"onCommand:notifications-sample.showProgress",
+		"onCommand:notifications-sample.showAll"
+
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "notifications-sample.showInfo",
+				"title": "Show Info Notification",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showInfoAsModal",
+				"title": "Show Info Notification As Modal",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showWarning",
+				"title": "Show Warning Notification",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showWarningWithActions",
+				"title": "Show Warning Notification With Actions",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showError",
+				"title": "Show Error Notification",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showProgress",
+				"title": "Show Progress Notification",
+				"category": "Notifications Sample"
+			},
+			{
+				"command": "notifications-sample.showAll",
+				"title": "Show All Notifications",
+				"category": "Notifications Sample"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.69.0",
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.1",
+		"@types/node": "16.x",
+		"@typescript-eslint/eslint-plugin": "^5.27.0",
+		"@typescript-eslint/parser": "^5.27.0",
+		"eslint": "^8.16.0",
+		"glob": "^8.0.3",
+		"mocha": "^10.0.0",
+		"typescript": "^4.7.2",
+		"@vscode/test-electron": "^2.1.3"
+	}
+}

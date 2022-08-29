@@ -136,7 +136,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	const diagnostics: Diagnostic[] = [];
 	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
 		problems++;
-		const diagnosic: Diagnostic = {
+		const diagnostic: Diagnostic = {
 			severity: DiagnosticSeverity.Warning,
 			range: {
 				start: textDocument.positionAt(m.index),
@@ -146,24 +146,24 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 			source: 'ex'
 		};
 		if (hasDiagnosticRelatedInformationCapability) {
-			diagnosic.relatedInformation = [
+			diagnostic.relatedInformation = [
 				{
 					location: {
 						uri: textDocument.uri,
-						range: Object.assign({}, diagnosic.range)
+						range: Object.assign({}, diagnostic.range)
 					},
 					message: 'Spelling matters'
 				},
 				{
 					location: {
 						uri: textDocument.uri,
-						range: Object.assign({}, diagnosic.range)
+						range: Object.assign({}, diagnostic.range)
 					},
 					message: 'Particularly for names'
 				}
 			];
 		}
-		diagnostics.push(diagnosic);
+		diagnostics.push(diagnostic);
 	}
 
 	// Send the computed diagnostics to VSCode.

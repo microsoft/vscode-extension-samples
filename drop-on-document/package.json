@@ -10,11 +10,8 @@
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
-	"enabledApiProposals": [
-		"textEditorDrop"
-	],
 	"engines": {
-		"vscode": "^1.67.0"
+		"vscode": "^1.70.0"
 	},
 	"categories": [
 		"Other"
@@ -28,14 +25,16 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint . --ext .ts,.tsx",
-		"watch": "tsc -watch -p ./"
+		"watch": "tsc -watch -p ./",
+		"download-api": "vscode-dts main",
+		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
-		"@types/node": "^12.12.0",
-		"@types/vscode": "^1.32.0",
-		"@typescript-eslint/eslint-plugin": "^5.19.0",
-		"@typescript-eslint/parser": "^5.19.0",
+		"@types/node": "^16.11.7",
+		"@typescript-eslint/eslint-plugin": "^5.30.0",
+		"@typescript-eslint/parser": "^5.30.0",
 		"eslint": "^8.13.0",
-		"typescript": "^4.6.3"
+		"typescript": "^4.7.2",
+		"vscode-dts": "^0.3.3"
 	}
 }

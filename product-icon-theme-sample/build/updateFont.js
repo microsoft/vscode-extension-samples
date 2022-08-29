@@ -30,7 +30,7 @@ async function generateFont() {
     fs.writeFileSync(dest, result.woff, 'binary');
     console.log(`Font created at ${dest}`);
   } catch (e) {
-    console.error('Font creation failed.', error);
+    console.error('Font creation failed.', e);
   }
 }
 

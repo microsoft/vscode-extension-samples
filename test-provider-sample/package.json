@@ -8,11 +8,10 @@
 	"license": "MIT",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples",
 	"enabledApiProposals": [
-		"testCoverage",
-		"testRefresh"
+		"testCoverage"
 	],
 	"engines": {
-		"vscode": "^1.51.0"
+		"vscode": "^1.68.0"
 	},
 	"categories": [
 		"Other"
@@ -21,26 +20,20 @@
 		"workspaceContains:*.md"
 	],
 	"main": "./out/extension.js",
-	"prettier": {
-		"printWidth": 120,
-		"singleQuote": true,
-		"arrowParens": "avoid"
-	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint . --ext .ts,.tsx",
 		"watch": "tsc -watch -p ./",
-		"download-api": "vscode-dts dev",
-		"postdownload-api": "vscode-dts main",
+		"download-api": "vscode-dts main && vscode-dts dev",
 		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
-		"@types/node": "^12.12.0",
-		"@typescript-eslint/eslint-plugin": "^5.19.0",
-		"@typescript-eslint/parser": "^5.19.0",
+		"@types/node": "^16.11.7",
+		"@typescript-eslint/eslint-plugin": "^5.30.0",
+		"@typescript-eslint/parser": "^5.30.0",
 		"eslint": "^8.13.0",
-		"typescript": "^4.6.3",
+		"typescript": "^4.7.2",
 		"vscode-dts": "^0.3.3"
 	}
 }

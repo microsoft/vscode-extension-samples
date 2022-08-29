@@ -1,8 +1,12 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./src/client"
-    }
-  ]
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "out",
+    "module": "esnext",
+    "target": "es2020",
+    "lib": ["es2020", "dom"],
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true   /* enable all strict type-checking options */
+  }
 }
