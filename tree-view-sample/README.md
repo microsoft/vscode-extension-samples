@@ -9,7 +9,7 @@ This sample demonstrates how to implement and contribute a tree view in VS Code.
 
 This sample provides following views
 
-- Node dependencies view
+- Node dependencies view 
 - Ftp file explorer view
 
 Following example shows Node dependencies view in Package Explorer View container.
