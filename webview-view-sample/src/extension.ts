@@ -88,8 +88,9 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 				<meta charset="UTF-8">
 
 				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
+					Use a content security policy to only allow loading styles from our extension directory,
 					and only allow scripts that have a specific nonce.
+					(See the 'webview-sample' extension sample for img-src content security policy examples)
 				-->
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 
@@ -98,7 +99,7 @@ class ColorsViewProvider implements vscode.WebviewViewProvider {
 				<link href="${styleResetUri}" rel="stylesheet">
 				<link href="${styleVSCodeUri}" rel="stylesheet">
 				<link href="${styleMainUri}" rel="stylesheet">
-				
+
 				<title>Cat Colors</title>
 			</head>
 			<body>
