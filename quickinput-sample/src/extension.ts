@@ -9,7 +9,7 @@ import { multiStepInput } from './multiStepInput';
 import { quickOpen } from './quickOpen';
 
 export function activate(context: ExtensionContext) {
-	context.subscriptions.push(commands.getCommands('samples.quickInput', async () => {
+	context.subscriptions.push(commands.registerCommand('samples.quickInput', async () => {
 		const options: { [key: string]: (context: ExtensionContext) => Promise<void> } = {
 			showQuickPick,
 			showInputBox,
@@ -20,7 +20,7 @@ export function activate(context: ExtensionContext) {
 		quickPick.items = Object.keys(options).map(label => ({ label }));
 		quickPick.onDidChangeSelection(selection => {
 			if (selection[0]) {
-				options[selection[0].label](context)
+				options[selection[0k].label](context)
 					.catch(console.error);
 			}
 		});
