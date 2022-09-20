@@ -20,7 +20,7 @@ export function activate(context: ExtensionContext) {
 		quickPick.items = Object.keys(options).map(label => ({ label }));
 		quickPick.onDidChangeSelection(selection => {
 			if (selection[0]) {
-				options[selection[0k].label](context)
+				options[selection[0].label](context)
 					.catch(console.error);
 			}
 		});
