@@ -1,6 +1,6 @@
 # Document on Drop Sample
 
-This sample shows usage of the [document on drop API](https://github.com/microsoft/vscode/issues/142990). It requires VS Code 1.70+.
+This sample shows usage of the [document on drop API](https://github.com/microsoft/vscode/issues/142990).
 
 This sample adds two sample drop providers for plain text files:
 
