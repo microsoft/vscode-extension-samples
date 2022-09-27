@@ -55,7 +55,7 @@
 		"mocha": "^9.2.2",
 		"typescript": "^4.5.5",
 		"@vscode/test-electron": "^2.1.3",
-		"@vscode/l10n-dev": "0.0.8"
+		"@vscode/l10n-dev": "0.0.9"
 	},
 	"dependencies": {
 		"@vscode/l10n": "^0.0.3"
