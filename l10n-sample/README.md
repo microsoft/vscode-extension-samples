@@ -6,8 +6,8 @@ Localization for VS Code extension's source code has 4 important parts:
 
 * `package.nls.json` - The file used for translating static contributions in your extension's package.json
 * `vscode.l10n.t` - The API for translating strings in your extension's code
-* `@vscode/l10n` - The library used for loading the translations into subprocesses of your extension
 * `@vscode/l10n-dev` - The tooling used for extracting l10n strings from vscode extensions and working with XLF files
+* `@vscode/l10n` - The library used for loading the translations into subprocesses of your extension
 
 ## `package.nls.json`
 
@@ -51,12 +51,6 @@ An absolute must for this to work is that you must add the following to your ext
 
 This tells VS Code where to find the localized strings for your extension and should be set to the directory that has the `bundle.l10n.<LANG>.json` files. You can set `l10n` to whatever you want, but note that it must be a relative path to the root of your extension. At runtime, that property will be used to load the correct localized strings for your extension so you will need to make sure that you put the files with the localized strings in the correct place.
 
-### `@vscode/l10n`
-
-In this repo, you can see that there is a `cli.ts`. This file will be run outside of your extension using the `node` executable directly. This is a simple example of how you can use the `@vscode/l10n` package to load the localized strings for your extension inside of that subprocess.
-
-Those `l10n.t` calls will pull the strings from the file uri that was passed in... but the importance of this package is that these `l10n.t()` calls will also be picked up by the tooling that we use to extract strings for localization.
-
 ## `@vscode/l10n-dev`
 
 This package is used for extracting strings from your extension and working with XLF files. It's a CLI tool that you can run from the command line. You can see the full usage of this tool in [its repo](https://github.com/microsoft/vscode-l10n/tree/main/l10n-dev). But for this sample, we'll just go over the basics.
@@ -76,3 +70,9 @@ npx @vscode/l10n-dev generate-xlf -o ./l10n-sample.xlf ./l10n/bundle.l10n.json .
 ```
 
 The `l10n-dev` tooling also supports converting XLF files back into `bundle.l10n.json` and `package.nls.json` files, but we won't cover this here as it's not needed for this sample.
+
+### `@vscode/l10n`
+
+In this repo, you can see that there is a `cli.ts`. This file will be run outside of your extension using the `node` executable directly. This is a simple example of how you can use the `@vscode/l10n` package to load the localized strings for your extension inside of that subprocess.
+
+Those `l10n.t` calls will pull the strings from the file uri that was passed in... but the importance of this package is that these `l10n.t()` calls will also be picked up by the tooling that we use to extract strings for localization.
