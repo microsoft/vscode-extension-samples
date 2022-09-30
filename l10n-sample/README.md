@@ -21,7 +21,7 @@ Take a look at the [package.nls.json](./package.nls.json) file. This file contai
 
 ### Pre-reqs for the Proposed API
 
-* When running an extension using a proposed API, you must either run VS Code with `code-insiders . --enable-proposed-api vscode-samples.l10n-sample`.
+* When running an extension using a proposed API, you must either run VS Code with `code-insiders . --enable-proposed-api vscode-samples.l10n-sample` or by running your extension in the extension development host with `F5` (which will automatically enable the proposed API for you).
 
 > More docs on this [can be found on our docs website](https://code.visualstudio.com/api/advanced-topics/using-proposed-api#:~:text=Proposed%20API%20is%20a%20set%20of%20unstable%20API,distribution%20and%20cannot%20be%20used%20in%20published%20extensions.).
 
@@ -59,7 +59,7 @@ Those `l10n.t` calls will pull the strings from the file uri that was passed in.
 
 ## `@vscode/l10n-dev`
 
-This package is used for extracting strings from your extension and working with XLF files. It's a CLI tool that you can run from the command line. You can see the full usage of this tool in [it's repo](https://github.com/microsoft/vscode-l10n/tree/main/l10n-dev). But for this sample, we'll just go over the basics.
+This package is used for extracting strings from your extension and working with XLF files. It's a CLI tool that you can run from the command line. You can see the full usage of this tool in [its repo](https://github.com/microsoft/vscode-l10n/tree/main/l10n-dev). But for this sample, we'll just go over the basics.
 
 First off, if you want to generate a `bundle.l10n.json` file which contains the sample's localizable strings, run:
 
