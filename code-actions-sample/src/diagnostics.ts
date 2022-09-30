@@ -10,8 +10,10 @@ import * as vscode from 'vscode';
 export const EMOJI_MENTION = 'emoji_mention';
 
 /** String to detect in the text document. */
-const EMOJI = 'emoji';
-
+const EMOJI = '?emoji?';
+function escapeRegExp(string:string) {
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
 /**
  * Analyzes the text document for problems. 
  * This demo diagnostic problem provider finds all mentions of 'emoji'.
@@ -23,21 +25,27 @@ export function refreshDiagnostics(doc: vscode.TextDocument, emojiDiagnostics: v
 
 	for (let lineIndex = 0; lineIndex < doc.lineCount; lineIndex++) {
 		const lineOfText = doc.lineAt(lineIndex);
-		if (lineOfText.text.includes(EMOJI)) {
-			diagnostics.push(createDiagnostic(doc, lineOfText, lineIndex));
+		const regex = new RegExp(escapeRegExp(EMOJI), 'g');
+		const matches = lineOfText.text.matchAll(regex);
+		for (const arr of matches) {
+			arr.index !== undefined && diagnostics.push(
+				createDiagnostic(doc, lineOfText, lineIndex, arr.index)
+			);
 		}
 	}
 
 	emojiDiagnostics.set(doc.uri, diagnostics);
 }
 
-function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.TextLine, lineIndex: number): vscode.Diagnostic {
+function createDiagnostic(doc: vscode.TextDocument, lineOfText: vscode.TextLine, lineIndex: number, startTextIndex: number): vscode.Diagnostic {
 	// find where in the line of that the 'emoji' is mentioned
-	const index = lineOfText.text.indexOf(EMOJI);
-
 	// create range that represents, where in the document the word is
-	const range = new vscode.Range(lineIndex, index, lineIndex, index + EMOJI.length);
-
+	const range = new vscode.Range(
+		lineIndex,
+		startTextIndex,
+		lineIndex,
+		startTextIndex + EMOJI.length
+	);
 	const diagnostic = new vscode.Diagnostic(range, "When you say 'emoji', do you want to find out more?",
 		vscode.DiagnosticSeverity.Information);
 	diagnostic.code = EMOJI_MENTION;
