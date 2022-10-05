@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 import { createConnection, BrowserMessageReader, BrowserMessageWriter } from 'vscode-languageserver/browser';
 
-import { Color, ColorInformation, Range, InitializeParams, InitializeResult, ServerCapabilities, TextDocuments, ColorPresentation, TextEdit, TextDocumentIdentifier } from 'vscode-languageserver';
+import { Color, ColorInformation, Range, InitializeParams, InitializeResult, ServerCapabilities, TextDocuments, ColorPresentation, TextEdit, TextDocumentIdentifier, DidOpenTextDocumentParams, DidCloseTextDocumentParams } from 'vscode-languageserver';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 
 
@@ -21,6 +21,7 @@ const connection = createConnection(messageReader, messageWriter);
 
 connection.onInitialize((params: InitializeParams): InitializeResult => {
 	const capabilities: ServerCapabilities = {
+		textDocumentSync: { openClose: true },
 		colorProvider: {} // provide a color provider
 	};
 	return { capabilities };
@@ -37,6 +38,14 @@ connection.onColorPresentation(params => getColorPresentation(params.color, para
 // Listen on the connection
 connection.listen();
 
+
+connection.onDidOpenTextDocument((params: DidOpenTextDocumentParams)=> {
+	console.log('OPENED URI', params.textDocument.uri);
+});
+
+connection.onDidCloseTextDocument((params: DidCloseTextDocumentParams) => {
+	console.log('CLOSED URI', params.textDocument.uri);
+});
 
 const colorRegExp = /#([0-9A-Fa-f]{6})/g;
 
