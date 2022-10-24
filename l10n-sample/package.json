@@ -1,5 +1,5 @@
 {
-  "name": "l10n-sample",
+	"name": "l10n-sample",
 	"displayName": "l10n-sample",
 	"description": "Sample that shows how to localize an extension",
 	"version": "0.1.0",
@@ -55,7 +55,7 @@
 		"mocha": "^9.2.2",
 		"typescript": "^4.5.5",
 		"@vscode/test-electron": "^2.1.3",
-		"@vscode/l10n-dev": "0.0.9"
+		"@vscode/l10n-dev": "0.0.16"
 	},
 	"dependencies": {
 		"@vscode/l10n": "^0.0.3"

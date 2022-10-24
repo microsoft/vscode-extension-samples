@@ -6,14 +6,14 @@ import { sayByeCommand } from './command/sayBye';
 
 export function activate(context: vscode.ExtensionContext) {
 	
-	const helloCmd = vscode.commands.registerCommand('extension.sayHello', () => {
+	const helloCmd = vscode.commands.registerCommand('extension.sayHello', async () => {
 		const message = vscode.l10n.t('Hello');
 		vscode.window.showInformationMessage(message);
 		console.log(context.extensionUri);
 		
 		// This is showing how you might pass the vscode.l10n.uri down to
 		// a subprocess if you have one that your extension spawns.
-		vscode.tasks.executeTask(
+		await vscode.tasks.executeTask(
 			new vscode.Task(
 				{ type: 'shell' },
 				vscode.TaskScope.Global,
@@ -23,6 +23,9 @@ export function activate(context: vscode.ExtensionContext) {
 					// eslint-disable-next-line @typescript-eslint/naming-convention
 					env: vscode.l10n.uri ? { EXTENSION_BUNDLE_URI: vscode.l10n.uri?.toString(true) } : undefined
 				})));
+
+		const messageDone = vscode.l10n.t('Hello {done}', { done: 'FINISHED' });
+		vscode.window.showInformationMessage(messageDone);
 	});
 
 	const byeCmd = vscode.commands.registerCommand(
