@@ -97,8 +97,8 @@ const samples = [
     contributions: ['colors']
   },
   {
-    description: 'I18n Sample',
-    path: 'i18n-sample',
+    description: 'L10n Sample',
+    path: 'l10n-sample',
     guide: null,
     apis: [],
     contributions: []
