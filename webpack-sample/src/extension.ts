@@ -8,9 +8,9 @@ import { add } from './math';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    const disposable = vscode.commands.registerCommand('extension.helloWebpack', () => {
-        vscode.window.showInformationMessage(`41 + 1 = ${add(41, 1)}`);
-    });
+	const disposable = vscode.commands.registerCommand('extension.helloWebpack', () => {
+		vscode.window.showInformationMessage(`41 + 1 = ${add(41, 1)}`);
+	});
 
-    context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable);
 }

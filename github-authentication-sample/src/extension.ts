@@ -7,7 +7,7 @@ import { Credentials } from './credentials';
 export async function activate(context: vscode.ExtensionContext) {
 	const credentials = new Credentials();
 	await credentials.initialize(context);
-	
+
 	const disposable = vscode.commands.registerCommand('extension.getGitHubUser', async () => {
 		/**
 		 * Octokit (https://github.com/octokit/rest.js#readme) is a library for making REST API
