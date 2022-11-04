@@ -11,11 +11,8 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.72.0-insider"
+		"vscode": "^1.73.0"
 	},
-	"enabledApiProposals": [
-		"localization"
-	],
 	"categories": [
 		"Other"
 	],
@@ -44,7 +41,7 @@
 		"lint": "eslint src --ext ts"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.71.0",
+		"@types/vscode": "^1.73.0",
 		"@types/glob": "^7.2.0",
 		"@types/mocha": "^9.1.0",
 		"@types/node": "14.x",
