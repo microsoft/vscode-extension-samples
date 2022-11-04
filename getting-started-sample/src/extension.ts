@@ -26,6 +26,6 @@ export function activate(context: vscode.ExtensionContext): void {
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('getting-started-sample.viewSources', () => {
-		return { openFolder: vscode.Uri.joinPath(context.extensionUri, 'src') }; 
+		return { openFolder: vscode.Uri.joinPath(context.extensionUri, 'src') };
 	}));
 }

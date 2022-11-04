@@ -28,12 +28,12 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('jsonOutline.refreshNode', offset => jsonOutlineProvider.refresh(offset));
 	vscode.commands.registerCommand('jsonOutline.renameNode', args => {
 		let offset = undefined;
-		if(args.selectedTreeItems && args.selectedTreeItems.length){
+		if (args.selectedTreeItems && args.selectedTreeItems.length) {
 			offset = args.selectedTreeItems[0];
-		}else if(typeof args === 'number'){
+		} else if (typeof args === 'number') {
 			offset = args;
 		}
-		if(offset){
+		if (offset) {
 			jsonOutlineProvider.rename(offset);
 		}
 	});

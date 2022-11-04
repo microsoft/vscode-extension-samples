@@ -15,7 +15,7 @@ export function activate(_context: vscode.ExtensionContext): void {
 	if (!workspaceRoot) {
 		return;
 	}
-		
+
 	rakeTaskProvider = vscode.tasks.registerTaskProvider(RakeTaskProvider.RakeType, new RakeTaskProvider(workspaceRoot));
 	customTaskProvider = vscode.tasks.registerTaskProvider(CustomBuildTaskProvider.CustomBuildScriptType, new CustomBuildTaskProvider(workspaceRoot));
 }

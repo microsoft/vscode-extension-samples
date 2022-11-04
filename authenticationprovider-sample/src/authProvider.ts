@@ -22,7 +22,7 @@ class AzureDevOpsPatSession implements AuthenticationSession {
 	 * 
 	 * @param accessToken The personal access token to use for authentication
 	 */
-	constructor(public readonly accessToken: string) {}
+	constructor(public readonly accessToken: string) { }
 }
 
 export class AzureDevOpsAuthenticationProvider implements AuthenticationProvider, Disposable {
