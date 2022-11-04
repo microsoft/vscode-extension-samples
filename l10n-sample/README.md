@@ -15,7 +15,7 @@ Take a look at the [package.nls.json](./package.nls.json) file. This file contai
 
 ## `vscode.l10n.t`
 
-`l10n` is a new namespace that's a part of the official VS Code API. This is the new way to mark a string as "needing to be translated" and replaces the old way of using the `vscode-nls` and the `vscode-nls-dev` packages.
+`l10n` is a new namespace that's a part of [the official VS Code API](https://code.visualstudio.com/api/references/vscode-api#l10n). This is the new way to mark a string as "needing to be translated" and replaces the old way of using the `vscode-nls` and the `vscode-nls-dev` packages.
 
 ### Usage
 
@@ -33,7 +33,7 @@ These strings support arguments and comments. The arguments are used to replace 
 
 An absolute must for this to work is that you must add the following to your extension manifest which you can see is done in this extension. Like so:
 
-```json
+```jsonc
 {
     // example
     "main": "./out/extension.js",
@@ -50,7 +50,7 @@ This package is used for extracting strings from your extension and working with
 
 First off, if you want to generate a `bundle.l10n.json` file which contains the sample's localizable strings, run:
 
-```
+```sh
 npx @vscode/l10n-dev export -o ./l10n ./src
 ```
 
@@ -68,7 +68,7 @@ This will create a `package.nls.qps-ploc.json` file and a `bundle.l10n.qps-ploc.
 
 On the VS Code team, we work with a team at Microsoft that accepts XLF files and handles translating strings for us. So we use the `@vscode/l10n-dev` tool to convert our `bundle.l10n.json` and `package.nls.json` files into XLF files. If you want to generate an XLF file, you can run:
 
-```
+```sh
 npx @vscode/l10n-dev generate-xlf -o ./l10n-sample.xlf ./l10n/bundle.l10n.json ./package.nls.json
 ```
 
