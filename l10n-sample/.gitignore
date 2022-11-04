@@ -1,0 +1,10 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+
+# Ignore generated files
+l10n/bundle.l10n.json
+l10n/bundle.l10n.qps-ploc.json
+package.nls.qps-ploc.json
