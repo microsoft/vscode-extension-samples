@@ -226,7 +226,7 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"lint": "eslint . --ext .ts,.tsx"
+		"lint": "eslint \"src/**/*.ts\""
 	},
 	"devDependencies": {
 		"@types/ftp": "^0.3.33",
@@ -234,9 +234,9 @@
 		"@types/node": "^16.11.7",
 		"@types/rimraf": "^2.0.2",
 		"@types/vscode": "^1.67.0",
-		"@typescript-eslint/eslint-plugin": "^5.30.0",
-		"@typescript-eslint/parser": "^5.30.0",
-		"eslint": "^8.13.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"eslint": "^8.26.0",
 		"typescript": "^4.8.4"
 	},
 	"dependencies": {
