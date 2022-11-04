@@ -52,10 +52,10 @@
 		"chrome": "npm run compile && vscode-test-web --browserType=chromium --extensionDevelopmentPath=. ./test-data"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.30.0",
-		"@typescript-eslint/parser": "^5.30.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
 		"@vscode/test-web": "^0.0.22",
-		"eslint": "^8.13.0",
+		"eslint": "^8.26.0",
 		"path-browserify": "^1.0.1",
 		"ts-loader": "^9.3.0",
 		"typescript": "^4.8.4",
