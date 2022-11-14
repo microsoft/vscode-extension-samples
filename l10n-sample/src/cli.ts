@@ -1,8 +1,8 @@
 import * as l10n from '@vscode/l10n';
 
-if (process.env['EXTENSION_BUNDLE_URI']) {
+if (process.env['EXTENSION_BUNDLE_PATH']) {
 	l10n.config({
-		uri: process.env['EXTENSION_BUNDLE_URI']
+		fsPath: process.env['EXTENSION_BUNDLE_PATH']
 	});
 }
 
