@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 				message,
 				new vscode.ShellExecution(`node ${path.join(__dirname, 'cli.js')}`, {
 					// eslint-disable-next-line @typescript-eslint/naming-convention
-					env: vscode.l10n.uri ? { EXTENSION_BUNDLE_URI: vscode.l10n.uri?.toString(true) } : undefined
+					env: vscode.l10n.uri ? { EXTENSION_BUNDLE_PATH: vscode.l10n.uri?.fsPath } : undefined
 				})));
 
 		const messageDone = vscode.l10n.t('Hello {done}', { done: 'FINISHED' });
