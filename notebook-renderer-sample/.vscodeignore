@@ -10,3 +10,7 @@ vsc-extension-quickstart.md
 **/*.map
 **/*.ts
 **/*.tsbuildinfo
+node_modules/**
+notebook-renderer-sample.gif
+sample/**
+*.vsix
