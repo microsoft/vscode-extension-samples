@@ -11,30 +11,12 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.58.0"
+		"vscode": "^1.74-insider"
 	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:terminalTest.createAndSend",
-		"onCommand:terminalTest.createTerminal",
-		"onCommand:terminalTest.createTerminalHideFromUser",
-		"onCommand:terminalTest.createZshLoginShell",
-		"onCommand:terminalTest.dimensions",
-		"onCommand:terminalTest.dispose",
-		"onCommand:terminalTest.hide",
-		"onCommand:terminalTest.onDidChangeTerminalDimensions",
-		"onCommand:terminalTest.onDidWriteTerminalData",
-		"onCommand:terminalTest.processId",
-		"onCommand:terminalTest.registerTerminalLinkProvider",
-		"onCommand:terminalTest.sendText",
-		"onCommand:terminalTest.sendTextNoNewLine",
-		"onCommand:terminalTest.show",
-		"onCommand:terminalTest.showPreserveFocus",
-		"onCommand:terminalTest.terminals",
-		"onCommand:terminalTest.updateEnvironment",
-		"onCommand:terminalTest.clearEnvironment",
 		"onTerminalProfile:terminalTest.terminal-profile"
 	],
 	"main": "./out/extension.js",
@@ -131,7 +113,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
-		"@types/vscode": "^1.58.0",
+		"@types/vscode": "^1.73.0",
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
 		"eslint": "^8.26.0",

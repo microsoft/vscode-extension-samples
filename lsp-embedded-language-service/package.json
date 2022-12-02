@@ -12,11 +12,9 @@
 	"categories": [],
 	"keywords": [],
 	"engines": {
-		"vscode": "^1.43.0"
+		"vscode": "^1.74-insider"
 	},
-	"activationEvents": [
-		"onLanguage:html1"
-	],
+	"activationEvents": [],
 	"main": "./client/out/extension",
 	"contributes": {
 		"languages": [

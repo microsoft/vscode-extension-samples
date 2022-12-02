@@ -4,21 +4,12 @@
 	"description": "Examples of notification types and various configurations",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.69.0"
+		"vscode": "^1.74-insider"
 	},
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:notifications-sample.showInfo",
-		"onCommand:notifications-sample.showInfoAsModal",
-		"onCommand:notifications-sample.showWarning",
-		"onCommand:notifications-sample.showWarningWithActions",
-		"onCommand:notifications-sample.showError",
-		"onCommand:notifications-sample.showProgress",
-		"onCommand:notifications-sample.showAll"
-
-	],
+	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [

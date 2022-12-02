@@ -4,15 +4,12 @@
   "description": "AuthenticationProvider API Sample",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.74-insider"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:vscode-authenticationprovider-sample.login",
-    "onAuthenticationRequest:AzureDevOpsPAT"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
