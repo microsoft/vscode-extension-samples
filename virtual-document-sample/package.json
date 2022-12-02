@@ -14,7 +14,7 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
 	},
 	"engines": {
-		"vscode": "^1.74"
+		"vscode": "^1.74.0"
 	},
 	"categories": [
 		"Other"

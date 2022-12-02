@@ -12,7 +12,7 @@
 	"categories": [],
 	"keywords": [],
 	"engines": {
-		"vscode": "^1.74"
+		"vscode": "^1.74.0"
 	},
 	"activationEvents": [],
 	"main": "./client/out/extension",
