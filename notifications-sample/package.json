@@ -4,7 +4,7 @@
 	"description": "Examples of notification types and various configurations",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.74-insider"
+		"vscode": "^1.74"
 	},
 	"categories": [
 		"Other"

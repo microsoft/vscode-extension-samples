@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "vscode": "^1.74-insider"
+    "vscode": "^1.74"
   },
   "categories": [
     "Other"
