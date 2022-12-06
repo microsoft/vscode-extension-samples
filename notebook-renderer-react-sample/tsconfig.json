@@ -1,8 +1,21 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./src/client"
-    }
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "ES2020",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "strict": true,
+    "jsx": "react",
+    // noEmit prevents the default tsc from building this--we use webpack instead
+    "noEmit": true,
+    "rootDir": ".",
+    "types": [
+      "webpack-env",
+      "vscode-notebook-renderer"
+    ],
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/**/*"
   ]
 }
