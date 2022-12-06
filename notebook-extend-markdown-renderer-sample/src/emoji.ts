@@ -18,5 +18,5 @@ export async function activate(ctx: RendererContext<void>) {
 	const emoji = require('markdown-it-emoji');
 	markdownItRenderer.extendMarkdownIt((md: MarkdownIt) => {
 		return md.use(emoji, {});
-	})
+	});
 }

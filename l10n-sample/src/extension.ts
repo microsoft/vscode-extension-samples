@@ -1,6 +1,6 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import path = require('path');
+import * as path from 'path';
 import * as vscode from 'vscode';
 import { sayByeCommand } from './command/sayBye';
 
@@ -35,6 +35,3 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(helloCmd, byeCmd);
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() { }
