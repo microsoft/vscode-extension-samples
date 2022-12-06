@@ -12,6 +12,8 @@
         "webpack.config.js"
     ],
     "rules": {
+        "@typescript-eslint/semi": "warn",
+        "semi": "off",
         "@typescript-eslint/no-var-requires": 0
     }
 }

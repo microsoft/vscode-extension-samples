@@ -23,7 +23,12 @@ export const activate: ActivationFunction = context => {
         root.id = 'root';
         shadow.append(root);
       }
-      const root = shadow.querySelector<HTMLElement>('#root')!;
+
+      const root = shadow.querySelector<HTMLElement>('#root');
+      if (!root) {
+        throw new Error('Could not find root element');
+      }
+
       errorOverlay.wrap(root, () => {
         root.innerHTML = '';
         const node = document.createElement('div');
@@ -32,7 +37,8 @@ export const activate: ActivationFunction = context => {
         ReactDOM.render(<IssuesList info={{ container: node, mime: outputItem.mime, value: outputItem.json(), context }} />, root);
       });
     },
-    disposeOutputItem(outputId) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    disposeOutputItem(_outputId) {
       // Do any teardown here. outputId is the cell output being deleted, or
       // undefined if we're clearing all outputs.
     }
