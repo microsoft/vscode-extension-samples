@@ -61,10 +61,9 @@ export function activate(context: ExtensionContext) {
 		const uri = document.uri;
 		// Untitled files go to a default client.
 		if (uri.scheme === 'untitled' && !defaultClient) {
-			const debugOptions = { execArgv: ["--nolazy", "--inspect=6010"] };
 			const serverOptions = {
 				run: { module, transport: TransportKind.ipc },
-				debug: { module, transport: TransportKind.ipc, options: debugOptions}
+				debug: { module, transport: TransportKind.ipc }
 			};
 			const clientOptions: LanguageClientOptions = {
 				documentSelector: [
@@ -87,10 +86,9 @@ export function activate(context: ExtensionContext) {
 		folder = getOuterMostWorkspaceFolder(folder);
 
 		if (!clients.has(folder.uri.toString())) {
-			const debugOptions = { execArgv: ["--nolazy", `--inspect=${6011 + clients.size}`] };
 			const serverOptions = {
 				run: { module, transport: TransportKind.ipc },
-				debug: { module, transport: TransportKind.ipc, options: debugOptions}
+				debug: { module, transport: TransportKind.ipc }
 			};
 			const clientOptions: LanguageClientOptions = {
 				documentSelector: [
