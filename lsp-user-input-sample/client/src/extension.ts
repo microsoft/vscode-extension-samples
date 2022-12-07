@@ -12,7 +12,7 @@ export function activate(context: ExtensionContext): void {
 	const serverModule = context.asAbsolutePath(path.join('server', 'out', 'sampleServer.js'));
 	let serverOptions: ServerOptions = {
 		run: { module: serverModule, transport: TransportKind.ipc, options: { cwd: process.cwd() } },
-		debug: { module: serverModule, transport: TransportKind.ipc, options: { execArgv: ['--nolazy', '--inspect=6011'], cwd: process.cwd() } }
+		debug: { module: serverModule, transport: TransportKind.ipc, options: { cwd: process.cwd() } }
 	};
 
 	let clientOptions: LanguageClientOptions = {
