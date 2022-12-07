@@ -16,9 +16,7 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:extension.getGitHubUser"
-	],
+	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
