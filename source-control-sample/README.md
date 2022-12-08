@@ -123,7 +123,6 @@ upon user request, or when a previously _cloned_ workspace folder is open.
 
 ```JSON
     "activationEvents": [
-        "onCommand:extension.source-control.open",
         "workspaceContains:.jsfiddle"
     ],
 ```

@@ -14,11 +14,9 @@
 		"multi-root ready"
 	],
 	"engines": {
-		"vscode": "^1.63.0"
+		"vscode": "^1.74.0"
 	},
-	"activationEvents": [
-		"onLanguage:plaintext"
-	],
+	"activationEvents": [],
 	"main": "./client/out/extension",
 	"contributes": {
 		"configuration": {

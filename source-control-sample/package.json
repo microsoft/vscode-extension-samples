@@ -11,18 +11,12 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.74.0"
 	},
 	"categories": [
 		"SCM Providers"
 	],
 	"activationEvents": [
-		"onCommand:extension.source-control.open",
-		"onCommand:extension.source-control.commit",
-		"onCommand:extension.source-control.refresh",
-		"onCommand:extension.source-control.discard",
-		"onCommand:extension.source-control.checkout",
-		"onCommand:extension.source-control.browse",
 		"workspaceContains:.jsfiddle"
 	],
 	"main": "./out/extension.js",
@@ -104,7 +98,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
-		"@types/vscode": "^1.32.0",
+		"@types/vscode": "^1.73.0",
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
 		"eslint": "^8.26.0",
