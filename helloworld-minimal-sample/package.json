@@ -5,11 +5,9 @@
 	"publisher": "vscode-samples",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-minimal-sample",
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.74.0"
 	},
-	"activationEvents": [
-		"onCommand:extension.helloWorld"
-	],
+	"activationEvents": [],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
@@ -21,6 +19,6 @@
 	},
 	"scripts": {},
 	"devDependencies": {
-		"@types/vscode": "^1.32.0"
+		"@types/vscode": "^1.73.0"
 	}
 }
