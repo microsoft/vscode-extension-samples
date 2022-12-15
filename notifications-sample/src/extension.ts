@@ -54,7 +54,7 @@ export function activate(context: vscode.ExtensionContext) {
 				progress.report({ increment: 50, message: "I am long running! - almost there..." });
 			}, 3000);
 
-			const p = new Promise<void>(resolve => {
+			const p = new sPromise<void>(resolve => {
 				setTimeout(() => {
 					resolve();
 				}, 5000);
