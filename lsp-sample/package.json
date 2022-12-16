@@ -41,7 +41,16 @@
 					"description": "Traces the communication between VS Code and the language server."
 				}
 			}
-		}
+		},
+		"languages": [
+			{
+				"id": "plaintext",
+				"extensions": [
+					".txt"
+				],
+				"aliases": ["Plain Text"]
+			}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
