@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export class SampleKernel {
-	private readonly _id = 'test-notebook-renderer-kernel';
+	private readonly _id = 'test-notebook-serializer-kernel';
 	private readonly _label = 'Sample Notebook Kernel';
 	private readonly _supportedLanguages = ['json'];
 
@@ -11,7 +11,7 @@ export class SampleKernel {
 	constructor() {
 
 		this._controller = vscode.notebooks.createNotebookController(this._id,
-			'test-notebook-renderer',
+			'test-notebook-serializer',
 			this._label);
 
 		this._controller.supportedLanguages = this._supportedLanguages;
@@ -37,7 +37,6 @@ export class SampleKernel {
 
 		try {
 			execution.replaceOutput([new vscode.NotebookCellOutput([
-				vscode.NotebookCellOutputItem.json(JSON.parse(cell.document.getText()), "x-application/sample-json-renderer"),
 				vscode.NotebookCellOutputItem.json(JSON.parse(cell.document.getText()))
 			])]);
 

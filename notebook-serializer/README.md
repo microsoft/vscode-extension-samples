@@ -1,28 +1,15 @@
-# notebook-serializer-example
+# notebook-serializer-sample
 
-⚠️ Work-in-progress starter code for custom notebook renderers in VS Code. Expect this to change as notebooks matures. ⚠️
+This is a very simple extension sample demonstrating the use of the notebook serializer and controller APIs. This sample includes:
 
-This starter includes:
+- A notebook serializer that is activated for files matching `*.sample-json-notebook`. It serializes notebook data into a simple JSON-based format.
+- A notebook controller that "executes" JSON-type code cells by adding an output to the cell that includes the content of the cell parsed as JSON.
+- A command "Create JSON Notebook" that creates a new untitled notebook of this type.
 
- - 🖥️ TypeScript code to create a simple `NotebookOutputRenderer`
- - 📦 A Webpack build for renderer client code
- - ⚡ Support for hot module reloading and safe boilerplate
- - 🎨 CSS modules support
+## Running this sample
 
-### Running this Sample
-
- 1. `cd notebook-serializer-example`
- 1. `code-insiders .`: Open the folder in VS Code Insiders
+ 1. `cd notebook-serializer-sample`
+ 1. `code .`: Open the folder in VS Code
  1. Hit `F5` to build+debug
-
-### Structure
-
-A Notebook Renderer consists of code that runs in the VS Code Extension Host (Node.js), which registers the renderer and passes data into the UI code running inside a WebView (Browser/DOM).
-
-This uses TypeScript project references. There are three projects in the `src` directory:
-
- - `extension` contains the code running in Node.js extension host. It's compiled with `tsc`.
- - `client` is the UI code, built by Webpack, with access to the DOM.
- - `common` contains code shared between the extension and client.
-
-When you run `watch`, `compile`, or `dev`, we invoke both `tsc` and `webpack` to compile the extension and the client portion of the code.
+ 1. Run the command "Create JSON Notebook"
+ 1. Add and edit cells, and click the run button to invoke the controller
