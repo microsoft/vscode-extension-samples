@@ -21,22 +21,16 @@ export class SampleContentSerializer implements vscode.NotebookSerializer {
 	public readonly label: string = 'My Sample Content Serializer';
 
 	public async deserializeNotebook(data: Uint8Array, token: vscode.CancellationToken): Promise<vscode.NotebookData> {
-		const contents = new TextDecoder().decode(data); // convert to String
-
-		// Read file contents
-		let raw: RawNotebookData;
-		try {
-			raw = <RawNotebookData>JSON.parse(contents);
-		} catch {
-			raw = { cells: [] };
-		}
+		console.log('Invoking my serializer');
 
 		// Create array of Notebook cells for the VS Code API from file contents
-		const cells = raw.cells.map(item => new vscode.NotebookCellData(
-			item.kind,
-			item.value,
-			item.language
-		));
+		const cells: vscode.NotebookCellData[] = [
+			new vscode.NotebookCellData(
+				vscode.NotebookCellKind.Markup,
+				'Hi from my test extension',
+				'markdown'
+			)
+		];
 
 		return new vscode.NotebookData(cells);
 	}
