@@ -147,6 +147,7 @@ interface QuickPickParameters<T extends QuickPickItem> {
 	totalSteps: number;
 	items: T[];
 	activeItem?: T;
+	ignoreFocusOut?: boolean;
 	placeholder: string;
 	buttons?: QuickInputButton[];
 	shouldResume: () => Thenable<boolean>;
@@ -160,6 +161,8 @@ interface InputBoxParameters {
 	prompt: string;
 	validate: (value: string) => Promise<string | undefined>;
 	buttons?: QuickInputButton[];
+	ignoreFocusOut?: boolean;
+	placeholder?: string;
 	shouldResume: () => Thenable<boolean>;
 }
 
@@ -201,7 +204,7 @@ class MultiStepInput {
 		}
 	}
 
-	async showQuickPick<T extends QuickPickItem, P extends QuickPickParameters<T>>({ title, step, totalSteps, items, activeItem, placeholder, buttons, shouldResume }: P) {
+	async showQuickPick<T extends QuickPickItem, P extends QuickPickParameters<T>>({ title, step, totalSteps, items, activeItem, ignoreFocusOut, placeholder, buttons, shouldResume }: P) {
 		const disposables: Disposable[] = [];
 		try {
 			return await new Promise<T | (P extends { buttons: (infer I)[] } ? I : never)>((resolve, reject) => {
@@ -209,6 +212,7 @@ class MultiStepInput {
 				input.title = title;
 				input.step = step;
 				input.totalSteps = totalSteps;
+				input.ignoreFocusOut = ignoreFocusOut ?? false;
 				input.placeholder = placeholder;
 				input.items = items;
 				if (activeItem) {
@@ -245,7 +249,7 @@ class MultiStepInput {
 		}
 	}
 
-	async showInputBox<P extends InputBoxParameters>({ title, step, totalSteps, value, prompt, validate, buttons, shouldResume }: P) {
+	async showInputBox<P extends InputBoxParameters>({ title, step, totalSteps, value, prompt, validate, buttons, ignoreFocusOut, placeholder, shouldResume }: P) {
 		const disposables: Disposable[] = [];
 		try {
 			return await new Promise<string | (P extends { buttons: (infer I)[] } ? I : never)>((resolve, reject) => {
@@ -255,6 +259,8 @@ class MultiStepInput {
 				input.totalSteps = totalSteps;
 				input.value = value || '';
 				input.prompt = prompt;
+				input.ignoreFocusOut = ignoreFocusOut ?? false;
+				input.placeholder = placeholder;
 				input.buttons = [
 					...(this.steps.length > 1 ? [QuickInputButtons.Back] : []),
 					...(buttons || [])
