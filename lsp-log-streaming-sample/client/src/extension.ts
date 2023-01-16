@@ -5,7 +5,7 @@
 
 import * as path from 'path';
 import { workspace, commands, ExtensionContext, OutputChannel } from 'vscode';
-import * as WebSocket from 'ws';
+import { WebSocket } from 'ws';
 
 import {
 	LanguageClient,
