@@ -5,18 +5,18 @@
 
 import * as path from 'path';
 import { workspace, commands, ExtensionContext, OutputChannel } from 'vscode';
-import * as WebSocket from 'ws';
+import { WebSocket } from 'ws';
 
 import {
 	LanguageClient,
 	LanguageClientOptions,
 	ServerOptions,
 	TransportKind
-} from 'vscode-languageclient';
+} from 'vscode-languageclient/node';
 
 let client: LanguageClient;
 
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
 	const socketPort = workspace.getConfiguration('languageServerExample').get('port', 7000);
 	let socket: WebSocket | null = null;
 
@@ -60,7 +60,8 @@ export function activate(context: ExtensionContext) {
 		clear() { /* empty */ },
 		show() { /* empty */ },
 		hide() { /* empty */ },
-		dispose() { /* empty */ }
+		dispose() { /* empty */ },
+		replace() { /* empty */ }
 	};
 
 	// Options to control the language client
@@ -84,7 +85,7 @@ export function activate(context: ExtensionContext) {
 	);
 
 	// Start the client. This will also launch the server
-	client.start();
+	await client.start();
 }
 
 export function deactivate(): Thenable<void> {
