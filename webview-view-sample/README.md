@@ -1,6 +1,6 @@
 # Calico Colors — Webview View API Sample
 
-Demonstrates VS Code's proposed [webview view API](https://github.com/microsoft/vscode/issues/46585). This includes:
+Demonstrates VS Code's [webview view API](https://github.com/microsoft/vscode/issues/46585). This includes:
 
 - Contributing a webview based view to the explorer.
 - Posting messages from an extension to a webview view
