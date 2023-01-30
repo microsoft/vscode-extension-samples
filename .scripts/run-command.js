@@ -8,14 +8,14 @@ const child_process = require('child_process');
 const { samples, lspSamples } = require('./samples');
 
 async function tryRunInstall(
-	/** @type {string} */command,
+	/** @type {string} */ command,
 	/** @type {import('./samples').Sample} */ sample,
 ) {
 	const packageJsonPath = path.join(sample.path, 'package.json');
 	if (fs.existsSync(packageJsonPath)) {
 		const packageJson = JSON.parse(fs.readFileSync(packageJsonPath).toString());
 		if (packageJson['devDependencies'] || packageJson['dependencies']) {
-			console.log(`=== Running install on ${path.basename(sample.path)} ===`);
+			console.log(`=== Running ${command} on ${path.basename(sample.path)} ===`);
 			child_process.execSync(command, {
 				cwd: sample.path,
 				stdio: 'inherit'
