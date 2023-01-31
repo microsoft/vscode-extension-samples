@@ -5,9 +5,10 @@
 
 // [0,*):console.log(
 
+
+// [0,*):console.log("foo"
 // [0,*):console.log({ label: "("
 
-// [0,*):console.log({ label: "("
 
 // [0,*):console.log(`${(1+2}`)
 
