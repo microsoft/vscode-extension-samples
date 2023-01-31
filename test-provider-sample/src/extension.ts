@@ -8,7 +8,7 @@ export async function activate(context: vscode.ExtensionContext) {
 	const fileChangedEmitter = new vscode.EventEmitter<vscode.Uri>();
 	const runHandler = (request: vscode.TestRunRequest2, cancellation: vscode.CancellationToken) => {
 		if (!request.continuous) {
-			return startTestRun(request, cancellation);
+			return startTestRun(request);
 		}
 
 		const l = fileChangedEmitter.event(uri => startTestRun(
@@ -18,12 +18,11 @@ export async function activate(context: vscode.ExtensionContext) {
 				request.profile,
 				true
 			),
-			cancellation
 		));
 		cancellation.onCancellationRequested(() => l.dispose());
 	};
 
-	const startTestRun = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
+	const startTestRun = (request: vscode.TestRunRequest) => {
 		const queue: { test: vscode.TestItem; data: TestCase }[] = [];
 		const run = ctrl.createTestRun(request);
 		// map of file uris to statements on each line:
@@ -66,7 +65,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const runTestQueue = async () => {
 			for (const { test, data } of queue) {
 				run.appendOutput(`Running ${test.id}\r\n`);
-				if (cancellation.isCancellationRequested) {
+				if (run.token.isCancellationRequested) {
 					run.skipped(test);
 				} else {
 					run.started(test);
