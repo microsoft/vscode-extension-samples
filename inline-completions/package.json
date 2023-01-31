@@ -1,6 +1,6 @@
 {
 	"enabledApiProposals": [
-		"inlineCompletions"
+		"inlineCompletionsAdditions"
 	],
 	"name": "inline-completion-sample",
 	"displayName": "Inline Completion Sample",
@@ -22,7 +22,7 @@
 		"commands": [
 			{
 				"command": "extension.inline-completion-settings",
-				"title": "Inline Completion Settings"
+				"title": "My Inline Completion Demo Settings"
 			}
 		],
 		"menus": {
@@ -39,7 +39,6 @@
 		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./",
 		"download-api": "vscode-dts dev",
-		"postdownload-api": "vscode-dts main",
 		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
@@ -48,6 +47,7 @@
 		"@typescript-eslint/parser": "^5.42.0",
 		"eslint": "^8.26.0",
 		"typescript": "^4.9.4",
-		"vscode-dts": "^0.3.3"
+		"vscode-dts": "^0.3.3",
+		"@types/vscode": "^1.74.0"
 	}
 }
