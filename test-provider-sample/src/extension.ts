@@ -5,7 +5,24 @@ export async function activate(context: vscode.ExtensionContext) {
 	const ctrl = vscode.tests.createTestController('mathTestController', 'Markdown Math');
 	context.subscriptions.push(ctrl);
 
-	const runHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
+	const fileChangedEmitter = new vscode.EventEmitter<vscode.Uri>();
+	const runHandler = (request: vscode.TestRunRequest2, cancellation: vscode.CancellationToken) => {
+		if (!request.continuous) {
+			return startTestRun(request);
+		}
+
+		const l = fileChangedEmitter.event(uri => startTestRun(
+			new vscode.TestRunRequest2(
+				[getOrCreateFile(ctrl, uri).file],
+				undefined,
+				request.profile,
+				true
+			),
+		));
+		cancellation.onCancellationRequested(() => l.dispose());
+	};
+
+	const startTestRun = (request: vscode.TestRunRequest) => {
 		const queue: { test: vscode.TestItem; data: TestCase }[] = [];
 		const run = ctrl.createTestRun(request);
 		// map of file uris to statements on each line:
@@ -48,7 +65,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		const runTestQueue = async () => {
 			for (const { test, data } of queue) {
 				run.appendOutput(`Running ${test.id}\r\n`);
-				if (cancellation.isCancellationRequested) {
+				if (run.token.isCancellationRequested) {
 					run.skipped(test);
 				} else {
 					run.started(test);
@@ -90,11 +107,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		await Promise.all(getWorkspaceTestPatterns().map(({ pattern }) => findInitialFiles(ctrl, pattern)));
 	};
 
-	ctrl.createRunProfile('Run Tests', vscode.TestRunProfileKind.Run, runHandler, true);
+	ctrl.createRunProfile('Run Tests', vscode.TestRunProfileKind.Run, runHandler, true, undefined, true);
 
 	ctrl.resolveHandler = async item => {
 		if (!item) {
-			context.subscriptions.push(...startWatchingWorkspace(ctrl));
+			context.subscriptions.push(...startWatchingWorkspace(ctrl, fileChangedEmitter));
 			return;
 		}
 
@@ -166,16 +183,20 @@ async function findInitialFiles(controller: vscode.TestController, pattern: vsco
 	}
 }
 
-function startWatchingWorkspace(controller: vscode.TestController) {
+function startWatchingWorkspace(controller: vscode.TestController, fileChangedEmitter: vscode.EventEmitter<vscode.Uri> ) {
 	return getWorkspaceTestPatterns().map(({ workspaceFolder, pattern }) => {
 		const watcher = vscode.workspace.createFileSystemWatcher(pattern);
 
-		watcher.onDidCreate(uri => getOrCreateFile(controller, uri));
-		watcher.onDidChange(uri => {
+		watcher.onDidCreate(uri => {
+			getOrCreateFile(controller, uri);
+			fileChangedEmitter.fire(uri);
+		});
+		watcher.onDidChange(async uri => {
 			const { file, data } = getOrCreateFile(controller, uri);
 			if (data.didResolve) {
-				data.updateFromDisk(controller, file);
+				await data.updateFromDisk(controller, file);
 			}
+			fileChangedEmitter.fire(uri);
 		});
 		watcher.onDidDelete(uri => controller.items.delete(uri.toString()));
 

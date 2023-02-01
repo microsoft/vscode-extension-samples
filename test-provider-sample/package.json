@@ -8,7 +8,8 @@
 	"license": "MIT",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples",
 	"enabledApiProposals": [
-		"testCoverage"
+		"testCoverage",
+		"testContinuousRun"
 	],
 	"engines": {
 		"vscode": "^1.68.0"
