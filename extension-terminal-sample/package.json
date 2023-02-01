@@ -17,7 +17,6 @@
 		"Other"
 	],
 	"main": "./out/extension.js",
-	"browser": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
@@ -38,7 +37,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
-		"@types/vscode": "~1.39.0",
+		"@types/vscode": "^1.74.0",
 		"@typescript-eslint/eslint-plugin": "^5.30.0",
 		"@typescript-eslint/parser": "^5.30.0",
 		"eslint": "^8.13.0",
