@@ -9,7 +9,8 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"publisher": "vscode-samples",
-	"categories": [],
+	"categories": [ "Programming Languages" ],
+	"files": [ "syntaxes" ],
 	"keywords": [
 		"multi-root ready"
 	],
@@ -17,7 +18,7 @@
 		"vscode": "^1.74.0"
 	},
 	"activationEvents": [
-		"onLanguage:plaintext"
+		"onLanguage:DML"
 	],
 	"main": "./client/out/extension",
 	"contributes": {
@@ -43,7 +44,20 @@
 					"description": "Traces the communication between VS Code and the language server."
 				}
 			}
-		}
+		},
+        "languages": [{
+            "id": "DML",
+            "aliases": [ "Device Modeling Language", "DML", "dml" ],
+                "extensions": [ ".dml" ],
+                "configuration": "./language-configuration.json"
+        }],
+        "grammars": [
+            {
+                "language": "DML",
+                "scopeName": "source.dml",
+                "path": "./syntaxes/DML.tmLanguage.json"
+            }
+        ]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
