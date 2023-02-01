@@ -11,16 +11,13 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.39.0"
+		"vscode": "^1.74.0"
 	},
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:extensionTerminalSample.create",
-		"onCommand:extensionTerminalSample.clear"
-	],
 	"main": "./out/extension.js",
+	"browser": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
