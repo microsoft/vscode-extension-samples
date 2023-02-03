@@ -45,7 +45,8 @@
       {"include": "#anon_pattern_range_8"},
       {"include": "#anon_pattern_range_9"},
       {"include": "#anon_pattern_14"},
-      {"include": "#anon_pattern_15"}
+      {"include": "#anon_pattern_15"},
+      {"include": "#anon_pattern_16"}
     ],
     "repository": {
       "access-method": {
@@ -145,6 +146,10 @@
       "anon_pattern_9": {
         "match": "\\b(pthread_attr_t|pthread_cond_t|pthread_condattr_t|pthread_mutex_t|pthread_mutexattr_t|pthread_once_t|pthread_rwlock_t|pthread_rwlockattr_t|pthread_t|pthread_key_t)\\b",
         "name": "support.type.pthread.c"
+      },
+      "anon_pattern_16": {
+        "match": "\\b((int|uint)+[z0-9_]{,2})\\b",
+        "name": "support.type.sys-types.c"
       },
       "anon_pattern_range_1": {
         "name": "meta.preprocessor.macro.c",
