@@ -22,9 +22,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 			let offset = 1;
 			while (offset > 0) {
+				if (position.line - offset < 0) {
+					break;
+				}
+				
 				const lineBefore = document.lineAt(position.line - offset).text;
 				const matches = lineBefore.match(regexp);
-				if (!matches || position.line - offset < 0) {
+				if (!matches) {
 					break;
 				}
 				offset++;
