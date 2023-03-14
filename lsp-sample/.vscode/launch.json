@@ -9,7 +9,6 @@
 			"runtimeExecutable": "${execPath}",
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}"],
 			"outFiles": ["${workspaceRoot}/client/out/**/*.js"],
-			"autoAttachChildProcesses": true,
 			"preLaunchTask": {
 				"type": "npm",
 				"script": "watch"
