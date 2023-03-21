@@ -1,4 +1,3 @@
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const { DefinePlugin } = require('webpack');
 const path = require('path');
 
@@ -28,7 +27,6 @@ module.exports = (env, argv) => ({
         test: /\.tsx?$/,
         loader: 'ts-loader',
         options: {
-          configFile: 'src/client/tsconfig.json',
           // transpileOnly enables hot-module-replacement
           transpileOnly: true,
           compilerOptions: {
@@ -63,11 +61,6 @@ module.exports = (env, argv) => ({
     headers: { 'Access-Control-Allow-Origin': '*' },
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin({
-      typescript: {
-        tsconfig: 'src/client/tsconfig.json',
-      },
-    }),
     new DefinePlugin({
       // Path from the output filename to the output directory
       __webpack_relative_entrypoint_to_root__: JSON.stringify(
