@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "webpack",
+			"problemMatcher": [
+				"$ts-webpack"
+			],
+			"label": "npm: webpack",
+			"detail": "webpack --mode development"
+		}
+	]
+}

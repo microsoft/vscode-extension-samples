@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(vscode.commands.registerCommand(commandId, run));
 	}
 	function registerCtrlKeyBinding(key: string): void {
-		registerCommandNice(key, function (args) {
+		registerCommandNice(key, function(args) {
 			if (!vscode.window.activeTextEditor) {
 				return;
 			}
@@ -23,34 +23,34 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const vimExt = new VimExt();
 
-	registerCommandNice('type', function (args) {
+	registerCommandNice('type', function(args) {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.type(args.text);
 	});
-	registerCommandNice('replacePreviousChar', function (args) {
+	registerCommandNice('replacePreviousChar', function(args) {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.replacePrevChar(args.text, args.replaceCharCnt);
 	});
-	registerCommandNice('compositionStart', function (args) {
+	registerCommandNice('compositionStart', function(args) {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.compositionStart();
 	});
-	registerCommandNice('compositionEnd', function (args) {
+	registerCommandNice('compositionEnd', function(args) {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.compositionEnd();
 	});
-	registerCommandNice('vim.goToNormalMode', function (args) {
+	registerCommandNice('vim.goToNormalMode', function(args) {
 		vimExt.goToNormalMode();
 	});
-	registerCommandNice('vim.clearInput', function (args) {
+	registerCommandNice('vim.clearInput', function(args) {
 		vimExt.clearInput();
 	});
 	// registerCommandNice('paste', function(args) {

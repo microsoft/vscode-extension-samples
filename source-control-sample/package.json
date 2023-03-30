@@ -11,18 +11,12 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.32.0"
+		"vscode": "^1.74.0"
 	},
 	"categories": [
 		"SCM Providers"
 	],
 	"activationEvents": [
-		"onCommand:extension.source-control.open",
-		"onCommand:extension.source-control.commit",
-		"onCommand:extension.source-control.refresh",
-		"onCommand:extension.source-control.discard",
-		"onCommand:extension.source-control.checkout",
-		"onCommand:extension.source-control.browse",
 		"workspaceContains:.jsfiddle"
 	],
 	"main": "./out/extension.js",
@@ -96,7 +90,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "eslint . --ext .ts,.tsx",
+		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
@@ -104,10 +98,10 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.11.7",
-		"@types/vscode": "^1.32.0",
-		"@typescript-eslint/eslint-plugin": "^5.30.0",
-		"@typescript-eslint/parser": "^5.30.0",
-		"eslint": "^8.13.0",
-		"typescript": "^4.8.4"
+		"@types/vscode": "^1.73.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
+		"eslint": "^8.26.0",
+		"typescript": "^5.0.2"
 	}
 }

@@ -27,7 +27,7 @@ class FileItem implements QuickPickItem {
 
 	label: string;
 	description: string;
-	
+
 	constructor(public base: Uri, public uri: Uri) {
 		this.label = path.basename(uri.fsPath);
 		this.description = path.dirname(path.relative(base.fsPath, uri.fsPath));
@@ -39,7 +39,7 @@ class MessageItem implements QuickPickItem {
 	label: string;
 	description = '';
 	detail: string;
-	
+
 	constructor(public base: Uri, public message: string) {
 		this.label = message.replace(/\r?\n/g, ' ');
 		this.detail = base.fsPath;

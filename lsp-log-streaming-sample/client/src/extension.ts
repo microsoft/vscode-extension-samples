@@ -5,18 +5,18 @@
 
 import * as path from 'path';
 import { workspace, commands, ExtensionContext, OutputChannel } from 'vscode';
-import * as WebSocket from 'ws';
+import { WebSocket } from 'ws';
 
 import {
 	LanguageClient,
 	LanguageClientOptions,
 	ServerOptions,
 	TransportKind
-} from 'vscode-languageclient';
+} from 'vscode-languageclient/node';
 
 let client: LanguageClient;
 
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
 	const socketPort = workspace.getConfiguration('languageServerExample').get('port', 7000);
 	let socket: WebSocket | null = null;
 
@@ -29,9 +29,6 @@ export function activate(context: ExtensionContext) {
 	const serverModule = context.asAbsolutePath(
 		path.join('server', 'out', 'server.js')
 	);
-	// The debug options for the server
-	// --inspect=6009: runs the server in Node's Inspector mode so VS Code can attach to the server for debugging
-	const debugOptions = { execArgv: ['--nolazy', '--inspect=6009'] };
 
 	// If the extension is launched in debug mode then the debug server options are used
 	// Otherwise the run options are used
@@ -40,7 +37,6 @@ export function activate(context: ExtensionContext) {
 		debug: {
 			module: serverModule,
 			transport: TransportKind.ipc,
-			options: debugOptions
 		}
 	};
 
@@ -64,7 +60,8 @@ export function activate(context: ExtensionContext) {
 		clear() { /* empty */ },
 		show() { /* empty */ },
 		hide() { /* empty */ },
-		dispose() { /* empty */ }
+		dispose() { /* empty */ },
+		replace() { /* empty */ }
 	};
 
 	// Options to control the language client
@@ -88,7 +85,7 @@ export function activate(context: ExtensionContext) {
 	);
 
 	// Start the client. This will also launch the server
-	client.start();
+	await client.start();
 }
 
 export function deactivate(): Thenable<void> {

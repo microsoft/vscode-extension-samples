@@ -57,7 +57,7 @@ export class FoodRelation {
 
 	constructor(subject: string, verb: string, object: string,
 		private readonly originalText: string, public readonly range: vscode.Range) {
-			
+
 		this._subject = subject.toLowerCase();
 		this._verb = verb.toLowerCase();
 		this._object = object.toLowerCase();
@@ -66,11 +66,11 @@ export class FoodRelation {
 	get subject(): string {
 		return this._subject;
 	}
-	
+
 	get object(): string {
 		return this._object;
 	}
-	
+
 	get verb(): string {
 		return this._verb;
 	}

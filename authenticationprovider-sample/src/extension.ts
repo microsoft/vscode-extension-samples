@@ -30,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
 			const req = await fetch('https://app.vssps.visualstudio.com/_apis/profile/profiles/me?api-version=6.0', {
 				headers: {
 					authorization: `Basic ${Buffer.from(`:${session.accessToken}`).toString('base64')}`,
+					// eslint-disable-next-line @typescript-eslint/naming-convention
 					'content-type': 'application/json',
 				},
 			});
@@ -48,6 +49,3 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 }
-
-// this method is called when your extension is deactivated
-export function deactivate() {}

@@ -1,0 +1,3 @@
+[*.{ts,tsx,js,jsx,json}]
+indent_style = tab
+tab_width = 4

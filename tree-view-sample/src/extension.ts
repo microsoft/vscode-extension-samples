@@ -28,12 +28,12 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.commands.registerCommand('jsonOutline.refreshNode', offset => jsonOutlineProvider.refresh(offset));
 	vscode.commands.registerCommand('jsonOutline.renameNode', args => {
 		let offset = undefined;
-		if(args.selectedTreeItems && args.selectedTreeItems.length){
+		if (args.selectedTreeItems && args.selectedTreeItems.length) {
 			offset = args.selectedTreeItems[0];
-		}else if(typeof args === 'number'){
+		} else if (typeof args === 'number') {
 			offset = args;
 		}
-		if(offset){
+		if (offset) {
 			jsonOutlineProvider.rename(offset);
 		}
 	});
@@ -46,9 +46,5 @@ export function activate(context: vscode.ExtensionContext) {
 	// Test View
 	new TestView(context);
 
-	// Drag and Drop proposed API sample
-	// This check is for older versions of VS Code that don't have the most up-to-date tree drag and drop API proposal.
-	if (typeof vscode.DataTransferItem === 'function') {
-		new TestViewDragAndDrop(context);
-	}
+	new TestViewDragAndDrop(context);
 }

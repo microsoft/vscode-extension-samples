@@ -1,0 +1,57 @@
+{
+	"name": "l10n-sample",
+	"displayName": "l10n-sample",
+	"description": "Sample that shows how to localize an extension",
+	"version": "0.1.0",
+	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"l10n": "./l10n",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.sayHello",
+				"title": "%extension.sayHello.title%"
+			},
+			{
+				"command": "extension.sayBye",
+				"title": "%extension.sayBye.title%"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint src --ext ts"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.73.0",
+		"@types/glob": "^7.2.0",
+		"@types/mocha": "^9.1.0",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^5.16.0",
+		"@typescript-eslint/parser": "^5.16.0",
+		"eslint": "^8.11.0",
+		"glob": "^7.2.0",
+		"mocha": "^9.2.2",
+		"typescript": "^5.0.2",
+		"@vscode/test-electron": "^2.1.3",
+		"@vscode/l10n-dev": "^0.0.18"
+	},
+	"dependencies": {
+		"@vscode/l10n": "^0.0.10"
+	}
+}

@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Command #1 - Check and show a JavaScript-file for a TypeScript-file
 	// * shows how to derive a new uri from an existing uri
 	// * shows how to check for existence of a file
-	vscode.commands.registerCommand('fs/openJS', async function () {
+	vscode.commands.registerCommand('fs/openJS', async function() {
 		if (
 			!vscode.window.activeTextEditor
 			|| posix.extname(vscode.window.activeTextEditor.document.uri.path) !== '.ts'
@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// * shows how to read a directory
 	// * shows how retrieve metadata for a file
 	// * create an untitled document that shows count and total of files
-	vscode.commands.registerCommand('fs/sumSizes', async function () {
+	vscode.commands.registerCommand('fs/sumSizes', async function() {
 
 		async function countAndTotalOfFilesInFolder(folder: vscode.Uri): Promise<{ total: number, count: number }> {
 			let total = 0;
@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// Command #3 - Write and read a file
 	// * shows how to derive a new file-uri from a folder-uri
 	// * shows how to convert a string into a typed array and back
-	vscode.commands.registerCommand('fs/readWriteFile', async function () {
+	vscode.commands.registerCommand('fs/readWriteFile', async function() {
 
 		if (!vscode.workspace.workspaceFolders) {
 			return vscode.window.showInformationMessage('No folder or workspace opened');

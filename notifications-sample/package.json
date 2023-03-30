@@ -4,21 +4,12 @@
 	"description": "Examples of notification types and various configurations",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.69.0"
+		"vscode": "^1.74.0"
 	},
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:notifications-sample.showInfo",
-		"onCommand:notifications-sample.showInfoAsModal",
-		"onCommand:notifications-sample.showWarning",
-		"onCommand:notifications-sample.showWarningWithActions",
-		"onCommand:notifications-sample.showError",
-		"onCommand:notifications-sample.showProgress",
-		"onCommand:notifications-sample.showAll"
-
-	],
+	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
@@ -74,7 +65,7 @@
 		"@typescript-eslint/parser": "^5.27.0",
 		"eslint": "^8.16.0",
 		"glob": "^8.0.3",
-		"typescript": "^4.8.4",
+		"typescript": "^5.0.2",
 		"@vscode/test-electron": "^2.1.3"
 	}
 }

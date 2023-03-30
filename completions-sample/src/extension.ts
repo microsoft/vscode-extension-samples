@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
 			// honored by the editor.
 			const snippetCompletion = new vscode.CompletionItem('Good part of the day');
 			snippetCompletion.insertText = new vscode.SnippetString('Good ${1|morning,afternoon,evening|}. It is ${1}, right?');
-			const docs : any = new vscode.MarkdownString("Inserts a snippet that lets you select [link](x.ts).");
+			const docs: any = new vscode.MarkdownString("Inserts a snippet that lets you select [link](x.ts).");
 			snippetCompletion.documentation = docs;
 			docs.baseUri = vscode.Uri.parse('http://example.com/a/b/c/');
 

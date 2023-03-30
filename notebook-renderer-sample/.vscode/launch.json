@@ -8,10 +8,12 @@
           "request": "launch",
           "runtimeExecutable": "${execPath}",
           "args": [
-              "--extensionDevelopmentPath=${workspaceFolder}"
+            "--extensionDevelopmentPath=${workspaceFolder}",
+            "--folder-uri=${workspaceFolder}/sample/",
+            "${workspaceFolder}/sample/sample.ipynb"
           ],
           "outFiles": [
-              "${workspaceFolder}/dist/**/*.js"
+              "${workspaceFolder}/out/**/*.js"
           ],
           "preLaunchTask": "npm: webpack"
       }

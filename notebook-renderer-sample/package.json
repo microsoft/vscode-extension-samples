@@ -11,6 +11,10 @@
   "categories": [
     "Other"
   ],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
   "contributes": {
     "notebookRenderer": [
       {
@@ -33,13 +37,13 @@
   "devDependencies": {
     "@types/vscode-notebook-renderer": "^1.57.8",
     "@types/webpack-env": "^1.17.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
     "css-loader": "^4.2.0",
-    "eslint": "^8.13.0",
+    "eslint": "^8.26.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^9.2.2",
-    "typescript": "^4.8.4",
+    "typescript": "^5.0.2",
     "vscode-notebook-error-overlay": "^1.0.1",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"

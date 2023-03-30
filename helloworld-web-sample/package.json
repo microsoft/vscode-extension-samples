@@ -8,14 +8,12 @@
 	"license": "MIT",
 	"repository": "https://github.com/microsoft/vscode-extension-samples/helloworld-web-sample",
 	"engines": {
-		"vscode": "^1.59.0"
+		"vscode": "^1.74.0"
 	},
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:helloworld-web-sample.helloWorld"
-	],
+	"activationEvents": [],
 	"browser": "./dist/web/extension.js",
 	"contributes": {
 		"commands": [
@@ -36,17 +34,17 @@
 	},
 	"devDependencies": {
 		"@types/mocha": "^9.0.0",
-		"@types/vscode": "^1.59.0",
+		"@types/vscode": "^1.73.0",
 		"@types/webpack-env": "^1.16.2",
-		"@typescript-eslint/eslint-plugin": "^5.30.0",
-		"@typescript-eslint/parser": "^5.30.0",
+		"@typescript-eslint/eslint-plugin": "^5.42.0",
+		"@typescript-eslint/parser": "^5.42.0",
 		"@vscode/test-web": "^0.0.22",
 		"assert": "^2.0.0",
-		"eslint": "^8.13.0",
+		"eslint": "^8.26.0",
 		"mocha": "^9.2.0",
 		"process": "^0.11.10",
 		"ts-loader": "^9.2.5",
-		"typescript": "^4.8.4",
+		"typescript": "^5.0.2",
 		"webpack": "^5.52.1",
 		"webpack-cli": "^4.8.0"
 	}

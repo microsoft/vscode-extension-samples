@@ -15,7 +15,7 @@ class MyUriHandler implements vscode.UriHandler {
 
 export function activate(context: vscode.ExtensionContext) {
 
-	let disposable = vscode.commands.registerCommand('uri-handler-sample.start', async () => {
+	const disposable = vscode.commands.registerCommand('uri-handler-sample.start', async () => {
 		// Create our new UriHandler
 		const uriHandler = new MyUriHandler();
 
@@ -31,5 +31,3 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(disposable);
 }
-
-export function deactivate() {}

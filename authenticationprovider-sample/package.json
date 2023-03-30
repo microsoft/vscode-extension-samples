@@ -4,15 +4,12 @@
   "description": "AuthenticationProvider API Sample",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.60.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-    "onCommand:vscode-authenticationprovider-sample.login",
-    "onAuthenticationRequest:AzureDevOpsPAT"
-  ],
+  "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -41,11 +38,11 @@
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/node": "^16.11.7",
     "@types/vscode": "^1.60.0",
-    "@typescript-eslint/eslint-plugin": "^5.30.0",
-    "@typescript-eslint/parser": "^5.30.0",
-    "eslint": "^8.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
+    "eslint": "^8.26.0",
     "glob": "^7.1.7",
-    "typescript": "^4.8.4",
+    "typescript": "^5.0.2",
     "vscode-test": "^1.5.2"
   },
   "dependencies": {

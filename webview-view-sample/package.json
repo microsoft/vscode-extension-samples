@@ -10,7 +10,7 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.50.0"
+		"vscode": "^1.74.0"
 	},
 	"extensionKind": [
 		"ui",
@@ -19,11 +19,7 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onView:calicoColors.colorsView",
-		"onCommand:calicoColors.addColor",
-		"onCommand:calicoColors.clearColors"
-	],
+	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
 		"views": {
@@ -61,14 +57,14 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "eslint . --ext .ts,.tsx",
+		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -w -p ./"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.50.0",
-		"@typescript-eslint/eslint-plugin": "^5.30.0",
-		"@typescript-eslint/parser": "^5.30.0",
-		"eslint": "^8.13.0",
-		"typescript": "^4.8.4"
+		"@types/vscode": "^1.73.0",
+		"@typescript-eslint/eslint-plugin": "^5.48.2",
+		"@typescript-eslint/parser": "^5.48.2",
+		"eslint": "^8.32.0",
+		"typescript": "^5.0.2"
 	}
 }

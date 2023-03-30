@@ -10,15 +10,18 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.26.0"
+		"vscode": "^1.74.0"
 	},
 	"scripts": {},
 	"dependencies": {
-		"vscode-languageclient": "^5.1.0-next.9",
-		"ws": "^6.2.2"
+		"vscode-languageclient": "8.1.0-next.6",
+		"ws": "8.12.0"
 	},
 	"devDependencies": {
-		"@types/ws": "^6.0.0",
-		"vscode": "^1.1.34"
+		"@types/ws": "8.5.4",
+		"@types/vscode": "1.74.0",
+		"@types/glob": "8.0.0",
+		"@vscode/test-electron": "2.2.2",
+		"glob": "8.1.0"
 	}
 }

@@ -124,7 +124,7 @@ export function activate(context: vscode.ExtensionContext) {
 						const configuration = vscode.workspace.getConfiguration('', workspaceFolder.uri);
 
 						// 5) Get the current value
-									const currentValue = configuration.get<{}>('conf.resource.insertEmptyLastLine');
+						const currentValue = configuration.get<{}>('conf.resource.insertEmptyLastLine');
 
 						const newValue = { ...currentValue, ...{ [value]: true } };
 
@@ -137,7 +137,7 @@ export function activate(context: vscode.ExtensionContext) {
 					const configuration = vscode.workspace.getConfiguration();
 
 					// 4) Get the current value
-							const currentValue = configuration.get<{}>('conf.resource.insertEmptyLastLine');
+					const currentValue = configuration.get<{}>('conf.resource.insertEmptyLastLine');
 
 					const newValue = { ...currentValue, ...(value ? { [value]: true } : {}) };
 
@@ -167,7 +167,7 @@ export function activate(context: vscode.ExtensionContext) {
 		if (statusSizeDisposable) {
 			statusSizeDisposable.dispose();
 		}
- 
+
 		// 1) Check if showing size is configured for current file
 		const showSize: any = vscode.workspace.getConfiguration('', e).get('conf.language.showSize');
 
