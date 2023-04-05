@@ -29,7 +29,7 @@ namespace _ {
 			return vscode.FileSystemError.FileExists();
 		}
 
-		if (error.code === 'EPERM' || error.code === 'EACCESS') {
+		if (error.code === 'EPERM' || error.code === 'EACCES') {
 			return vscode.FileSystemError.NoPermissions();
 		}
 
