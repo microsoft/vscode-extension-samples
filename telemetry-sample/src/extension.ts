@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "telemtry-sample" is now active!');
+	console.log('Congratulations, your extension "telemetry-sample" is now active!');
 
 
 	const appender: vscode.TelemetryAppender = {
