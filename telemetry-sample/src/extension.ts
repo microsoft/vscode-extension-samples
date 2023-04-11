@@ -6,8 +6,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const appender: vscode.TelemetryAppender = {
 		ignoreBuiltInCommonProperties: false,
-		logEvent: (evenName, data) => {
-			console.log(`Event: ${evenName}`);
+		logEvent: (eventName, data) => {
+			console.log(`Event: ${eventName}`);
 			console.log(`Data: ${JSON.stringify(data)}`);
 		},
 		logException: (exception, data) => {
