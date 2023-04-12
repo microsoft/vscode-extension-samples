@@ -1,13 +1,13 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('Congratulations, your extension "telemtry-sample" is now active!');
+	console.log('Congratulations, your extension "telemetry-sample" is now active!');
 
 
 	const appender: vscode.TelemetryAppender = {
 		ignoreBuiltInCommonProperties: false,
-		logEvent: (evenName, data) => {
-			console.log(`Event: ${evenName}`);
+		logEvent: (eventName, data) => {
+			console.log(`Event: ${eventName}`);
 			console.log(`Data: ${JSON.stringify(data)}`);
 		},
 		logException: (exception, data) => {
