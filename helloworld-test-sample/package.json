@@ -36,7 +36,7 @@
 		"@types/vscode": "^1.73.0",
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
-		"@vscode/test-electron": "^1.6.1",
+		"@vscode/test-electron": "^2.3.0",
 		"eslint": "^8.26.0",
 		"glob": "^7.1.4",
 		"mocha": "^10.2.0",

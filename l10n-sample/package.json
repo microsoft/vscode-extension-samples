@@ -48,7 +48,7 @@
 		"glob": "^7.2.0",
 		"mocha": "^9.2.2",
 		"typescript": "^5.0.2",
-		"@vscode/test-electron": "^2.1.3",
+		"@vscode/test-electron": "^2.3.0",
 		"@vscode/l10n-dev": "^0.0.18"
 	},
 	"dependencies": {
