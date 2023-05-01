@@ -1,5 +1,5 @@
-import * as vscode from 'vscode';
 import * as path from 'path';
+import * as vscode from 'vscode';
 
 const uriListMime = 'text/uri-list';
 
@@ -32,7 +32,7 @@ class ReverseTextOnDropProvider implements vscode.DocumentDropEditProvider {
 		// Adding the reversed text
 		snippet.appendText([...text].reverse().join(''));
 
-		return { insertText: snippet };
+		return new vscode.DocumentDropEdit(snippet);
 	}
 }
 
@@ -48,7 +48,7 @@ class ReverseTextOnDropProvider implements vscode.DocumentDropEditProvider {
 class FileNameListOnDropProvider implements vscode.DocumentDropEditProvider {
 	async provideDocumentDropEdits(
 		_document: vscode.TextDocument,
-		position: vscode.Position,
+		_position: vscode.Position,
 		dataTransfer: vscode.DataTransfer,
 		token: vscode.CancellationToken
 	): Promise<vscode.DocumentDropEdit | undefined> {
@@ -90,7 +90,7 @@ class FileNameListOnDropProvider implements vscode.DocumentDropEditProvider {
 			}
 		});
 
-		return { insertText: snippet };
+		return new vscode.DocumentDropEdit(snippet);
 	}
 }
 
