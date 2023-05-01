@@ -55,7 +55,6 @@
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.2",
     "vscode-notebook-error-overlay": "^1.0.1",
-    "vscode-test": "^1.5.2",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"
   }
