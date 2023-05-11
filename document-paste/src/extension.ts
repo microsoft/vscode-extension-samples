@@ -30,7 +30,7 @@ class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 			return undefined;
 		}
 
-		const textDataTransferItem = dataTransfer.get('text') ?? dataTransfer.get('text/plain');
+		const textDataTransferItem = dataTransfer.get('text/plain');
 		if (!textDataTransferItem) {
 			return undefined;
 		}
@@ -42,7 +42,7 @@ class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 		const snippet = new vscode.SnippetString();
 		snippet.appendText(`(copy #${count}) ${text}`);
 
-		return { insertText: snippet };
+		return new vscode.DocumentPasteEdit(snippet, 'copyCount', "Insert with copy count sample");
 	}
 }
 
