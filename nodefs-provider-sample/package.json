@@ -32,13 +32,13 @@
 	},
 	"devDependencies": {
 		"@types/mkdirp": "^0.5.2",
-		"@types/node": "^16.11.7",
+		"@types/node": "^16.18.34",
 		"@types/promisify-node": "^0.4.0",
 		"@types/rimraf": "^2.0.2",
 		"@types/vscode": "^1.34.0",
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
 		"eslint": "^8.26.0",
-		"typescript": "^5.0.2"
+		"typescript": "^5.1.3"
 	}
 }

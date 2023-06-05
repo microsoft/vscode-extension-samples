@@ -32,7 +32,7 @@
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^10.0.1",
-		"@types/node": "^16.11.7",
+		"@types/node": "^16.18.34",
 		"@types/vscode": "^1.73.0",
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
@@ -41,6 +41,6 @@
 		"glob": "^7.1.4",
 		"mocha": "^10.2.0",
 		"source-map-support": "^0.5.12",
-		"typescript": "^5.0.2"
+		"typescript": "^5.1.3"
 	}
 }

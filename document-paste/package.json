@@ -33,12 +33,12 @@
 		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
-		"@types/node": "^16.11.7",
+		"@types/node": "^16.18.34",
 		"@types/vscode": "^1.77.0",
 		"@typescript-eslint/eslint-plugin": "^5.42.0",
 		"@typescript-eslint/parser": "^5.42.0",
 		"eslint": "^8.26.0",
-		"typescript": "^5.0.2",
+		"typescript": "^5.1.3",
 		"vscode-dts": "^0.3.3"
 	}
 }
