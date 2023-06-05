@@ -29,8 +29,8 @@
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./",
-		"download-api": "vscode-dts dev",
-		"postdownload-api": "vscode-dts main",
+		"download-api": "dts dev",
+		"postdownload-api": "dts main",
 		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
@@ -39,6 +39,6 @@
 		"@typescript-eslint/parser": "^5.42.0",
 		"eslint": "^8.26.0",
 		"typescript": "^5.1.3",
-		"vscode-dts": "^0.3.2"
+		"@vscode/dts": "^0.4.0"
 	}
 }
