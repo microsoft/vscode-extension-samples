@@ -48,6 +48,6 @@
     "@typescript-eslint/parser": "^4.26.0",
     "eslint": "^7.27.0",
     "mocha": "^10.2.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.1.3"
   }
 }

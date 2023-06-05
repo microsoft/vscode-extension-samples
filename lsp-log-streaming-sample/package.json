@@ -85,11 +85,11 @@
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.1",
-		"@types/node": "^16.11.7",
+		"@types/node": "^16.18.34",
 		"@typescript-eslint/eslint-plugin": "^5.48.2",
 		"@typescript-eslint/parser": "^5.48.2",
 		"eslint": "^8.26.0",
 		"mocha": "^10.2.0",
-		"typescript": "^5.0.2"
+		"typescript": "^5.1.3"
 	}
 }

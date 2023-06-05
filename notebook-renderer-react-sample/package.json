@@ -53,7 +53,7 @@
     "react-dom": "^17.0.2",
     "style-loader": "^1.2.1",
     "ts-loader": "^9.4.2",
-    "typescript": "^5.0.2",
+    "typescript": "^5.1.3",
     "vscode-notebook-error-overlay": "^1.0.1",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"
