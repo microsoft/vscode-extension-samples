@@ -1,5 +1,6 @@
 {
-	"compilerOptions": {
+	"compilerOptions": {{
+
 		"module": "commonjs",
 		"target": "es2020",
 		"outDir": "out",
@@ -7,5 +8,5 @@
 		"rootDir": "src",
 		"strict": true
 	},
-	"exclude": ["node_modules", ".vscode-test"]
+	"https://github.com/microsoft/vscode-extension-samples/tree/668632196f378491a65240463a16ce09629fe6c8/progress-sample
 }
