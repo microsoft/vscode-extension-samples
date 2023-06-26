@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 				// get all text until the `position` and check if it reads `console.`
 				// and if so then complete if `log`, `warn`, and `error`
-				const linePrefix = document.lineAt(position).text.substr(0, position.character);
+				const linePrefix = document.lineAt(position).text.slice(0, position.character);
 				if (!linePrefix.endsWith('console.')) {
 					return undefined;
 				}
