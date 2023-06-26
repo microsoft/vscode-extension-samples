@@ -32,3 +32,16 @@ Demonstrates VS Code's [webview API](https://code.visualstudio.com/api/extension
 - `F5` to start debugging
 
 Run the `Cat Coding: Start cat coding session` to create the webview.
+
+## Commands
+
+This extension provides the following commands:
+
+- `Cat Coding: Start cat coding session`: Creates and displays the Cat Coding webview.
+- `Cat Coding: Do refactor`: Halves the count of lines of code displayed in the Cat Coding webview.
+
+## Messages
+
+The Cat Coding webview can send the following messages to the extension:
+
+- `alert`: Sent when the cat introduces a bug. The message includes the text '🐛  on line ' followed by the current line count.
