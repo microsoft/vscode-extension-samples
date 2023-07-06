@@ -26,7 +26,7 @@ function massageError(error: Error & { code?: string }): Error {
 		return vscode.FileSystemError.FileExists();
 	}
 
-	if (error.code === 'EPERM' || error.code === 'EACCESS') {
+	if (error.code === 'EPERM' || error.code === 'EACCES') {
 		return vscode.FileSystemError.NoPermissions();
 	}
 
