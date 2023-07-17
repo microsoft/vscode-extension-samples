@@ -6,7 +6,7 @@ import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	const provider1 = vscode.languages.registerCompletionItemProvider('plaintext', {
+	const provider1 = vscode.languages.registerCompletionItemProvider({ scheme: 'file', language: 'yaml' }, {
 
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 
@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	const provider2 = vscode.languages.registerCompletionItemProvider(
-		'plaintext',
+		{ scheme: 'file', language: 'yaml' },
 		{
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 
@@ -60,6 +60,7 @@ export function activate(context: vscode.ExtensionContext) {
 					return undefined;
 				}
 
+				console.log("I'm still getting logged");
 				return [
 					new vscode.CompletionItem('log', vscode.CompletionItemKind.Method),
 					new vscode.CompletionItem('warn', vscode.CompletionItemKind.Method),
