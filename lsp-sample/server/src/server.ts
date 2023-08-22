@@ -5,6 +5,7 @@
 import {
 	createConnection,
 	TextDocuments,
+	Range,
 	Diagnostic,
 	DiagnosticSeverity,
 	ProposedFeatures,
@@ -55,7 +56,8 @@ connection.onInitialize((params: InitializeParams) => {
 			// Tell the client that this server supports code completion.
 			completionProvider: {
 				resolveProvider: true
-			}
+			},
+			codeActionProvider: true,
 		}
 	};
 	if (hasWorkspaceFolderCapability) {
@@ -147,14 +149,16 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 	const diagnostics: Diagnostic[] = [];
 	while ((m = pattern.exec(text)) && problems < settings.maxNumberOfProblems) {
 		problems++;
+		const range: Range = {
+			start: textDocument.positionAt(m.index),
+			end: textDocument.positionAt(m.index + m[0].length)
+		};
 		const diagnostic: Diagnostic = {
 			severity: DiagnosticSeverity.Warning,
-			range: {
-				start: textDocument.positionAt(m.index),
-				end: textDocument.positionAt(m.index + m[0].length)
-			},
+			range: range,
 			message: `${m[0]} is all uppercase.`,
-			source: 'ex'
+			source: 'ex',
+			data: JSON.stringify(range, undefined, 0)
 		};
 		if (hasDiagnosticRelatedInformationCapability) {
 			diagnostic.relatedInformation = [
@@ -221,6 +225,9 @@ connection.onCompletionResolve(
 		return item;
 	}
 );
+connection.onCodeAction((params) => {
+	return [];
+});
 
 // Make the text document manager listen on the connection
 // for open, change and close text document events
