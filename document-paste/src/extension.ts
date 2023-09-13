@@ -23,26 +23,33 @@ class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 		_document: vscode.TextDocument,
 		_ranges: readonly vscode.Range[],
 		dataTransfer: vscode.DataTransfer,
-		_token: vscode.CancellationToken
+		token: vscode.CancellationToken
 	): Promise<vscode.DocumentPasteEdit | undefined> {
 		const countDataTransferItem = dataTransfer.get(this.countMimeTypes);
 		if (!countDataTransferItem) {
-			return undefined;
+			return;
 		}
 
 		const textDataTransferItem = dataTransfer.get('text/plain');
 		if (!textDataTransferItem) {
-			return undefined;
+			return;
 		}
 
 		const count = await countDataTransferItem.asString();
+		if (token.isCancellationRequested) {
+			return;
+		}
+
 		const text = await textDataTransferItem.asString();
+		if (token.isCancellationRequested) {
+			return;
+		}
 
 		// Build a snippet to insert
 		const snippet = new vscode.SnippetString();
 		snippet.appendText(`(copy #${count}) ${text}`);
 
-		return new vscode.DocumentPasteEdit(snippet, 'copyCount', "Insert with copy count sample");
+		return new vscode.DocumentPasteEdit(snippet, "Insert with copy count sample");
 	}
 }
 
@@ -52,6 +59,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register our provider
 	context.subscriptions.push(vscode.languages.registerDocumentPasteEditProvider(selector, new CopyCountPasteEditProvider(), {
+		id: 'copyCount',
 		pasteMimeTypes: ['text/plain'],
 	}));
 }
