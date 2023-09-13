@@ -37,8 +37,8 @@
   "devDependencies": {
     "@types/vscode-notebook-renderer": "^1.57.8",
     "@types/webpack-env": "^1.17.0",
-    "@typescript-eslint/eslint-plugin": "^5.42.0",
-    "@typescript-eslint/parser": "^5.42.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
     "css-loader": "^4.2.0",
     "eslint": "^8.26.0",
     "style-loader": "^1.2.1",
