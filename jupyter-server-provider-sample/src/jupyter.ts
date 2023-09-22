@@ -29,11 +29,11 @@ export async function findLocallyRunningServers(type: 'lab' | 'notebook') {
 				url: string;
 				token: string;
 				root_dir: string;
+				secure: boolean;
 				pid: number;
 				port: number;
 			} = JSON.parse(contents);
-			if (!json.token) {
-				console.warn(`Ignoring url ${json.url} as it does not contain a token`);
+			if (json.secure) {
 				return;
 			}
 			try {
