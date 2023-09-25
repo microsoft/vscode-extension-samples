@@ -16,7 +16,7 @@
         "${workspaceFolder}/out/**/*.js"
       ],
       "trace": true,
-      "preLaunchTask": "npm: watch"
+      "preLaunchTask": "npm: compile"
     }
   ]
 }
