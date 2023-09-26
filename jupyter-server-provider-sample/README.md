@@ -1,4 +1,4 @@
-# jupyter-servedr-provider-sample
+# Jupyter Server Provider Sample
 
 This is a very simple extension sample demonstrating the use of the Jupyter Extension API allowing other extensions to contribute [Jupyter](https://jupyter.org/) Servers via the Kernel Picker for Jupyter notebooks:
 
