@@ -1,0 +1,36 @@
+{
+	"name": "jupyter-server-provider-sample",
+	"displayName": "Jupyter Server Provider Sample",
+	"description": "Jupyter Notebook Kernel Picker with custom servers using the Jupyter API sample",
+	"publisher": "vscode-samples",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.82.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onNotebook:jupyter-notebook",
+		"onNotebook:interactive"
+	],
+	"extensionDependencies": [
+		"ms-toolsai.jupyter"
+	],
+	"main": "./out/extension.js",
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -b",
+		"lint": "eslint src --ext ts",
+		"watch": "tsc -b --watch"
+	},
+	"devDependencies": {
+		"@types/node": "14.x",
+		"@types/vscode": "^1.82.0",
+		"@typescript-eslint/eslint-plugin": "^6.7.0",
+		"@typescript-eslint/parser": "^6.7.0",
+		"@vscode/jupyter-extension": "^1.0.0",
+		"eslint": "^7.27.0",
+		"typescript": "^5.2.2"
+	}
+}

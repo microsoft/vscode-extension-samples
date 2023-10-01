@@ -260,6 +260,13 @@ const samples = [
     apis: [],
     contributions: ["notebookRenderer"]
   },
+  {
+    description: 'jupyter-server-provider-sample',
+    path: 'jupyter-server-provider-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
   { description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
   { description: 'contentprovider-sample', excludeFromReadme: true, path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
   { description: 'nodefs-provider-sample', excludeFromReadme: true, path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
