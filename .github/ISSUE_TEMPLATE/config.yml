@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🙋 Ask Question
+    about: Ask questions about developing VS Code extensions on Stack Overflow.
+    url: 'https://stackoverflow.com/questions/tagged/vscode-extensions'
+  - name: 💬 Discuss
+    url: https://github.com/microsoft/vscode-discussions/discussions
+    about: Discuss extension development questions and ideas with the VS Code developer community.

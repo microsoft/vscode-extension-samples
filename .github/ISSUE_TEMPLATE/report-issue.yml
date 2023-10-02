@@ -1,0 +1,35 @@
+name: 🐛 Report Extension Sample Issue
+description: Report an issue with one of the extension samples.
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to fill out this bug report! Please make sure to fill in the following sections:
+  - type: input
+    id: sample-name
+    attributes:
+      label: Extension sample
+      description: Name of the extension sample that you are reporting with issue in
+      placeholder: extension-sample-name
+    validations:
+      required: true
+  - type: input
+    id: vscode-version
+    attributes:
+      label: VS Code version
+      description: The version of VS Code that the issue reproduces in
+      placeholder: 1.xx.x
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What went wrong?
+      description: |
+        Tell us what what went wrong. Be sure to include:
+
+        - What were you trying to do?
+        - What went wrong?
+        - What was the expected behavior?
+    validations:
+      required: true
