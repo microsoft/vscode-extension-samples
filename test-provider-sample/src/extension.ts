@@ -1,25 +1,45 @@
 import * as vscode from 'vscode';
-import { getContentFromFilesystem, MarkdownTestData, TestCase, testData, TestFile } from './testTree';
+import { getContentFromFilesystem, TestCase, testData, TestFile } from './testTree';
 
 export async function activate(context: vscode.ExtensionContext) {
 	const ctrl = vscode.tests.createTestController('mathTestController', 'Markdown Math');
 	context.subscriptions.push(ctrl);
 
 	const fileChangedEmitter = new vscode.EventEmitter<vscode.Uri>();
-	const runHandler = (request: vscode.TestRunRequest2, cancellation: vscode.CancellationToken) => {
+	const watchingTests = new Map<vscode.TestItem | 'ALL', vscode.TestRunProfile | undefined>();
+	fileChangedEmitter.event(uri => {
+		if (watchingTests.has('ALL')) {
+			startTestRun(new vscode.TestRunRequest(undefined, undefined, watchingTests.get('ALL'), true));
+			return;
+		}
+
+		const include: vscode.TestItem[] = [];
+		let profile: vscode.TestRunProfile | undefined;
+		for (const [item, thisProfile] of watchingTests) {
+			const cast = item as vscode.TestItem;
+			if (cast.uri?.toString() == uri.toString()) {
+				include.push(cast);
+				profile = thisProfile;
+			}
+		}
+
+		if (include.length) {
+			startTestRun(new vscode.TestRunRequest(include, undefined, profile, true));
+		}
+	});
+
+	const runHandler = (request: vscode.TestRunRequest, cancellation: vscode.CancellationToken) => {
 		if (!request.continuous) {
 			return startTestRun(request);
 		}
 
-		const l = fileChangedEmitter.event(uri => startTestRun(
-			new vscode.TestRunRequest2(
-				[getOrCreateFile(ctrl, uri).file],
-				undefined,
-				request.profile,
-				true
-			),
-		));
-		cancellation.onCancellationRequested(() => l.dispose());
+		if (request.include === undefined) {
+			watchingTests.set('ALL', request.profile);
+			cancellation.onCancellationRequested(() => watchingTests.delete('ALL'));
+		} else {
+			request.include.forEach(item => watchingTests.set(item, request.profile));
+			cancellation.onCancellationRequested(() => request.include!.forEach(item => watchingTests.delete(item)));
+		}
 	};
 
 	const startTestRun = (request: vscode.TestRunRequest) => {
@@ -74,8 +94,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
 				const lineNo = test.range!.start.line;
 				const fileCoverage = coveredLines.get(test.uri!.toString());
-				if (fileCoverage) {
-					fileCoverage[lineNo]!.executionCount++;
+				const lineInfo = fileCoverage?.[lineNo];
+				if (lineInfo) {
+					lineInfo.executionCount++;
 				}
 
 				run.appendOutput(`Completed ${test.id}\r\n`);
@@ -183,7 +204,7 @@ async function findInitialFiles(controller: vscode.TestController, pattern: vsco
 	}
 }
 
-function startWatchingWorkspace(controller: vscode.TestController, fileChangedEmitter: vscode.EventEmitter<vscode.Uri> ) {
+function startWatchingWorkspace(controller: vscode.TestController, fileChangedEmitter: vscode.EventEmitter<vscode.Uri>) {
 	return getWorkspaceTestPatterns().map(({ workspaceFolder, pattern }) => {
 		const watcher = vscode.workspace.createFileSystemWatcher(pattern);
 
