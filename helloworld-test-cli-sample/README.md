@@ -6,6 +6,8 @@ You can find the accompanying documentation at https://code.visualstudio.com/api
 
 ## Demo
 
+https://github.com/microsoft/vscode-extension-samples/assets/2230985/d9253b37-53fb-4d7f-85ea-3459cbf5932e
+
 ## Running the Sample
 
 - Run `npm install` in terminal to install dependencies
