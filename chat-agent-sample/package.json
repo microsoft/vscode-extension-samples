@@ -22,9 +22,7 @@
     ],
     "enabledApiProposals": [
         "chatAgents2",
-        "chatRequestAccess",
-        "interactive",
-        "readonlyMessage"
+        "chatRequestAccess"
     ],
     "main": "./out/extension.js",
     "scripts": {

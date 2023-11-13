@@ -29,8 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
             ];
             const request = access.makeRequest(messages, {}, token);
             for await (const fragment of request.response) {
-                const incomingText = fragment.replace('[RESPONSE END]', '');
-                progress.report({ content: incomingText });
+                progress.report({ content: fragment });
             }
             return teachResult;
         } else if (request.slashCommand?.name == 'play') {
@@ -43,8 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
             ];
             const request = access.makeRequest(messages, {}, token);
             for await (const fragment of request.response) {
-                const incomingText = fragment.replace('[RESPONSE END]', '');
-                progress.report({ content: incomingText });
+                progress.report({ content: fragment });
             }
             return playResult;
         }
