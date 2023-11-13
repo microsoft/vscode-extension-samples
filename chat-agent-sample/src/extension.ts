@@ -27,8 +27,8 @@ export function activate(context: vscode.ExtensionContext) {
                     content: topic
                 },
             ];
-            const request = access.makeRequest(messages, {}, token);
-            for await (const fragment of request.response) {
+            const chatRequest = access.makeRequest(messages, {}, token);
+            for await (const fragment of chatRequest.response) {
                 progress.report({ content: fragment });
             }
             return teachResult;
@@ -39,9 +39,13 @@ export function activate(context: vscode.ExtensionContext) {
                     role: vscode.ChatMessageRole.System,
                     content: CAT_PLAY_SYSTEM_PROMPT
                 },
+                {
+                    role: vscode.ChatMessageRole.User,
+                    content: request.prompt
+                }
             ];
-            const request = access.makeRequest(messages, {}, token);
-            for await (const fragment of request.response) {
+            const chatRequest = access.makeRequest(messages, {}, token);
+            for await (const fragment of chatRequest.response) {
                 progress.report({ content: fragment });
             }
             return playResult;
