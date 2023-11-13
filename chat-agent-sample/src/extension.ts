@@ -1,26 +1,26 @@
 import * as vscode from 'vscode';
 
-const CAT_LEARN_SYSTEM_PROMPT = 'You are a cat! Your job is to explain computer science concepts in a funny manner of a cat. Always start your response by stating what concept you are explaining.';
-const CAT_PLAY_SYSTEM_PROMPT = 'You are a cat that wants to play! Reply in a helpful way for a coder, but with the hidden meaning that all you want to do is play.';
 const MEOW_COMMAND_ID = 'cat.meow';
+
+interface ICatChatAgentResult extends vscode.ChatAgentResult2 {
+	slashCommand: string;
+}
 
 export function activate(context: vscode.ExtensionContext) {
 
-	const teachResult = { /* you can return anything in your result object */ };
-    const playResult = { /* you can return anything in your result object */ };
     // Define a Cat chat agent handler. 
-    const handler: vscode.ChatAgentHandler = async (request: vscode.ChatAgentRequest, context: vscode.ChatAgentContext, progress: vscode.Progress<vscode.ChatAgentProgress>, token: vscode.CancellationToken) => {
+    const handler: vscode.ChatAgentHandler = async (request: vscode.ChatAgentRequest, context: vscode.ChatAgentContext, progress: vscode.Progress<vscode.ChatAgentProgress>, token: vscode.CancellationToken): Promise<ICatChatAgentResult> => {
         // To talk to an LLM in your slash command handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
-        // The pre-release of the GitHub Copilot Chat extension implements this provider.
+        // The GitHub Copilot Chat extension implements this provider.
         if (request.slashCommand?.name == 'teach') {
             const access = await vscode.chat.requestChatAccess('copilot');
-			const topics = ["linked list", "recursion", "stack", "queue", "pointers"];
+			const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
 			const topic = topics[Math.floor(Math.random() * topics.length)];
             const messages = [
                 {
                     role: vscode.ChatMessageRole.System,
-                    content: CAT_LEARN_SYSTEM_PROMPT
+					content: 'You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining.'
                 },
                 {
                     role: vscode.ChatMessageRole.User,
@@ -31,13 +31,13 @@ export function activate(context: vscode.ExtensionContext) {
             for await (const fragment of chatRequest.response) {
                 progress.report({ content: fragment });
             }
-            return teachResult;
+			return { slashCommand: 'teach' };
         } else if (request.slashCommand?.name == 'play') {
             const access = await vscode.chat.requestChatAccess('copilot');
             const messages = [
                 {
                     role: vscode.ChatMessageRole.System,
-                    content: CAT_PLAY_SYSTEM_PROMPT
+					content: 'You are a cat that wants to play! Reply in a helpful way for a coder, but with the hidden meaning that all you want to do is play.'
                 },
                 {
                     role: vscode.ChatMessageRole.User,
@@ -48,8 +48,26 @@ export function activate(context: vscode.ExtensionContext) {
             for await (const fragment of chatRequest.response) {
                 progress.report({ content: fragment });
             }
-            return playResult;
-        }
+			return { slashCommand: 'play' };
+        } else {
+			const access = await vscode.chat.requestChatAccess('copilot');
+			const messages = [
+				{
+					role: vscode.ChatMessageRole.System,
+					content: 'You are a cat! Reply in the voice of a cat, using cat analogies when appropriate.'
+				},
+				{
+					role: vscode.ChatMessageRole.User,
+					content: request.prompt
+				}
+			];
+			const chatRequest = access.makeRequest(messages, {}, token);
+			for await (const fragment of chatRequest.response) {
+				progress.report({ content: fragment });
+			}
+			
+			return { slashCommand: '' };
+		}
     };
     
     // Agents appear as top-level options in the chat input
@@ -69,14 +87,14 @@ export function activate(context: vscode.ExtensionContext) {
     };
 
     agent.followupProvider = {
-        provideFollowups(result, token) {
-            if (result === teachResult) {
+		provideFollowups(result: ICatChatAgentResult, token: vscode.CancellationToken) {
+            if (result.slashCommand === 'teach') {
                 return [{
                     commandId: MEOW_COMMAND_ID,
                     message: '@cat thank you',
                     title: vscode.l10n.t('Meow!')
                 }];
-            } else if (result === playResult) {
+            } else if (result.slashCommand === 'play') {
                 return [{
                     message: '@cat let us play',
                     title: vscode.l10n.t('Play with the cat')
