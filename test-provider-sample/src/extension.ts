@@ -102,23 +102,23 @@ export async function activate(context: vscode.ExtensionContext) {
 				run.appendOutput(`Completed ${test.id}\r\n`);
 			}
 
+			run.coverageProvider = {
+				provideFileCoverage() {
+					const coverage: vscode.FileCoverage[] = [];
+					for (const [uri, statements] of coveredLines) {
+						coverage.push(
+							vscode.FileCoverage.fromDetails(
+								vscode.Uri.parse(uri),
+								statements.filter((s): s is vscode.StatementCoverage => !!s)
+							)
+						);
+					}
+
+					return coverage;
+				},
+			};
+
 			run.end();
-		};
-
-		run.coverageProvider = {
-			provideFileCoverage() {
-				const coverage: vscode.FileCoverage[] = [];
-				for (const [uri, statements] of coveredLines) {
-					coverage.push(
-						vscode.FileCoverage.fromDetails(
-							vscode.Uri.parse(uri),
-							statements.filter((s): s is vscode.StatementCoverage => !!s)
-						)
-					);
-				}
-
-				return coverage;
-			},
 		};
 
 		discoverTests(request.include ?? gatherTestItems(ctrl.items)).then(runTestQueue);
