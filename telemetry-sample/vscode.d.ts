@@ -809,7 +809,7 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * Represents options to configure the behavior of showing a {@link NotebookDocument notebook document} in an {@link NotebookEditor notebook editor}.
+	 * Represents options to configure the behavior of showing a {@link NotebookDocument notebook document} in a {@link NotebookEditor notebook editor}.
 	 */
 	export interface NotebookDocumentShowOptions {
 		/**
@@ -1771,7 +1771,7 @@ declare module 'vscode' {
 
 		/**
 		 * Optional buttons that will be rendered on this particular item. These buttons will trigger
-		 * an {@link QuickPickItemButtonEvent} when clicked. Buttons are only rendered when using a quickpick
+		 * a {@link QuickPickItemButtonEvent} when clicked. Buttons are only rendered when using a quickpick
 		 * created by the {@link window.createQuickPick createQuickPick()} API. Buttons are not rendered when using
 		 * the {@link window.showQuickPick showQuickPick()} API.
 		 *
@@ -9201,7 +9201,7 @@ declare module 'vscode' {
 		 * This method is invoked by the editor when the user triggers 'save as' on a custom editor. The implementer must
 		 * persist the custom editor to `destination`.
 		 *
-		 * When the user accepts save as, the current editor is be replaced by an non-dirty editor for the newly saved file.
+		 * When the user accepts save as, the current editor is replaced by a non-dirty editor for the newly saved file.
 		 *
 		 * @param document Document to save.
 		 * @param destination Location to save to.
@@ -11706,7 +11706,7 @@ declare module 'vscode' {
 		/** The text change is caused by an undo operation. */
 		Undo = 1,
 
-		/** The text change is caused by an redo operation. */
+		/** The text change is caused by a redo operation. */
 		Redo = 2,
 	}
 
@@ -12373,7 +12373,7 @@ declare module 'vscode' {
 		 * Opens a document. Will return early if this document is already open. Otherwise
 		 * the document is loaded and the {@link workspace.onDidOpenTextDocument didOpen}-event fires.
 		 *
-		 * The document is denoted by an {@link Uri}. Depending on the {@link Uri.scheme scheme} the
+		 * The document is denoted by a {@link Uri}. Depending on the {@link Uri.scheme scheme} the
 		 * following rules apply:
 		 * * `file`-scheme: Open a file on disk (`openTextDocument(Uri.file(path))`). Will be rejected if the file
 		 * does not exist or cannot be loaded.
@@ -14409,7 +14409,7 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * An source control resource state represents the state of an underlying workspace
+	 * A source control resource state represents the state of an underlying workspace
 	 * resource within a certain {@link SourceControlResourceGroup source control group}.
 	 */
 	export interface SourceControlResourceState {
@@ -14487,7 +14487,7 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * An source control is able to provide {@link SourceControlResourceState resource states}
+	 * A source control is able to provide {@link SourceControlResourceState resource states}
 	 * to the editor and interact with the editor in several source control related ways.
 	 */
 	export interface SourceControl {
@@ -14765,7 +14765,7 @@ declare module 'vscode' {
 
 		/**
 		 * The command or path of the debug adapter executable.
-		 * A command must be either an absolute path of an executable or the name of an command to be looked up via the PATH environment variable.
+		 * A command must be either an absolute path of an executable or the name of a command to be looked up via the PATH environment variable.
 		 * The special value 'node' will be mapped to the editor's built-in Node.js runtime.
 		 */
 		readonly command: string;
@@ -16845,7 +16845,7 @@ declare module 'vscode' {
 	/**
 	 * A telemetry logger which can be used by extensions to log usage and error telementry.
 	 *
-	 * A logger wraps around an {@link TelemetrySender sender} but it guarantees that
+	 * A logger wraps around a {@link TelemetrySender sender} but it guarantees that
 	 * - user settings to disable or tweak telemetry are respected, and that
 	 * - potential sensitive data is removed
 	 *
