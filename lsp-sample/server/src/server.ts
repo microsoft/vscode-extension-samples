@@ -183,7 +183,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 
 connection.onDidChangeWatchedFiles(_change => {
 	// Monitored files have change in VSCode
-	connection.console.log('We received an file change event');
+	connection.console.log('We received a file change event');
 });
 
 // This handler provides the initial list of the completion items.
