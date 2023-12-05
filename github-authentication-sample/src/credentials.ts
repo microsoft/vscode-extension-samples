@@ -11,7 +11,7 @@ export class Credentials {
 
 	async initialize(context: vscode.ExtensionContext): Promise<void> {
 		this.registerListeners(context);
-		this.setOctokit();
+		await this.setOctokit();
 	}
 
 	private async setOctokit() {
