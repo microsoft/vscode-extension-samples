@@ -31,6 +31,6 @@
 		"@typescript-eslint/parser": "^6.7.0",
 		"@vscode/jupyter-extension": "^1.0.0",
 		"eslint": "^7.27.0",
-		"typescript": "^5.2.2"
+		"typescript": "^5.3.2"
 	}
 }
