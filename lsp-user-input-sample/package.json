@@ -31,7 +31,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^16.18.34",
-		"typescript": "^5.2.2",
+		"typescript": "^5.3.2",
 		"eslint": "^7.32.0",
 		"@typescript-eslint/parser": "^6.7.0",
 		"webpack": "^5.48.0",
