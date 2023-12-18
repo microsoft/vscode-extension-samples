@@ -10,7 +10,10 @@
 			"args": ["--extensionDevelopmentPath=${workspaceFolder}" ],
 			"autoAttachChildProcesses": true,
 			"sourceMaps": true,
-			"outFiles": ["${workspaceFolder}/client/out/**/*.js"],
+			"outFiles": [
+				"${workspaceRoot}/client/out/**/*.js",
+				"${workspaceRoot}/server/out/**/*.js"
+			],
 			"preLaunchTask": "npm: watch"
 		}
 	]
