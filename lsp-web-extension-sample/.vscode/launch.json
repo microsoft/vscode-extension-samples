@@ -4,7 +4,7 @@
 	"configurations": [
 		{
 			"name": "Launch Client",
-			"type": "pwa-extensionHost",
+			"type": "extensionHost",
 			"debugWebWorkerHost": true,
 			"request": "launch",
 			"args": [
