@@ -10,8 +10,8 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 	constructor(private workspaceRoot: string | undefined) {
 	}
 
-	refresh(): void {
-		this._onDidChangeTreeData.fire();
+	refresh(element?: any): void {
+		this._onDidChangeTreeData.fire(element);
 	}
 
 	getTreeItem(element: Dependency): vscode.TreeItem {
@@ -35,7 +35,6 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 				return Promise.resolve([]);
 			}
 		}
-
 	}
 
 	/**
@@ -46,23 +45,23 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 		if (this.pathExists(packageJsonPath) && workspaceRoot) {
 			const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'));
 
-			const toDep = (moduleName: string, version: string): Dependency => {
+			const toDep = (moduleName: string, version: string, refreshInFive: boolean): Dependency => {
 				if (this.pathExists(path.join(workspaceRoot, 'node_modules', moduleName))) {
-					return new Dependency(moduleName, version, vscode.TreeItemCollapsibleState.Collapsed);
+					return new Dependency(this, moduleName, version, vscode.TreeItemCollapsibleState.Collapsed, undefined, refreshInFive);
 				} else {
-					return new Dependency(moduleName, version, vscode.TreeItemCollapsibleState.None, {
+					return new Dependency(this, moduleName, version, vscode.TreeItemCollapsibleState.None, {
 						command: 'extension.openPackageOnNpm',
 						title: '',
 						arguments: [moduleName]
-					});
+					}, refreshInFive);
 				}
 			};
 
 			const deps = packageJson.dependencies
-				? Object.keys(packageJson.dependencies).map(dep => toDep(dep, packageJson.dependencies[dep]))
+				? Object.keys(packageJson.dependencies).map((dep, idx) => toDep(dep, packageJson.dependencies[dep], idx % 5 === 0))
 				: [];
 			const devDeps = packageJson.devDependencies
-				? Object.keys(packageJson.devDependencies).map(dep => toDep(dep, packageJson.devDependencies[dep]))
+				? Object.keys(packageJson.devDependencies).map((dep, idx) => toDep(dep, packageJson.devDependencies[dep], idx % 5 === 0))
 				: [];
 			return deps.concat(devDeps);
 		} else {
@@ -84,15 +83,30 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 export class Dependency extends vscode.TreeItem {
 
 	constructor(
-		public readonly label: string,
+		private tree: DepNodeProvider,
+		public label: string,
 		private readonly version: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-		public readonly command?: vscode.Command
+		public readonly command?: vscode.Command,
+		refreshInFive: boolean = false
 	) {
 		super(label, collapsibleState);
-
 		this.tooltip = `${this.label}-${this.version}`;
 		this.description = this.version;
+		if (refreshInFive) {
+			const origLabel = this.label;
+			this.label = '******Updating soon******';
+			setTimeout(() => {
+				this.label = '******' + Math.round(10 + Math.random() * 90) + '******';
+				console.log('refreshing:  ', origLabel);
+				this.tree.refresh(this);
+			}, 1000 + Math.random() * 6000);
+			setTimeout(() => {
+				this.label = origLabel;
+				console.log('refreshing:  ', origLabel);
+				this.tree.refresh(this);
+			}, 10000);
+		}
 	}
 
 	iconPath = {
