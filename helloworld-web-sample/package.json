@@ -13,7 +13,7 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [],
+	"activationEvents": ["onStartupFinished"],
 	"browser": "./dist/web/extension.js",
 	"contributes": {
 		"commands": [

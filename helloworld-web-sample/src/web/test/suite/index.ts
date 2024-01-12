@@ -1,8 +1,9 @@
 // imports mocha for the browser, defining the `mocha` global.
 require('mocha/mocha');
+import * as vscode from 'vscode';
 
-export function run(): Promise<void> {
-
+export async function run(): Promise<void> {
+	await vscode.extensions.getExtension('vscode-samples.helloworld-web-sample')?.activate();
 	return new Promise((c, e) => {
 		mocha.setup({
 			ui: 'tdd',
