@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
         // To talk to an LLM in your slash command handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
-        if (request.slashCommand?.name == 'teach') {
+        if (request.subCommand == 'teach') {
             const access = await vscode.chat.requestChatAccess('copilot');
 			const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
 			const topic = topics[Math.floor(Math.random() * topics.length)];
@@ -32,7 +32,7 @@ export function activate(context: vscode.ExtensionContext) {
                 progress.report({ content: fragment });
             }
 			return { slashCommand: 'teach' };
-        } else if (request.slashCommand?.name == 'play') {
+        } else if (request.subCommand == 'play') {
             const access = await vscode.chat.requestChatAccess('copilot');
             const messages = [
                 {
