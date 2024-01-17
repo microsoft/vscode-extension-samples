@@ -8,7 +8,8 @@ import * as path from 'path';
 import { ExtensionContext, window as Window } from 'vscode';
 import { LanguageClient, LanguageClientOptions, RevealOutputChannelOn, ServerOptions, TransportKind } from 'vscode-languageclient/node';
 
-export function activate(context: ExtensionContext): void {
+let client: LanguageClient;
+export async function activate(context: ExtensionContext): Promise<void> {
 	const serverModule = context.asAbsolutePath(path.join('server', 'out', 'sampleServer.js'));
 	let serverOptions: ServerOptions = {
 		run: { module: serverModule, transport: TransportKind.ipc, options: { cwd: process.cwd() } },
@@ -33,7 +34,6 @@ export function activate(context: ExtensionContext): void {
 		}
 	};
 
-	let client: LanguageClient;
 	try {
 		client = new LanguageClient('UI Sample', serverOptions, clientOptions);
 	} catch (err) {
@@ -41,11 +41,11 @@ export function activate(context: ExtensionContext): void {
 		return;
 	}
 	client.registerProposedFeatures();
-
-	context.subscriptions.push(
-		client.start(),
-	);
+	return client.start();
 }
 
-export function deactivate() {
+export async function deactivate() {
+	if (client !== undefined) {
+		return client.stop();
+	}
 }
