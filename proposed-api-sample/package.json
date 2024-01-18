@@ -1,5 +1,16 @@
 {
-	"enabledApiProposals": [],
+	"enabledApiProposals": [
+		"debugVisualization"
+	],
+	"contributes": {
+		"debugVisualizers": [
+			{
+				"id": "base64Decoder",
+				"when": "variableValue =~ /^['\"]?[A-Za-z0-9=\\/+]+['\"]?$/ && variableType == string"
+			}
+		]
+	},
+
 	"name": "proposed-api-sample",
 	"displayName": "proposed-api-sample",
 	"description": "Sample showing how to use Proposed API",
@@ -16,14 +27,6 @@
 	],
 	"activationEvents": [],
 	"main": "./out/extension.js",
-	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		]
-	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
