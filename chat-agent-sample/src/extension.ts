@@ -3,14 +3,14 @@ import * as vscode from 'vscode';
 const MEOW_COMMAND_ID = 'cat.meow';
 
 interface ICatChatAgentResult extends vscode.ChatAgentResult2 {
-	slashCommand: string;
+	subCommand: string;
 }
 
 export function activate(context: vscode.ExtensionContext) {
 
     // Define a Cat chat agent handler. 
     const handler: vscode.ChatAgentHandler = async (request: vscode.ChatAgentRequest, context: vscode.ChatAgentContext, progress: vscode.Progress<vscode.ChatAgentProgress>, token: vscode.CancellationToken): Promise<ICatChatAgentResult> => {
-        // To talk to an LLM in your slash command handler implementation, your
+        // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
         if (request.subCommand == 'teach') {
@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
             for await (const fragment of chatRequest.response) {
                 progress.report({ content: fragment });
             }
-			return { slashCommand: 'teach' };
+			return { subCommand: 'teach' };
         } else if (request.subCommand == 'play') {
             const access = await vscode.chat.requestChatAccess('copilot');
             const messages = [
@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
             for await (const fragment of chatRequest.response) {
                 progress.report({ content: fragment });
             }
-			return { slashCommand: 'play' };
+			return { subCommand: 'play' };
         } else {
 			const access = await vscode.chat.requestChatAccess('copilot');
 			const messages = [
@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
 				progress.report({ content: fragment });
 			}
 			
-			return { slashCommand: '' };
+			return { subCommand: '' };
 		}
     };
     
@@ -77,8 +77,8 @@ export function activate(context: vscode.ExtensionContext) {
     agent.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     agent.description = vscode.l10n.t('Meow! What can I help you with?');
 	agent.fullName = vscode.l10n.t('Cat');
-    agent.slashCommandProvider = {
-        provideSlashCommands(token) {
+    agent.subCommandProvider = {
+        provideSubCommands(token) {
             return [
                 { name: 'teach', description: 'Pick at random a computer science concept then explain it in purfect way of a cat' },
                 { name: 'play', description: 'Do whatever you want, you are a cat after all' }
@@ -88,13 +88,13 @@ export function activate(context: vscode.ExtensionContext) {
 
     agent.followupProvider = {
 		provideFollowups(result: ICatChatAgentResult, token: vscode.CancellationToken) {
-            if (result.slashCommand === 'teach') {
+            if (result.subCommand === 'teach') {
                 return [{
                     commandId: MEOW_COMMAND_ID,
                     message: '@cat thank you',
                     title: vscode.l10n.t('Meow!')
                 }];
-            } else if (result.slashCommand === 'play') {
+            } else if (result.subCommand === 'play') {
                 return [{
                     message: '@cat let us play',
                     title: vscode.l10n.t('Play with the cat')
