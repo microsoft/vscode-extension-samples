@@ -51,21 +51,24 @@ async function executeCode(kernel: Kernel, code: string, logger: OutputChannel) 
 	logger.appendLine(`Executing code against kernel ${code}`);
 	const tokenSource = new CancellationTokenSource();
 	try {
-		for await (const outputs of kernel.executeCode(code, tokenSource.token)) {
-			for (const output of outputs) {
-				if (output.mime === ErrorMimeType) {
-					const error = JSON.parse(textDecoder.decode(output.data)) as Error;
+		for await (const output of kernel.executeCode(code, tokenSource.token)) {
+			for (const outputItem of output.items) {
+				if (outputItem.mime === ErrorMimeType) {
+					const error = JSON.parse(textDecoder.decode(outputItem.data)) as Error;
 					logger.appendLine(
 						`Error executing code ${error.name}: ${error.message},/n ${error.stack}`
 					);
 				} else {
 					logger.appendLine(
-						`${output.mime} Output: ${textDecoder.decode(output.data)}`
+						`${outputItem.mime} Output: ${textDecoder.decode(outputItem.data)}`
 					);
 				}
 			}
 		}
 		logger.appendLine('Code execution completed');
+		logger.appendLine(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`);
+	} catch (ex){
+		logger.appendLine(`Code execution failed with an error '${ex}'`);
 		logger.appendLine(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`);
 	} finally {
 		tokenSource.dispose();
