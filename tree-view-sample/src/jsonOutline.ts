@@ -76,7 +76,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 				path.pop();
 				const node = path.length ? json.findNodeAtLocation(this.tree, path) : void 0;
 				this.parseTree();
-				this._onDidChangeTreeData.fire(node?.parent ? node.parent.offset : void 0);
+				this._onDidChangeTreeData.fire(node ? node.offset : void 0);
 			}
 		}
 	}
@@ -115,7 +115,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 		return offsets;
 	}
 
-	getTreeItem(offset: number): vscode.TreeItem {
+	async getTreeItem(offset: number): Promise<vscode.TreeItem> {
 		if (!this.tree) {
 			throw new Error('Invalid tree');
 		}
@@ -135,6 +135,9 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 			};
 			treeItem.iconPath = this.getIcon(valueNode);
 			treeItem.contextValue = valueNode.type;
+			if (typeof valueNode.value === 'string' && valueNode.value.startsWith('test')) {
+				await new Promise(resolve => setTimeout(resolve, 2000));
+			}
 			return treeItem;
 		}
 		throw (new Error(`Could not find json node at ${path}`));
