@@ -8,12 +8,13 @@ import { LanguageClientOptions } from 'vscode-languageclient';
 
 import { LanguageClient } from 'vscode-languageclient/browser';
 
+let client: LanguageClient | undefined;
 // this method is called when vs code is activated
-export function activate(context: ExtensionContext) {
+export async function activate(context: ExtensionContext) {
 
 	console.log('lsp-web-extension-sample activated!');
 
-	/* 
+	/*
 	 * all except the code to create the language client in not browser specific
 	 * and could be shared with a regular (Node) extension
 	 */
@@ -26,14 +27,16 @@ export function activate(context: ExtensionContext) {
 		initializationOptions: {}
 	};
 
-	const client = createWorkerLanguageClient(context, clientOptions);
+	client = createWorkerLanguageClient(context, clientOptions);
 
-	const disposable = client.start();
-	context.subscriptions.push(disposable);
+	await  client.start();
+	console.log('lsp-web-extension-sample server is ready');
+}
 
-	client.onReady().then(() => {
-		console.log('lsp-web-extension-sample server is ready');
-	});
+export async function deactivate(): Promise<void> {
+	if (client !== undefined) {
+		await client.stop();
+	}
 }
 
 function createWorkerLanguageClient(context: ExtensionContext, clientOptions: LanguageClientOptions) {
