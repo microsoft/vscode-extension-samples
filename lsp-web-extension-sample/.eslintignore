@@ -1,6 +1,8 @@
 node_modules/**
 client/node_modules/**
 client/out/**
+client/dist/**
 server/node_modules/**
 server/out/**
+server/dist/**
 ./webpack.config.js
