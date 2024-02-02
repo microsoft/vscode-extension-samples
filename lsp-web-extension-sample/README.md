@@ -32,9 +32,14 @@ It also includes an End-to-End test.
 - Open VS Code on this folder.
 - Press Ctrl+Shift+B to compile the client and server.
 - Switch to the Debug viewlet.
-- Select `Launch Client` from the drop down.
+- Select `Run Web Extension` from the drop down.
 - Run the launch config.
-- If you want to debug the server as well use the launch configuration `Attach to Server`
 - In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode.
   - Type #00ff00 or any other color in hex format
   - color decorators will appear
+- You can set breakpoints in the client code. Debugging the server code currently is not working, see issue [#204114](https://github.com/microsoft/vscode/issues/204114).
+
+
+You can also run and debug the extension in a browser
+- `npm run chrome`
+- use browser dev tools to set breakpoints
