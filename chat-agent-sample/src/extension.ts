@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
         if (request.subCommand == 'teach') {
-            const access = await vscode.chat.requestChatAccess('copilot');
+            const access = await vscode.chat.requestLanguageModelAccess('copilot');
 			const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
 			const topic = topics[Math.floor(Math.random() * topics.length)];
             const messages = [
@@ -28,12 +28,12 @@ export function activate(context: vscode.ExtensionContext) {
                 },
             ];
             const chatRequest = access.makeRequest(messages, {}, token);
-            for await (const fragment of chatRequest.response) {
+            for await (const fragment of chatRequest.stream) {
                 progress.report({ content: fragment });
             }
 			return { subCommand: 'teach' };
         } else if (request.subCommand == 'play') {
-            const access = await vscode.chat.requestChatAccess('copilot');
+            const access = await vscode.chat.requestLanguageModelAccess('copilot');
             const messages = [
                 {
                     role: vscode.ChatMessageRole.System,
@@ -45,12 +45,12 @@ export function activate(context: vscode.ExtensionContext) {
                 }
             ];
             const chatRequest = access.makeRequest(messages, {}, token);
-            for await (const fragment of chatRequest.response) {
+            for await (const fragment of chatRequest.stream) {
                 progress.report({ content: fragment });
             }
 			return { subCommand: 'play' };
         } else {
-			const access = await vscode.chat.requestChatAccess('copilot');
+			const access = await vscode.chat.requestLanguageModelAccess('copilot');
 			const messages = [
 				{
 					role: vscode.ChatMessageRole.System,
@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
 				}
 			];
 			const chatRequest = access.makeRequest(messages, {}, token);
-			for await (const fragment of chatRequest.response) {
+			for await (const fragment of chatRequest.stream) {
 				progress.report({ content: fragment });
 			}
 			
