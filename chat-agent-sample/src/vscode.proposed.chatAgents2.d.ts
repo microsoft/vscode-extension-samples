@@ -4,6 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 declare module 'vscode' {
+
 	/**
 	 * One request/response pair in chat history.
 	 */
@@ -17,13 +18,7 @@ declare module 'vscode' {
 		/**
 		 * The content that was received from the chat agent. Only the progress parts that represent actual content (not metadata) are represented.
 		 */
-		response: (
-			| ChatAgentContentProgress
-			| ChatResponseTextPart
-			| ChatResponseMarkdownPart
-			| ChatResponseFileTreePart
-			| ChatResponseAnchorPart
-		)[];
+		response: (ChatAgentContentProgress | ChatResponseTextPart | ChatResponseMarkdownPart | ChatResponseFileTreePart | ChatResponseAnchorPart)[];
 
 		/**
 		 * The result that was received from the chat agent.
@@ -164,6 +159,7 @@ declare module 'vscode' {
 
 	// TODO@API NAME: w/o Sub just `ChatAgentCommand` etc pp
 	export interface ChatAgentSubCommandProvider {
+
 		/**
 		 * Returns a list of subCommands that its agent is capable of handling. A subCommand
 		 * can be selected by the user and will then be passed to the {@link ChatAgentHandler handler}
@@ -217,13 +213,11 @@ declare module 'vscode' {
 		 * @param result The same instance of the result object that was returned by the chat agent, and it can be extended with arbitrary properties if needed.
 		 * @param token A cancellation token.
 		 */
-		provideFollowups(
-			result: TResult,
-			token: CancellationToken
-		): ProviderResult<ChatAgentFollowup[]>;
+		provideFollowups(result: TResult, token: CancellationToken): ProviderResult<ChatAgentFollowup[]>;
 	}
 
 	export interface ChatAgent2<TResult extends ChatAgentResult2> {
+
 		/**
 		 * The short name by which this agent is referred to in the UI, e.g `workspace`.
 		 */
@@ -242,19 +236,16 @@ declare module 'vscode' {
 		/**
 		 * Icon for the agent shown in UI.
 		 */
-		iconPath?:
-			| Uri
-			| {
-					/**
-					 * The icon path for the light theme.
-					 */
-					light: Uri;
-					/**
-					 * The icon path for the dark theme.
-					 */
-					dark: Uri;
-			  }
-			| ThemeIcon;
+		iconPath?: Uri | {
+			/**
+			 * The icon path for the light theme.
+			 */
+			light: Uri;
+			/**
+			 * The icon path for the dark theme.
+			 */
+			dark: Uri;
+		} | ThemeIcon;
 
 		/**
 		 * This provider will be called to retrieve the agent's subCommands.
@@ -265,6 +256,7 @@ declare module 'vscode' {
 		 * This provider will be called once after each request to retrieve suggested followup questions.
 		 */
 		followupProvider?: ChatAgentFollowupProvider<TResult>;
+
 
 		// TODO@API
 		// notify(request: ChatResponsePart, reference: string): boolean;
@@ -296,6 +288,7 @@ declare module 'vscode' {
 	}
 
 	export interface ChatAgentRequest {
+
 		/**
 		 * The prompt entered by the user. The {@link ChatAgent2.name name} of the agent or the {@link ChatAgentSubCommand.name subCommand}
 		 * are not part of the prompt.
@@ -321,6 +314,7 @@ declare module 'vscode' {
 	}
 
 	export interface ChatAgentResponseStream {
+
 		/**
 		 * Push a text part to this stream. Short-hand for
 		 * `push(new ChatResponseTextPart(value))`.
@@ -443,13 +437,8 @@ declare module 'vscode' {
 		constructor(value: Uri | Location);
 	}
 
-	export type ChatResponsePart =
-		| ChatResponseTextPart
-		| ChatResponseMarkdownPart
-		| ChatResponseFileTreePart
-		| ChatResponseAnchorPart
-		| ChatResponseProgressPart
-		| ChatResponseReferencePart;
+	export type ChatResponsePart = ChatResponseTextPart | ChatResponseMarkdownPart | ChatResponseFileTreePart | ChatResponseAnchorPart
+		| ChatResponseProgressPart | ChatResponseReferencePart;
 
 	/**
 	 * @deprecated use ChatAgentResponseStream instead
@@ -568,14 +557,10 @@ declare module 'vscode' {
 
 	// TODO@API Remove a different type of `request` so that they can
 	// evolve at their own pace
-	export type ChatAgentHandler = (
-		request: ChatAgentRequest,
-		context: ChatAgentContext,
-		response: ChatAgentResponseStream,
-		token: CancellationToken
-	) => ProviderResult<ChatAgentResult2>;
+	export type ChatAgentHandler = (request: ChatAgentRequest, context: ChatAgentContext, response: ChatAgentResponseStream, token: CancellationToken) => ProviderResult<ChatAgentResult2>;
 
 	export namespace chat {
+
 		/**
 		 * Create a new {@link ChatAgent2 chat agent} instance.
 		 *
@@ -583,10 +568,7 @@ declare module 'vscode' {
 		 * @param handler The reply-handler of the agent.
 		 * @returns A new chat agent
 		 */
-		export function createChatAgent<TResult extends ChatAgentResult2>(
-			name: string,
-			handler: ChatAgentHandler
-		): ChatAgent2<TResult>;
+		export function createChatAgent<TResult extends ChatAgentResult2>(name: string, handler: ChatAgentHandler): ChatAgent2<TResult>;
 
 		/**
 		 * Register a variable which can be used in a chat request to any agent.
@@ -594,11 +576,7 @@ declare module 'vscode' {
 		 * @param description A description of the variable for the chat input suggest widget.
 		 * @param resolver Will be called to provide the chat variable's value when it is used.
 		 */
-		export function registerVariable(
-			name: string,
-			description: string,
-			resolver: ChatVariableResolver
-		): Disposable;
+		export function registerVariable(name: string, description: string, resolver: ChatVariableResolver): Disposable;
 	}
 
 	/**
@@ -608,7 +586,7 @@ declare module 'vscode' {
 	export enum ChatVariableLevel {
 		Short = 1,
 		Medium = 2,
-		Full = 3,
+		Full = 3
 	}
 
 	export interface ChatVariableValue {
@@ -642,10 +620,6 @@ declare module 'vscode' {
 		 * @param context Contextual information about this chat request.
 		 * @param token A cancellation token.
 		 */
-		resolve(
-			name: string,
-			context: ChatVariableContext,
-			token: CancellationToken
-		): ProviderResult<ChatVariableValue[]>;
+		resolve(name: string, context: ChatVariableContext, token: CancellationToken): ProviderResult<ChatVariableValue[]>;
 	}
 }
