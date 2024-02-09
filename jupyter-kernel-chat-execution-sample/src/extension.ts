@@ -76,11 +76,11 @@ from vscode import chat
 
 def step1():
     print("Started Step1")
-    chat.send_message("generatePandaSummary", {"name": "df", "shape": [10, 5]}, step2)
+    chat.call_function("generatePandaSummary", step2, "df", [10, 5])
 
 def step2(data):
     print(f"Inside Step2, got data {data['summary']}")
-    chat.send_message("generatePlot", {"name": "df", "type": "histogram", }, step3)
+    chat.call_function("generatePlot", step3, "df", "histogram", data)
 
 def step3(data):
     print(f"Inside Step3, got data {data['output']}")
@@ -91,17 +91,22 @@ step1()
 `;
 
 	const handlers: Record<string, (...data: any[]) => Promise<any>> = {
-		generatePandaSummary: async (_data: {
-			df: string;
-			shape: [rows: number, columns: number];
-		}) => {
+		generatePandaSummary: async (
+			df: string,
+			shape: [rows: number, columns: number]
+		) => {
+			console.log(`Generating Panda Summary for ${df} with shape ${shape}`);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			return { summary: 'Panda Summary' };
 		},
-		generatePlot: async (_data: {
-			df: string;
-			type: 'histogram' | 'line' | 'scatter';
-		}) => {
+		generatePlot: async (
+			df: string,
+			type: 'histogram' | 'line' | 'scatter',
+			summary: string
+		) => {
+			console.log(
+				`Generating Plot for ${df} with type ${type} and summary ${summary}`
+			);
 			await new Promise((resolve) => setTimeout(resolve, 1000));
 			return { output: 'df.plot(...)' };
 		},
