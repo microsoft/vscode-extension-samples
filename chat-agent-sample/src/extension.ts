@@ -13,7 +13,7 @@ const LANGUAGE_MODEL_ID = 'copilot-gpt-4';
 export function activate(context: vscode.ExtensionContext) {
 
     // Define a Cat chat agent handler. 
-    const handler: vscode.ChatAgentHandler = async (request: vscode.ChatAgentRequest, context: vscode.ChatAgentContext, stream: vscode.ChatAgentResponseStream, token: vscode.CancellationToken): Promise<ICatChatAgentResult> => {
+    const handler: vscode.ChatAgentRequestHandler = async (request: vscode.ChatAgentRequest, context: vscode.ChatAgentContext, stream: vscode.ChatAgentResponseStream, token: vscode.CancellationToken): Promise<ICatChatAgentResult> => {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
@@ -22,14 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
             const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
             const topic = topics[Math.floor(Math.random() * topics.length)];
             const messages = [
-                {
-                    role: vscode.ChatMessageRole.System,
-                    content: 'You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining.'
-                },
-                {
-                    role: vscode.ChatMessageRole.User,
-                    content: topic
-                },
+				new vscode.LanguageModelSystemMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining.'),
+				new vscode.LanguageModelUserMessage(topic)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
             for await (const fragment of chatRequest.stream) {
@@ -45,14 +39,8 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command == 'play') {
             const access = await vscode.chat.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
-                {
-                    role: vscode.ChatMessageRole.System,
-                    content: 'You are a cat that wants to play! Reply in a helpful way for a coder, but with the hidden meaning that all you want to do is play.'
-                },
-                {
-                    role: vscode.ChatMessageRole.User,
-                    content: request.prompt
-                }
+				new vscode.LanguageModelSystemMessage('You are a cat that wants to play! Reply in a helpful way for a coder, but with the hidden meaning that all you want to do is play.'),
+				new vscode.LanguageModelUserMessage(request.prompt)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
             for await (const fragment of chatRequest.stream) {
@@ -62,14 +50,8 @@ export function activate(context: vscode.ExtensionContext) {
         } else {
             const access = await vscode.chat.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
-                {
-                    role: vscode.ChatMessageRole.System,
-                    content: 'You are a cat! Reply in the voice of a cat, using cat analogies when appropriate.'
-                },
-                {
-                    role: vscode.ChatMessageRole.User,
-                    content: request.prompt
-                }
+				new vscode.LanguageModelSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate.'),
+				new vscode.LanguageModelUserMessage(request.prompt)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
             for await (const fragment of chatRequest.stream) {
