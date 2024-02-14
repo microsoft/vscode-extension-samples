@@ -7,6 +7,10 @@
 			{
 				"id": "base64Decoder",
 				"when": "variableValue =~ /^['\"]?[A-Za-z0-9=\\/+]+['\"]?$/ && variableType == string"
+			},
+			{
+				"id": "inlineBase64Decoder",
+				"when": "variableValue =~ /^['\"]?[A-Za-z0-9=\\/+]+['\"]?$/ && variableType == string"
 			}
 		]
 	},
