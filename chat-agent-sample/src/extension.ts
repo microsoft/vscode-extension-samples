@@ -80,12 +80,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     agent.followupProvider = {
         provideFollowups(result: ICatChatAgentResult, token: vscode.CancellationToken) {
-            if (result.metadata.command === 'play') {
-                return [{
-                    prompt: 'let us play',
-                    title: vscode.l10n.t('Play with the cat')
-                } satisfies vscode.ChatAgentFollowup];
-            }
+            return [{
+                prompt: 'let us play',
+                title: vscode.l10n.t('Play with the cat')
+            } satisfies vscode.ChatAgentFollowup];
         }
     };
 
