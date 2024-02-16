@@ -22,7 +22,7 @@
     ],
     "enabledApiProposals": [
         "chatAgents2",
-        "chatRequestAccess"
+        "languageModels"
     ],
     "main": "./out/extension.js",
     "scripts": {
