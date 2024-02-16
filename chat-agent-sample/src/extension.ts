@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
         if (request.command == 'teach') {
-            const access = await vscode.chat.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
+            const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
             const topic = topics[Math.floor(Math.random() * topics.length)];
             const messages = [
@@ -37,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
-            const access = await vscode.chat.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
+            const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
 				new vscode.LanguageModelSystemMessage('You are a cat that wants to play! Reply in a helpful way for a coder, but with the hidden meaning that all you want to do is play.'),
 				new vscode.LanguageModelUserMessage(request.prompt)
@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
             return { metadata: { command: 'play' } };
         } else {
-            const access = await vscode.chat.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
+            const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
 				new vscode.LanguageModelSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate.'),
 				new vscode.LanguageModelUserMessage(request.prompt)
