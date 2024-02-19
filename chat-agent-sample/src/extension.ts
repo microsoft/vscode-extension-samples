@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 
 const MEOW_COMMAND_ID = 'cat.meow';
 
-interface ICatChatAgentResult extends vscode.ChatAgentResult2 {
+interface ICatChatResult extends vscode.ChatResult {
     metadata: {
         command: string;
     }
@@ -13,7 +13,7 @@ const LANGUAGE_MODEL_ID = 'copilot-gpt-4';
 export function activate(context: vscode.ExtensionContext) {
 
     // Define a Cat chat agent handler. 
-    const handler: vscode.ChatAgentRequestHandler = async (request: vscode.ChatAgentRequest, context: vscode.ChatAgentContext, stream: vscode.ChatAgentResponseStream, token: vscode.CancellationToken): Promise<ICatChatAgentResult> => {
+    const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult> => {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
@@ -65,7 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Agents appear as top-level options in the chat input
     // when you type `@`, and can contribute sub-commands in the chat input
     // that appear when you type `/`.
-    const agent = vscode.chat.createChatAgent('cat', handler);
+    const agent = vscode.chat.createChatParticipant('cat', handler);
     agent.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     agent.description = vscode.l10n.t('Meow! What can I help you with?');
     agent.fullName = vscode.l10n.t('Cat');
@@ -79,15 +79,15 @@ export function activate(context: vscode.ExtensionContext) {
     };
 
     agent.followupProvider = {
-        provideFollowups(result: ICatChatAgentResult, token: vscode.CancellationToken) {
+        provideFollowups(result: ICatChatResult, token: vscode.CancellationToken) {
             return [{
                 prompt: 'let us play',
-                title: vscode.l10n.t('Play with the cat')
-            } satisfies vscode.ChatAgentFollowup];
+                label: vscode.l10n.t('Play with the cat')
+            } satisfies vscode.ChatFollowup];
         }
     };
 
-    vscode.chat.registerVariable('cat_context', 'Describes the state of mind and version of the cat', {
+    vscode.chat.registerChatVariableResolver('cat_context', 'Describes the state of mind and version of the cat', {
         resolve: (name, context, token) => {
             if (name == 'cat_context') {
                 const mood = Math.random() > 0.5 ? 'happy' : 'grumpy';
