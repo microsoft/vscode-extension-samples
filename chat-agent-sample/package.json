@@ -21,7 +21,8 @@
         "onStartupFinished"
     ],
     "enabledApiProposals": [
-        "chatAgents2",
+        "chatParticipant",
+		"chatVariableResolver",
         "languageModels"
     ],
     "main": "./out/extension.js",
