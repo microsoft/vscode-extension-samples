@@ -37,7 +37,6 @@ export function activate(context: vscode.ExtensionContext) {
 
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
-            console.log(vscode.lm.languageModels);
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
 				new vscode.LanguageModelSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
