@@ -8,7 +8,7 @@ interface ICatChatResult extends vscode.ChatResult {
     }
 }
 
-const LANGUAGE_MODEL_ID = 'copilot-gpt-4';
+const LANGUAGE_MODEL_ID = 'copilot-gpt-3.5-turbo'; // Use faster model. Alternative is 'copilot-gpt-4', which is slower but more powerful
 
 export function activate(context: vscode.ExtensionContext) {
 
