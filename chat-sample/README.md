@@ -1,4 +1,4 @@
-# Chat Agent Example
+# Chat Example
 
 This sample shows
 
