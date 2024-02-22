@@ -1,8 +1,8 @@
-# Chat Agent Example
+# Chat Example
 
 This sample shows
 
-- How to contribute a chat agent.
+- How to contribute a chat participant.
 - How to use the chatRequestAccess API to request access to the chat.
 - How to respond with follow-ups.
 
