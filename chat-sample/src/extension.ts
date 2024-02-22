@@ -8,7 +8,7 @@ interface ICatChatResult extends vscode.ChatResult {
     }
 }
 
-const LANGUAGE_MODEL_ID = 'copilot-gpt-4';
+const LANGUAGE_MODEL_ID = 'copilot-gpt-3.5-turbo'; // 'copilot-gpt-4'
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -37,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
+            console.log(vscode.lm.languageModels);
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
 				new vscode.LanguageModelSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
