@@ -70,6 +70,7 @@ export function activate(context: vscode.ExtensionContext) {
     // when you type `@`, and can contribute sub-commands in the chat input
     // that appear when you type `/`.
     const cat = vscode.chat.createChatParticipant('cat', handler);
+    cat.isSticky = true; // Cat is persistant, whenever a user starts interacting with @cat, @cat will automatically be added to the following messages
     cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     cat.description = vscode.l10n.t('Meow! What can I help you with?');
     cat.commandProvider = {
