@@ -12,7 +12,7 @@ const LANGUAGE_MODEL_ID = 'copilot-gpt-4';
 
 export function activate(context: vscode.ExtensionContext) {
 
-    // Define a Cat chat agent handler. 
+    // Define a Cat chat handler. 
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult> => {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
@@ -66,13 +66,13 @@ export function activate(context: vscode.ExtensionContext) {
         }
     };
 
-    // Agents appear as top-level options in the chat input
+    // Chat participants appear as top-level options in the chat input
     // when you type `@`, and can contribute sub-commands in the chat input
     // that appear when you type `/`.
-    const agent = vscode.chat.createChatParticipant('cat', handler);
-    agent.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
-    agent.description = vscode.l10n.t('Meow! What can I help you with?');
-    agent.commandProvider = {
+    const cat = vscode.chat.createChatParticipant('cat', handler);
+    cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
+    cat.description = vscode.l10n.t('Meow! What can I help you with?');
+    cat.commandProvider = {
         provideCommands(token) {
             return [
                 { name: 'teach', description: 'Pick at random a computer science concept then explain it in purfect way of a cat' },
@@ -81,7 +81,7 @@ export function activate(context: vscode.ExtensionContext) {
         }
     };
 
-    agent.followupProvider = {
+    cat.followupProvider = {
         provideFollowups(result: ICatChatResult, token: vscode.CancellationToken) {
             return [{
                 prompt: 'let us play',
@@ -114,7 +114,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(
-        agent,
+        cat,
         // Register the command handler for the /meow followup
         vscode.commands.registerCommand(MEOW_COMMAND_ID, async () => {
             vscode.window.showInformationMessage('Meow!');
