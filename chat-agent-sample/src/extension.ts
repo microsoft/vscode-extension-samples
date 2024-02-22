@@ -39,7 +39,8 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command == 'play') {
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
-				new vscode.LanguageModelSystemMessage('You are a cat that wants to play! Reply in a helpful way for a coder, but with the hidden meaning that all you want to do is play.'),
+				new vscode.LanguageModelSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
+                 Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
 				new vscode.LanguageModelUserMessage(request.prompt)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
@@ -50,12 +51,15 @@ export function activate(context: vscode.ExtensionContext) {
         } else {
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
-				new vscode.LanguageModelSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate.'),
+				new vscode.LanguageModelSystemMessage('You are a cat! Be concise! Reply in the voice of a cat, using cat analogies when appropriate. Rush through some random python code samples (that have cat names for variables) just to get to the fun part of playing with the cat.'),
 				new vscode.LanguageModelUserMessage(request.prompt)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
             for await (const fragment of chatRequest.stream) {
-                stream.markdown(fragment);
+                // Process the output from the language model
+                // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
+                const catFragment = fragment.replaceAll('def', 'meow');
+                stream.markdown(catFragment);
             }
 
             return { metadata: { command: '' } };
@@ -81,7 +85,8 @@ export function activate(context: vscode.ExtensionContext) {
         provideFollowups(result: ICatChatResult, token: vscode.CancellationToken) {
             return [{
                 prompt: 'let us play',
-                label: vscode.l10n.t('Play with the cat')
+                label: vscode.l10n.t('Play with the cat'),
+                command: 'play'
             } satisfies vscode.ChatFollowup];
         }
     };
