@@ -68,7 +68,6 @@ export function activate(context: vscode.ExtensionContext) {
     const agent = vscode.chat.createChatParticipant('cat', handler);
     agent.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     agent.description = vscode.l10n.t('Meow! What can I help you with?');
-    agent.fullName = vscode.l10n.t('Cat');
     agent.commandProvider = {
         provideCommands(token) {
             return [
