@@ -2,7 +2,7 @@
     "name": "chat-sample",
     "publisher": "vscode-samples",
     "displayName": "Copilot Chat Sample",
-    "description": "Sample chat extension, a trusty cat that will help you with your code.",
+    "description": "Sample chat extension, a trusty cat tutor that will can teach you computer science topics.",
     "repository": {
         "type": "git",
         "url": "https://github.com/Microsoft/vscode-extension-samples"
@@ -15,7 +15,7 @@
         "github.copilot-chat"
     ],
     "categories": [
-        "Other"
+        "Chat"
     ],
     "activationEvents": [
         "onStartupFinished"
