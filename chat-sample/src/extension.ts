@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 
 const MEOW_COMMAND_ID = 'cat.meow';
+const CAT_PARTICIPANT_NAME = 'cat';
 
 interface ICatChatResult extends vscode.ChatResult {
     metadata: {
@@ -19,8 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
         // The GitHub Copilot Chat extension implements this provider.
         if (request.command == 'teach') {
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
-            const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
-            const topic = topics[Math.floor(Math.random() * topics.length)];
+            const topic = getTopic(context.history);
             const messages = [
 				new vscode.LanguageModelSystemMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining.'),
 				new vscode.LanguageModelUserMessage(topic)
@@ -69,7 +69,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Chat participants appear as top-level options in the chat input
     // when you type `@`, and can contribute sub-commands in the chat input
     // that appear when you type `/`.
-    const cat = vscode.chat.createChatParticipant('cat', handler);
+    const cat = vscode.chat.createChatParticipant(CAT_PARTICIPANT_NAME, handler);
     cat.isSticky = true; // Cat is persistant, whenever a user starts interacting with @cat, @cat will automatically be added to the following messages
     cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     cat.description = vscode.l10n.t('Meow! What can I help you with?');
@@ -121,6 +121,25 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage('Meow!');
         }),
     );
+}
+
+// Get a random topic that the cat has not taught in the chat history yet
+function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatResponseTurn>): string {
+    const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
+    // Filter the chat history to get only the responses from the cat
+    const previousCatResponses = history.filter(h => {
+        return h instanceof vscode.ChatResponseTurn && h.participant.name == CAT_PARTICIPANT_NAME
+    }) as vscode.ChatResponseTurn[];
+    // Filter the topics to get only the topics that have not been taught by the cat yet
+    const topicsNoRepetition = topics.filter(topic => {
+        return !previousCatResponses.some(catResponse => {
+            return catResponse.response.some(r => {
+                return r instanceof vscode.ChatResponseMarkdownPart && r.value.value.includes(topic)
+            });
+        });
+    });
+
+    return topicsNoRepetition[Math.floor(Math.random() * topicsNoRepetition.length)] || 'binary search';
 }
 
 export function deactivate() { }
