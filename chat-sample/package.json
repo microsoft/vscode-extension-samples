@@ -25,6 +25,14 @@
 		"chatVariableResolver",
         "languageModels"
     ],
+    "contributes": {
+        "commands": [
+          {
+            "command": "cat.namesInEditor",
+            "title": "Use Cat Names in Editor"
+          }
+        ]
+    },
     "main": "./out/extension.js",
     "scripts": {
         "vscode:prepublish": "npm run compile",
