@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 
-const MEOW_COMMAND_ID = 'cat.meow';
+const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
 const CAT_PARTICIPANT_NAME = 'cat';
 
 interface ICatChatResult extends vscode.ChatResult {
@@ -32,8 +32,8 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             stream.button({
-                command: MEOW_COMMAND_ID,
-                title: vscode.l10n.t('Meow!')
+                command: CAT_NAMES_COMMAND_ID,
+                title: vscode.l10n.t('Use Cat Names in Editor')
             });
 
             return { metadata: { command: 'teach' } };
@@ -119,8 +119,32 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         cat,
         // Register the command handler for the /meow followup
-        vscode.commands.registerCommand(MEOW_COMMAND_ID, async () => {
-            vscode.window.showInformationMessage('Meow!');
+        vscode.commands.registerTextEditorCommand(CAT_NAMES_COMMAND_ID, async (textEditor: vscode.TextEditor) => {
+            // Replace all variables in active editor with cat names and words
+            const text = textEditor.document.getText();
+            const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
+            const messages = [
+                new vscode.LanguageModelSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
+                Your job is to replace all variable names in the following code with funny cat variable names. Be creative. IMPORTANT respond just with code. Do not use markdown!`),
+                new vscode.LanguageModelUserMessage(text)
+            ];
+            const chatRequest = access.makeChatRequest(messages, {}, new vscode.CancellationTokenSource().token);
+            
+            // Clear the editor content before inserting new content
+            await textEditor.edit(edit => {
+                const start = new vscode.Position(0, 0);
+                const end = new vscode.Position(textEditor.document.lineCount - 1, textEditor.document.lineAt(textEditor.document.lineCount - 1).text.length);
+                edit.delete(new vscode.Range(start, end));
+            });
+
+            // Stream the code into the editor as it is coming in from the Language Model
+            for await (const fragment of chatRequest.stream) {
+                await textEditor.edit(edit => {
+                    const lastLine = textEditor.document.lineAt(textEditor.document.lineCount - 1);
+                    const position = new vscode.Position(lastLine.lineNumber, lastLine.text.length);
+                    edit.insert(position, fragment);
+                });
+            }
         }),
     );
 }
