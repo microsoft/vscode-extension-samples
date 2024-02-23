@@ -19,10 +19,11 @@ export function activate(context: vscode.ExtensionContext) {
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
         if (request.command == 'teach') {
+		    stream.progress('Picking the right topic to teach...');
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const topic = getTopic(context.history);
             const messages = [
-				new vscode.LanguageModelSystemMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining.'),
+				new vscode.LanguageModelSystemMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
 				new vscode.LanguageModelUserMessage(topic)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
@@ -37,11 +38,11 @@ export function activate(context: vscode.ExtensionContext) {
 
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
+		    stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
-				new vscode.LanguageModelSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
-                 Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-				new vscode.LanguageModelUserMessage(request.prompt)
+				new vscode.LanguageModelSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
+				new vscode.LanguageModelUserMessage('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
             for await (const fragment of chatRequest.stream) {
@@ -51,7 +52,8 @@ export function activate(context: vscode.ExtensionContext) {
         } else {
             const access = await vscode.lm.requestLanguageModelAccess(LANGUAGE_MODEL_ID);
             const messages = [
-				new vscode.LanguageModelSystemMessage('You are a cat! Be concise! Reply in the voice of a cat, using cat analogies when appropriate. Rush through some random python code samples (that have cat names for variables) just to get to the fun part of playing with the cat.'),
+                new vscode.LanguageModelSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
+                    Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
 				new vscode.LanguageModelUserMessage(request.prompt)
             ];
             const chatRequest = access.makeChatRequest(messages, {}, token);
@@ -72,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
     const cat = vscode.chat.createChatParticipant(CAT_PARTICIPANT_NAME, handler);
     cat.isSticky = true; // Cat is persistant, whenever a user starts interacting with @cat, @cat will automatically be added to the following messages
     cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
-    cat.description = vscode.l10n.t('Meow! What can I help you with?');
+    cat.description = vscode.l10n.t('Meow! What can I teach you?');
     cat.commandProvider = {
         provideCommands(token) {
             return [
@@ -139,7 +141,7 @@ function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatRes
         });
     });
 
-    return topicsNoRepetition[Math.floor(Math.random() * topicsNoRepetition.length)] || 'binary search';
+    return topicsNoRepetition[Math.floor(Math.random() * topicsNoRepetition.length)] || 'I have taught you everything I know. Meow!';
 }
 
 export function deactivate() { }
