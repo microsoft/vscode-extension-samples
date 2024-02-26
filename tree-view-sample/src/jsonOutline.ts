@@ -135,7 +135,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 			};
 			treeItem.iconPath = this.getIcon(valueNode);
 			treeItem.contextValue = valueNode.type;
-			if (typeof valueNode.value === 'string' && valueNode.value.startsWith('test')) {
+			if (typeof valueNode.value === 'string') {
 				await new Promise(resolve => setTimeout(resolve, 2000));
 			}
 			return treeItem;
