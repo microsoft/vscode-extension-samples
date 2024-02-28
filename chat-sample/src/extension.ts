@@ -19,14 +19,14 @@ export function activate(context: vscode.ExtensionContext) {
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
         if (request.command == 'teach') {
-		    stream.progress('Picking the right topic to teach...');
+            stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             const messages = [
-				new vscode.LanguageModelChatSystemMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
-				new vscode.LanguageModelChatUserMessage(topic)
+                new vscode.LanguageModelChatSystemMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
+                new vscode.LanguageModelChatUserMessage(topic)
             ];
-            const chatRequest = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
-            for await (const fragment of chatRequest.stream) {
+            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
+            for await (const fragment of chatResponse.stream) {
                 stream.markdown(fragment);
             }
 
@@ -37,13 +37,13 @@ export function activate(context: vscode.ExtensionContext) {
 
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
-		    stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
+            stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             const messages = [
-				new vscode.LanguageModelChatSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
-				new vscode.LanguageModelChatUserMessage('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
+                new vscode.LanguageModelChatSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
+                new vscode.LanguageModelChatUserMessage('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
             ];
-            const chatRequest = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
-            for await (const fragment of chatRequest.stream) {
+            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
+            for await (const fragment of chatResponse.stream) {
                 stream.markdown(fragment);
             }
             return { metadata: { command: 'play' } };
@@ -51,10 +51,10 @@ export function activate(context: vscode.ExtensionContext) {
             const messages = [
                 new vscode.LanguageModelChatSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
                     Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-				new vscode.LanguageModelChatUserMessage(request.prompt)
+                new vscode.LanguageModelChatUserMessage(request.prompt)
             ];
-            const chatRequest = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
-            for await (const fragment of chatRequest.stream) {
+            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
+            for await (const fragment of chatResponse.stream) {
                 // Process the output from the language model
                 // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
                 const catFragment = fragment.replaceAll('def', 'meow');
@@ -97,16 +97,16 @@ export function activate(context: vscode.ExtensionContext) {
                 const mood = Math.random() > 0.5 ? 'happy' : 'grumpy';
                 return [
                     {
-                        level: vscode.ChatVariableLevel.Short, 
-                        value: 'version 1.3 ' + mood 
+                        level: vscode.ChatVariableLevel.Short,
+                        value: 'version 1.3 ' + mood
                     },
                     {
-                        level: vscode.ChatVariableLevel.Medium, 
-                        value: 'I am a playful cat, version 1.3, and I am ' + mood 
+                        level: vscode.ChatVariableLevel.Medium,
+                        value: 'I am a playful cat, version 1.3, and I am ' + mood
                     },
                     {
-                        level: vscode.ChatVariableLevel.Full, 
-                        value: 'I am a playful cat, version 1.3, this version prefer to explain everything using mouse and tail metaphores. I am ' + mood 
+                        level: vscode.ChatVariableLevel.Full,
+                        value: 'I am a playful cat, version 1.3, this version prefer to explain everything using mouse and tail metaphores. I am ' + mood
                     }
                 ]
             }
@@ -124,8 +124,22 @@ export function activate(context: vscode.ExtensionContext) {
                 Your job is to replace all variable names in the following code with funny cat variable names. Be creative. IMPORTANT respond just with code. Do not use markdown!`),
                 new vscode.LanguageModelChatUserMessage(text)
             ];
-            const chatRequest = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, new vscode.CancellationTokenSource().token);
-            
+
+            let chatResponse: vscode.LanguageModelChatResponse | undefined;
+            try {
+                chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, new vscode.CancellationTokenSource().token);
+
+            } catch (err) {
+                // making the chat request might fail because
+                // - model does not exist
+                // - user consent not given
+                // - quote limits exceeded
+                if (err instanceof vscode.LanguageModelError) {
+                    console.log(err.message, err.code, err.cause)
+                }
+                return
+            }
+
             // Clear the editor content before inserting new content
             await textEditor.edit(edit => {
                 const start = new vscode.Position(0, 0);
@@ -134,11 +148,20 @@ export function activate(context: vscode.ExtensionContext) {
             });
 
             // Stream the code into the editor as it is coming in from the Language Model
-            for await (const fragment of chatRequest.stream) {
+            try {
+                for await (const fragment of chatResponse.stream) {
+                    await textEditor.edit(edit => {
+                        const lastLine = textEditor.document.lineAt(textEditor.document.lineCount - 1);
+                        const position = new vscode.Position(lastLine.lineNumber, lastLine.text.length);
+                        edit.insert(position, fragment);
+                    });
+                }
+            } catch (err) {
+                // async response stream may fail, e.g network interruption or server side error
                 await textEditor.edit(edit => {
                     const lastLine = textEditor.document.lineAt(textEditor.document.lineCount - 1);
                     const position = new vscode.Position(lastLine.lineNumber, lastLine.text.length);
-                    edit.insert(position, fragment);
+                    edit.insert(position, (<Error>err).message);
                 });
             }
         }),
