@@ -15,8 +15,7 @@
         "github.copilot-chat"
     ],
     "categories": [
-        "AI",
-        "Chat"
+        "Other"
     ],
     "activationEvents": [
         "onStartupFinished"
