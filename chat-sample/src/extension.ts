@@ -71,16 +71,6 @@ export function activate(context: vscode.ExtensionContext) {
     const cat = vscode.chat.createChatParticipant(CAT_PARTICIPANT_NAME, handler);
     cat.isSticky = true; // Cat is persistant, whenever a user starts interacting with @cat, @cat will automatically be added to the following messages
     cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
-    cat.description = vscode.l10n.t('Meow! What can I teach you?');
-    cat.commandProvider = {
-        provideCommands(token) {
-            return [
-                { name: 'teach', description: 'Pick at random a computer science concept then explain it in purfect way of a cat' },
-                { name: 'play', description: 'Do whatever you want, you are a cat after all' }
-            ];
-        }
-    };
-
     cat.followupProvider = {
         provideFollowups(result: ICatChatResult, token: vscode.CancellationToken) {
             return [{

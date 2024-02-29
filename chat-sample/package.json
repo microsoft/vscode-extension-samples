@@ -9,7 +9,7 @@
     },
     "version": "0.1.0",
     "engines": {
-        "vscode": "^1.86.0"
+        "vscode": "^1.88.0"
     },
     "extensionDependencies": [
         "github.copilot-chat"
@@ -17,20 +17,34 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": [
-        "onStartupFinished"
-    ],
+    "activationEvents": [ ],
     "enabledApiProposals": [
         "chatParticipant",
-		"chatVariableResolver",
+        "chatVariableResolver",
         "languageModels"
     ],
     "contributes": {
+        "chatParticipants": [
+            {
+                "name": "cat",
+                "description": "Meow! What can I teach you?",
+                "commands": [
+                    {
+                        "name": "teach",
+                        "description": "Pick at random a computer science concept then explain it in purfect way of a cat"
+                    },
+                    {
+                        "name": "play",
+                        "description": "Do whatever you want, you are a cat after all"
+                    }
+                ]
+            }
+        ],
         "commands": [
-          {
-            "command": "cat.namesInEditor",
-            "title": "Use Cat Names in Editor"
-          }
+            {
+                "command": "cat.namesInEditor",
+                "title": "Use Cat Names in Editor"
+            }
         ]
     },
     "main": "./out/extension.js",
