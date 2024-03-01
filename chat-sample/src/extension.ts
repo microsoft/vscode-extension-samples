@@ -72,7 +72,7 @@ export function activate(context: vscode.ExtensionContext) {
     cat.isSticky = true; // Cat is persistant, whenever a user starts interacting with @cat, @cat will automatically be added to the following messages
     cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     cat.followupProvider = {
-        provideFollowups(result: ICatChatResult, token: vscode.CancellationToken) {
+        provideFollowups(result: ICatChatResult, context: vscode.ChatContext, token: vscode.CancellationToken) {
             return [{
                 prompt: 'let us play',
                 label: vscode.l10n.t('Play with the cat'),
