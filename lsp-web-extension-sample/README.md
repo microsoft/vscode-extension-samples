@@ -35,9 +35,9 @@ It also includes an End-to-End test.
 - Select `Run Web Extension` from the drop down.
 - Run the launch config.
 - In the [Extension Development Host] instance of VSCode, open a document in 'plain text' language mode.
-  - Type #00ff00 or any other color in hex format
-  - color decorators will appear
-- You can set breakpoints in the client code. Debugging the server code currently is not working, see issue [#204114](https://github.com/microsoft/vscode/issues/204114).
+  - Type #00ff00 or any other color in hex format.
+  - color decorators will appear.
+- You can set breakpoints in the client or server code.
 
 
 You can also run and debug the extension in a browser
