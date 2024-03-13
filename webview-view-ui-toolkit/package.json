@@ -1,0 +1,60 @@
+{
+	"name": "webview-view-ui-toolkit",
+	"displayName": "webview-view-ui-toolkit",
+	"description": "Sample for implementing simple hello-world webview-view along with ui-toolkit",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "vscode-hello-activitybar",
+					"title": "Webview View UI Sample",
+					"icon": "media/hi.svg"
+				}
+			]
+		},
+		"views": {
+			"vscode-hello-activitybar": [
+				{
+					"type": "webview",
+					"id": "webview-view-ui-toolkit.entry",
+					"name": "Webview View UI Sample"
+				}
+			]
+		},
+		"commands": []
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"compile": "node ./esbuild.js",
+		"package": "NODE_ENV=production node ./esbuild.js",
+		"watch": "node ./esbuild.js --watch"
+	},
+	"devDependencies": {
+		"@types/node": "^16.18.34",
+		"@types/vscode": "^1.74.0",
+		"@typescript-eslint/eslint-plugin": "^6.7.0",
+		"@typescript-eslint/parser": "^6.7.0",
+		"esbuild": "^0.16.17",
+		"eslint": "^8.26.0",
+		"typescript": "^5.3.2"
+	},
+	"dependencies": {
+		"@vscode/webview-ui-toolkit": "^1.4.0"
+	}
+}
