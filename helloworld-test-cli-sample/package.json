@@ -36,6 +36,6 @@
 		"@vscode/test-cli": "^0.0.3",
 		"@vscode/test-electron": "^2.3.6",
 		"mocha": "^10.2.0",
-		"typescript": "^5.3.2"
+		"typescript": "^5.4.2"
 	}
 }

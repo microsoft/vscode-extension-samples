@@ -72,8 +72,8 @@ export function activate(context: vscode.ExtensionContext) {
 		 */
 		handleDidPartiallyAcceptCompletionItem(
 			completionItem: vscode.InlineCompletionItem,
-			acceptedLength: number
-		): void {
+			info: vscode.PartialAcceptInfo | number
+		): void { 
 			console.log('handleDidPartiallyAcceptCompletionItem');
 		},
 	};
