@@ -5,38 +5,49 @@ import * as vscode from 'vscode';
  */
 class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 
-	private readonly countMimeTypes = 'application/vnd.code.copydemo-copy-count';
+	static readonly kind = vscode.DocumentPasteEditKind.Empty.append('text', 'custom', 'count');
+
+	static readonly countMimeType = 'application/vnd.code.copydemo-copy-count';
 
 	private count = 0;
 
-	prepareDocumentPaste?(
+	/**
+	 * Invoked on copy. This allows us to modify the `dataTransfer` that is later passed to {@link provideDocumentPasteEdits}.
+	 */
+	prepareDocumentPaste(
 		_document: vscode.TextDocument,
 		_ranges: readonly vscode.Range[],
 		dataTransfer: vscode.DataTransfer,
 		_token: vscode.CancellationToken
-	): void | Thenable<void> {
-		dataTransfer.set(this.countMimeTypes, new vscode.DataTransferItem(this.count++));
-		dataTransfer.set('text/plain', new vscode.DataTransferItem(this.count++));
+	) {
+		// Save off metadata in a custom mimetype
+		dataTransfer.set(CopyCountPasteEditProvider.countMimeType, new vscode.DataTransferItem(this.count++));
 	}
 
+	/**
+	 * Invoked on paste
+	 */
 	async provideDocumentPasteEdits(
 		_document: vscode.TextDocument,
 		_ranges: readonly vscode.Range[],
 		dataTransfer: vscode.DataTransfer,
+		_context: vscode.DocumentPasteEditContext,
 		token: vscode.CancellationToken
-	): Promise<vscode.DocumentPasteEdit | undefined> {
-		const countDataTransferItem = dataTransfer.get(this.countMimeTypes);
+	): Promise<vscode.DocumentPasteEdit[] | undefined> {
+		// Read our custom metadata
+		const countDataTransferItem = dataTransfer.get(CopyCountPasteEditProvider.countMimeType);
 		if (!countDataTransferItem) {
-			return;
-		}
-
-		const textDataTransferItem = dataTransfer.get('text/plain');
-		if (!textDataTransferItem) {
 			return;
 		}
 
 		const count = await countDataTransferItem.asString();
 		if (token.isCancellationRequested) {
+			return;
+		}
+
+		// Also read the text data in the clipboard
+		const textDataTransferItem = dataTransfer.get('text/plain');
+		if (!textDataTransferItem) {
 			return;
 		}
 
@@ -49,7 +60,9 @@ class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 		const snippet = new vscode.SnippetString();
 		snippet.appendText(`(copy #${count}) ${text}`);
 
-		return new vscode.DocumentPasteEdit(snippet, "Insert with copy count sample");
+		return [
+			new vscode.DocumentPasteEdit(snippet, "Insert with copy count sample", CopyCountPasteEditProvider.kind),
+		];
 	}
 }
 
@@ -59,7 +72,13 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register our provider
 	context.subscriptions.push(vscode.languages.registerDocumentPasteEditProvider(selector, new CopyCountPasteEditProvider(), {
-		id: 'copyCount',
-		pasteMimeTypes: ['text/plain'],
+		// List out all kinds of edits that our provider may return
+		providedPasteEditKinds: [CopyCountPasteEditProvider.kind],
+
+		// List out all mime types that our provider may add on copy
+		copyMimeTypes: [CopyCountPasteEditProvider.countMimeType],
+
+		// List out all mime types that our provider should be invoked for on paste
+		pasteMimeTypes: ['text/plain', CopyCountPasteEditProvider.countMimeType],
 	}));
 }
