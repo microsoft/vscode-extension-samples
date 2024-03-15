@@ -10,8 +10,8 @@ import { window } from 'vscode';
  */
 export async function showQuickPick() {
 	let i = 0;
-	const result = await window.showQuickPick(['eins', 'zwei', 'drei'], {
-		placeHolder: 'eins, zwei or drei',
+	const result = await window.showQuickPick(['one', 'two', 'three'], {
+		placeHolder: 'one, two or three',
 		onDidSelectItem: item => window.showInformationMessage(`Focus ${++i}: ${item}`)
 	});
 	window.showInformationMessage(`Got: ${result}`);
