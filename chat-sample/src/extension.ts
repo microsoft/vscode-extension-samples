@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
-const CAT_PARTICIPANT_NAME = 'cat';
+const CAT_PARTICIPANT_ID = 'chat-sample.cat';
 
 interface ICatChatResult extends vscode.ChatResult {
     metadata: {
@@ -68,7 +68,7 @@ export function activate(context: vscode.ExtensionContext) {
     // Chat participants appear as top-level options in the chat input
     // when you type `@`, and can contribute sub-commands in the chat input
     // that appear when you type `/`.
-    const cat = vscode.chat.createChatParticipant(CAT_PARTICIPANT_NAME, handler);
+    const cat = vscode.chat.createChatParticipant(CAT_PARTICIPANT_ID, handler);
     cat.isSticky = true; // Cat is persistant, whenever a user starts interacting with @cat, @cat will automatically be added to the following messages
     cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     cat.followupProvider = {
@@ -163,7 +163,7 @@ function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatRes
     const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
     // Filter the chat history to get only the responses from the cat
     const previousCatResponses = history.filter(h => {
-        return h instanceof vscode.ChatResponseTurn && h.participant.name == CAT_PARTICIPANT_NAME
+        return h instanceof vscode.ChatResponseTurn && h.participant == CAT_PARTICIPANT_ID
     }) as vscode.ChatResponseTurn[];
     // Filter the topics to get only the topics that have not been taught by the cat yet
     const topicsNoRepetition = topics.filter(topic => {

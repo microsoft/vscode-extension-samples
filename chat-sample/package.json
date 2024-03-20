@@ -26,6 +26,7 @@
     "contributes": {
         "chatParticipants": [
             {
+				"id": "chat-sample.cat",
                 "name": "cat",
                 "description": "Meow! What can I teach you?",
                 "commands": [
