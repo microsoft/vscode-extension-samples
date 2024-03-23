@@ -29,6 +29,7 @@
 				"id": "chat-sample.cat",
                 "name": "cat",
                 "description": "Meow! What can I teach you?",
+                "isSticky": true,
                 "commands": [
                     {
                         "name": "teach",
