@@ -14,7 +14,9 @@
 	"engines": {
 		"vscode": "^1.74.0"
 	},
-	"activationEvents": [],
+	"activationEvents": [
+		"onLanguage:html1"
+	],
 	"main": "./client/out/extension",
 	"contributes": {
 		"languages": [
