@@ -17,7 +17,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"onStartupFinished"
 	],
 	"main": "./out/src/extension",
 	"scripts": {
