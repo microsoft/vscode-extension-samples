@@ -1,4 +1,7 @@
+import { renderPrompt } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
+import { TestPrompt } from './play';
+import { ChatRole } from '@vscode/prompt-tsx/dist/base/openai';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
 const CAT_PARTICIPANT_ID = 'chat-sample.cat';
@@ -38,11 +41,21 @@ export function activate(context: vscode.ExtensionContext) {
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
-            const messages = [
-                new vscode.LanguageModelChatSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
-                new vscode.LanguageModelChatUserMessage('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
-            ];
-            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
+			const { messages } = await renderPrompt(
+				TestPrompt,
+				{ userQuery: request.prompt },
+				{ modelMaxPromptTokens: 4096 }
+			);
+			const messages2 = messages.map(m => {
+				if (m.role === ChatRole.User) {
+					return new vscode.LanguageModelChatUserMessage(m.content);
+				} else if (m.role === ChatRole.System) {
+					return new vscode.LanguageModelChatSystemMessage(m.content);
+				} else if (m.role === ChatRole.Assistant) {
+					return new vscode.LanguageModelChatAssistantMessage(m.content);
+				}
+			}) as vscode.LanguageModelChatMessage[];
+            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages2, {}, token);
             for await (const fragment of chatResponse.stream) {
                 stream.markdown(fragment);
             }

@@ -26,7 +26,7 @@
     "contributes": {
         "chatParticipants": [
             {
-				"id": "chat-sample.cat",
+                "id": "chat-sample.cat",
                 "name": "cat",
                 "description": "Meow! What can I teach you?",
                 "isSticky": true,
