@@ -3,5 +3,6 @@
 	"prettier.semi": true,
 	"prettier.printWidth": 92,
 	"prettier.singleQuote": true,
-	"prettier.useTabs": true
+	"prettier.useTabs": true,
+	"cmake.sourceDirectory": "C:/Users/leann/OneDrive/BusWrapBattle/BluntWrapz/.vscode"
 }
