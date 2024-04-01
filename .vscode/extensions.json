@@ -1,6 +1,8 @@
 {
 	"recommendations": [
 		"googlecloudtools.cloudcode",
-		"ms-dotnettools.vscode-dotnet-sdk"
+		"ms-dotnettools.vscode-dotnet-sdk",
+		"ms-edgedevtools.vscode-edge-devtools",
+		"ms-kubernetes-tools.vscode-kubernetes-tools"
 	]
 }
