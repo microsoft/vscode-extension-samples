@@ -29,12 +29,11 @@
 		"test": "vscode-test"
 	},
 	"devDependencies": {
-		"@types/glob": "^7.1.1",
 		"@types/mocha": "^10.0.1",
 		"@types/node": "^16.18.34",
 		"@types/vscode": "^1.73.0",
-		"@vscode/test-cli": "^0.0.3",
-		"@vscode/test-electron": "^2.3.6",
+		"@vscode/test-cli": "^0.0.8",
+		"@vscode/test-electron": "^2.3.9",
 		"mocha": "^10.2.0",
 		"typescript": "^5.4.2"
 	}
