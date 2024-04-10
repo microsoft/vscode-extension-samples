@@ -1,4 +1,4 @@
-import { basename, dirname } from 'path';
+import { dirname } from 'path';
 import * as vscode from 'vscode';
 
 const terminalProfileName = 'Tracking Editor';
