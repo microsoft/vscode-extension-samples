@@ -7,7 +7,6 @@
             "webworker"
         ],
         "types": [
-            "node",
             "vscode"
         ],
         "module": "Node16",
