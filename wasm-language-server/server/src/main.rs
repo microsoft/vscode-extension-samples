@@ -4,13 +4,27 @@
  *--------------------------------------------------------------------------------------------*/
 use std::error::Error;
 
-use lsp_types::OneOf;
 use lsp_types::{
-    request::GotoDefinition, GotoDefinitionResponse, InitializeParams, ServerCapabilities,
-    Location
+    request::Request, request::GotoDefinition, GotoDefinitionResponse, InitializeParams,
+    ServerCapabilities, Location, OneOf
 };
+use lsp_server::{ Connection, ExtractError, Message, RequestId, Response };
+use serde::{ Deserialize, Serialize };
 
-use lsp_server::{Connection, ExtractError, Message, Request, RequestId, Response};
+#[derive(Deserialize, Serialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct AddParams {
+    pub left: i32,
+    pub right: i32,
+}
+
+pub enum AddRequest {}
+impl Request for AddRequest {
+    type Params = AddParams;
+    type Result = i32;
+    const METHOD: &'static str = "wasm-language-server/addRequest";
+}
+
 
 fn main() -> Result<(), Box<dyn Error + Sync + Send>> {
     // Note that  we must have our logging only write out to stderr.
@@ -35,10 +49,7 @@ fn main() -> Result<(), Box<dyn Error + Sync + Send>> {
     Ok(())
 }
 
-fn main_loop(
-    connection: Connection,
-    params: serde_json::Value,
-) -> Result<(), Box<dyn Error + Sync + Send>> {
+fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Box<dyn Error + Sync + Send>> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
     for msg in &connection.receiver {
         match msg {
@@ -61,7 +72,20 @@ fn main_loop(
                     Err(err @ ExtractError::JsonError { .. }) => panic!("{err:?}"),
                     Err(ExtractError::MethodMismatch(req)) => req,
                 };
-                // ...
+                match cast::<AddRequest>(req) {
+                    Ok((id, params)) => {
+                        eprintln!("Received add request request #{id}");
+                        let left = params.left;
+                        let right = params.right;
+                        let result = left + right;
+                        let result = serde_json::to_value(&result).unwrap();
+                        let resp = Response { id, result: Some(result), error: None };
+                        connection.sender.send(Message::Response(resp))?;
+                        continue;
+                    }
+                    Err(err @ ExtractError::JsonError { .. }) => panic!("{err:?}"),
+                    Err(ExtractError::MethodMismatch(req)) => req,
+                };
             }
             Message::Response(resp) => {
                 eprintln!("got response: {resp:?}");
@@ -74,7 +98,7 @@ fn main_loop(
     Ok(())
 }
 
-fn cast<R>(req: Request) -> Result<(RequestId, R::Params), ExtractError<Request>>
+fn cast<R>(req: lsp_server::Request) -> Result<(RequestId, R::Params), ExtractError<lsp_server::Request>>
 where
     R: lsp_types::request::Request,
     R::Params: serde::de::DeserializeOwned,
