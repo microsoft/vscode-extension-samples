@@ -1,0 +1,47 @@
+{
+	"name": "wasm-language-server",
+	"description": "An example demonstrating how to implement a language server as a WebAssembly module.",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"publisher": "vscode-samples",
+	"categories": [],
+	"keywords": [
+		"WASM",
+		"Component Model",
+		"LSP",
+		"Language Server"
+	],
+	"engines": {
+		"vscode": "^1.88.0"
+	},
+	"main": "./client/out/extension",
+	"browser": "./client/dist/web/extension",
+	"activationEvents": [
+		"onLanguage:bat"
+	],
+	"extensionDependencies": [
+		"ms-vscode.wasm-wasi-core"
+	],
+	"dependencies": {
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^7.6.0",
+		"@typescript-eslint/parser": "^7.6.0",
+		"@types/node": "^18.14.6",
+		"eslint": "^8.57.0",
+		"typescript": "^5.4.5",
+		"esbuild": "^0.20.2",
+		"serve": "^14.2.1"
+	},
+	"scripts": {
+		"postinstall": "cd client && npm install && cd ..",
+		"vscode:prepublish": "npm run build",
+		"build": "cd client && npm run compile && cd ../server && npm run build && cd ..",
+		"lint": "cd client && npm run lint && cd .."
+	}
+}
