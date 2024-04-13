@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-import { ExtensionContext, Uri, window, workspace } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions } from 'vscode-languageclient/node';
+import { ExtensionContext, Uri, window, workspace, commands } from 'vscode';
+import { LanguageClient, LanguageClientOptions, ServerOptions, RequestType } from 'vscode-languageclient/node';
 import { Wasm, ProcessOptions } from '@vscode/wasm-wasi';
 import { createStdioOptions, startServer } from '@vscode/wasm-wasi-lsp';
 
@@ -46,6 +46,13 @@ export async function activate(context: ExtensionContext) {
 	} catch (error) {
 		client.error(`Start failed`, error, 'force');
 	}
+
+	type AddParams = { left: number; right: number };
+	const AddRequest = new RequestType<AddParams, number, void>('wasm-language-server/add');
+	context.subscriptions.push(commands.registerCommand('vscode-samples.wasm-language-server.add', async () => {
+		const result = await client.sendRequest(AddRequest, { left: 3, right: 4 });
+		window.showInformationMessage(`3 + 4 = ${result}`);
+	}));
 }
 
 export function deactivate() {

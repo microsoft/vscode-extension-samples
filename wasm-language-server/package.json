@@ -27,6 +27,14 @@
 	"extensionDependencies": [
 		"ms-vscode.wasm-wasi-core"
 	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "vscode-samples.wasm-language-server.add",
+				"title": "Execute Add"
+			}
+		]
+	},
 	"dependencies": {
 	},
 	"devDependencies": {

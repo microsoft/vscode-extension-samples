@@ -22,7 +22,7 @@ pub enum AddRequest {}
 impl Request for AddRequest {
     type Params = AddParams;
     type Result = i32;
-    const METHOD: &'static str = "wasm-language-server/addRequest";
+    const METHOD: &'static str = "wasm-language-server/add";
 }
 
 
@@ -57,7 +57,7 @@ fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Bo
                 if connection.handle_shutdown(&req)? {
                     return Ok(());
                 }
-                match cast::<GotoDefinition>(req) {
+                match cast::<GotoDefinition>(req.clone()) {
                     Ok((id, params)) => {
                         eprintln!("Received gotoDefinition request #{id}");
                         let loc = Location::new(params.text_document_position_params.text_document.uri, lsp_types::Range::new(lsp_types::Position::new(0, 0), lsp_types::Position::new(0, 0)));
@@ -72,7 +72,7 @@ fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Bo
                     Err(err @ ExtractError::JsonError { .. }) => panic!("{err:?}"),
                     Err(ExtractError::MethodMismatch(req)) => req,
                 };
-                match cast::<AddRequest>(req) {
+                match cast::<AddRequest>(req.clone()) {
                     Ok((id, params)) => {
                         eprintln!("Received add request request #{id}");
                         let left = params.left;
