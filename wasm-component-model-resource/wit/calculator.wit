@@ -1,0 +1,20 @@
+// wit/calculator.wit
+package vscode:example;
+
+interface types {
+
+	enum operation {
+		add,
+		sub,
+		mul,
+		div
+	}
+
+	resource machine {
+		constructor(left: u32, right: u32, operation: operation);
+		execute: func() -> u32;
+	}
+}
+world calculator {
+	export types;
+}
