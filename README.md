@@ -2,12 +2,12 @@
 VS Code Extension Samples
 </h1>
 
-This repository contains sample code illustrating the VS Code extension API. Each sample is a self-contained extension that explains one topic in [VS Code API](https://code.visualstudio.com/api/references/vscode-api) or VS Code's [Contribution Points](https://code.visualstudio.com/api/references/contribution-points). You can read, play with or adapt from these samples to create your own extensions.
+This repository contains sample code illustrating the VS Code extension API. Each sample is a self-contained extension that explains one topic in [VS Code API](https://code.visualstudio.com/api/references/vscode-api) or VS Code's [Contribution Points](https://code.visualstudio.com/api/references/contribution-points). You can read, play with, or adapt from these samples to create your extensions.
 
 You can expect from each sample:
 - An explanation of its functionality
-- A gif or screenshot demonstrating its usage
-- Link to a guide on VS Code website, if it has one
+- A GIF or screenshot demonstrating its usage
+- Link to a guide on the VS Code website, if it has one
 - Listing of used VS Code API and Contribution Points
 - Code of the same style, enforced using ESLint
 
