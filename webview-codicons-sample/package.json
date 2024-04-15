@@ -37,8 +37,10 @@
 		"@types/vscode": "^1.73.0",
 		"@typescript-eslint/eslint-plugin": "^6.7.0",
 		"@typescript-eslint/parser": "^6.7.0",
-		"@vscode/codicons": "0.0.20",
 		"eslint": "^8.26.0",
 		"typescript": "^5.4.2"
+	},
+	"dependencies": {
+		"@vscode/codicons": "0.0.20"
 	}
 }
