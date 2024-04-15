@@ -1,0 +1,19 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "extensionHost",
+			"request": "launch",
+			"name": "Run Example",
+			"runtimeExecutable": "${execPath}",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceRoot}",
+			],
+			"outFiles": [
+				"${workspaceRoot}/out/**/*.js"
+			],
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
+		}
+	]
+}
