@@ -1,7 +1,7 @@
 import { renderPrompt } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
 import { PlayPrompt } from './play';
-import { ChatRole } from '@vscode/prompt-tsx/dist/base/openai';
+import { Cl100KBaseTokenizer } from '@vscode/prompt-tsx';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
 const CAT_PARTICIPANT_ID = 'chat-sample.cat';
@@ -44,18 +44,10 @@ export function activate(context: vscode.ExtensionContext) {
 			const { messages } = await renderPrompt(
 				PlayPrompt,
 				{ userQuery: request.prompt },
-				{ modelMaxPromptTokens: 4096 }
+				{ modelMaxPromptTokens: 4096 },
+				new Cl100KBaseTokenizer()
 			);
-			const messages2 = messages.map(m => {
-				if (m.role === ChatRole.User) {
-					return new vscode.LanguageModelChatUserMessage(m.content);
-				} else if (m.role === ChatRole.System) {
-					return new vscode.LanguageModelChatSystemMessage(m.content);
-				} else if (m.role === ChatRole.Assistant) {
-					return new vscode.LanguageModelChatAssistantMessage(m.content);
-				}
-			}) as vscode.LanguageModelChatMessage[];
-            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages2, {}, token);
+            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
             for await (const fragment of chatResponse.stream) {
                 stream.markdown(fragment);
             }

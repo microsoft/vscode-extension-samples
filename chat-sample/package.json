@@ -9,7 +9,7 @@
     },
     "version": "0.1.0",
     "engines": {
-        "vscode": "^1.88.0"
+        "vscode": "^1.89.0"
     },
     "extensionDependencies": [
         "github.copilot-chat"
@@ -17,7 +17,7 @@
     "categories": [
         "Other"
     ],
-    "activationEvents": [ ],
+    "activationEvents": [],
     "enabledApiProposals": [
         "chatParticipant",
         "chatVariableResolver",
@@ -58,6 +58,7 @@
     "devDependencies": {
         "@types/node": "^20.5.9",
         "@types/vscode": "1.82.0",
+        "@vscode/prompt-tsx": "^0.1.3-alpha",
         "eslint": "^7.22.0",
         "tslint": "^6.1.3",
         "typescript": "^4.0.3"
