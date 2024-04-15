@@ -5,9 +5,9 @@ wit_bindgen::generate!({
 	world: "calculator",
 });
 
-struct MyType;
+struct Calculator;
 
-impl Guest for MyType {
+impl Guest for Calculator {
 
     fn calc(op: Operation) -> u32 {
 		log(&format!("Starting calculation: {:?}", op));
@@ -22,4 +22,4 @@ impl Guest for MyType {
 	}
 }
 
-export!(MyType);
+export!(Calculator);
