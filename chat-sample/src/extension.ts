@@ -1,6 +1,6 @@
 import { renderPrompt } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
-import { TestPrompt } from './play';
+import { PlayPrompt } from './play';
 import { ChatRole } from '@vscode/prompt-tsx/dist/base/openai';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
@@ -42,7 +42,7 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
 			const { messages } = await renderPrompt(
-				TestPrompt,
+				PlayPrompt,
 				{ userQuery: request.prompt },
 				{ modelMaxPromptTokens: 4096 }
 			);

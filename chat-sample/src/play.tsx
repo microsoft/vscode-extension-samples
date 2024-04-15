@@ -10,7 +10,7 @@ export interface PromptProps extends BasePromptElementProps {
 	userQuery: string;
 }
 
-export class TestPrompt extends PromptElement<PromptProps, void> {
+export class PlayPrompt extends PromptElement<PromptProps, void> {
 	render(state: void, sizing: PromptSizing) {
 		return (
 			<>
