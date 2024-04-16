@@ -1,0 +1,41 @@
+{
+  "name": "shell-integration-sample",
+  "displayName": "shell-integration-sample",
+  "description": "",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "enabledApiProposals": [
+    "terminalShellIntegration"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+	"terminal": {
+		"profiles": [
+			{
+				"id": "shell-integration-sample.track-editor-directory",
+				"title": "Track Editor Directory"
+			}
+		]
+	}
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.88.0",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^7.4.0",
+    "@typescript-eslint/parser": "^7.4.0",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
+  }
+}
