@@ -29,12 +29,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		log: (msg: string) => {
 			log.info(msg);
 		}
-	}
+	};
 
 	// The context for the WASM module
 	const wasmContext: WasmContext.Default = new WasmContext.Default();
 
-	// Instantiate the module and create the necessary imports from the service implementation
+	// Instantiate the module and create the necessary imports from the service implementation.
 	const instance = await WebAssembly.instantiate(module, calculator._.createImports(service, wasmContext));
 	// Bind the WASM memory to the context
 	wasmContext.initialize(new Memory.Default(instance.exports));
