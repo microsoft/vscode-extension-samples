@@ -10,7 +10,7 @@ interface types {
 		div
 	}
 
-	resource machine {
+	resource engine {
 		constructor(left: u32, right: u32, operation: operation);
 		execute: func() -> u32;
 	}
