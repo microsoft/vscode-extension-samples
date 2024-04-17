@@ -30,9 +30,9 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "vscode-samples.wasm-language-server.add",
+				"command": "vscode-samples.wasm-language-server.countFiles",
 				"category": "Samples",
-				"title": "Execute Add"
+				"title": "Count Files"
 			}
 		]
 	},

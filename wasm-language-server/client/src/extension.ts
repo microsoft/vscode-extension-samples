@@ -47,11 +47,15 @@ export async function activate(context: ExtensionContext) {
 		client.error(`Start failed`, error, 'force');
 	}
 
-	type AddParams = { left: number; right: number };
-	const AddRequest = new RequestType<AddParams, number, void>('wasm-language-server/add');
-	context.subscriptions.push(commands.registerCommand('vscode-samples.wasm-language-server.add', async () => {
-		const result = await client.sendRequest(AddRequest, { left: 3, right: 4 });
-		window.showInformationMessage(`3 + 4 = ${result}`);
+	type CountFileParams = { folder: string };
+	const CountFilesRequest = new RequestType<CountFileParams, number, void>('wasm-language-server/countFilesInFolder');
+	context.subscriptions.push(commands.registerCommand('vscode-samples.wasm-language-server.countFiles', async () => {
+		// We assume we do have a folder.
+		const folder = workspace.workspaceFolders![0].uri;
+		// We need to convert the folder URI to a URI that maps to the mounted WASI file system. This is something
+		// @vscode/wasm-wasi-lsp does for us.
+		const result = await client.sendRequest(CountFilesRequest, { folder: client.code2ProtocolConverter.asUri(folder!) });
+		window.showInformationMessage(`The workspace contains ${result} files.`);
 	}));
 }
 

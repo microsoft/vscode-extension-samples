@@ -10,19 +10,19 @@ use lsp_types::{
 };
 use lsp_server::{ Connection, ExtractError, Message, RequestId, Response };
 use serde::{ Deserialize, Serialize };
+use walkdir::WalkDir;
 
 #[derive(Deserialize, Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct AddParams {
-    pub left: i32,
-    pub right: i32,
+pub struct CountFilesParams {
+    pub folder: String,
 }
 
-pub enum AddRequest {}
-impl Request for AddRequest {
-    type Params = AddParams;
-    type Result = i32;
-    const METHOD: &'static str = "wasm-language-server/add";
+pub enum CountFilesRequest {}
+impl Request for CountFilesRequest {
+    type Params = CountFilesParams;
+    type Result = u32;
+    const METHOD: &'static str = "wasm-language-server/countFilesInFolder";
 }
 
 
@@ -72,14 +72,13 @@ fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Bo
                     Err(err @ ExtractError::JsonError { .. }) => panic!("{err:?}"),
                     Err(ExtractError::MethodMismatch(req)) => req,
                 };
-                match cast::<AddRequest>(req.clone()) {
+                match cast::<CountFilesRequest>(req.clone()) {
                     Ok((id, params)) => {
-                        eprintln!("Received add request request #{id}");
-                        let left = params.left;
-                        let right = params.right;
-                        let result = left + right;
-                        let result = serde_json::to_value(&result).unwrap();
-                        let resp = Response { id, result: Some(result), error: None };
+                        eprintln!("Received count request request #{id}");
+                        let result = count_files_in_folder(params.folder.as_str());
+                        eprintln!("Number of files #{result}");
+                        let json = serde_json::to_value(&result).unwrap();
+                        let resp = Response { id, result: Some(json), error: None };
                         connection.sender.send(Message::Response(resp))?;
                         continue;
                     }
@@ -104,4 +103,13 @@ where
     R::Params: serde::de::DeserializeOwned,
 {
     req.extract(R::METHOD)
+}
+
+fn count_files_in_folder(path: &str) -> usize {
+    let result = WalkDir::new(path)
+        .into_iter()
+        .filter_map(Result::ok)
+        .filter(|entry| entry.file_type().is_file())
+        .count();
+    return result;
 }
