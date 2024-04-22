@@ -27,37 +27,21 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	const wasmContext: WasmContext.Default = new WasmContext.Default();
 
 	// Instantiate the module and create the necessary imports from the service implementation
-	const instance = await WebAssembly.instantiate(module, {
-		'[export]vscode:example/types' : {
-			'[resource-drop]machine': (...args: any[]) => {
-				console.log(args);
-			},
-			'[resource-new]machine': (...args: any[]) => {
-				console.log(args);
-				return args[0];
-			}
-		}
-	});
+	const instance = await WebAssembly.instantiate(module, calculator._.imports.create({ foo: () => 20 }, wasmContext));
 	// Bind the WASM memory to the context
 	wasmContext.initialize(new Memory.Default(instance.exports));
 
 	// Bind the JavaScript Api
-	const api = calculator._.bindExports(instance.exports as calculator._.Exports, wasmContext);
+	const api = calculator._.exports.bind(instance.exports as calculator._.Exports, wasmContext);
 
 	context.subscriptions.push(vscode.commands.registerCommand('vscode-samples.wasm-component-model.run', () => {
 		channel.show();
 		channel.appendLine('Running calculator example');
-		const add = new api.types.Machine(1, 2, Types.Operation.add);
-		channel.appendLine(`Add ${add.execute()}`);
-		const sub = new api.types.Machine(10, 8, Types.Operation.sub);
-		channel.appendLine(`Sub ${sub.execute()}`);
-		const mul = new api.types.Machine(3, 7, Types.Operation.mul);
-		channel.appendLine(`Mul ${mul.execute()}`);
-		const div = new api.types.Machine(10, 2, Types.Operation.div);
-		channel.appendLine(`Div ${div.execute()}`);
-		// add.$drop!();
-		// sub.$drop!();
-		// mul.$drop!();
-		// div.$drop!();
+		const calculator = new api.types.Engine();
+		calculator.pushOperand(10);
+		calculator.pushOperand(20);
+		calculator.pushOperation(Types.Operation.add);
+		const result = calculator.execute();
+		channel.appendLine(`Result: ${result}`);
 	}));
 }

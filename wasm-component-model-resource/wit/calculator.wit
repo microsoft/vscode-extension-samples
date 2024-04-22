@@ -11,7 +11,9 @@ interface types {
 	}
 
 	resource engine {
-		constructor(left: u32, right: u32, operation: operation);
+		constructor();
+		push-operand: func(operand: u32);
+		push-operation: func(operation: operation);
 		execute: func() -> u32;
 	}
 }

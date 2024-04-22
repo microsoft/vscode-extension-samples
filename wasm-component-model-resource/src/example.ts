@@ -14,26 +14,28 @@ export namespace example {
 			div = 'div'
 		}
 
-		export namespace Machine {
-			export interface Interface {
-				$handle?: $wcm.ResourceHandle;
-				$drop?(): void;
+		export namespace Engine {
+			export interface Interface extends $wcm.JInterface {
+				pushOperand(operand: u32): void;
+
+				pushOperation(operation: Operation): void;
 
 				execute(): u32;
 			}
 			export type Statics = {
 			};
 			export type Class = Statics & {
-				new(left: u32, right: u32, operation: Operation): Interface;
+				new(): Interface;
 			};
 		}
-		export type Machine = Machine.Interface;
+		export type Engine = Engine.Interface;
 	}
 	export type Types = {
-		Machine: Types.Machine.Class;
+		Engine: Types.Engine.Class;
 	};
 	export namespace calculator {
 		export type Imports = {
+			foo: () => u32;
 		};
 		export type Exports = {
 			types: example.Types;
@@ -44,91 +46,140 @@ export namespace example {
 export namespace example {
 	export namespace Types.$ {
 		export const Operation = new $wcm.EnumType<example.Types.Operation>(['add', 'sub', 'mul', 'div']);
-		export const Machine = new $wcm.ResourceType<example.Types.Machine>('machine', 'vscode:example/types/machine');
-		export const Machine_Handle = new $wcm.ResourceHandleType('machine');
-		Machine.addDestructor('$drop', new $wcm.DestructorType('[resource-drop]machine', [['inst', Machine]]));
-		Machine.addConstructor('constructor', new $wcm.ConstructorType<example.Types.Machine.Class['constructor']>('[constructor]machine', [
-			['left', $wcm.u32],
-			['right', $wcm.u32],
+		export const Engine = new $wcm.ResourceType<example.Types.Engine>('engine', 'vscode:example/types/engine');
+		export const Engine_Handle = new $wcm.ResourceHandleType('engine');
+		Engine.addDestructor('$drop', new $wcm.DestructorType('[resource-drop]engine', [['inst', Engine]]));
+		Engine.addConstructor('constructor', new $wcm.ConstructorType<example.Types.Engine.Class['constructor']>('[constructor]engine', [], new $wcm.OwnType(Engine_Handle)));
+		Engine.addMethod('pushOperand', new $wcm.MethodType<example.Types.Engine.Interface['pushOperand']>('[method]engine.push-operand', [
+			['operand', $wcm.u32],
+		], undefined));
+		Engine.addMethod('pushOperation', new $wcm.MethodType<example.Types.Engine.Interface['pushOperation']>('[method]engine.push-operation', [
 			['operation', Operation],
-		], new $wcm.OwnType(Machine_Handle)));
-		Machine.addMethod('execute', new $wcm.MethodType<example.Types.Machine.Interface['execute']>('[method]machine.execute', [], $wcm.u32));
+		], undefined));
+		Engine.addMethod('execute', new $wcm.MethodType<example.Types.Engine.Interface['execute']>('[method]engine.execute', [], $wcm.u32));
 	}
 	export namespace Types._ {
 		export const id = 'vscode:example/types' as const;
 		export const witName = 'types' as const;
-		export const types: Map<string, $wcm.GenericComponentModelType> = new Map<string, $wcm.GenericComponentModelType>([
-			['Operation', $.Operation],
-			['Machine', $.Machine]
-		]);
-		export const resources: Map<string, $wcm.ResourceType> = new Map<string, $wcm.ResourceType>([
-			['Machine', $.Machine]
-		]);
-		export namespace Machine {
+		export namespace Engine {
 			export type WasmInterface = {
-				'[constructor]machine': (left: i32, right: i32, operation_Operation: i32) => i32;
-				'[method]machine.execute': (self: i32) => i32;
-				'[resource-drop]machine': (self: i32) => void;
+				'[constructor]engine': () => i32;
+				'[method]engine.push-operand': (self: i32, operand: i32) => void;
+				'[method]engine.push-operation': (self: i32, operation_Operation: i32) => void;
+				'[method]engine.execute': (self: i32) => i32;
 			};
-			type ObjectModule = {
-				constructor(left: u32, right: u32, operation: Operation): own<$wcm.ResourceHandle>;
-				$drop(self: Machine): void;
-				execute(self: Machine): u32;
+			export type ObjectModule = {
+				constructor(): own<$wcm.ResourceHandle>;
+				pushOperand(self: Engine, operand: u32): void;
+				pushOperation(self: Engine, operation: Operation): void;
+				execute(self: Engine): u32;
 			};
-			class Impl extends $wcm.Resource implements example.Types.Machine.Interface {
-				private readonly _om: ObjectModule;
-				constructor(left: u32, right: u32, operation: Operation, om: ObjectModule) {
-					super();
-					this._om = om;
-					this.$handle = om.constructor(left, right, operation);
+			export namespace imports {
+				export type WasmInterface = Engine.WasmInterface & { '[resource-drop]engine': (self: i32) => void };
+			}
+			export namespace exports {
+				export type WasmInterface = Engine.WasmInterface & { '[dtor]engine': (self: i32) => void };
+				class Impl extends $wcm.Resource implements example.Types.Engine.Interface {
+					private readonly _om: ObjectModule;
+					constructor(om: ObjectModule);
+					constructor(handleTag: Symbol, handle: $wcm.ResourceHandle, om: ObjectModule);
+					constructor(...args: any[]);
+					constructor(...args: any[]) {
+						if (args[0] === $wcm.ResourceManager.handleTag) {
+							super(args[1] as $wcm.ResourceHandle);
+							this._om = args[2] as ObjectModule;
+						} else {
+							const om = args[0] as ObjectModule;
+							super(om.constructor());
+							this._om = om;
+						}
+					}
+					public pushOperand(operand: u32): void {
+						return this._om.pushOperand(this, operand);
+					}
+					public pushOperation(operation: Operation): void {
+						return this._om.pushOperation(this, operation);
+					}
+					public execute(): u32 {
+						return this._om.execute(this);
+					}
 				}
-				public $drop(): void {
-					return this._om.$drop(this);
-				}
-				public execute(): u32 {
-					return this._om.execute(this);
+				export function Class(wasmInterface: WasmInterface, context: $wcm.WasmContext): example.Types.Engine.Class {
+					const resource = example.Types.$.Engine;
+					const om: ObjectModule = $wcm.Module.createObjectModule(resource, wasmInterface, context);
+					const rm: $wcm.ResourceManager = context.resources.ensure('vscode:example/types/engine');
+					return class extends Impl {
+						constructor();
+						constructor(handleTag: Symbol, handle: $wcm.ResourceHandle);
+						constructor(...args: any[]) {
+							super(...args, om);
+							rm.registerProxy(this);
+						}
+					};
 				}
 			}
-			export function Class(wasmInterface: WasmInterface, context: $wcm.WasmContext): example.Types.Machine.Class {
-				const resource = example.Types.$.Machine;
-				const om: ObjectModule = $wcm.Module.createObjectModule(resource, wasmInterface, context);
-				return class extends Impl {
-					constructor(left: u32, right: u32, operation: Operation) {
-						super(left, right, operation, om);
-					}
+		}
+		export const types: Map<string, $wcm.GenericComponentModelType> = new Map<string, $wcm.GenericComponentModelType>([
+			['Operation', $.Operation],
+			['Engine', $.Engine]
+		]);
+		export const resources: Map<string, { resource: $wcm.ResourceType; factory: $wcm.ClassFactory<any>}> = new Map<string, { resource: $wcm.ResourceType; factory: $wcm.ClassFactory<any>}>([
+			['Engine', { resource: $.Engine, factory: Engine.exports.Class }]
+		]);
+		export type WasmInterface = {
+		};
+		export namespace imports {
+			export type WasmInterface = _.WasmInterface & Engine.imports.WasmInterface;
+		}
+		export namespace exports {
+			export type WasmInterface = _.WasmInterface & Engine.exports.WasmInterface;
+			export namespace imports {
+				export type WasmInterface = {
+					'[resource-new]engine': (rep: i32) => i32;
+					'[resource-rep]engine': (handle: i32) => i32;
+					'[resource-drop]engine': (handle: i32) => i32;
 				};
 			}
 		}
-		export type WasmInterface = {
-		} & Machine.WasmInterface;
-		export function createImports(service: example.Types, context: $wcm.WasmContext): WasmInterface {
-			return $wcm.Imports.create<WasmInterface>(undefined, resources, service, context);
-		}
-		export function filterExports(exports: object, context: $wcm.WasmContext): WasmInterface {
-			return $wcm.Exports.filter<WasmInterface>(exports, undefined, resources, id, undefined, context);
-		}
-		export function bindExports(wasmInterface: WasmInterface, context: $wcm.WasmContext): example.Types {
-			return $wcm.Exports.bind<example.Types>(undefined, [['Machine', $.Machine, Machine.Class]], wasmInterface, context);
-		}
 	}
 	export namespace calculator.$ {
+		export namespace Imports {
+			export const foo = new $wcm.FunctionType<calculator.Imports['foo']>('foo', [], $wcm.u32);
+		}
 	}
 	export namespace calculator._ {
 		export const id = 'vscode:example/calculator' as const;
 		export const witName = 'calculator' as const;
-		export const Imports = {};
-		export type Imports = {};
-		export namespace Exports {
+		export type $Root = {
+			'foo': () => i32;
+		};
+		export type Imports = {
+			'[export]vscode:example/types': example.Types._.exports.imports.WasmInterface;
+		};
+		export namespace imports {
+			export const functions: Map<string, $wcm.FunctionType> = new Map([
+				['foo', $.Imports.foo]
+			]);
+			export function create(service: calculator.Imports, context: $wcm.WasmContext): Imports {
+				return $wcm.Imports.create<Imports>(_, service, context);
+			}
+			export function loop(service: calculator.Imports, context: $wcm.WasmContext): calculator.Imports {
+				return $wcm.Imports.loop(_, service, context);
+			}
+		}
+		export type Exports = {
+			'vscode:example/types#[constructor]engine': () => i32;
+			'vscode:example/types#[method]engine.push-operand': (self: i32, operand: i32) => void;
+			'vscode:example/types#[method]engine.push-operation': (self: i32, operation_Operation: i32) => void;
+			'vscode:example/types#[method]engine.execute': (self: i32) => i32;
+		};
+		export namespace exports {
 			export const interfaces: Map<string, $wcm.InterfaceType> = new Map<string, $wcm.InterfaceType>([
 				['Types', Types._]
 			]);
-		}
-		export type Exports = {
-		};
-		export function bindExports(exports: Exports, context: $wcm.WasmContext): calculator.Exports {
-			const result: calculator.Exports = Object.create(null);
-			result.types = example.Types._.bindExports(example.Types._.filterExports(exports, context), context);
-			return result;
+			export function bind(exports: Exports, context: $wcm.WasmContext): calculator.Exports {
+				return $wcm.Exports.bind<calculator.Exports>(_, exports, context);
+			}
 		}
 	}
 }

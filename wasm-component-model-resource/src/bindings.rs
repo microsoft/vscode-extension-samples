@@ -60,22 +60,22 @@ pub mod exports {
 
         #[derive(Debug)]
         #[repr(transparent)]
-        pub struct Machine{
-          handle: _rt::Resource<Machine>,
+        pub struct Engine{
+          handle: _rt::Resource<Engine>,
         }
 
-        type _MachineRep<T> = Option<T>;
+        type _EngineRep<T> = Option<T>;
 
-        impl Machine{
+        impl Engine{
           /// Creates a new resource from the specified representation.
           ///
           /// This function will create a new resource handle by moving `val` onto
           /// the heap and then passing that heap pointer to the component model to
-          /// create a handle. The owned handle is then returned as `Machine`.
-          pub fn new<T: GuestMachine>(val: T) -> Self {
+          /// create a handle. The owned handle is then returned as `Engine`.
+          pub fn new<T: GuestEngine>(val: T) -> Self {
             Self::type_guard::<T>();
-            let val: _MachineRep<T> = Some(val);
-            let ptr: *mut _MachineRep<T> =
+            let val: _EngineRep<T> = Some(val);
+            let ptr: *mut _EngineRep<T> =
             _rt::Box::into_raw(_rt::Box::new(val));
             unsafe {
               Self::from_handle(T::_resource_new(ptr.cast()))
@@ -83,20 +83,20 @@ pub mod exports {
           }
 
           /// Gets access to the underlying `T` which represents this resource.
-          pub fn get<T: GuestMachine>(&self) -> &T {
+          pub fn get<T: GuestEngine>(&self) -> &T {
             let ptr = unsafe { &*self.as_ptr::<T>() };
             ptr.as_ref().unwrap()
           }
 
           /// Gets mutable access to the underlying `T` which represents this
           /// resource.
-          pub fn get_mut<T: GuestMachine>(&mut self) -> &mut T {
+          pub fn get_mut<T: GuestEngine>(&mut self) -> &mut T {
             let ptr = unsafe { &mut *self.as_ptr::<T>() };
             ptr.as_mut().unwrap()
           }
 
           /// Consumes this resource and returns the underlying `T`.
-          pub fn into_inner<T: GuestMachine>(self) -> T {
+          pub fn into_inner<T: GuestEngine>(self) -> T {
             let ptr = unsafe { &mut *self.as_ptr::<T>() };
             ptr.take().unwrap()
           }
@@ -118,7 +118,7 @@ pub mod exports {
             _rt::Resource::handle(&self.handle)
           }
 
-          // It's theoretically possible to implement the `GuestMachine` trait twice
+          // It's theoretically possible to implement the `GuestEngine` trait twice
           // so guard against using it with two different types here.
           #[doc(hidden)]
           fn type_guard<T: 'static>() {
@@ -137,25 +137,25 @@ pub mod exports {
           #[doc(hidden)]
           pub unsafe fn dtor<T: 'static>(handle: *mut u8) {
             Self::type_guard::<T>();
-            let _ = _rt::Box::from_raw(handle as *mut _MachineRep<T>);
+            let _ = _rt::Box::from_raw(handle as *mut _EngineRep<T>);
           }
 
-          fn as_ptr<T: GuestMachine>(&self) -> *mut _MachineRep<T> {
-            Machine::type_guard::<T>();
+          fn as_ptr<T: GuestEngine>(&self) -> *mut _EngineRep<T> {
+            Engine::type_guard::<T>();
             T::_resource_rep(self.handle()).cast()
           }
         }
 
-        /// A borrowed version of [`Machine`] which represents a borrowed value
+        /// A borrowed version of [`Engine`] which represents a borrowed value
         /// with the lifetime `'a`.
         #[derive(Debug)]
         #[repr(transparent)]
-        pub struct MachineBorrow<'a> {
+        pub struct EngineBorrow<'a> {
           rep: *mut u8,
-          _marker: core::marker::PhantomData<&'a Machine>,
+          _marker: core::marker::PhantomData<&'a Engine>,
         }
 
-        impl<'a> MachineBorrow<'a>{
+        impl<'a> EngineBorrow<'a>{
           #[doc(hidden)]
           pub unsafe fn lift(rep: usize) -> Self {
             Self {
@@ -165,7 +165,7 @@ pub mod exports {
           }
 
           /// Gets access to the underlying `T` in this resource.
-          pub fn get<T: GuestMachine>(&self) -> &T {
+          pub fn get<T: GuestEngine>(&self) -> &T {
             let ptr = unsafe { &mut *self.as_ptr::<T>() };
             ptr.as_ref().unwrap()
           }
@@ -173,14 +173,14 @@ pub mod exports {
           // NB: mutable access is not allowed due to the component model allowing
           // multiple borrows of the same resource.
 
-          fn as_ptr<T: 'static>(&self) -> *mut _MachineRep<T> {
-            Machine::type_guard::<T>();
+          fn as_ptr<T: 'static>(&self) -> *mut _EngineRep<T> {
+            Engine::type_guard::<T>();
             self.rep.cast()
           }
         }
 
 
-        unsafe impl _rt::WasmResource for Machine{
+        unsafe impl _rt::WasmResource for Engine{
           #[inline]
           unsafe fn drop(_handle: u32) {
             #[cfg(not(target_arch = "wasm32"))]
@@ -190,7 +190,7 @@ pub mod exports {
             {
               #[link(wasm_import_module = "[export]vscode:example/types")]
               extern "C" {
-                #[link_name = "[resource-drop]machine"]
+                #[link_name = "[resource-drop]engine"]
                 fn drop(_: u32);
               }
 
@@ -201,100 +201,120 @@ pub mod exports {
 
         #[doc(hidden)]
         #[allow(non_snake_case)]
-        pub unsafe fn _export_constructor_machine_cabi<T: GuestMachine>(arg0: i32,arg1: i32,arg2: i32,) -> i32 {#[cfg(target_arch="wasm32")]
-        _rt::run_ctors_once();let result0 = Machine::new(T::new(arg0 as u32, arg1 as u32, Operation::_lift(arg2 as u8)));
+        pub unsafe fn _export_constructor_engine_cabi<T: GuestEngine>() -> i32 {#[cfg(target_arch="wasm32")]
+        _rt::run_ctors_once();let result0 = Engine::new(T::new());
         (result0).take_handle() as i32
       }
       #[doc(hidden)]
       #[allow(non_snake_case)]
-      pub unsafe fn _export_method_machine_execute_cabi<T: GuestMachine>(arg0: *mut u8,) -> i32 {#[cfg(target_arch="wasm32")]
-      _rt::run_ctors_once();let result0 = T::execute(MachineBorrow::lift(arg0 as u32 as usize).get());
-      _rt::as_i32(result0)
-    }
-    pub trait Guest {
-      type Machine: GuestMachine;
-    }
-    pub trait GuestMachine: 'static {
-
-      #[doc(hidden)]
-      unsafe fn _resource_new(val: *mut u8) -> u32
-      where Self: Sized
-      {
-        #[cfg(not(target_arch = "wasm32"))]
-        {
-          let _ = val;
-          unreachable!();
-        }
-
-        #[cfg(target_arch = "wasm32")]
-        {
-          #[link(wasm_import_module = "[export]vscode:example/types")]
-          extern "C" {
-            #[link_name = "[resource-new]machine"]
-            fn new(_: *mut u8) -> u32;
-          }
-          new(val)
-        }
-      }
-
-      #[doc(hidden)]
-      fn _resource_rep(handle: u32) -> *mut u8
-      where Self: Sized
-      {
-        #[cfg(not(target_arch = "wasm32"))]
-        {
-          let _ = handle;
-          unreachable!();
-        }
-
-        #[cfg(target_arch = "wasm32")]
-        {
-          #[link(wasm_import_module = "[export]vscode:example/types")]
-          extern "C" {
-            #[link_name = "[resource-rep]machine"]
-            fn rep(_: u32) -> *mut u8;
-          }
-          unsafe {
-            rep(handle)
-          }
-        }
-      }
-
-      
-      fn new(left: u32,right: u32,operation: Operation,) -> Self;
-      fn execute(&self,) -> u32;
+      pub unsafe fn _export_method_engine_push_operand_cabi<T: GuestEngine>(arg0: *mut u8,arg1: i32,) {#[cfg(target_arch="wasm32")]
+      _rt::run_ctors_once();T::push_operand(EngineBorrow::lift(arg0 as u32 as usize).get(), arg1 as u32);
     }
     #[doc(hidden)]
-
-    macro_rules! __export_vscode_example_types_cabi{
-      ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
-
-        #[export_name = "vscode:example/types#[constructor]machine"]
-        unsafe extern "C" fn export_constructor_machine(arg0: i32,arg1: i32,arg2: i32,) -> i32 {
-          $($path_to_types)*::_export_constructor_machine_cabi::<<$ty as $($path_to_types)*::Guest>::Machine>(arg0, arg1, arg2)
-        }
-        #[export_name = "vscode:example/types#[method]machine.execute"]
-        unsafe extern "C" fn export_method_machine_execute(arg0: *mut u8,) -> i32 {
-          $($path_to_types)*::_export_method_machine_execute_cabi::<<$ty as $($path_to_types)*::Guest>::Machine>(arg0)
-        }
-
-        const _: () = {
-          #[doc(hidden)]
-          #[export_name = "vscode:example/types#[dtor]machine"]
-          #[allow(non_snake_case)]
-          unsafe extern "C" fn dtor(rep: *mut u8) {
-            $($path_to_types)*::Machine::dtor::<
-            <$ty as $($path_to_types)*::Guest>::Machine
-            >(rep)
-          }
-        };
-        
-      };);
-    }
-    #[doc(hidden)]
-    pub(crate) use __export_vscode_example_types_cabi;
-
+    #[allow(non_snake_case)]
+    pub unsafe fn _export_method_engine_push_operation_cabi<T: GuestEngine>(arg0: *mut u8,arg1: i32,) {#[cfg(target_arch="wasm32")]
+    _rt::run_ctors_once();T::push_operation(EngineBorrow::lift(arg0 as u32 as usize).get(), Operation::_lift(arg1 as u8));
   }
+  #[doc(hidden)]
+  #[allow(non_snake_case)]
+  pub unsafe fn _export_method_engine_execute_cabi<T: GuestEngine>(arg0: *mut u8,) -> i32 {#[cfg(target_arch="wasm32")]
+  _rt::run_ctors_once();let result0 = T::execute(EngineBorrow::lift(arg0 as u32 as usize).get());
+  _rt::as_i32(result0)
+}
+pub trait Guest {
+  type Engine: GuestEngine;
+}
+pub trait GuestEngine: 'static {
+
+  #[doc(hidden)]
+  unsafe fn _resource_new(val: *mut u8) -> u32
+  where Self: Sized
+  {
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+      let _ = val;
+      unreachable!();
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    {
+      #[link(wasm_import_module = "[export]vscode:example/types")]
+      extern "C" {
+        #[link_name = "[resource-new]engine"]
+        fn new(_: *mut u8) -> u32;
+      }
+      new(val)
+    }
+  }
+
+  #[doc(hidden)]
+  fn _resource_rep(handle: u32) -> *mut u8
+  where Self: Sized
+  {
+    #[cfg(not(target_arch = "wasm32"))]
+    {
+      let _ = handle;
+      unreachable!();
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    {
+      #[link(wasm_import_module = "[export]vscode:example/types")]
+      extern "C" {
+        #[link_name = "[resource-rep]engine"]
+        fn rep(_: u32) -> *mut u8;
+      }
+      unsafe {
+        rep(handle)
+      }
+    }
+  }
+
+  
+  fn new() -> Self;
+  fn push_operand(&self,operand: u32,);
+  fn push_operation(&self,operation: Operation,);
+  fn execute(&self,) -> u32;
+}
+#[doc(hidden)]
+
+macro_rules! __export_vscode_example_types_cabi{
+  ($ty:ident with_types_in $($path_to_types:tt)*) => (const _: () = {
+
+    #[export_name = "vscode:example/types#[constructor]engine"]
+    unsafe extern "C" fn export_constructor_engine() -> i32 {
+      $($path_to_types)*::_export_constructor_engine_cabi::<<$ty as $($path_to_types)*::Guest>::Engine>()
+    }
+    #[export_name = "vscode:example/types#[method]engine.push-operand"]
+    unsafe extern "C" fn export_method_engine_push_operand(arg0: *mut u8,arg1: i32,) {
+      $($path_to_types)*::_export_method_engine_push_operand_cabi::<<$ty as $($path_to_types)*::Guest>::Engine>(arg0, arg1)
+    }
+    #[export_name = "vscode:example/types#[method]engine.push-operation"]
+    unsafe extern "C" fn export_method_engine_push_operation(arg0: *mut u8,arg1: i32,) {
+      $($path_to_types)*::_export_method_engine_push_operation_cabi::<<$ty as $($path_to_types)*::Guest>::Engine>(arg0, arg1)
+    }
+    #[export_name = "vscode:example/types#[method]engine.execute"]
+    unsafe extern "C" fn export_method_engine_execute(arg0: *mut u8,) -> i32 {
+      $($path_to_types)*::_export_method_engine_execute_cabi::<<$ty as $($path_to_types)*::Guest>::Engine>(arg0)
+    }
+
+    const _: () = {
+      #[doc(hidden)]
+      #[export_name = "vscode:example/types#[dtor]engine"]
+      #[allow(non_snake_case)]
+      unsafe extern "C" fn dtor(rep: *mut u8) {
+        $($path_to_types)*::Engine::dtor::<
+        <$ty as $($path_to_types)*::Guest>::Engine
+        >(rep)
+      }
+    };
+    
+  };);
+}
+#[doc(hidden)]
+pub(crate) use __export_vscode_example_types_cabi;
+
+}
 
 }
 }
@@ -505,15 +525,16 @@ pub(crate) use __export_calculator_impl as export;
 #[cfg(target_arch = "wasm32")]
 #[link_section = "component-type:wit-bindgen:0.24.0:calculator:encoded world"]
 #[doc(hidden)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 338] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xd1\x01\x01A\x02\x01\
-A\x02\x01B\x09\x01m\x04\x03add\x03sub\x03mul\x03div\x04\0\x09operation\x03\0\0\x04\
-\0\x07machine\x03\x01\x01i\x02\x01@\x03\x04lefty\x05righty\x09operation\x01\0\x03\
-\x04\0\x14[constructor]machine\x01\x04\x01h\x02\x01@\x01\x04self\x05\0y\x04\0\x17\
-[method]machine.execute\x01\x06\x04\x01\x14vscode:example/types\x05\0\x04\x01\x19\
-vscode:example/calculator\x04\0\x0b\x10\x01\0\x0acalculator\x03\0\0\0G\x09produc\
-ers\x01\x0cprocessed-by\x02\x0dwit-component\x070.202.0\x10wit-bindgen-rust\x060\
-.24.0";
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 419] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xa2\x02\x01A\x02\x01\
+A\x02\x01B\x0d\x01m\x04\x03add\x03sub\x03mul\x03div\x04\0\x09operation\x03\0\0\x04\
+\0\x06engine\x03\x01\x01i\x02\x01@\0\0\x03\x04\0\x13[constructor]engine\x01\x04\x01\
+h\x02\x01@\x02\x04self\x05\x07operandy\x01\0\x04\0\x1b[method]engine.push-operan\
+d\x01\x06\x01@\x02\x04self\x05\x09operation\x01\x01\0\x04\0\x1d[method]engine.pu\
+sh-operation\x01\x07\x01@\x01\x04self\x05\0y\x04\0\x16[method]engine.execute\x01\
+\x08\x04\x01\x14vscode:example/types\x05\0\x04\x01\x19vscode:example/calculator\x04\
+\0\x0b\x10\x01\0\x0acalculator\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0d\
+wit-component\x070.202.0\x10wit-bindgen-rust\x060.24.0";
 
 #[inline(never)]
 #[doc(hidden)]
