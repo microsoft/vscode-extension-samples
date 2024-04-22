@@ -113,7 +113,7 @@ export namespace example {
 						constructor(handleTag: Symbol, handle: $wcm.ResourceHandle);
 						constructor(...args: any[]) {
 							super(...args, om);
-							rm.registerProxy(this);
+							// rm.registerProxy(this);
 						}
 					};
 				}
