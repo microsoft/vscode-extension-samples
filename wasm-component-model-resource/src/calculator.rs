@@ -270,7 +270,7 @@ pub trait GuestEngine: 'static {
     }
   }
 
-  
+
   fn new() -> Self;
   fn push_operand(&self,operand: u32,);
   fn push_operation(&self,operation: Operation,);
@@ -308,7 +308,7 @@ macro_rules! __export_vscode_example_types_cabi{
         >(rep)
       }
     };
-    
+
   };);
 }
 #[doc(hidden)]
@@ -421,7 +421,7 @@ mod _rt {
   pub fn run_ctors_once() {
     wit_bindgen::rt::run_ctors_once();
   }
-  
+
   pub fn as_i32<T: AsI32>(t: T) -> i32 {
     t.as_i32()
   }
@@ -435,56 +435,56 @@ mod _rt {
       (*self).as_i32()
     }
   }
-  
+
   impl AsI32 for i32 {
     #[inline]
     fn as_i32(self) -> i32 {
       self as i32
     }
   }
-  
+
   impl AsI32 for u32 {
     #[inline]
     fn as_i32(self) -> i32 {
       self as i32
     }
   }
-  
+
   impl AsI32 for i16 {
     #[inline]
     fn as_i32(self) -> i32 {
       self as i32
     }
   }
-  
+
   impl AsI32 for u16 {
     #[inline]
     fn as_i32(self) -> i32 {
       self as i32
     }
   }
-  
+
   impl AsI32 for i8 {
     #[inline]
     fn as_i32(self) -> i32 {
       self as i32
     }
   }
-  
+
   impl AsI32 for u8 {
     #[inline]
     fn as_i32(self) -> i32 {
       self as i32
     }
   }
-  
+
   impl AsI32 for char {
     #[inline]
     fn as_i32(self) -> i32 {
       self as i32
     }
   }
-  
+
   impl AsI32 for usize {
     #[inline]
     fn as_i32(self) -> i32 {

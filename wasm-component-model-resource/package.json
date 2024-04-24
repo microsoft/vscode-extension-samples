@@ -29,7 +29,7 @@
 		]
 	},
 	"dependencies": {
-		"@vscode/wasm-component-model": "0.1.0-pre.4"
+		"@vscode/wasm-component-model": "0.1.0-pre.7"
 	},
 	"devDependencies": {
 		"@types/vscode": "1.88.0",
@@ -44,6 +44,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"build": "npm run compile && cargo build --target wasm32-unknown-unknown",
+		"wit-bindgen": "wit-bindgen rust --out-dir ./src ./wit",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint ./src --ext .ts,.tsx",

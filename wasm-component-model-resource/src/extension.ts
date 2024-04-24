@@ -26,22 +26,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	// The context for the WASM module
 	const wasmContext: WasmContext.Default = new WasmContext.Default();
 
-	const imports: any = {
-		'foo': () => 20,
-		'[export]vscode:example/types' : {
-			'[resource-drop]engine': (...args: any[]) => {
-				console.log(args);
-			},
-			'[resource-new]engine': (...args: any[]) => {
-				console.log(args);
-				return args[0];
-			}
-		}
-	};
-
 	// Instantiate the module and create the necessary imports from the service implementation
 	// const imports = calculator._.imports.create({ foo: () => 20 }, wasmContext);
-	const instance = await WebAssembly.instantiate(module, imports);
+	const instance = await WebAssembly.instantiate(module, calculator._.imports.create({}, wasmContext));
 	// Bind the WASM memory to the context
 	wasmContext.initialize(new Memory.Default(instance.exports));
 
@@ -55,6 +42,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		calculator.pushOperand(10);
 		calculator.pushOperand(20);
 		calculator.pushOperation(Types.Operation.add);
+		calculator.pushOperand(2);
+		calculator.pushOperation(Types.Operation.mul);
 		const result = calculator.execute();
 		channel.appendLine(`Result: ${result}`);
 	}));

@@ -1,89 +1,68 @@
-// Use a procedural macro to generate bindings for the world we specified in
-// `host.wit`
-// wit_bindgen::generate!({
-// 	// the name of the world in the `*.wit` input file
-// 	world: "calculator",
-// });
-
-mod bindings;
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+mod calculator;
 
 use std::cell::RefCell;
-use crate::bindings::exports::vscode::example::types::{ Guest, GuestEngine, Operation };
+use crate::calculator::exports::vscode::example::types::{ Guest, GuestEngine, Operation };
 
-
-enum StackElement {
-	Operand(u32),
-	Operation(Operation),
+struct EngineImpl {
+	left: Option<u32>,
+	right: Option<u32>,
 }
 
-struct Stack {
-	values: Vec<StackElement>
-}
-
-impl Stack {
+impl EngineImpl {
 	fn new() -> Self {
-		Stack {
-			values: Vec::new()
+		EngineImpl {
+			left: None,
+			right: None,
 		}
 	}
 
 	fn push_operand(&mut self, operand: u32) {
-		self.values.push(StackElement::Operand(operand));
+		if self.left == None {
+			self.left = Some(operand);
+		} else {
+			self.right = Some(operand);
+		}
 	}
 
 	fn push_operation(&mut self, operation: Operation) {
-		self.values.push(StackElement::Operation(operation));
+		match operation {
+			Operation::Add => {
+				let result = self.left.unwrap() + self.right.unwrap();
+				self.left = Some(result);
+			},
+			Operation::Sub => {
+				let result = self.left.unwrap() - self.right.unwrap();
+				self.left = Some(result);
+			},
+			Operation::Mul => {
+				let result = self.left.unwrap() * self.right.unwrap();
+				self.left = Some(result);
+			},
+			Operation::Div => {
+				let result = self.left.unwrap() / self.right.unwrap();
+				self.left = Some(result);
+			},
+		}
 	}
 
 	fn execute(&mut self) -> u32 {
-		let mut result = 0;
-		let mut left = 0;
-		let mut right = 0;
-		let mut operation: &Operation = &Operation::Add;
-		self.values.reverse();
-		let iter = self.values.iter();
-		for element in iter {
-			match element {
-				StackElement::Operand(operand) => {
-					if left == 0 {
-						left = *operand;
-					} else {
-						right = *operand;
-					}
-				},
-				StackElement::Operation(op) => {
-					match operation {
-						Operation::Add => {
-							result = left + right;
-						},
-						Operation::Sub => {
-							result = left - right;
-						},
-						Operation::Mul => {
-							result = left * right;
-						},
-						Operation::Div => {
-							result = left / right;
-						},
-					}
-					operation = op;
-				}
-			}
-		}
-		self.values.clear();
-		return result;
+		return self.left.unwrap();
 	}
 }
 
 struct CalcEngine {
-	stack: RefCell<Stack>,
+	stack: RefCell<EngineImpl>,
 }
 
 impl GuestEngine for CalcEngine {
 
 	fn new() -> Self {
 		CalcEngine {
-			stack: RefCell::new(Stack::new())
+			stack: RefCell::new(EngineImpl::new())
 		}
 	}
 
@@ -91,7 +70,7 @@ impl GuestEngine for CalcEngine {
 		self.stack.borrow_mut().push_operand(operand);
 	}
 
-	fn push_operation(&self,operation:Operation,) {
+	fn push_operation(&self,operation:Operation) {
 		self.stack.borrow_mut().push_operation(operation);
 	}
 
@@ -105,4 +84,4 @@ impl Guest for Implementation {
 	type Engine = CalcEngine;
 }
 
-bindings::export!(Implementation with_types_in bindings);
+calculator::export!(Implementation with_types_in calculator);

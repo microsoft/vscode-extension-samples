@@ -15,7 +15,7 @@ export namespace example {
 		}
 
 		export namespace Engine {
-			export interface Interface extends $wcm.JInterface {
+			export interface Interface extends $wcm.Resource {
 				pushOperand(operand: u32): void;
 
 				pushOperation(operation: Operation): void;
@@ -35,7 +35,6 @@ export namespace example {
 	};
 	export namespace calculator {
 		export type Imports = {
-			foo: () => u32;
 		};
 		export type Exports = {
 			types: example.Types;
@@ -79,21 +78,27 @@ export namespace example {
 			}
 			export namespace exports {
 				export type WasmInterface = Engine.WasmInterface & { '[dtor]engine': (self: i32) => void };
-				class Impl extends $wcm.Resource implements example.Types.Engine.Interface {
+				class Impl extends $wcm.Resource.Default implements example.Types.Engine.Interface {
+					private readonly _rep: $wcm.ResourceRepresentation;
 					private readonly _om: ObjectModule;
 					constructor(om: ObjectModule);
-					constructor(handleTag: Symbol, handle: $wcm.ResourceHandle, om: ObjectModule);
+					constructor(handleTag: Symbol, handle: $wcm.ResourceHandle, rm: $wcm.ResourceManager, om: ObjectModule);
 					constructor(...args: any[]);
 					constructor(...args: any[]) {
 						if (args[0] === $wcm.ResourceManager.handleTag) {
-							super(args[1] as $wcm.ResourceHandle);
-							this._om = args[2] as ObjectModule;
+							const handle = args[1] as $wcm.ResourceHandle;
+							super(handle);
+							this._rep = (args[2] as $wcm.ResourceManager).getRepresentation(handle);
+							this._om = args[3] as ObjectModule;
 						} else {
-							const om = args[0] as ObjectModule;
+							const rm = args[0] as $wcm.ResourceManager;
+							const om = args[1] as ObjectModule;
 							super(om.constructor());
+							this._rep = rm.getRepresentation(this.$handle());
 							this._om = om;
 						}
 					}
+					public $rep(): $wcm.ResourceRepresentation { return this._rep; }
 					public pushOperand(operand: u32): void {
 						return this._om.pushOperand(this, operand);
 					}
@@ -106,14 +111,14 @@ export namespace example {
 				}
 				export function Class(wasmInterface: WasmInterface, context: $wcm.WasmContext): example.Types.Engine.Class {
 					const resource = example.Types.$.Engine;
-					const om: ObjectModule = $wcm.Module.createObjectModule(resource, wasmInterface, context);
 					const rm: $wcm.ResourceManager = context.resources.ensure('vscode:example/types/engine');
+					const om: ObjectModule = $wcm.Module.createObjectModule(resource, wasmInterface, context);
 					return class extends Impl {
 						constructor();
 						constructor(handleTag: Symbol, handle: $wcm.ResourceHandle);
 						constructor(...args: any[]) {
-							super(...args, om);
-							// rm.registerProxy(this);
+							super(...args, rm, om);
+							rm.registerProxy(this);
 						}
 					};
 				}
@@ -137,29 +142,20 @@ export namespace example {
 				export type WasmInterface = {
 					'[resource-new]engine': (rep: i32) => i32;
 					'[resource-rep]engine': (handle: i32) => i32;
-					'[resource-drop]engine': (handle: i32) => i32;
+					'[resource-drop]engine': (handle: i32) => void;
 				};
 			}
 		}
 	}
 	export namespace calculator.$ {
-		export namespace Imports {
-			export const foo = new $wcm.FunctionType<calculator.Imports['foo']>('foo', [], $wcm.u32);
-		}
 	}
 	export namespace calculator._ {
 		export const id = 'vscode:example/calculator' as const;
 		export const witName = 'calculator' as const;
-		export type $Root = {
-			'foo': () => i32;
-		};
 		export type Imports = {
 			'[export]vscode:example/types': example.Types._.exports.imports.WasmInterface;
 		};
 		export namespace imports {
-			export const functions: Map<string, $wcm.FunctionType> = new Map([
-				['foo', $.Imports.foo]
-			]);
 			export function create(service: calculator.Imports, context: $wcm.WasmContext): Imports {
 				return $wcm.Imports.create<Imports>(_, service, context);
 			}
