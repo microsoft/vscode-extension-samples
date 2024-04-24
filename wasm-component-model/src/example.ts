@@ -100,6 +100,8 @@ export namespace example {
 			['Operands', $.Operands],
 			['Operation', $.Operation]
 		]);
+		export type WasmInterface = {
+		};
 	}
 	export namespace calculator.$ {
 		export const Operation = Types.$.Operation;
@@ -119,35 +121,34 @@ export namespace example {
 		export const witName = 'calculator' as const;
 		export type $Root = {
 			'log': (msg_ptr: i32, msg_len: i32) => void;
-		}
-		export namespace Imports {
+		};
+		export type Imports = {
+			'$root': $Root;
+		};
+		export namespace imports {
 			export const functions: Map<string, $wcm.FunctionType> = new Map([
 				['log', $.Imports.log]
 			]);
 			export const interfaces: Map<string, $wcm.InterfaceType> = new Map<string, $wcm.InterfaceType>([
 				['Types', Types._]
 			]);
-		}
-		export type Imports = {
-			'$root': $Root;
-		};
-		export namespace Exports {
-			export const functions: Map<string, $wcm.FunctionType> = new Map([
-				['calc', $.Exports.calc]
-			]);
+			export function create(service: calculator.Imports, context: $wcm.WasmContext): Imports {
+				return $wcm.Imports.create<Imports>(_, service, context);
+			}
+			export function loop(service: calculator.Imports, context: $wcm.WasmContext): calculator.Imports {
+				return $wcm.Imports.loop(_, service, context);
+			}
 		}
 		export type Exports = {
 			'calc': (o_Operation_case: i32, o_Operation_0: i32, o_Operation_1: i32) => i32;
 		};
-		export function createImports(service: calculator.Imports, context: $wcm.WasmContext): Imports {
-			const result: Imports = Object.create(null);
-			result['$root'] = $wcm.Imports.create<$Root>(Imports.functions, undefined, service, context);
-			return result;
-		}
-		export function bindExports(exports: Exports, context: $wcm.WasmContext): calculator.Exports {
-			const result: calculator.Exports = Object.create(null);
-			Object.assign(result, $wcm.Exports.bind(Exports.functions, undefined, exports, context));
-			return result;
+		export namespace exports {
+			export const functions: Map<string, $wcm.FunctionType> = new Map([
+				['calc', $.Exports.calc]
+			]);
+			export function bind(exports: Exports, context: $wcm.WasmContext): calculator.Exports {
+				return $wcm.Exports.bind<calculator.Exports>(_, exports, context);
+			}
 		}
 	}
 }

@@ -5,26 +5,10 @@
 use std::error::Error;
 
 use lsp_types::{
-    request::Request, request::GotoDefinition, GotoDefinitionResponse, InitializeParams,
+    request::GotoDefinition, GotoDefinitionResponse, InitializeParams,
     ServerCapabilities, Location, OneOf
 };
 use lsp_server::{ Connection, ExtractError, Message, RequestId, Response };
-use serde::{ Deserialize, Serialize };
-use walkdir::WalkDir;
-
-#[derive(Deserialize, Serialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct CountFilesParams {
-    pub folder: String,
-}
-
-pub enum CountFilesRequest {}
-impl Request for CountFilesRequest {
-    type Params = CountFilesParams;
-    type Result = u32;
-    const METHOD: &'static str = "wasm-language-server/countFilesInFolder";
-}
-
 
 fn main() -> Result<(), Box<dyn Error + Sync + Send>> {
     // Note that  we must have our logging only write out to stderr.
@@ -57,7 +41,7 @@ fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Bo
                 if connection.handle_shutdown(&req)? {
                     return Ok(());
                 }
-                match cast::<GotoDefinition>(req.clone()) {
+                match cast::<GotoDefinition>(req) {
                     Ok((id, params)) => {
                         eprintln!("Received gotoDefinition request #{id}");
                         let loc = Location::new(params.text_document_position_params.text_document.uri, lsp_types::Range::new(lsp_types::Position::new(0, 0), lsp_types::Position::new(0, 0)));
@@ -66,19 +50,6 @@ fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Bo
                         let result = Some(GotoDefinitionResponse::Array(vec));
                         let result = serde_json::to_value(&result).unwrap();
                         let resp = Response { id, result: Some(result), error: None };
-                        connection.sender.send(Message::Response(resp))?;
-                        continue;
-                    }
-                    Err(err @ ExtractError::JsonError { .. }) => panic!("{err:?}"),
-                    Err(ExtractError::MethodMismatch(req)) => req,
-                };
-                match cast::<CountFilesRequest>(req.clone()) {
-                    Ok((id, params)) => {
-                        eprintln!("Received count request request #{id}");
-                        let result = count_files_in_folder(params.folder.as_str());
-                        eprintln!("Number of files #{result}");
-                        let json = serde_json::to_value(&result).unwrap();
-                        let resp = Response { id, result: Some(json), error: None };
                         connection.sender.send(Message::Response(resp))?;
                         continue;
                     }
@@ -103,13 +74,4 @@ where
     R::Params: serde::de::DeserializeOwned,
 {
     req.extract(R::METHOD)
-}
-
-fn count_files_in_folder(path: &str) -> usize {
-    let result = WalkDir::new(path)
-        .into_iter()
-        .filter_map(Result::ok)
-        .filter(|entry| entry.file_type().is_file())
-        .count();
-    return result;
 }

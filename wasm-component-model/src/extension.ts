@@ -35,12 +35,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	const wasmContext: WasmContext.Default = new WasmContext.Default();
 
 	// Instantiate the module and create the necessary imports from the service implementation.
-	const instance = await WebAssembly.instantiate(module, calculator._.createImports(service, wasmContext));
+	const instance = await WebAssembly.instantiate(module, calculator._.imports.create(service, wasmContext));
 	// Bind the WASM memory to the context
 	wasmContext.initialize(new Memory.Default(instance.exports));
 
 	// Bind the TypeScript Api
-	const api = calculator._.bindExports(instance.exports as calculator._.Exports, wasmContext);
+	const api = calculator._.exports.bind(instance.exports as calculator._.Exports, wasmContext);
 
 	context.subscriptions.push(vscode.commands.registerCommand('vscode-samples.wasm-component-model.run', () => {
 		channel.show();
