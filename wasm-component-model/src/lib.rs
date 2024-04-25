@@ -22,4 +22,5 @@ impl Guest for Calculator {
 	}
 }
 
+// Export the Calculator to the extension code.
 export!(Calculator);

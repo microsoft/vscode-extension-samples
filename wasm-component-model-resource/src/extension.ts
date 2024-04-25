@@ -5,9 +5,7 @@
 import * as vscode from 'vscode';
 import { WasmContext, Memory } from '@vscode/wasm-component-model';
 
-import { example } from './example';
-import calculator = example.calculator;
-import Types = example.Types;
+import { calculator, Types } from './calculator';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
 	// The channel for printing the result.
@@ -27,7 +25,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	const wasmContext: WasmContext.Default = new WasmContext.Default();
 
 	// Instantiate the module and create the necessary imports from the service implementation
-	// const imports = calculator._.imports.create({ foo: () => 20 }, wasmContext);
 	const instance = await WebAssembly.instantiate(module, calculator._.imports.create({}, wasmContext));
 	// Bind the WASM memory to the context
 	wasmContext.initialize(new Memory.Default(instance.exports));

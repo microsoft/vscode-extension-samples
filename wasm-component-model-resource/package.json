@@ -29,7 +29,7 @@
 		]
 	},
 	"dependencies": {
-		"@vscode/wasm-component-model": "0.1.0-pre.8"
+		"@vscode/wasm-component-model": "0.1.0-pre.9"
 	},
 	"devDependencies": {
 		"@types/vscode": "1.88.0",
@@ -49,7 +49,7 @@
 		"watch": "tsc -b -w",
 		"lint": "eslint ./src --ext .ts,.tsx",
 		"esbuild": "node ./bin/esbuild.js",
-		"generate:model": "wit2ts --noMain --outDir ./src ./wit",
+		"generate:model": "wit2ts --outDir ./src ./wit",
 		"serve": "serve --cors -l 5000 --ssl-cert $HOME/certs/localhost.pem --ssl-key $HOME/certs/localhost-key.pem"
 	}
 }
