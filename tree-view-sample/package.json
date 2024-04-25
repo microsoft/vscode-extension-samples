@@ -144,6 +144,22 @@
 			{
 				"command": "testView.changeTitle",
 				"title": "Test View: Change Title"
+			},
+			{
+				"command": "cmdaa",
+				"title": "Command for AA"
+			},
+			{
+				"command": "cmdaaa",
+				"title": "Command for AAA"
+			},
+			{
+				"command": "cmdaaaa",
+				"title": "Command for AAAA"
+			},
+			{
+				"command": "cmdall",
+				"title": "Command for All"
 			}
 		],
 		"menus": {
@@ -179,27 +195,19 @@
 			],
 			"view/item/context": [
 				{
-					"command": "nodeDependencies.editEntry",
-					"when": "view == nodeDependencies && viewItem == dependency",
-					"group": "inline"
+					"command": "cmdaa",
+					"when": "viewItem == aa"
 				},
 				{
-					"command": "nodeDependencies.deleteEntry",
-					"when": "view == nodeDependencies && viewItem == dependency"
+					"command": "cmdaaa",
+					"when": "viewItem == aaa"
 				},
 				{
-					"command": "jsonOutline.renameNode",
-					"when": "view == jsonOutline"
+					"command": "cmdaaaa",
+					"when": "viewItem == aaaa"
 				},
 				{
-					"command": "jsonOutline.refreshNode",
-					"when": "view == jsonOutline",
-					"group": "inline"
-				},
-				{
-					"command": "fileExplorer.refreshFile",
-					"when": "view == fileExplorer && viewItem == file",
-					"group": "inline"
+					"command": "cmdall"
 				}
 			]
 		},
