@@ -2,6 +2,7 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
+/* eslint-disable @typescript-eslint/ban-types */
 import * as $wcm from '@vscode/wasm-component-model';
 import type { u32, own, i32 } from '@vscode/wasm-component-model';
 
@@ -64,8 +65,8 @@ export namespace Types._ {
 			'[method]engine.push-operation': (self: i32, operation_Operation: i32) => void;
 			'[method]engine.execute': (self: i32) => i32;
 		};
-		export type ObjectModule = {
-			constructor(): own<$wcm.ResourceHandle>;
+		type ObjectModule = {
+			'constructor'(): own<$wcm.ResourceHandle>;
 			pushOperand(self: Engine, operand: u32): void;
 			pushOperation(self: Engine, operation: Operation): void;
 			execute(self: Engine): u32;
@@ -79,7 +80,7 @@ export namespace Types._ {
 				private readonly _rep: $wcm.ResourceRepresentation;
 				private readonly _om: ObjectModule;
 				constructor(om: ObjectModule);
-				constructor(handleTag: Symbol, handle: $wcm.ResourceHandle, rm: $wcm.ResourceManager, om: ObjectModule);
+				constructor(handleTag: symbol, handle: $wcm.ResourceHandle, rm: $wcm.ResourceManager, om: ObjectModule);
 				constructor(...args: any[]);
 				constructor(...args: any[]) {
 					if (args[0] === $wcm.ResourceManager.handleTag) {
@@ -112,7 +113,7 @@ export namespace Types._ {
 				const om: ObjectModule = $wcm.Module.createObjectModule(resource, wasmInterface, context);
 				return class extends Impl {
 					constructor();
-					constructor(handleTag: Symbol, handle: $wcm.ResourceHandle);
+					constructor(handleTag: symbol, handle: $wcm.ResourceHandle);
 					constructor(...args: any[]) {
 						super(...args, rm, om);
 						rm.registerProxy(this);
