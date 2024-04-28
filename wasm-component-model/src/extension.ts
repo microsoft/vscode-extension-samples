@@ -32,8 +32,11 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	// The context for the WASM module
 	const wasmContext: WasmContext.Default = new WasmContext.Default();
 
-	// Instantiate the module and create the necessary imports from the service implementation.
-	const instance = await WebAssembly.instantiate(module, calculator._.imports.create(service, wasmContext));
+	// Create the bindings to import the log function into the WASM module
+	const imports = calculator._.imports.create(service, wasmContext);
+	// Instantiate the module
+	const instance = await WebAssembly.instantiate(module, imports);
+
 	// Bind the WASM memory to the context
 	wasmContext.initialize(new Memory.Default(instance.exports));
 
@@ -43,9 +46,13 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(vscode.commands.registerCommand('vscode-samples.wasm-component-model.run', () => {
 		channel.show();
 		channel.appendLine('Running calculator example');
-		channel.appendLine(`Add ${api.calc(Types.Operation.Add({ left: 1, right: 2}))}`);
-		channel.appendLine(`Sub ${api.calc(Types.Operation.Sub({ left: 10, right: 8 }))}`);
-		channel.appendLine(`Mul ${api.calc(Types.Operation.Mul({ left: 3, right: 7 }))}`);
-		channel.appendLine(`Div ${api.calc(Types.Operation.Div({ left: 10, right: 2 }))}`);
+		const add = Types.Operation.Add({ left: 1, right: 2});
+		channel.appendLine(`Add ${api.calc(add)}`);
+		const sub = Types.Operation.Sub({ left: 10, right: 8 });
+		channel.appendLine(`Sub ${api.calc(sub)}`);
+		const mul = Types.Operation.Mul({ left: 3, right: 7 });
+		channel.appendLine(`Mul ${api.calc(mul)}`);
+		const div = Types.Operation.Div({ left: 10, right: 2 });
+		channel.appendLine(`Div ${api.calc(div)}`);
 	}));
 }
