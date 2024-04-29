@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 
+const didChangeTreeData = new vscode.EventEmitter<{ key: string } | undefined>();
 export class TestView {
 
 	constructor(context: vscode.ExtensionContext) {
@@ -16,6 +17,20 @@ export class TestView {
 			if (title) {
 				view.title = title;
 			}
+		});
+
+		vscode.commands.registerCommand('testView.swapTrees', async () => {
+			setTimeout(() => {
+				if (currentTree === tree) {
+					currentTree = tree2;
+				} else {
+					currentTree = tree;
+				}
+				didChangeTreeData.fire(undefined);
+			}, 500);
+		});
+		view.onDidChangeSelection(e => {
+			vscode.window.showInformationMessage('Selected ' + e.selection[0].key);
 		});
 	}
 }
@@ -40,6 +55,29 @@ const tree: any = {
 		'bb': {}
 	}
 };
+const tree2: any = {
+	'c': {
+		'cc': {
+			'ccc': {
+				'cccc': {
+					'ccccc': {
+						'cccccc': {
+
+						}
+					}
+				}
+			}
+		},
+		'cd': {}
+	},
+	'd': {
+		'dc': {},
+		'dd': {}
+	}
+};
+
+let currentTree = tree;
+
 const nodes: any = {};
 
 function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }> {
@@ -55,13 +93,14 @@ function aNodeWithIdTreeDataProvider(): vscode.TreeDataProvider<{ key: string }>
 		getParent: ({ key }: { key: string }): { key: string } | undefined => {
 			const parentKey = key.substring(0, key.length - 1);
 			return parentKey ? new Key(parentKey) : undefined;
-		}
+		},
+		onDidChangeTreeData: didChangeTreeData.event
 	};
 }
 
 function getChildren(key: string | undefined): string[] {
 	if (!key) {
-		return Object.keys(tree);
+		return Object.keys(currentTree);
 	}
 	const treeElement = getTreeElement(key);
 	if (treeElement) {
@@ -82,7 +121,7 @@ function getTreeItem(key: string): vscode.TreeItem {
 }
 
 function getTreeElement(element: string): any {
-	let parent = tree;
+	let parent = currentTree;
 	for (let i = 0; i < element.length; i++) {
 		parent = parent[element.substring(0, i + 1)];
 		if (!parent) {

@@ -66,6 +66,10 @@
 		},
 		"commands": [
 			{
+				"command": "testView.swapTrees",
+				"title": "Swap Trees"
+			},
+			{
 				"command": "nodeDependencies.refreshEntry",
 				"title": "Refresh",
 				"icon": {
