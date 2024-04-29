@@ -30,8 +30,12 @@ export class TestView {
 			}, 500);
 		});
 		view.onDidChangeSelection(e => {
-			vscode.window.showInformationMessage('Selected ' + e.selection[0].key);
+			vscode.window.showInformationMessage('Change Selected ' + e.selection[0].key);
 		});
+
+		setInterval(() => {
+			vscode.window.showInformationMessage('Selected ' + view.selection[0]?.key);
+		}, 5000);
 	}
 }
 
