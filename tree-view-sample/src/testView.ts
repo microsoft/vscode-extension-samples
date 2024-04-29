@@ -29,10 +29,12 @@ export class TestView {
 				didChangeTreeData.fire(undefined);
 			}, 500);
 		});
+		// This does not fire when you run `swapTrees` command
 		view.onDidChangeSelection(e => {
 			vscode.window.showInformationMessage('Change Selected ' + e.selection[0].key);
 		});
 
+		// To show that selected goes from "something" to "undefined" and back to "something
 		setInterval(() => {
 			vscode.window.showInformationMessage('Selected ' + view.selection[0]?.key);
 		}, 5000);
