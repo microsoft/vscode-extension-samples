@@ -26,7 +26,7 @@ class AzureDevOpsPatSession implements AuthenticationSession {
 }
 
 export class AzureDevOpsAuthenticationProvider implements AuthenticationProvider, Disposable {
-	static id = 'AzureDevOpsPAT';
+	static id = 'azuredevopspat';
 	private static secretKey = 'AzureDevOpsPAT';
 
 	// this property is used to determine if the token has been changed in another window of VS Code.
@@ -132,6 +132,11 @@ export class AzureDevOpsAuthenticationProvider implements AuthenticationProvider
 
 	// This function is called when the end user signs out of the account.
 	async removeSession(_sessionId: string): Promise<void> {
+		const token = await this.currentToken;
+		if (!token) {
+			return;
+		}
 		await this.secretStorage.delete(AzureDevOpsAuthenticationProvider.secretKey);
+		this._onDidChangeSessions.fire({ removed: [new AzureDevOpsPatSession(token)] });
 	}
 }
