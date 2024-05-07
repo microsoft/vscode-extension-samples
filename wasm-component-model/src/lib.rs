@@ -18,7 +18,7 @@ impl Guest for Calculator {
 			Operation::Div(operands) => operands.left / operands.right,
 		};
 		log(&format!("Finished calculation: {:?}", op));
-		return result;
+		result
 	}
 }
 
