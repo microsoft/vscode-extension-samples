@@ -5,11 +5,11 @@ wit_bindgen::generate!({
 	world: "calculator",
 });
 
-struct MyType;
+struct Calculator;
 
-impl Guest for MyType {
+impl Guest for Calculator {
 
-    fn calc(op: Operation) -> u32 {
+	fn calc(op: Operation) -> u32 {
 		log(&format!("Starting calculation: {:?}", op));
 		let result = match op {
 			Operation::Add(operands) => operands.left + operands.right,
@@ -18,8 +18,9 @@ impl Guest for MyType {
 			Operation::Div(operands) => operands.left / operands.right,
 		};
 		log(&format!("Finished calculation: {:?}", op));
-		return result;
+		result
 	}
 }
 
-export!(MyType);
+// Export the Calculator to the extension code.
+export!(Calculator);

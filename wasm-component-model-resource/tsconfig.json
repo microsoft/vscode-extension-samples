@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "rootDir": "./src",
+        "skipLibCheck": true,
+        "lib": [
+            "es2022",
+            "webworker"
+        ],
+        "types": [
+            "vscode"
+        ],
+        "module": "Node16",
+        "moduleResolution": "Node16",
+        "outDir": "./out",
+        "strict": true,
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "declaration": true,
+        "stripInternal": true,
+        "sourceMap": true,
+        "declarationMap": true,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
+    }
+}

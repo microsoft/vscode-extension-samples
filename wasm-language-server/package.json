@@ -27,6 +27,15 @@
 	"extensionDependencies": [
 		"ms-vscode.wasm-wasi-core"
 	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "vscode-samples.wasm-language-server.countFiles",
+				"category": "Samples",
+				"title": "Count Files"
+			}
+		]
+	},
 	"dependencies": {
 	},
 	"devDependencies": {
