@@ -29,28 +29,18 @@ impl EngineImpl {
 	}
 
 	fn push_operation(&mut self, operation: Operation) {
-		match operation {
-			Operation::Add => {
-				let result = self.left.unwrap() + self.right.unwrap();
-				self.left = Some(result);
-			},
-			Operation::Sub => {
-				let result = self.left.unwrap() - self.right.unwrap();
-				self.left = Some(result);
-			},
-			Operation::Mul => {
-				let result = self.left.unwrap() * self.right.unwrap();
-				self.left = Some(result);
-			},
-			Operation::Div => {
-				let result = self.left.unwrap() / self.right.unwrap();
-				self.left = Some(result);
-			},
-		}
+        let left = self.left.unwrap();
+        let right = self.right.unwrap();
+        self.left = Some(match operation {
+			Operation::Add => left + right,
+			Operation::Sub => left - right,
+			Operation::Mul => left * right,
+			Operation::Div => left / right,
+		});
 	}
 
 	fn execute(&mut self) -> u32 {
-		return self.left.unwrap();
+		self.left.unwrap()
 	}
 }
 
