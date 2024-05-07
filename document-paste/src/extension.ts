@@ -5,7 +5,7 @@ import * as vscode from 'vscode';
  */
 class CopyCountPasteEditProvider implements vscode.DocumentPasteEditProvider {
 
-	static readonly kind = vscode.DocumentPasteEditKind.Empty.append('text', 'custom', 'count');
+	static readonly kind = vscode.DocumentDropOrPasteEditKind.Empty.append('text', 'custom', 'count');
 
 	static readonly countMimeType = 'application/vnd.code.copydemo-copy-count';
 

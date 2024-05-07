@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             const messages = [
-                new vscode.LanguageModelChatSystemMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
+                new vscode.LanguageModelChatUserMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
                 new vscode.LanguageModelChatUserMessage(topic)
             ];
             const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
@@ -39,7 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             const messages = [
-                new vscode.LanguageModelChatSystemMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
+                new vscode.LanguageModelChatUserMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
                 new vscode.LanguageModelChatUserMessage('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
             ];
             const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
@@ -49,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
             return { metadata: { command: 'play' } };
         } else {
             const messages = [
-                new vscode.LanguageModelChatSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
+                new vscode.LanguageModelChatUserMessage(`You are a cat! Think carefully and step by step like a cat would.
                     Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
                 new vscode.LanguageModelChatUserMessage(request.prompt)
             ];
@@ -109,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
             // Replace all variables in active editor with cat names and words
             const text = textEditor.document.getText();
             const messages = [
-                new vscode.LanguageModelChatSystemMessage(`You are a cat! Think carefully and step by step like a cat would.
+                new vscode.LanguageModelChatUserMessage(`You are a cat! Think carefully and step by step like a cat would.
                 Your job is to replace all variable names in the following code with funny cat variable names. Be creative. IMPORTANT respond just with code. Do not use markdown!`),
                 new vscode.LanguageModelChatUserMessage(text)
             ];
