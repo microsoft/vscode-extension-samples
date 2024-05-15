@@ -12,8 +12,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register our authentication provider. NOTE: this will register the provider globally which means that
 	// any other extension can use this provider via the `getSession` API.
-	// NOTE: when implementing an auth provider, don't forget to register an activation event for that provider
-	// in your package.json file: "onAuthenticationRequest:AzureDevOpsPAT"
 	context.subscriptions.push(vscode.authentication.registerAuthenticationProvider(
 		AzureDevOpsAuthenticationProvider.id,
 		'Azure Repos',

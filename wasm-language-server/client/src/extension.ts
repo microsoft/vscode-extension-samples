@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-import { ExtensionContext, Uri, window, workspace } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions } from 'vscode-languageclient/node';
+import { ExtensionContext, Uri, window, workspace, commands } from 'vscode';
+import { LanguageClient, LanguageClientOptions, ServerOptions, RequestType } from 'vscode-languageclient/node';
 import { Wasm, ProcessOptions } from '@vscode/wasm-wasi';
 import { createStdioOptions, startServer } from '@vscode/wasm-wasi-lsp';
 
@@ -46,6 +46,17 @@ export async function activate(context: ExtensionContext) {
 	} catch (error) {
 		client.error(`Start failed`, error, 'force');
 	}
+
+	type CountFileParams = { folder: string };
+	const CountFilesRequest = new RequestType<CountFileParams, number, void>('wasm-language-server/countFilesInFolder');
+	context.subscriptions.push(commands.registerCommand('vscode-samples.wasm-language-server.countFiles', async () => {
+		// We assume we do have a folder.
+		const folder = workspace.workspaceFolders![0].uri;
+		// We need to convert the folder URI to a URI that maps to the mounted WASI file system. This is something
+		// @vscode/wasm-wasi-lsp does for us.
+		const result = await client.sendRequest(CountFilesRequest, { folder: client.code2ProtocolConverter.asUri(folder!) });
+		window.showInformationMessage(`The workspace contains ${result} files.`);
+	}));
 }
 
 export function deactivate() {

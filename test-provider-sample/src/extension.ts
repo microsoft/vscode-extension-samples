@@ -66,7 +66,7 @@ export async function activate(context: vscode.ExtensionContext) {
 					await discoverTests(gatherTestItems(test.children));
 				}
 
-				if (test.uri && !coveredLines.has(test.uri.toString())) {
+				if (test.uri && !coveredLines.has(test.uri.toString()) && request.profile?.kind === vscode.TestRunProfileKind.Coverage) {
 					try {
 						const lines = (await getContentFromFilesystem(test.uri)).split('\n');
 						coveredLines.set(
@@ -96,27 +96,15 @@ export async function activate(context: vscode.ExtensionContext) {
 				const fileCoverage = coveredLines.get(test.uri!.toString());
 				const lineInfo = fileCoverage?.[lineNo];
 				if (lineInfo) {
-					lineInfo.executionCount++;
+					(lineInfo.executed as number)++;
 				}
 
 				run.appendOutput(`Completed ${test.id}\r\n`);
 			}
 
-			run.coverageProvider = {
-				provideFileCoverage() {
-					const coverage: vscode.FileCoverage[] = [];
-					for (const [uri, statements] of coveredLines) {
-						coverage.push(
-							vscode.FileCoverage.fromDetails(
-								vscode.Uri.parse(uri),
-								statements.filter((s): s is vscode.StatementCoverage => !!s)
-							)
-						);
-					}
-
-					return coverage;
-				},
-			};
+			for (const [uri, statements] of coveredLines) {
+				run.addCoverage(new MarkdownFileCoverage(uri, statements));
+			}
 
 			run.end();
 		};
@@ -129,6 +117,15 @@ export async function activate(context: vscode.ExtensionContext) {
 	};
 
 	ctrl.createRunProfile('Run Tests', vscode.TestRunProfileKind.Run, runHandler, true, undefined, true);
+
+	const coverageProfile = ctrl.createRunProfile('Run with Coverage', vscode.TestRunProfileKind.Coverage, runHandler, true, undefined, true);
+	coverageProfile.loadDetailedCoverage = async (_testRun, coverage) => {
+		if (coverage instanceof MarkdownFileCoverage) {
+			return coverage.coveredLines.filter((l): l is vscode.StatementCoverage => !!l);
+		}
+
+		return [];
+	};
 
 	ctrl.resolveHandler = async item => {
 		if (!item) {
@@ -225,4 +222,16 @@ function startWatchingWorkspace(controller: vscode.TestController, fileChangedEm
 
 		return watcher;
 	});
+}
+
+class MarkdownFileCoverage extends vscode.FileCoverage {
+	constructor(uri: string, public readonly coveredLines: (vscode.StatementCoverage | undefined)[]) {
+		super(vscode.Uri.parse(uri), new vscode.TestCoverageCount(0, 0));
+		for (const line of coveredLines) {
+			if (line) {
+				this.statementCoverage.covered += line.executed ? 1 : 0;
+				this.statementCoverage.total++;
+			}
+		}
+	}
 }

@@ -1,6 +1,6 @@
 {
-	"name": "wasm-component-model",
-	"description": "An example demonstrating how to use the component model to integrate WebAssembly modules into VS Code.",
+	"name": "wasm-component-model-resource",
+	"description": "An example implementing a calculator using a resource.",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
 	"version": "1.0.0",
@@ -44,6 +44,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"build": "npm run compile && cargo build --target wasm32-unknown-unknown",
+		"wit-bindgen": "wit-bindgen rust --out-dir ./src ./wit",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint ./src --ext .ts,.tsx",

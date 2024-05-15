@@ -1,4 +1,4 @@
-# Jupyter Server Provider Sample
+# Jupyter Kernel Code Execution Sample
 
 This is a very simple extension sample demonstrating the use of the Jupyter Extension API allowing other extensions to execute code against Jupyter Kernels.
 

@@ -9,11 +9,10 @@ declare module 'vscode' {
 	 * Represents a user request in chat history.
 	 */
 	export class ChatRequestTurn {
-
 		/**
 		 * The prompt as entered by the user.
 		 *
-		 * Information about variables used in this request is stored in {@link ChatRequestTurn.variables}.
+		 * Information about references used in this request is stored in {@link ChatRequestTurn.references}.
 		 *
 		 * *Note* that the {@link ChatParticipant.name name} of the participant and the {@link ChatCommand.name command}
 		 * are not part of the prompt.
@@ -21,7 +20,7 @@ declare module 'vscode' {
 		readonly prompt: string;
 
 		/**
-		 * The id of the chat participant and contributing extension to which this request was directed.
+		 * The id of the chat participant to which this request was directed.
 		 */
 		readonly participant: string;
 
@@ -31,20 +30,22 @@ declare module 'vscode' {
 		readonly command?: string;
 
 		/**
-		 * The variables that were referenced in this message.
+		 * The references that were used in this message.
 		 */
-		readonly variables: ChatResolvedVariable[];
+		readonly references: ChatPromptReference[];
 
-		private constructor(prompt: string, command: string | undefined, variables: ChatResolvedVariable[], participant: string);
+		/**
+		 * @hidden
+		 */
+		private constructor(prompt: string, command: string | undefined, references: ChatPromptReference[], participant: string);
 	}
 
 	/**
 	 * Represents a chat participant's response in chat history.
 	 */
 	export class ChatResponseTurn {
-
 		/**
-		* The content that was received from the chat participant. Only the stream parts that represent actual content (not metadata) are represented.
+		 * The content that was received from the chat participant. Only the stream parts that represent actual content (not metadata) are represented.
 		 */
 		readonly response: ReadonlyArray<ChatResponseMarkdownPart | ChatResponseFileTreePart | ChatResponseAnchorPart | ChatResponseCommandButtonPart>;
 
@@ -54,7 +55,7 @@ declare module 'vscode' {
 		readonly result: ChatResult;
 
 		/**
-		 * The id of the chat participant and contributing extension that this response came from.
+		 * The id of the chat participant that this response came from.
 		 */
 		readonly participant: string;
 
@@ -63,12 +64,18 @@ declare module 'vscode' {
 		 */
 		readonly command?: string;
 
+		/**
+		 * @hidden
+		 */
 		private constructor(response: ReadonlyArray<ChatResponseMarkdownPart | ChatResponseFileTreePart | ChatResponseAnchorPart | ChatResponseCommandButtonPart>, result: ChatResult, participant: string);
 	}
 
+	/**
+	 * Extra context passed to a participant.
+	 */
 	export interface ChatContext {
 		/**
-		 * All of the chat messages so far in the current chat session.
+		 * All of the chat messages so far in the current chat session. Currently, only chat messages for the current participant are included.
 		 */
 		readonly history: ReadonlyArray<ChatRequestTurn | ChatResponseTurn>;
 	}
@@ -81,15 +88,6 @@ declare module 'vscode' {
 		 * An error message that is shown to the user.
 		 */
 		message: string;
-
-		/**
-		 * If partial markdown content was sent over the {@link ChatRequestHandler handler}'s response stream before the response terminated, then this flag
-		 * can be set to true and it will be rendered with incomplete markdown features patched up.
-		 *
-		 * For example, if the response terminated after sending part of a triple-backtick code block, then the editor will
-		 * render it as a complete code block.
-		 */
-		responseIsIncomplete?: boolean;
 
 		/**
 		 * If set to true, the response will be partly blurred out.
@@ -132,8 +130,8 @@ declare module 'vscode' {
 	 */
 	export interface ChatResultFeedback {
 		/**
-		 * The ChatResult that the user is providing feedback for.
-		 * This instance has the same properties as the result returned from the participant callback, including `metadata`, but is not the same instance.
+		 * The ChatResult for which the user is providing feedback.
+		 * This object has the same properties as the result returned from the participant callback, including `metadata`, but is not the same instance.
 		 */
 		readonly result: ChatResult;
 
@@ -175,7 +173,7 @@ declare module 'vscode' {
 	export interface ChatFollowupProvider {
 		/**
 		 * Provide followups for the given result.
-		 * @param result This instance has the same properties as the result returned from the participant callback, including `metadata`, but is not the same instance.
+		 * @param result This object has the same properties as the result returned from the participant callback, including `metadata`, but is not the same instance.
 		 * @param token A cancellation token.
 		 */
 		provideFollowups(result: ChatResult, context: ChatContext, token: CancellationToken): ProviderResult<ChatFollowup[]>;
@@ -197,7 +195,7 @@ declare module 'vscode' {
 		readonly id: string;
 
 		/**
-		 * Icon for the participant shown in UI.
+		 * An icon for the participant shown in UI.
 		 */
 		iconPath?: Uri | {
 			/**
@@ -221,11 +219,6 @@ declare module 'vscode' {
 		followupProvider?: ChatFollowupProvider;
 
 		/**
-		 * When the user clicks this participant in `/help`, this text will be submitted to this participant.
-		 */
-		sampleRequest?: string;
-
-		/**
 		 * An event that fires whenever feedback for a result is received, e.g. when a user up- or down-votes
 		 * a result.
 		 *
@@ -235,43 +228,41 @@ declare module 'vscode' {
 		onDidReceiveFeedback: Event<ChatResultFeedback>;
 
 		/**
-		 * Dispose this participant and free resources
+		 * Dispose this participant and free resources.
 		 */
 		dispose(): void;
 	}
 
-	/**
-	 * A resolved variable value is a name-value pair as well as the range in the prompt where a variable was used.
-	 */
-	export interface ChatResolvedVariable {
+	export interface ChatPromptReference {
 		/**
-		 * The name of the variable.
-		 *
-		 * *Note* that the name doesn't include the leading `#`-character,
-		 * e.g `selection` for `#selection`.
+		 * A unique identifier for this kind of reference.
 		 */
-		readonly name: string;
+		readonly id: string;
 
 		/**
-		 * The start and end index of the variable in the {@link ChatRequest.prompt prompt}.
+		 * The start and end index of the reference in the {@link ChatRequest.prompt prompt}. When undefined, the reference was not part of the prompt text.
 		 *
 		 * *Note* that the indices take the leading `#`-character into account which means they can
 		 * used to modify the prompt as-is.
 		 */
 		readonly range?: [start: number, end: number];
 
-		// TODO@API decouple of resolve API, use `value: string | Uri | (maybe) unknown?`
 		/**
-		 * The values of the variable. Can be an empty array if the variable doesn't currently have a value.
+		 * A description of this value that could be used in an LLM prompt.
 		 */
-		readonly values: ChatVariableValue[];
+		readonly modelDescription?: string;
+
+		/**
+		 * The value of this reference. The `string | Uri | Location` types are used today, but this could expand in the future.
+		 */
+		readonly value: string | Uri | Location | unknown;
 	}
 
 	export interface ChatRequest {
 		/**
 		 * The prompt as entered by the user.
 		 *
-		 * Information about variables used in this request is stored in {@link ChatRequest.variables}.
+		 * Information about references used in this request is stored in {@link ChatRequest.references}.
 		 *
 		 * *Note* that the {@link ChatParticipant.name name} of the participant and the {@link ChatCommand.name command}
 		 * are not part of the prompt.
@@ -285,17 +276,15 @@ declare module 'vscode' {
 
 
 		/**
-		 * The list of variables and their values that are referenced in the prompt.
+		 * The list of references and their values that are referenced in the prompt.
 		 *
-		 * *Note* that the prompt contains varibale references as authored and that it is up to the participant
-		 * to further modify the prompt, for instance by inlining variable values or creating links to
-		 * headings which contain the resolved values. Variables are sorted in reverse by their range
-		 * in the prompt. That means the last variable in the prompt is the first in this list. This simplifies
+		 * *Note* that the prompt contains references as authored and that it is up to the participant
+		 * to further modify the prompt, for instance by inlining reference values or creating links to
+		 * headings which contain the resolved values. References are sorted in reverse by their range
+		 * in the prompt. That means the last reference in the prompt is the first in this list. This simplifies
 		 * string-manipulation of the prompt.
 		 */
-		// TODO@API Q? are there implicit variables that are not part of the prompt?
-		readonly variables: readonly ChatResolvedVariable[];
-
+		readonly references: readonly ChatPromptReference[];
 	}
 
 	/**
@@ -310,48 +299,43 @@ declare module 'vscode' {
 		 *
 		 * @see {@link ChatResponseStream.push}
 		 * @param value A markdown string or a string that should be interpreted as markdown. The boolean form of {@link MarkdownString.isTrusted} is NOT supported.
-		 * @returns This stream.
 		 */
-		markdown(value: string | MarkdownString): ChatResponseStream;
+		markdown(value: string | MarkdownString): void;
 
 		/**
 		 * Push an anchor part to this stream. Short-hand for
 		 * `push(new ChatResponseAnchorPart(value, title))`.
 		 * An anchor is an inline reference to some type of resource.
 		 *
-		 * @param value A uri or location
-		 * @param title An optional title that is rendered with value
-		 * @returns This stream.
+		 * @param value A uri, location, or symbol information.
+		 * @param title An optional title that is rendered with value.
 		 */
-		anchor(value: Uri | Location, title?: string): ChatResponseStream;
+		anchor(value: Uri | Location, title?: string): void;
 
 		/**
 		 * Push a command button part to this stream. Short-hand for
 		 * `push(new ChatResponseCommandButtonPart(value, title))`.
 		 *
 		 * @param command A Command that will be executed when the button is clicked.
-		 * @returns This stream.
 		 */
-		button(command: Command): ChatResponseStream;
+		button(command: Command): void;
 
 		/**
 		 * Push a filetree part to this stream. Short-hand for
 		 * `push(new ChatResponseFileTreePart(value))`.
 		 *
 		 * @param value File tree data.
-		 * @param baseUri The base uri to which this file tree is relative to.
-		 * @returns This stream.
+		 * @param baseUri The base uri to which this file tree is relative.
 		 */
-		filetree(value: ChatResponseFileTree[], baseUri: Uri): ChatResponseStream;
+		filetree(value: ChatResponseFileTree[], baseUri: Uri): void;
 
 		/**
 		 * Push a progress part to this stream. Short-hand for
 		 * `push(new ChatResponseProgressPart(value))`.
 		 *
 		 * @param value A progress message
-		 * @returns This stream.
 		 */
-		progress(value: string): ChatResponseStream;
+		progress(value: string): void;
 
 		/**
 		 * Push a reference to this stream. Short-hand for
@@ -360,53 +344,145 @@ declare module 'vscode' {
 		 * *Note* that the reference is not rendered inline with the response.
 		 *
 		 * @param value A uri or location
-		 * @returns This stream.
+		 * @param iconPath Icon for the reference shown in UI
 		 */
-		reference(value: Uri | Location | { variableName: string; value?: Uri | Location }): ChatResponseStream;
+		reference(value: Uri | Location, iconPath?: Uri | ThemeIcon | { light: Uri; dark: Uri }): void;
 
 		/**
 		 * Pushes a part to this stream.
 		 *
 		 * @param part A response part, rendered or metadata
 		 */
-		push(part: ChatResponsePart): ChatResponseStream;
+		push(part: ChatResponsePart): void;
 	}
 
+	/**
+	 * Represents a part of a chat response that is formatted as Markdown.
+	 */
 	export class ChatResponseMarkdownPart {
-		/** Note: The boolean form of {@link MarkdownString.isTrusted} is NOT supported. */
+		/**
+		 * A markdown string or a string that should be interpreted as markdown.
+		 */
 		value: MarkdownString;
+
+		/**
+		 * Create a new ChatResponseMarkdownPart.
+		 *
+		 * @param value A markdown string or a string that should be interpreted as markdown. The boolean form of {@link MarkdownString.isTrusted} is NOT supported.
+		 */
 		constructor(value: string | MarkdownString);
 	}
 
+	/**
+	 * Represents a file tree structure in a chat response.
+	 */
 	export interface ChatResponseFileTree {
+		/**
+		 * The name of the file or directory.
+		 */
 		name: string;
+
+		/**
+		 * An array of child file trees, if the current file tree is a directory.
+		 */
 		children?: ChatResponseFileTree[];
 	}
 
+	/**
+	 * Represents a part of a chat response that is a file tree.
+	 */
 	export class ChatResponseFileTreePart {
+		/**
+		 * File tree data.
+		 */
 		value: ChatResponseFileTree[];
+
+		/**
+		 * The base uri to which this file tree is relative
+		 */
 		baseUri: Uri;
+
+		/**
+		 * Create a new ChatResponseFileTreePart.
+		 * @param value File tree data.
+		 * @param baseUri The base uri to which this file tree is relative.
+		 */
 		constructor(value: ChatResponseFileTree[], baseUri: Uri);
 	}
 
+	/**
+	 * Represents a part of a chat response that is an anchor, that is rendered as a link to a target.
+	 */
 	export class ChatResponseAnchorPart {
-		value: Uri | Location | SymbolInformation;
+		/**
+		 * The target of this anchor.
+		 */
+		value: Uri | Location;
+
+		/**
+		 * An optional title that is rendered with value.
+		 */
 		title?: string;
-		constructor(value: Uri | Location | SymbolInformation, title?: string);
+
+		/**
+		 * Create a new ChatResponseAnchorPart.
+		 * @param value A uri or location.
+		 * @param title An optional title that is rendered with value.
+		 */
+		constructor(value: Uri | Location, title?: string);
 	}
 
+	/**
+	 * Represents a part of a chat response that is a progress message.
+	 */
 	export class ChatResponseProgressPart {
+		/**
+		 * The progress message
+		 */
 		value: string;
+
+		/**
+		 * Create a new ChatResponseProgressPart.
+		 * @param value A progress message
+		 */
 		constructor(value: string);
 	}
 
+	/**
+	 * Represents a part of a chat response that is a reference, rendered separately from the content.
+	 */
 	export class ChatResponseReferencePart {
-		value: Uri | Location | { variableName: string; value?: Uri | Location };
-		constructor(value: Uri | Location | { variableName: string; value?: Uri | Location });
+		/**
+		 * The reference target.
+		 */
+		value: Uri | Location;
+
+		/**
+		 * The icon for the reference.
+		 */
+		iconPath?: Uri | ThemeIcon | { light: Uri; dark: Uri };
+
+		/**
+		 * Create a new ChatResponseReferencePart.
+		 * @param value A uri or location
+		 * @param iconPath Icon for the reference shown in UI
+		 */
+		constructor(value: Uri | Location, iconPath?: Uri | ThemeIcon | { light: Uri; dark: Uri });
 	}
 
+	/**
+	 * Represents a part of a chat response that is a button that executes a command.
+	 */
 	export class ChatResponseCommandButtonPart {
+		/**
+		 * The command that will be executed when the button is clicked.
+		 */
 		value: Command;
+
+		/**
+		 * Create a new ChatResponseCommandButtonPart.
+		 * @param value A Command that will be executed when the button is clicked.
+		 */
 		constructor(value: Command);
 	}
 
@@ -426,31 +502,5 @@ declare module 'vscode' {
 		 * @returns A new chat participant
 		 */
 		export function createChatParticipant(id: string, handler: ChatRequestHandler): ChatParticipant;
-	}
-
-	/**
-	 * The detail level of this chat variable value.
-	 */
-	export enum ChatVariableLevel {
-		Short = 1,
-		Medium = 2,
-		Full = 3
-	}
-
-	export interface ChatVariableValue {
-		/**
-		 * The detail level of this chat variable value. If possible, variable resolvers should try to offer shorter values that will consume fewer tokens in an LLM prompt.
-		 */
-		level: ChatVariableLevel;
-
-		/**
-		 * The variable's value, which can be included in an LLM prompt as-is, or the chat participant may decide to read the value and do something else with it.
-		 */
-		value: string | Uri;
-
-		/**
-		 * A description of this value, which could be provided to the LLM as a hint.
-		 */
-		description?: string;
 	}
 }
