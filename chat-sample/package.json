@@ -26,8 +26,8 @@
     "contributes": {
         "chatParticipants": [
             {
-				"id": "chat-sample.cat",
-				"fullName": "Cat",
+                "id": "chat-sample.cat",
+                "fullName": "Cat",
                 "name": "cat",
                 "description": "Meow! What can I teach you?",
                 "isSticky": true,
@@ -59,7 +59,7 @@
     "devDependencies": {
         "@types/node": "^20.5.9",
         "@types/vscode": "1.82.0",
-        "@vscode/prompt-tsx": "^0.1.3-alpha",
+        "@vscode/prompt-tsx": "^0.1.8-alpha",
         "eslint": "^7.22.0",
         "tslint": "^6.1.3",
         "typescript": "^4.0.3"

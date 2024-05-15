@@ -1,7 +1,6 @@
-import { renderPrompt } from '@vscode/prompt-tsx';
+import { renderPrompt, Cl100KBaseTokenizer } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
 import { PlayPrompt } from './play';
-import { Cl100KBaseTokenizer } from '@vscode/prompt-tsx';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
 const CAT_PARTICIPANT_ID = 'chat-sample.cat';
@@ -48,8 +47,9 @@ export function activate(context: vscode.ExtensionContext) {
 				{ modelMaxPromptTokens: 4096 },
 				new Cl100KBaseTokenizer()
 			);
-            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
-            for await (const fragment of chatResponse.stream) {
+			const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
+            const chatResponse = await model.sendRequest(messages, {}, token);
+            for await (const fragment of chatResponse.text) {
                 stream.markdown(fragment);
             }
             return { metadata: { command: 'play' } };
