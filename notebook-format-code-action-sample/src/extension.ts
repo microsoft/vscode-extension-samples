@@ -24,10 +24,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
 /**
  * Notebook Format Code Action Provider
- * Takes all mentions of import "xx" and extracts them to a new top code cell.
+ * Takes all mentions of import "xx" or from "xx" and extracts them to a new top code cell.
  */
 export class ExtractNotebookImports implements vscode.CodeActionProvider {
-	static readonly providedKind = CodeActionKind.Notebook.append('format.yoyokrazy');
+	static readonly providedKind = CodeActionKind.Notebook.append('format.extensionName');
 
 	public provideCodeActions(
 		document: vscode.TextDocument,
@@ -35,7 +35,6 @@ export class ExtractNotebookImports implements vscode.CodeActionProvider {
 		_context: vscode.CodeActionContext,
 		_token: vscode.CancellationToken
 	): vscode.CodeAction[] | undefined {
-		// console.log(`PROVIDED -- ${document.uri}`);
 
 		const notebookDocument = this.getNotebookDocument(document);
 		if (!notebookDocument) {
@@ -63,122 +62,6 @@ export class ExtractNotebookImports implements vscode.CodeActionProvider {
 		}
 		return [fix];
 	}
-
-	// private extractImportsAndCreateCellEdits(
-	// 	notebookDocument: vscode.NotebookDocument
-	// ): (vscode.NotebookEdit | vscode.TextEdit)[] {
-	// 	const nbEdits: (vscode.NotebookEdit | vscode.TextEdit)[] = [];
-	// 	const importStatements: vscode.TextLine[] = [];
-
-	// 	for (const cell of notebookDocument.getCells()) {
-	// 		if (cell.kind !== vscode.NotebookCellKind.Code) {
-	// 			continue;
-	// 		}
-
-	// 		const cellTextDocument: vscode.TextDocument = cell.document;
-
-	// 		let i = 0;
-	// 		let nonImportText = '';
-	// 		while (i < cellTextDocument.lineCount) {
-	// 			const l = cellTextDocument.lineAt(i);
-	// 			if (l) {
-	// 				if (l.text.startsWith('import') || l.text.startsWith('from')) {
-	// 					if (!importStatements.includes(l)) {
-	// 						importStatements.push(l);
-	// 					}
-	// 				} else {
-	// 					nonImportText += l.text + '\n';
-	// 				}
-	// 			}
-	// 			i++;
-	// 		}
-
-	// 		// text edits replacements are better perf. use nb edit sparingly for deletions/additions
-	// 		// could lose outputs if you only replace cells
-	// 		// create the edit to remove the imports from the cell
-	// 		const newCell = new vscode.NotebookCellData(
-	// 			vscode.NotebookCellKind.Code,
-	// 			nonImportText,
-	// 			'python'
-	// 		);
-	// 		nbEdits.push(
-	// 			vscode.NotebookEdit.replaceCells(
-	// 				new vscode.NotebookRange(cell.index, cell.index + 1),
-	// 				[newCell]
-	// 			)
-	// 		);
-	// 	}
-
-	// 	if (!importStatements.length) {
-	// 		return [];
-	// 	}
-
-	// 	// create the edit to create a new top cell containing all imports
-	// 	const newCell = new vscode.NotebookCellData(
-	// 		vscode.NotebookCellKind.Code,
-	// 		importStatements.map((l) => l.text).join('\n') + '\n',
-	// 		'python'
-	// 	);
-	// 	nbEdits.push(new vscode.NotebookEdit(new vscode.NotebookRange(0, 0), [newCell]));
-	// 	return nbEdits;
-	// }
-
-	// private extractImportsAndCreateCellEdits(
-	// 	notebookDocument: vscode.NotebookDocument
-	// ): (vscode.NotebookEdit | vscode.TextEdit)[] {
-	// 	const nbEdits: (vscode.NotebookEdit | vscode.TextEdit)[] = [];
-	// 	let importStatements: string[] = [];
-
-	// 	notebookDocument.getCells().forEach((cell, index) => {
-	// 		if (cell.kind !== vscode.NotebookCellKind.Code) {
-	// 			return;
-	// 		}
-
-	// 		let cellHasImports = false;
-	// 		let nonImportText = '';
-	// 		cell.document
-	// 			.getText()
-	// 			.split('\n')
-	// 			.forEach((line) => {
-	// 				if (line.startsWith('import') || line.startsWith('from')) {
-	// 					importStatements.push(line);
-	// 					cellHasImports = true;
-	// 				} else {
-	// 					nonImportText += line + '\n';
-	// 				}
-	// 			});
-
-	// 		if (cellHasImports) {
-	// 			if (nonImportText.trim()) {
-	// 				// Replace cell content without imports
-	// 				const range = new vscode.Range(0, 0, cell.document.lineCount, 0);
-	// 				nbEdits.push(new vscode.TextEdit(range, nonImportText));
-	// 			} else {
-	// 				// Cell is empty after removing imports, mark for deletion
-	// 				nbEdits.push(
-	// 					vscode.NotebookEdit.replaceCells(
-	// 						new vscode.NotebookRange(index, index + 1),
-	// 						[]
-	// 					)
-	// 				);
-	// 			}
-	// 		}
-	// 	});
-
-	// 	if (importStatements.length > 0) {
-	// 		// Create a new top cell with all import statements
-	// 		const newCell = new vscode.NotebookCellData(
-	// 			vscode.NotebookCellKind.Code,
-	// 			importStatements.join('\n') + '\n',
-	// 			'python'
-	// 		);
-	// 		nbEdits.push(
-	// 			vscode.NotebookEdit.insertCells(new vscode.NotebookRange(0, 0), [newCell])
-	// 		);
-	// 	}
-
-	// 	return nbEdits;
-	// }
 
 	private extractImportsAndCreateCellEdits(
 		notebookDocument: vscode.NotebookDocument
