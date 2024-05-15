@@ -9,7 +9,7 @@ interface ICatChatResult extends vscode.ChatResult {
     }
 }
 
-const LANGUAGE_MODEL_ID = 'copilot-gpt-3.5-turbo'; // Use faster model. Alternative is 'copilot-gpt-4', which is slower but more powerful
+const LANGUAGE_MODEL_FAMILY = 'copilot-gpt-3.5-turbo'; // Use faster model. Alternative is 'copilot-gpt-4', which is slower but more powerful
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -22,11 +22,12 @@ export function activate(context: vscode.ExtensionContext) {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             const messages = [
-                new vscode.LanguageModelChatUserMessage('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
-                new vscode.LanguageModelChatUserMessage(topic)
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, 'You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, topic)
             ];
-            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
-            for await (const fragment of chatResponse.stream) {
+            const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+            const chatResponse = await model.sendRequest(messages, {}, token);
+            for await (const fragment of chatResponse.text) {
                 stream.markdown(fragment);
             }
 
@@ -39,22 +40,24 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             const messages = [
-                new vscode.LanguageModelChatUserMessage('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
-                new vscode.LanguageModelChatUserMessage('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, 'You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, 'Give a small random python code samples (that have cat names for variables). ' + request.prompt)
             ];
-            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
-            for await (const fragment of chatResponse.stream) {
+            const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+            const chatResponse = await model.sendRequest(messages, {}, token);
+            for await (const fragment of chatResponse.text) {
                 stream.markdown(fragment);
             }
             return { metadata: { command: 'play' } };
         } else {
             const messages = [
-                new vscode.LanguageModelChatUserMessage(`You are a cat! Think carefully and step by step like a cat would.
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, `You are a cat! Think carefully and step by step like a cat would.
                     Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-                new vscode.LanguageModelChatUserMessage(request.prompt)
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, request.prompt)
             ];
-            const chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, token);
-            for await (const fragment of chatResponse.stream) {
+            const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+            const chatResponse = await model.sendRequest(messages, {}, token);
+            for await (const fragment of chatResponse.text) {
                 // Process the output from the language model
                 // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
                 const catFragment = fragment.replaceAll('def', 'meow');
@@ -80,28 +83,6 @@ export function activate(context: vscode.ExtensionContext) {
         }
     };
 
-    vscode.chat.registerChatVariableResolver('cat_context', 'Describes the state of mind and version of the cat', {
-        resolve: (name, context, token) => {
-            if (name == 'cat_context') {
-                const mood = Math.random() > 0.5 ? 'happy' : 'grumpy';
-                return [
-                    {
-                        level: vscode.ChatVariableLevel.Short,
-                        value: 'version 1.3 ' + mood
-                    },
-                    {
-                        level: vscode.ChatVariableLevel.Medium,
-                        value: 'I am a playful cat, version 1.3, and I am ' + mood
-                    },
-                    {
-                        level: vscode.ChatVariableLevel.Full,
-                        value: 'I am a playful cat, version 1.3, this version prefer to explain everything using mouse and tail metaphores. I am ' + mood
-                    }
-                ]
-            }
-        }
-    });
-
     context.subscriptions.push(
         cat,
         // Register the command handler for the /meow followup
@@ -109,14 +90,15 @@ export function activate(context: vscode.ExtensionContext) {
             // Replace all variables in active editor with cat names and words
             const text = textEditor.document.getText();
             const messages = [
-                new vscode.LanguageModelChatUserMessage(`You are a cat! Think carefully and step by step like a cat would.
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, `You are a cat! Think carefully and step by step like a cat would.
                 Your job is to replace all variable names in the following code with funny cat variable names. Be creative. IMPORTANT respond just with code. Do not use markdown!`),
-                new vscode.LanguageModelChatUserMessage(text)
+                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, text)
             ];
 
             let chatResponse: vscode.LanguageModelChatResponse | undefined;
             try {
-                chatResponse = await vscode.lm.sendChatRequest(LANGUAGE_MODEL_ID, messages, {}, new vscode.CancellationTokenSource().token);
+                const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+                chatResponse = await model.sendRequest(messages, {}, new vscode.CancellationTokenSource().token);
 
             } catch (err) {
                 // making the chat request might fail because
@@ -138,7 +120,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             // Stream the code into the editor as it is coming in from the Language Model
             try {
-                for await (const fragment of chatResponse.stream) {
+                for await (const fragment of chatResponse.text) {
                     await textEditor.edit(edit => {
                         const lastLine = textEditor.document.lineAt(textEditor.document.lineCount - 1);
                         const position = new vscode.Position(lastLine.lineNumber, lastLine.text.length);
