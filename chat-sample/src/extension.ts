@@ -9,7 +9,7 @@ interface ICatChatResult extends vscode.ChatResult {
     }
 }
 
-const LANGUAGE_MODEL_FAMILY = 'gpt-3.5-turbo'; // Use faster model. Alternative is 'copilot-gpt-4', which is slower but more powerful
+const MODEL_SELECTOR: vscode.LanguageModelChatSelector = { vendor: 'copilot', family: 'gpt-3.5-turbo' };
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -22,10 +22,10 @@ export function activate(context: vscode.ExtensionContext) {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             const messages = [
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, 'You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, topic)
+                vscode.LanguageModelChatMessage.User('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
+                vscode.LanguageModelChatMessage.User(topic)
             ];
-            const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+            const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
             const chatResponse = await model.sendRequest(messages, {}, token);
             for await (const fragment of chatResponse.text) {
                 stream.markdown(fragment);
@@ -40,10 +40,10 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             const messages = [
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, 'You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, 'Give a small random python code samples (that have cat names for variables). ' + request.prompt)
+                vscode.LanguageModelChatMessage.User('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
+                vscode.LanguageModelChatMessage.User('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
             ];
-            const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+            const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
             const chatResponse = await model.sendRequest(messages, {}, token);
             for await (const fragment of chatResponse.text) {
                 stream.markdown(fragment);
@@ -51,11 +51,11 @@ export function activate(context: vscode.ExtensionContext) {
             return { metadata: { command: 'play' } };
         } else {
             const messages = [
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, `You are a cat! Think carefully and step by step like a cat would.
+                vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
                     Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, request.prompt)
+                vscode.LanguageModelChatMessage.User(request.prompt)
             ];
-            const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+            const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
             const chatResponse = await model.sendRequest(messages, {}, token);
             for await (const fragment of chatResponse.text) {
                 // Process the output from the language model
@@ -97,7 +97,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             let chatResponse: vscode.LanguageModelChatResponse | undefined;
             try {
-                const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: LANGUAGE_MODEL_FAMILY });
+                const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: 'gpt-3.5-turbo' });
                 chatResponse = await model.sendRequest(messages, {}, new vscode.CancellationTokenSource().token);
 
             } catch (err) {
