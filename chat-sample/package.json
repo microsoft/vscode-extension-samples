@@ -19,9 +19,7 @@
     ],
     "activationEvents": [ ],
     "enabledApiProposals": [
-        "chatParticipant",
-        "chatVariableResolver",
-        "languageModels"
+        "chatVariableResolver"
     ],
     "contributes": {
         "chatParticipants": [
