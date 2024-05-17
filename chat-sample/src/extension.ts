@@ -90,9 +90,9 @@ export function activate(context: vscode.ExtensionContext) {
             // Replace all variables in active editor with cat names and words
             const text = textEditor.document.getText();
             const messages = [
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, `You are a cat! Think carefully and step by step like a cat would.
+                vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
                 Your job is to replace all variable names in the following code with funny cat variable names. Be creative. IMPORTANT respond just with code. Do not use markdown!`),
-                new vscode.LanguageModelChatMessage(vscode.LanguageModelChatMessageRole.User, text)
+                vscode.LanguageModelChatMessage.User(text)
             ];
 
             let chatResponse: vscode.LanguageModelChatResponse | undefined;
