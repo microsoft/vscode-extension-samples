@@ -59,7 +59,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
-        "@vscode/prompt-tsx": "^0.1.9-alpha",
+        "@vscode/prompt-tsx": "^0.1.10-alpha",
         "eslint": "^7.22.0",
         "tslint": "^6.1.3",
         "typescript": "^4.0.3"
