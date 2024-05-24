@@ -6,14 +6,14 @@
 import { ExtensionContext, Uri, window, workspace, commands } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, RequestType } from 'vscode-languageclient/node';
 import { Wasm, ProcessOptions } from '@vscode/wasm-wasi';
-import { createStdioOptions, startServer } from '@vscode/wasm-wasi-lsp';
+import { createStdioOptions, createUriConverters, startServer } from '@vscode/wasm-wasi-lsp';
 
 let client: LanguageClient;
-const channel = window.createOutputChannel('LSP WASM Server');
 
 export async function activate(context: ExtensionContext) {
 	const wasm: Wasm = await Wasm.load();
 
+	const channel = window.createOutputChannel('LSP WASM Server');
 	const serverOptions: ServerOptions = async () => {
 		const options: ProcessOptions = {
 			stdio: createStdioOptions(),
@@ -21,7 +21,7 @@ export async function activate(context: ExtensionContext) {
 				{ kind: 'workspaceFolder' },
 			]
 		};
-		const filename = Uri.joinPath(context.extensionUri, 'server', 'target', 'wasm32-wasi-preview1-threads', 'release', 'server.wasm');
+		const filename = Uri.joinPath(context.extensionUri, 'server', 'target', 'wasm32-wasip1-threads', 'release', 'server.wasm');
 		const bits = await workspace.fs.readFile(filename);
 		const module = await WebAssembly.compile(bits);
 		const process = await wasm.createProcess('lsp-server', module, { initial: 160, maximum: 160, shared: true }, options);
@@ -35,9 +35,9 @@ export async function activate(context: ExtensionContext) {
 	};
 
 	const clientOptions: LanguageClientOptions = {
-		documentSelector: [ { language: 'bat' } ],
+		documentSelector: [ { language: 'plaintext' } ],
 		outputChannel: channel,
-		diagnosticCollectionName: 'markers',
+		uriConverters: createUriConverters(),
 	};
 
 	client = new LanguageClient('lspClient', 'LSP Client', serverOptions, clientOptions);
@@ -48,13 +48,13 @@ export async function activate(context: ExtensionContext) {
 	}
 
 	type CountFileParams = { folder: string };
-	const CountFilesRequest = new RequestType<CountFileParams, number, void>('wasm-language-server/countFilesInFolder');
+	const CountFilesRequest = new RequestType<CountFileParams, number, void>('wasm-language-server/countFiles');
 	context.subscriptions.push(commands.registerCommand('vscode-samples.wasm-language-server.countFiles', async () => {
 		// We assume we do have a folder.
 		const folder = workspace.workspaceFolders![0].uri;
 		// We need to convert the folder URI to a URI that maps to the mounted WASI file system. This is something
 		// @vscode/wasm-wasi-lsp does for us.
-		const result = await client.sendRequest(CountFilesRequest, { folder: client.code2ProtocolConverter.asUri(folder!) });
+		const result = await client.sendRequest(CountFilesRequest, { folder: client.code2ProtocolConverter.asUri(folder) });
 		window.showInformationMessage(`The workspace contains ${result} files.`);
 	}));
 }

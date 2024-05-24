@@ -15,7 +15,8 @@
         "github.copilot-chat"
     ],
     "categories": [
-        "Other"
+        "AI",
+        "Chat"
     ],
     "activationEvents": [],
     "enabledApiProposals": [

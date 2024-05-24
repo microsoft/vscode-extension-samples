@@ -2,17 +2,26 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
+use std::fs;
 use std::error::Error;
 
+use serde::{ Deserialize, Serialize };
+use walkdir::WalkDir;
+
 use lsp_types::{
-    request::GotoDefinition, GotoDefinitionResponse, InitializeParams,
-    ServerCapabilities, Location, OneOf
+    GotoDefinitionResponse, InitializeParams, Location, OneOf, ServerCapabilities, Url,
+    request::{ GotoDefinition, Request }
 };
 use lsp_server::{ Connection, ExtractError, Message, RequestId, Response };
 
 fn main() -> Result<(), Box<dyn Error + Sync + Send>> {
-    // Note that  we must have our logging only write out to stderr.
+    // Note that  we must have our logging only write out to stderr since the communication with the client
+    // is done via stdin/stdout. If we write to stdout, we will corrupt the communication.
     eprintln!("Starting WASM based LSP server");
+
+    // This is a workaround for a deadlock issue in WASI libc.
+    // See https://github.com/WebAssembly/wasi-libc/pull/491
+    fs::metadata("/workspace").unwrap();
 
     // Create the transport. Includes the stdio (stdin and stdout) versions but this could
     // also be implemented to use sockets or HTTP.
@@ -33,6 +42,19 @@ fn main() -> Result<(), Box<dyn Error + Sync + Send>> {
     Ok(())
 }
 
+#[derive(Debug, Eq, PartialEq, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CountFilesParams {
+    pub folder: Url,
+}
+
+pub enum CountFilesRequest {}
+impl Request for CountFilesRequest {
+    type Params = CountFilesParams;
+    type Result = u32;
+    const METHOD: &'static str = "wasm-language-server/countFiles";
+}
+
 fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Box<dyn Error + Sync + Send>> {
     let _params: InitializeParams = serde_json::from_value(params).unwrap();
     for msg in &connection.receiver {
@@ -41,10 +63,14 @@ fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Bo
                 if connection.handle_shutdown(&req)? {
                     return Ok(());
                 }
-                match cast::<GotoDefinition>(req) {
+                match cast::<GotoDefinition>(req.clone()) {
                     Ok((id, params)) => {
-                        eprintln!("Received gotoDefinition request #{id}");
-                        let loc = Location::new(params.text_document_position_params.text_document.uri, lsp_types::Range::new(lsp_types::Position::new(0, 0), lsp_types::Position::new(0, 0)));
+                        let uri = params.text_document_position_params.text_document.uri;
+                        eprintln!("Received gotoDefinition request #{} {}", id, uri.to_string());
+                        let loc = Location::new(
+                            uri,
+                            lsp_types::Range::new(lsp_types::Position::new(0, 0), lsp_types::Position::new(0, 0))
+                        );
                         let mut vec = Vec::new();
                         vec.push(loc);
                         let result = Some(GotoDefinitionResponse::Array(vec));
@@ -56,12 +82,22 @@ fn main_loop(connection: Connection, params: serde_json::Value) -> Result<(), Bo
                     Err(err @ ExtractError::JsonError { .. }) => panic!("{err:?}"),
                     Err(ExtractError::MethodMismatch(req)) => req,
                 };
+                match cast::<CountFilesRequest>(req.clone()) {
+                    Ok((id, params)) => {
+                        eprintln!("Received countFiles request #{} {}", id, params.folder);
+                		let result = count_files_in_directory(&params.folder.path());
+                		let json = serde_json::to_value(&result).unwrap();
+        		        let resp = Response { id, result: Some(json), error: None };
+        		        connection.sender.send(Message::Response(resp))?;
+                        continue;
+                    }
+                    Err(err @ ExtractError::JsonError { .. }) => panic!("{err:?}"),
+                    Err(ExtractError::MethodMismatch(req)) => req,
+                };
             }
-            Message::Response(resp) => {
-                eprintln!("got response: {resp:?}");
+            Message::Response(_resp) => {
             }
-            Message::Notification(not) => {
-                eprintln!("Received notification: {not:?}");
+            Message::Notification(_not) => {
             }
         }
     }
@@ -74,4 +110,12 @@ where
     R::Params: serde::de::DeserializeOwned,
 {
     req.extract(R::METHOD)
+}
+
+fn count_files_in_directory(path: &str) -> usize {
+    WalkDir::new(path)
+        .into_iter()
+        .filter_map(Result::ok)
+        .filter(|entry| entry.file_type().is_file())
+        .count()
 }
