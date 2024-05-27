@@ -11,9 +11,6 @@
     "engines": {
         "vscode": "^1.90.0"
     },
-    "extensionDependencies": [
-        "github.copilot-chat"
-    ],
     "categories": [
         "AI",
         "Chat"
