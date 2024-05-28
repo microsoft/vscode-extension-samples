@@ -43,16 +43,15 @@ export function activate(context: vscode.ExtensionContext) {
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
-			const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
+            const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
             if (model) {
-    
-			// Here's an example of how to use the prompt-tsx library to build a prompt
-			const { messages } = await renderPrompt(
-				PlayPrompt,
-				{ userQuery: request.prompt },
-				{ modelMaxPromptTokens: model.maxInputTokens },
-				new Cl100KBaseTokenizer());
-            const chatResponse = await model.sendRequest(messages, {}, token);
+                // Here's an example of how to use the prompt-tsx library to build a prompt
+                const { messages } = await renderPrompt(
+                    PlayPrompt,
+                    { userQuery: request.prompt },
+                    { modelMaxPromptTokens: model.maxInputTokens },
+                    new Cl100KBaseTokenizer());
+                const chatResponse = await model.sendRequest(messages, {}, token);
                 for await (const fragment of chatResponse.text) {
                     stream.markdown(fragment);
                 }
