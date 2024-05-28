@@ -28,9 +28,11 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.LanguageModelChatMessage.User(topic)
             ];
             const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-            const chatResponse = await model.sendRequest(messages, {}, token);
-            for await (const fragment of chatResponse.text) {
-                stream.markdown(fragment);
+            if (model) {
+                const chatResponse = await model.sendRequest(messages, {}, token);
+                for await (const fragment of chatResponse.text) {
+                    stream.markdown(fragment);
+                }
             }
 
             stream.button({
@@ -42,7 +44,8 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
 			const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-
+            if (model) {
+    
 			// Here's an example of how to use the prompt-tsx library to build a prompt
 			const { messages } = await renderPrompt(
 				PlayPrompt,
@@ -50,9 +53,11 @@ export function activate(context: vscode.ExtensionContext) {
 				{ modelMaxPromptTokens: model.maxInputTokens },
 				new Cl100KBaseTokenizer());
             const chatResponse = await model.sendRequest(messages, {}, token);
-            for await (const fragment of chatResponse.text) {
-                stream.markdown(fragment);
+                for await (const fragment of chatResponse.text) {
+                    stream.markdown(fragment);
+                }
             }
+
             return { metadata: { command: 'play' } };
         } else {
             const messages = [
@@ -61,12 +66,14 @@ export function activate(context: vscode.ExtensionContext) {
                 vscode.LanguageModelChatMessage.User(request.prompt)
             ];
             const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-            const chatResponse = await model.sendRequest(messages, {}, token);
-            for await (const fragment of chatResponse.text) {
-                // Process the output from the language model
-                // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
-                const catFragment = fragment.replaceAll('def', 'meow');
-                stream.markdown(catFragment);
+            if (model) {
+                const chatResponse = await model.sendRequest(messages, {}, token);
+                for await (const fragment of chatResponse.text) {
+                    // Process the output from the language model
+                    // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
+                    const catFragment = fragment.replaceAll('def', 'meow');
+                    stream.markdown(catFragment);
+                }
             }
 
             return { metadata: { command: '' } };
@@ -103,6 +110,11 @@ export function activate(context: vscode.ExtensionContext) {
             let chatResponse: vscode.LanguageModelChatResponse | undefined;
             try {
                 const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: 'gpt-3.5-turbo' });
+                if (!model) {
+                    console.log('Model not found. Please make sure the GitHub Copilot Chat extension is installed and enabled.')
+                    return;
+                }
+
                 chatResponse = await model.sendRequest(messages, {}, new vscode.CancellationTokenSource().token);
 
             } catch (err) {
@@ -113,7 +125,7 @@ export function activate(context: vscode.ExtensionContext) {
                 if (err instanceof vscode.LanguageModelError) {
                     console.log(err.message, err.code, err.cause)
                 }
-                return
+                return;
             }
 
             // Clear the editor content before inserting new content
