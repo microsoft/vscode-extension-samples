@@ -1,0 +1,22 @@
+// wit/calculator.wit
+package vscode:example;
+
+interface types {
+	record operands {
+		left: u32,
+		right: u32
+	}
+
+	variant operation {
+		add(operands),
+		sub(operands),
+		mul(operands),
+		div(operands)
+	}
+}
+world calculator {
+	use types.{ operation };
+	import log: func(msg: string);
+
+	export calc: func(o: operation) -> u32;
+}
