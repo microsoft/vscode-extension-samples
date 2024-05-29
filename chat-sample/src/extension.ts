@@ -1,4 +1,6 @@
+import { renderPrompt, Cl100KBaseTokenizer } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
+import { PlayPrompt } from './play';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
 const CAT_PARTICIPANT_ID = 'chat-sample.cat';
@@ -41,12 +43,14 @@ export function activate(context: vscode.ExtensionContext) {
             return { metadata: { command: 'teach' } };
         } else if (request.command == 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
-            const messages = [
-                vscode.LanguageModelChatMessage.User('You are a cat! Reply in the voice of a cat, using cat analogies when appropriate. Be concise to prepare for cat play time.'),
-                vscode.LanguageModelChatMessage.User('Give a small random python code samples (that have cat names for variables). ' + request.prompt)
-            ];
             const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
             if (model) {
+                // Here's an example of how to use the prompt-tsx library to build a prompt
+                const { messages } = await renderPrompt(
+                    PlayPrompt,
+                    { userQuery: request.prompt },
+                    { modelMaxPromptTokens: model.maxInputTokens },
+                    new Cl100KBaseTokenizer());
                 const chatResponse = await model.sendRequest(messages, {}, token);
                 for await (const fragment of chatResponse.text) {
                     stream.markdown(fragment);

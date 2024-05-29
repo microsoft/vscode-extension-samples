@@ -15,15 +15,15 @@
         "AI",
         "Chat"
     ],
-    "activationEvents": [ ],
+    "activationEvents": [],
     "enabledApiProposals": [
         "chatVariableResolver"
     ],
     "contributes": {
         "chatParticipants": [
             {
-				"id": "chat-sample.cat",
-				"fullName": "Cat",
+                "id": "chat-sample.cat",
+                "fullName": "Cat",
                 "name": "cat",
                 "description": "Meow! What can I teach you?",
                 "isSticky": true,
@@ -50,10 +50,13 @@
     "scripts": {
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
-        "watch": "tsc -watch -p ./"
+        "watch": "tsc -watch -p ./",
+        "setupTiktoken": "cp node_modules/@vscode/prompt-tsx/dist/base/tokenizer/cl100k_base.tiktoken out/",
+        "postinstall": "npm run setupTiktoken"
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
+        "@vscode/prompt-tsx": "^0.1.10-alpha",
         "eslint": "^7.22.0",
         "tslint": "^6.1.3",
         "typescript": "^4.0.3"
