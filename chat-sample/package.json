@@ -51,13 +51,16 @@
         "vscode:prepublish": "npm run compile",
         "compile": "tsc -p ./",
         "watch": "tsc -watch -p ./",
-        "setupTiktoken": "cp node_modules/@vscode/prompt-tsx/dist/base/tokenizer/cl100k_base.tiktoken out/",
-        "postinstall": "npm run setupTiktoken"
+        "postinstall": "npm run setupTiktoken",
+        "setupTiktoken": "run-script-os",
+        "setupTiktoken:linux:darwin": "cp node_modules/@vscode/prompt-tsx/dist/base/tokenizer/cl100k_base.tiktoken out/",
+        "setupTiktoken:windows": "copy node_modules\\@vscode\\prompt-tsx\\dist\\base\\tokenizer\\cl100k_base.tiktoken out\\"
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
         "@vscode/prompt-tsx": "^0.1.10-alpha",
         "eslint": "^7.22.0",
+        "run-script-os": "^1.1.6",
         "tslint": "^6.1.3",
         "typescript": "^4.0.3"
     }
