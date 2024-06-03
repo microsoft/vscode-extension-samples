@@ -1,0 +1,8 @@
+.vscode
+node_modules
+src/**
+package-lock.json
+tsconfig.json
+esbuild.js
+.eslintrc.js
+**/*.map
