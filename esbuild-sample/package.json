@@ -1,0 +1,50 @@
+{
+	"name": "esbuild-sample",
+	"displayName": "esbuild-sample",
+	"description": "",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./dist/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "esbuild-sample.hello-esbuild",
+				"title": "Hello esbuild"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run package",
+		"compile": "npm run check-types && npm run lint && node esbuild.js",
+		"watch": "npm-run-all -p watch:*",
+		"watch:esbuild": "node esbuild.js --watch",
+		"watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+		"package": "npm run check-types && npm run lint && node esbuild.js --production",
+		"compile-tests": "tsc -p . --outDir out",
+		"check-types": "tsc --noEmit",
+		"lint": "eslint \"src/**/*.ts\""
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.73.0",
+		"@types/mocha": "^10.0.6",
+		"@types/node": "18.x",
+		"@typescript-eslint/eslint-plugin": "^7.7.1",
+		"@typescript-eslint/parser": "^7.7.1",
+		"eslint": "^8.57.0",
+		"esbuild": "^0.20.2",
+		"npm-run-all": "^4.1.5",
+		"typescript": "^5.4.5"
+	}
+}

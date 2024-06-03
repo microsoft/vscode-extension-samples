@@ -164,6 +164,15 @@ const samples = [
   {
     description: 'webpack-sample',
     path: 'webpack-sample',
+    excludeFromReadme: true
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'esbuild-sample',
+    path: 'esbuild-sample',
+    excludeFromReadme: true
     guide: null,
     apis: [],
     contributions: []
@@ -282,7 +291,6 @@ const samples = [
   { description: 'notebook-renderer-react-sample', excludeFromReadme: true, path: 'notebook-renderer-react-sample', guide: null, apis: [], contributions: [] },
   { description: 'proposed-api-sample', excludeFromReadme: true, path: 'proposed-api-sample', guide: null, apis: [], contributions: [] },
   { description: 'virtual-document-sample', excludeFromReadme: true, path: 'virtual-document-sample', guide: null, apis: [], contributions: [] },
-  { description: 'webpack-sample', excludeFromReadme: true, path: 'webpack-sample', guide: null, apis: [], contributions: [] },
   { description: 'welcome-view-content-sample', excludeFromReadme: true, path: 'welcome-view-content-sample', guide: null, apis: [], contributions: [] },
   { description: 'document-paste', excludeFromReadme: true, path: 'document-paste', guide: null, apis: [], contributions: [] },
   { description: 'drop-on-document', excludeFromReadme: true, path: 'drop-on-document', guide: null, apis: [], contributions: [] },
