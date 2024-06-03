@@ -134,6 +134,8 @@ export function activate(context: vscode.ExtensionContext) {
             } catch (err) {
                 if (err instanceof vscode.LanguageModelError) {
                     console.log(err.message, err.code, err.cause)
+                } else {
+                    throw err;
                 }
                 return;
             }
@@ -176,6 +178,9 @@ function handleError(err: any, stream: vscode.ChatResponseStream): void {
         if (err.cause instanceof Error && err.cause.message.includes('off_topic')) {
             stream.markdown(vscode.l10n.t('I\'m sorry, I can only explain computer science concepts.'));
         }
+    } else {
+        // re-throw other errors so they show up in the UI
+        throw err;
     }
 }
 
