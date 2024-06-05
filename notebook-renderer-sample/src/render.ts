@@ -17,7 +17,7 @@ interface GitHubIssuesValue {
 }
 
 // This function is called to render your contents.
-export function render({ container, mime, value }: IRenderInfo) {
+export function render({ container, value }: IRenderInfo) {
 	// Format the JSON and insert it as <pre><code>{ ... }</code></pre>
 	// Replace this with your custom code!
 	const pre = document.createElement('pre');

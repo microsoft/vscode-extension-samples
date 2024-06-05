@@ -37,13 +37,13 @@
   "devDependencies": {
     "@types/vscode-notebook-renderer": "^1.57.8",
     "@types/webpack-env": "^1.17.0",
-    "@typescript-eslint/eslint-plugin": "^5.42.0",
-    "@typescript-eslint/parser": "^5.42.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
     "css-loader": "^4.2.0",
     "eslint": "^8.26.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^9.2.2",
-    "typescript": "^5.0.2",
+    "typescript": "^5.4.2",
     "vscode-notebook-error-overlay": "^1.0.1",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"

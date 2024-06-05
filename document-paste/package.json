@@ -14,7 +14,7 @@
 		"documentPaste"
 	],
 	"engines": {
-		"vscode": "^1.77.0"
+		"vscode": "^1.88.0"
 	},
 	"categories": [
 		"Other"
@@ -29,16 +29,15 @@
 		"compile": "tsc -p ./",
 		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./",
-		"download-api": "vscode-dts main && vscode-dts dev",
+		"download-api": "dts main && dts dev",
 		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
-		"@types/node": "^16.11.7",
-		"@types/vscode": "^1.77.0",
-		"@typescript-eslint/eslint-plugin": "^5.42.0",
-		"@typescript-eslint/parser": "^5.42.0",
+		"@types/node": "^18",
+		"@typescript-eslint/eslint-plugin": "^6.7.0",
+		"@typescript-eslint/parser": "^6.7.0",
 		"eslint": "^8.26.0",
-		"typescript": "^5.0.2",
-		"vscode-dts": "^0.3.3"
+		"typescript": "^5.4.2",
+		"@vscode/dts": "^0.4.0"
 	}
 }

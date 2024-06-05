@@ -1,0 +1,67 @@
+{
+    "name": "chat-sample",
+    "publisher": "vscode-samples",
+    "displayName": "Copilot Chat Sample",
+    "description": "Sample chat extension, a trusty cat tutor that will can teach you computer science topics.",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Microsoft/vscode-extension-samples"
+    },
+    "version": "0.1.0",
+    "engines": {
+        "vscode": "^1.90.0"
+    },
+    "categories": [
+        "AI",
+        "Chat"
+    ],
+    "activationEvents": [],
+    "enabledApiProposals": [
+        "chatVariableResolver"
+    ],
+    "contributes": {
+        "chatParticipants": [
+            {
+                "id": "chat-sample.cat",
+                "fullName": "Cat",
+                "name": "cat",
+                "description": "Meow! What can I teach you?",
+                "isSticky": true,
+                "commands": [
+                    {
+                        "name": "teach",
+                        "description": "Pick at random a computer science concept then explain it in purfect way of a cat"
+                    },
+                    {
+                        "name": "play",
+                        "description": "Do whatever you want, you are a cat after all"
+                    }
+                ]
+            }
+        ],
+        "commands": [
+            {
+                "command": "cat.namesInEditor",
+                "title": "Use Cat Names in Editor"
+            }
+        ]
+    },
+    "main": "./out/extension.js",
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "npm run setupTiktoken",
+        "setupTiktoken": "run-script-os",
+        "setupTiktoken:linux:darwin": "cp node_modules/@vscode/prompt-tsx/dist/base/tokenizer/cl100k_base.tiktoken out/",
+        "setupTiktoken:windows": "copy node_modules\\@vscode\\prompt-tsx\\dist\\base\\tokenizer\\cl100k_base.tiktoken out\\"
+    },
+    "devDependencies": {
+        "@types/node": "^20.5.9",
+        "@vscode/prompt-tsx": "^0.1.10-alpha",
+        "eslint": "^7.22.0",
+        "run-script-os": "^1.1.6",
+        "tslint": "^6.1.3",
+        "typescript": "^4.0.3"
+    }
+}

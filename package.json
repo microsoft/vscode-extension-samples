@@ -1,5 +1,6 @@
 {
 	"name": "vsc-extension-samples",
+	"license": "MIT",
 	"publisher": "Microsoft",
 	"version": "0.0.1",
 	"scripts": {
