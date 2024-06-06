@@ -1,6 +1,4 @@
-import { renderPrompt, Cl100KBaseTokenizer } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
-import { PlayPrompt } from './play';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
 const CAT_PARTICIPANT_ID = 'chat-sample.cat';
@@ -16,67 +14,200 @@ const MODEL_SELECTOR: vscode.LanguageModelChatSelector = { vendor: 'copilot', fa
 export function activate(context: vscode.ExtensionContext) {
 
     // Define a Cat chat handler. 
-    const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult> => {
-        // To talk to an LLM in your subcommand handler implementation, your
-        // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
-        // The GitHub Copilot Chat extension implements this provider.
-        if (request.command == 'teach') {
-            stream.progress('Picking the right topic to teach...');
-            const topic = getTopic(context.history);
-            const messages = [
-                vscode.LanguageModelChatMessage.User('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
-                vscode.LanguageModelChatMessage.User(topic)
-            ];
-            const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-            if (model) {
-                const chatResponse = await model.sendRequest(messages, {}, token);
-                for await (const fragment of chatResponse.text) {
-                    stream.markdown(fragment);
-                }
-            }
+    const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
+        const models = await vscode.lm.selectChatModels({
+            vendor: 'copilot',
+        });
 
-            stream.button({
-                command: CAT_NAMES_COMMAND_ID,
-                title: vscode.l10n.t('Use Cat Names in Editor')
-            });
-
-            return { metadata: { command: 'teach' } };
-        } else if (request.command == 'play') {
-            stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
-            const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-            if (model) {
-                // Here's an example of how to use the prompt-tsx library to build a prompt
-                const { messages } = await renderPrompt(
-                    PlayPrompt,
-                    { userQuery: request.prompt },
-                    { modelMaxPromptTokens: model.maxInputTokens },
-                    new Cl100KBaseTokenizer());
-                const chatResponse = await model.sendRequest(messages, {}, token);
-                for await (const fragment of chatResponse.text) {
-                    stream.markdown(fragment);
-                }
-            }
-
-            return { metadata: { command: 'play' } };
-        } else {
-            const messages = [
-                vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
-                    Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-                vscode.LanguageModelChatMessage.User(request.prompt)
-            ];
-            const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-            if (model) {
-                const chatResponse = await model.sendRequest(messages, {}, token);
-                for await (const fragment of chatResponse.text) {
-                    // Process the output from the language model
-                    // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
-                    const catFragment = fragment.replaceAll('def', 'meow');
-                    stream.markdown(catFragment);
-                }
-            }
-
-            return { metadata: { command: '' } };
+        if (!models || !models.length) {
+            console.log('NO MODELS')
+            return {};
         }
+
+        // for (const model of models) {
+        //     stream.markdown(`- ${model.name} (${model.family} - ${model.vendor})\n`)
+        // }
+
+        const chat = models[Math.floor(Math.random() * models.length)];
+
+
+        stream.progress(`Using ${chat.name} (${context.languageModelAccessInformation.canSendRequest(chat)})...`);
+
+
+        abstract class FunctionTool {
+
+            static All = new Map<string, {
+                metadata: vscode.LanguageModelChatFunction,
+                run: (...args: any[]) => Promise<string>
+            }>();
+
+            static register(metadata: vscode.LanguageModelChatFunction, run: (...args: any[]) => Promise<string>) {
+                FunctionTool.All.set(metadata.name, { metadata, run: run });
+            }
+        }
+
+        // get the size of an editor
+        FunctionTool.register({
+            name: "get_length_of_editor",
+            description: "Get the length of an editor",
+            parametersSchema: {
+                "type": "object",
+                "properties": {
+                    "nth": {
+                        "type": "number",
+                        "description": "The index of the editor, starting at 0",
+                    },
+                },
+                "required": ["nth"],
+            },
+        }, async (arg: { nth: number }) => {
+            if (!(arg && typeof arg === 'object' && typeof arg.nth === 'number')) {
+                return 'Error: Invalid arguments, expected { nth: number}';
+            }
+            const editor = vscode.window.visibleTextEditors[arg.nth];
+            if (!editor) {
+                return `Warning: No editor found at index ${arg.nth}, please try a different index between 0 and ${vscode.window.visibleTextEditors.length - 1}`;
+            }
+            return editor.document.getText().length.toString();
+        })
+
+        FunctionTool.register({
+            name: "show_user_message",
+            description: "Show a message to the user",
+            parametersSchema: {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "description": "The message to show",
+                    },
+                },
+                "required": ["message"],
+            },
+        }, async (arg: { message: string }) => {
+            if (!(arg && typeof arg === 'object' && typeof arg.message === 'string')) {
+                return 'Error: Invalid arguments, expected { message: string}';
+            }
+            vscode.window.showInformationMessage(arg.message);
+            return 'done';
+        });
+
+        FunctionTool.register({
+            name: "current_temperature",
+            description: "Get the current temperature for a location",
+            parametersSchema: {
+                "type": "object",
+                "properties": {
+                    "location": {
+                        "type": "string",
+                        "description": "The location to check the tepmerature for",
+                    },
+                },
+                "required": ["location"],
+            },
+        }, async (arg: { location: string }) => {
+            if (!(arg && typeof arg === 'object' && typeof arg.location === 'string')) {
+                return 'Error: Invalid arguments, expected { location: string}';
+            }
+            return 'The temperature in ' + arg.location + ' is 25°C';
+        });
+
+        FunctionTool.register({
+            name: "start_debugging",
+            description: "Start debugging the given file",
+            parametersSchema: {
+                "type": "object",
+                "properties": {
+                    "filename": {
+                        "type": "string",
+                        "description": "The file to debug",
+                    },
+                },
+                "required": ["filename"],
+            },
+        }, async (arg: { filename: string }) => {
+            if (!(arg && typeof arg === 'object' && typeof arg.filename === 'string')) {
+                return 'Error: Invalid arguments, expected { filename: string}';
+            }
+            vscode.debug.startDebugging(undefined, {
+                name: 'debug',
+                type: 'node',
+                request: 'launch',
+                program: vscode.Uri.joinPath(vscode.workspace.workspaceFolders![0].uri, arg.filename).fsPath,
+            });
+            return 'done';
+        });
+
+        FunctionTool.register({
+            name: "create_terminal",
+            description: "Create a terminal with the given name",
+            parametersSchema: {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "The terminal name",
+                    },
+                },
+                "required": ["name"],
+            },
+        }, async (arg: { name: string }) => {
+            if (!(arg && typeof arg === 'object' && typeof arg.name === 'string')) {
+                return 'Error: Invalid arguments, expected { name: string}';
+            }
+            vscode.window.createTerminal(arg.name).show();
+            return 'done';
+        });
+
+
+        const options: vscode.LanguageModelChatRequestOptions = {
+            tools: Array.from(FunctionTool.All.values()).map(tool => tool.metadata),
+            justification: 'Just because!',
+        }
+
+        const messages = [vscode.LanguageModelChatMessage.User(request.prompt)];
+        const runWithFunctions = async () => {
+
+            let didReceiveFunctionUse = false;
+
+            const response = await chat.sendRequest(messages, options, token);
+
+            for await (const part of response.stream) {
+
+                if (part instanceof vscode.LanguageModelChatResponseTextPart) {
+                    stream.markdown(part.value)
+
+                } else if (part instanceof vscode.LanguageModelChatResponseFunctionUsePart) {
+                    const tool = FunctionTool.All.get(part.name);
+                    if (!tool) {
+                        // BAD tool choice?
+                        continue;
+                    }
+
+                    stream.progress(`FUNCTION_CALL: ${tool.metadata.name} with \`${part.parameters}\``)
+
+                    const result = await tool.run(JSON.parse(part.parameters));
+
+                    // NOTE that the result of calling a function is a special content type of a USER-message
+                    let message = vscode.LanguageModelChatMessage.User('');
+                    message.content2 = new vscode.LanguageModelChatMessageFunctionResultPart(tool.metadata.name, result)
+                    messages.push(message)
+
+                    // IMPORTANT 
+                    // IMPORTANT working around CAPI always wanting to end with a `User`-message
+                    // IMPORTANT 
+                    messages.push(vscode.LanguageModelChatMessage.User('Above is the result of calling the function ${tool.metadata.name}'))
+                    didReceiveFunctionUse = true;
+                }
+            }
+
+            if (didReceiveFunctionUse) {
+                // RE-enter
+                return runWithFunctions();
+            }
+        };
+
+        await runWithFunctions()
     };
 
     // Chat participants appear as top-level options in the chat input

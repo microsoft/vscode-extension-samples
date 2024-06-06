@@ -17,7 +17,8 @@
     ],
     "activationEvents": [],
     "enabledApiProposals": [
-        "chatVariableResolver"
+        "chatVariableResolver",
+        "lmTools"
     ],
     "contributes": {
         "chatParticipants": [
@@ -58,6 +59,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
+        "@types/vscode": "^1.90.0",
         "@vscode/prompt-tsx": "^0.1.10-alpha",
         "eslint": "^7.22.0",
         "run-script-os": "^1.1.6",
