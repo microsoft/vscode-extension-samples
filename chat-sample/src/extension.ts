@@ -1,4 +1,4 @@
-import { renderPrompt, Cl100KBaseTokenizer } from '@vscode/prompt-tsx';
+import { renderPrompt } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
 import { PlayPrompt } from './play';
 
@@ -56,7 +56,7 @@ export function activate(context: vscode.ExtensionContext) {
                         PlayPrompt,
                         { userQuery: request.prompt },
                         { modelMaxPromptTokens: model.maxInputTokens },
-                        new Cl100KBaseTokenizer());
+                        model);
                     
                     const chatResponse = await model.sendRequest(messages, {}, token);
                     for await (const fragment of chatResponse.text) {
