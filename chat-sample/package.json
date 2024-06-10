@@ -17,7 +17,8 @@
     ],
     "activationEvents": [],
     "enabledApiProposals": [
-        "chatVariableResolver"
+        "chatVariableResolver",
+        "lmTools"
     ],
     "contributes": {
         "chatParticipants": [

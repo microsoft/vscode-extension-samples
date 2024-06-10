@@ -14,84 +14,55 @@ interface ICatChatResult extends vscode.ChatResult {
 const MODEL_SELECTOR: vscode.LanguageModelChatSelector = { vendor: 'copilot', family: 'gpt-3.5-turbo' };
 
 export function activate(context: vscode.ExtensionContext) {
-
+    const options: vscode.LanguageModelChatRequestOptions = {
+		tools: Array.from(FunctionTool.All.values()).map(tool => tool.metadata),
+		justification: 'Voice assistant needs access to functions to run commands',
+	};
     // Define a Cat chat handler. 
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult> => {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
-        if (request.command == 'teach') {
-            stream.progress('Picking the right topic to teach...');
-            const topic = getTopic(context.history);
-            try {
-                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-                if (model) {
-                    const messages = [
-                        vscode.LanguageModelChatMessage.User('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
-                        vscode.LanguageModelChatMessage.User(topic)
-                    ];
+        try {
+			const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
+			
+			if (model) {
+				const messages = [
+					vscode.LanguageModelChatMessage.User(request.prompt)
+				];
+				const chatResponse = await model.sendRequest(messages, options, token)
+				
+				for await (const part of chatResponse.stream) {
+					// Process the output from the language model
+					if (part instanceof vscode.LanguageModelChatResponseTextPart) {
+						stream.markdown(part.value)
+					} else if (part instanceof vscode.LanguageModelChatResponseFunctionUsePart) {
+						const tool = FunctionTool.All.get(part.name);
+						if (!tool) {
+							// BAD tool choice?
+							continue;
+						}
 
-                    const chatResponse = await model.sendRequest(messages, {}, token);
-                    for await (const fragment of chatResponse.text) {
-                        stream.markdown(fragment);
-                    }
-                }
-            } catch(err) {
-                handleError(err, stream);
-            }
+						stream.progress(`FUNCTION_CALL: ${tool.metadata.name} with \`${part.parameters}\``)
 
-            stream.button({
-                command: CAT_NAMES_COMMAND_ID,
-                title: vscode.l10n.t('Use Cat Names in Editor')
-            });
+						const result = await tool.run(JSON.parse(part.parameters));
 
-            return { metadata: { command: 'teach' } };
-        } else if (request.command == 'play') {
-            stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
-            try {
-                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-                if (model) {
-                    // Here's an example of how to use the prompt-tsx library to build a prompt
-                    const { messages } = await renderPrompt(
-                        PlayPrompt,
-                        { userQuery: request.prompt },
-                        { modelMaxPromptTokens: model.maxInputTokens },
-                        model);
-                    
-                    const chatResponse = await model.sendRequest(messages, {}, token);
-                    for await (const fragment of chatResponse.text) {
-                        stream.markdown(fragment);
-                    }
-                }
-            } catch(err) {
-                handleError(err, stream);
-            }
+						// NOTE that the result of calling a function is a special content type of a USER-message
+						let message = vscode.LanguageModelChatMessage.User('');
+						message.content2 = new vscode.LanguageModelChatMessageFunctionResultPart(tool.metadata.name, result)
+						messages.push(message)
 
-            return { metadata: { command: 'play' } };
-        } else {
-            try {
-                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-                if (model) {
-                    const messages = [
-                        vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
-                            Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-                        vscode.LanguageModelChatMessage.User(request.prompt)
-                    ];
-                    
-                    const chatResponse = await model.sendRequest(messages, {}, token);
-                    for await (const fragment of chatResponse.text) {
-                        // Process the output from the language model
-                        // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
-                        const catFragment = fragment.replaceAll('def', 'meow');
-                        stream.markdown(catFragment);
-                    }
-                }
-            } catch(err) {
-                handleError(err, stream);
-            }
-
+						// IMPORTANT 
+						// IMPORTANT working around CAPI always wanting to end with a `User`-message
+						// IMPORTANT 
+						messages.push(vscode.LanguageModelChatMessage.User('Above is the result of calling the function ${tool.metadata.name}'))
+					}
+				}
+			}
             return { metadata: { command: '' } };
-        }
+		} catch (err) {
+			handleError(err, stream);
+		}
     };
 
     // Chat participants appear as top-level options in the chat input
@@ -183,6 +154,43 @@ function handleError(err: any, stream: vscode.ChatResponseStream): void {
         throw err;
     }
 }
+
+abstract class FunctionTool {
+
+	static All = new Map<string, {
+		metadata: vscode.LanguageModelChatFunction,
+		run: (...args: any[]) => Promise<string>
+	}>();
+
+	static register(metadata: vscode.LanguageModelChatFunction, run: (...args: any[]) => Promise<string>) {
+		FunctionTool.All.set(metadata.name, { metadata, run: run });
+	}
+}
+
+// get the size of an editor
+FunctionTool.register({
+	name: "workbench.action.terminal.toggleTerminal",
+	description: "Open or close the terminal",
+	parametersSchema: {
+		"type": "object",
+		"properties": {
+			"nth": {
+				"type": "number",
+				"description": "The index of the editor, starting at 0",
+			},
+		},
+		// "required": ["nth"],
+	},
+}, async (arg: { nth: number }) => {
+	if (!(arg && typeof arg === 'object' && typeof arg.nth === 'number')) {
+		return 'Error: Invalid arguments, expected { nth: number}';
+	}
+	const editor = vscode.window.visibleTextEditors[arg.nth];
+	if (!editor) {
+		return `Warning: No editor found at index ${arg.nth}, please try a different index between 0 and ${vscode.window.visibleTextEditors.length - 1}`;
+	}
+	return editor.document.getText().length.toString();
+});
 
 // Get a random topic that the cat has not taught in the chat history yet
 function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatResponseTurn>): string {
