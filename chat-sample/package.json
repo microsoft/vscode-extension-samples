@@ -54,7 +54,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
-        "@vscode/prompt-tsx": "^0.2.1-alpha",
+        "@vscode/prompt-tsx": "^0.2.3-alpha",
         "@types/vscode": "1.90.0",
         "eslint": "^7.22.0",
         "run-script-os": "^1.1.6",
