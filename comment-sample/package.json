@@ -23,6 +23,10 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "mywiki.createByCommand",
+				"title": "Create Note from Command"
+			},
+			{
 				"command": "mywiki.createNote",
 				"title": "Create Note",
 				"enablement": "!commentIsEmpty"

@@ -33,6 +33,16 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	};
 
+	context.subscriptions.push(vscode.commands.registerCommand('mywiki.createByCommand', () => {
+		const line = vscode.window.activeTextEditor?.selection.active.line;
+		if (line === undefined) {
+			return;
+		}
+		const thread = commentController.createCommentThread(vscode.window.activeTextEditor!.document.uri, new vscode.Range(line, 0, line, 0), [new NoteComment('', vscode.CommentMode.Editing, { name: 'vscode' })]);
+		thread.label = 'Test label';
+		thread.collapsibleState = vscode.CommentThreadCollapsibleState.Expanded;
+	}));
+
 	context.subscriptions.push(vscode.commands.registerCommand('mywiki.createNote', (reply: vscode.CommentReply) => {
 		replyNote(reply);
 	}));
