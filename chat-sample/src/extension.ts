@@ -68,6 +68,10 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             return { metadata: { command: 'play' } };
+        } else if (request.command == 'pet') {
+            handlePetCommand(request, context, stream, token);
+            
+            return { metadata: { command: 'pet' } };
         } else {
             try {
                 const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
@@ -201,6 +205,36 @@ function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatRes
     });
 
     return topicsNoRepetition[Math.floor(Math.random() * topicsNoRepetition.length)] || 'I have taught you everything I know. Meow!';
+}
+
+interface ICatIdentifier {
+    name: string;
+}
+
+const catNames = ['Alfred', 'Biscuit', 'Cleo', 'Coco', 'Dusty', 'Fluffy', 'Ginger', 'Misty', 'Muffin', 'Oreo', 'Peanut', 'Pumpkin', 'Sasha', 'Shadow', 'Simba', 'Smokey', 'Socks', 'Sophie', 'Tiger', 'Whiskers', 'Willow', 'Zoe']; 
+function handlePetCommand(request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): void {
+    // If this request contains confirmation data, respond to it.
+    // If not, it's a new request.
+    if (request.acceptedConfirmationData?.length) {
+        handlePetAccept(request.acceptedConfirmationData[0] as ICatIdentifier, stream);
+        return;
+    } else if (request.rejectedConfirmationData?.length) {
+        handlePetReject(request.rejectedConfirmationData[0] as ICatIdentifier, stream);
+        return;
+    }
+
+    stream.markdown(`Looking for an available cat...\n\n`);
+    const catName = catNames[Math.floor(Math.random() * catNames.length)];
+    stream.markdown(`Found a cat named ${catName}!`);
+    stream.confirmation(`Are you sure you want to pet ${catName}?`, 'Petting the cat cannot be undone.', { name: catName } as ICatIdentifier);
+}
+
+function handlePetAccept(data: ICatIdentifier, stream: vscode.ChatResponseStream): void {
+    stream.markdown(`You pet the cat! ${data.name} purrs contentedly.`);
+}
+
+function handlePetReject(data: ICatIdentifier, stream: vscode.ChatResponseStream): void {
+    stream.markdown(`You did not pet the cat. ${data.name} is indifferent.`);
 }
 
 export function deactivate() { }

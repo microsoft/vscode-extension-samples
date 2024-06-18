@@ -17,7 +17,8 @@
     ],
     "activationEvents": [],
     "enabledApiProposals": [
-        "chatVariableResolver"
+        "chatVariableResolver",
+        "chatParticipantAdditions"
     ],
     "contributes": {
         "chatParticipants": [
@@ -35,6 +36,10 @@
                     {
                         "name": "play",
                         "description": "Do whatever you want, you are a cat after all"
+                    },
+                    {
+                        "name": "pet",
+                        "description": "Pet the cat"
                     }
                 ]
             }
