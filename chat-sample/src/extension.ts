@@ -17,12 +17,12 @@ export function activate(context: vscode.ExtensionContext) {
             return {};
         }
 
-        stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
+        stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.name).join(', ')}\n\n`);
 
         const options: vscode.LanguageModelChatRequestOptions = {
             tools: vscode.lm.tools.map((tool): vscode.LanguageModelChatFunction => {
                 return {
-                    name: tool.id.replace(/\./g, '_'),
+                    name: tool.name.replace(/\./g, '_'),
                     description: tool.description,
                     parametersSchema: tool.parametersSchema ?? {}
                 }
@@ -44,14 +44,14 @@ export function activate(context: vscode.ExtensionContext) {
                 if (part instanceof vscode.LanguageModelChatResponseTextPart) {
                     stream.markdown(part.value)
                 } else if (part instanceof vscode.LanguageModelChatResponseFunctionUsePart) {
-                    const tool = vscode.lm.tools.find(tool => tool.id.replace(/\./g, '_') === part.name);
+                    const tool = vscode.lm.tools.find(tool => tool.name.replace(/\./g, '_') === part.name);
                     if (!tool) {
                         // BAD tool choice?
                         continue;
                     }
 
-                    const resultPromise = vscode.lm.invokeTool(tool.id, JSON.parse(part.parameters), token);
-                    stream.progress(`FUNCTION_CALL: ${tool.id} with \`${part.parameters}\``, async (progress) => {
+                    const resultPromise = vscode.lm.invokeTool(tool.name, JSON.parse(part.parameters), token);
+                    stream.progress(`FUNCTION_CALL: ${tool.name} with \`${part.parameters}\``, async (progress) => {
                         await resultPromise;
                     });
 
@@ -59,13 +59,13 @@ export function activate(context: vscode.ExtensionContext) {
 
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     let message = vscode.LanguageModelChatMessage.User('');
-                    message.content2 = new vscode.LanguageModelChatMessageFunctionResultPart(tool.id, result)
+                    message.content2 = new vscode.LanguageModelChatMessageFunctionResultPart(tool.name, result)
                     messages.push(message)
 
                     // IMPORTANT 
                     // IMPORTANT working around CAPI always wanting to end with a `User`-message
                     // IMPORTANT 
-                    messages.push(vscode.LanguageModelChatMessage.User(`Above is the result of calling the function ${tool.id}. The user cannot see this result, so you should explain it to the user if referencing it in your answer.`))
+                    messages.push(vscode.LanguageModelChatMessage.User(`Above is the result of calling the function ${tool.name}. The user cannot see this result, so you should explain it to the user if referencing it in your answer.`))
                     didReceiveFunctionUse = true;
                 }
             }
