@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
-        if (request.command == 'teach') {
+        if (request.command === 'teach') {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             try {
@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
             });
 
             return { metadata: { command: 'teach' } };
-        } else if (request.command == 'play') {
+        } else if (request.command === 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             try {
                 const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
@@ -120,7 +120,7 @@ export function activate(context: vscode.ExtensionContext) {
             try {
                 const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: 'gpt-3.5-turbo' });
                 if (!model) {
-                    console.log('Model not found. Please make sure the GitHub Copilot Chat extension is installed and enabled.')
+                    console.log('Model not found. Please make sure the GitHub Copilot Chat extension is installed and enabled.');
                     return;
                 }
 
@@ -133,7 +133,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             } catch (err) {
                 if (err instanceof vscode.LanguageModelError) {
-                    console.log(err.message, err.code, err.cause)
+                    console.log(err.message, err.code, err.cause);
                 } else {
                     throw err;
                 }
@@ -189,13 +189,13 @@ function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatRes
     const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
     // Filter the chat history to get only the responses from the cat
     const previousCatResponses = history.filter(h => {
-        return h instanceof vscode.ChatResponseTurn && h.participant == CAT_PARTICIPANT_ID
+        return h instanceof vscode.ChatResponseTurn && h.participant === CAT_PARTICIPANT_ID;
     }) as vscode.ChatResponseTurn[];
     // Filter the topics to get only the topics that have not been taught by the cat yet
     const topicsNoRepetition = topics.filter(topic => {
         return !previousCatResponses.some(catResponse => {
             return catResponse.response.some(r => {
-                return r instanceof vscode.ChatResponseMarkdownPart && r.value.value.includes(topic)
+                return r instanceof vscode.ChatResponseMarkdownPart && r.value.value.includes(topic);
             });
         });
     });
