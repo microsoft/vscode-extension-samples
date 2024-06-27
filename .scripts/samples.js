@@ -164,7 +164,7 @@ const samples = [
   {
     description: 'webpack-sample',
     path: 'webpack-sample',
-    excludeFromReadme: true
+    excludeFromReadme: true,
     guide: null,
     apis: [],
     contributions: []
@@ -172,7 +172,7 @@ const samples = [
   {
     description: 'esbuild-sample',
     path: 'esbuild-sample',
-    excludeFromReadme: true
+    excludeFromReadme: true,
     guide: null,
     apis: [],
     contributions: []
