@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 export class TestView {
 
 	constructor(context: vscode.ExtensionContext) {
-		const view = vscode.window.createTreeView('testView', { treeDataProvider: aNodeWithIdTreeDataProvider(), showCollapseAll: true });
+		const view = vscode.window.createTreeView('testView', { treeDataProvider: aNodeWithIdTreeDataProvider(), showCollapseAll: true, canSelectMany: true });
 		context.subscriptions.push(view);
 		vscode.commands.registerCommand('testView.reveal', async () => {
 			const key = await vscode.window.showInputBox({ placeHolder: 'Type the label of the item to reveal' });
@@ -38,7 +38,17 @@ const tree: any = {
 	'b': {
 		'ba': {},
 		'bb': {}
-	}
+	},
+	'c': {},
+	'd': {
+		'da': {},
+		'db': {}
+	},
+	'e': {},
+	'f': {},
+	'g': {},
+	'h': {},
+	'i': {},
 };
 const nodes: any = {};
 
