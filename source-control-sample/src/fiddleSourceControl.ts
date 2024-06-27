@@ -13,7 +13,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 	private fiddleRepository: FiddleRepository;
 	private latestFiddleVersion: number = Number.POSITIVE_INFINITY; // until actual value is established
 	private _onRepositoryChange = new vscode.EventEmitter<Fiddle>();
-	private timeout?: NodeJS.Timer;
+	private timeout?: NodeJS.Timeout;
 	private fiddle!: Fiddle;
 
 	constructor(context: vscode.ExtensionContext, private readonly workspaceFolder: vscode.WorkspaceFolder, fiddle: Fiddle, download: boolean) {
