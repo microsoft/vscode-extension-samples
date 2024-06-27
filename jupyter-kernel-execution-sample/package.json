@@ -44,8 +44,8 @@
 	"devDependencies": {
 		"@types/node": "14.x",
 		"@types/vscode": "^1.82.0",
-		"@typescript-eslint/eslint-plugin": "^6.7.0",
-		"@typescript-eslint/parser": "^6.7.0",
+		"@typescript-eslint/eslint-plugin": "^7.14.0",
+		"@typescript-eslint/parser": "^7.14.0",
 		"@vscode/jupyter-extension": "^1.1.0",
 		"eslint": "^7.27.0",
 		"typescript": "^5.2.2"
