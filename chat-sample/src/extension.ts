@@ -58,7 +58,13 @@ export function activate(context: vscode.ExtensionContext) {
                         { modelMaxPromptTokens: model.maxInputTokens },
                         model);
                     
-                    const chatResponse = await model.sendRequest(messages, {}, token);
+                    const chatResponse = await model.sendRequest(messages, {
+                        modelOptions: {
+                            "max_tokens": 1000,
+                            "temperature": 0.0,
+                            "top_p": 1.0,
+                        },
+                    }, token);
                     for await (const fragment of chatResponse.text) {
                         stream.markdown(fragment);
                     }
