@@ -84,13 +84,22 @@ export function activate(context: vscode.ExtensionContext) {
                         vscode.LanguageModelChatMessage.User(request.prompt)
                     ];
                     
-                    const chatResponse = await model.sendRequest(messages, {}, token);
+                    const chatResponse = await model.sendRequest(messages, {
+                        modelOptions: {
+                            "max_tokens": 1000,
+                            "temperature": 0.0,
+                            "top_p": 1.0,
+                        },
+                    }, token);
+                    let text = "";
                     for await (const fragment of chatResponse.text) {
                         // Process the output from the language model
                         // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
                         const catFragment = fragment.replaceAll('def', 'meow');
                         stream.markdown(catFragment);
+                        text += catFragment;
                     }
+                    stream.markdown(`\n\n**Tokens: ${await model.countTokens(text)}**`);
                 }
             } catch(err) {
                 handleError(err, stream);
