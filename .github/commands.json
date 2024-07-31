@@ -12,6 +12,18 @@
 		"addLabel": "*question"
 	},
 	{
+		"type": "comment",
+		"name": "needsPerfInfo",
+		"allowUsers": [
+			"cleidigh",
+			"usernamehw",
+			"gjsjohnmurray",
+			"IllusionMH"
+		],
+		"addLabel": "info-needed",
+		"comment": "Thanks for creating this issue regarding performance! Please follow this guide to help us diagnose performance issues: https://github.com/microsoft/vscode/wiki/Performance-Issues \n\nHappy Coding!"
+	},
+	{
 		"type": "label",
 		"name": "*question",
 		"action": "close",
@@ -162,11 +174,11 @@
 	},
 	{
 		"type": "label",
-		"name": "~needs version info",
+		"name": "~version-info-needed",
 		"action": "updateLabels",
 		"addLabel": "info-needed",
-		"removeLabel": "~needs version info",
-		"comment": "Thanks for creating this issue! We figured it's missing some basic information, such as a version number, or in some other way doesn't follow our [issue reporting](https://aka.ms/vscodeissuereporting) guidelines. Please take the time to review these and update the issue.\n\nHappy Coding!"
+		"removeLabel": "~version-info-needed",
+		"comment": "Thanks for creating this issue! We figured it's missing some basic information, such as a version number, or in some other way doesn't follow our [issue reporting guidelines](https://aka.ms/vscodeissuereporting). Please take the time to review these and update the issue.\n\nHappy Coding!"
 	},
 	{
 		"type": "comment",
