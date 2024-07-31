@@ -11,7 +11,8 @@ interface ICatChatResult extends vscode.ChatResult {
     }
 }
 
-const MODEL_SELECTOR: vscode.LanguageModelChatSelector = { vendor: 'copilot', family: 'gpt-3.5-turbo' };
+// Use gpt-4o since it is fast and high quality. gpt-3.5-turbo and gpt-4 are also available.
+const MODEL_SELECTOR: vscode.LanguageModelChatSelector = { vendor: 'copilot', family: 'gpt-4o' };
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -24,6 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             try {
+                // To get a list of all available models, do not pass any selector to the selectChatModels.
                 const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
                 if (model) {
                     const messages = [
@@ -118,7 +120,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             let chatResponse: vscode.LanguageModelChatResponse | undefined;
             try {
-                const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: 'gpt-3.5-turbo' });
+                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
                 if (!model) {
                     console.log('Model not found. Please make sure the GitHub Copilot Chat extension is installed and enabled.');
                     return;
