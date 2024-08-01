@@ -16,7 +16,9 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [],
+	"activationEvents": [
+		"onLanguage:semanticLanguage"
+	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"languages": [
