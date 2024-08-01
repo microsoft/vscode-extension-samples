@@ -16,9 +16,6 @@
 		"Chat"
 	],
 	"activationEvents": [],
-	"enabledApiProposals": [
-		"chatVariableResolver"
-	],
 	"contributes": {
 		"chatParticipants": [
 			{
@@ -53,9 +50,11 @@
 		"lint": "eslint \"src/**/*.ts\"",
 		"watch": "tsc -watch -p ./"
 	},
+	"dependencies": {
+		"@vscode/prompt-tsx": "^0.2.3-alpha"
+	},
 	"devDependencies": {
 		"@types/node": "^20.5.9",
-		"@vscode/prompt-tsx": "^0.2.3-alpha",
 		"@types/vscode": "1.90.0",
 		"@typescript-eslint/eslint-plugin": "^7.14.0",
 		"@typescript-eslint/parser": "^7.14.0",
