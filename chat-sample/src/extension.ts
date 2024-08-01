@@ -39,14 +39,15 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 }
             } catch(err) {
-                handleError(err, stream);
+                handleError(logger, err, stream);
             }
 
             stream.button({
                 command: CAT_NAMES_COMMAND_ID,
                 title: vscode.l10n.t('Use Cat Names in Editor')
             });
-
+            
+            logger.logUsage('request', { kind: 'teach'});
             return { metadata: { command: 'teach' } };
         } else if (request.command === 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
@@ -66,9 +67,10 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 }
             } catch(err) {
-                handleError(err, stream);
+                handleError(logger, err, stream);
             }
 
+            logger.logUsage('request', { kind: 'play'});
             return { metadata: { command: 'play' } };
         } else {
             try {
@@ -89,9 +91,10 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 }
             } catch(err) {
-                handleError(err, stream);
+                handleError(logger, err, stream);
             }
 
+            logger.logUsage('request', { kind: ''});
             return { metadata: { command: '' } };
         }
     };
@@ -110,6 +113,29 @@ export function activate(context: vscode.ExtensionContext) {
             } satisfies vscode.ChatFollowup];
         }
     };
+
+    const logger = vscode.env.createTelemetryLogger({
+        sendEventData(eventName, data) {
+            // Capture event telemetry
+            console.log(`Event: ${eventName}`);
+            console.log(`Data: ${JSON.stringify(data)}`);
+        },
+        sendErrorData(error, data) {
+            // Capture error telemetry
+            console.error(`Error: ${error}`);
+            console.error(`Data: ${JSON.stringify(data)}`);
+        }
+    });
+
+    context.subscriptions.push(cat.onDidReceiveFeedback((feedback: vscode.ChatResultFeedback) => {
+        if (logger.isUsageEnabled) {
+            // Log chat result feedback to be able to compute the success matric of the participant
+            // unhelpful / totalRequests is a good success metric
+            logger.logUsage('chatResultFeedback', {
+                kind: feedback.kind
+            });
+        }
+    }));
 
     context.subscriptions.push(
         cat,
@@ -170,11 +196,15 @@ export function activate(context: vscode.ExtensionContext) {
     );
 }
 
-function handleError(err: any, stream: vscode.ChatResponseStream): void {
+function handleError(logger: vscode.TelemetryLogger, err: any, stream: vscode.ChatResponseStream): void {
     // making the chat request might fail because
     // - model does not exist
     // - user consent not given
     // - quote limits exceeded
+    if (logger.isErrorsEnabled) {
+        logger.logError(err);
+    }
+    
     if (err instanceof vscode.LanguageModelError) {
         console.log(err.message, err.code, err.cause);
         if (err.cause instanceof Error && err.cause.message.includes('off_topic')) {
