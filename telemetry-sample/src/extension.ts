@@ -21,18 +21,14 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const c1 = vscode.commands.registerCommand('extension.logEvent', () => {
 		vscode.window.showInformationMessage('Logged telemetry event!');
-		if (logger.isUsageEnabled) {
-			logger.logUsage('testEvent', { 'testProp': 'testValue' });
-		}
+		logger.logUsage('testEvent', { 'testProp': 'testValue' });
 	});
 
 	context.subscriptions.push(c1);
 
 	context.subscriptions.push(vscode.commands.registerCommand('extension.logException', () => {
 		vscode.window.showInformationMessage('Logged telemetry exception!');
-		if (logger.isErrorsEnabled) {
-			logger.logError(new Error('Test'), { 'testProp': 'testValue' });
-			logger.logError('testerror', { 'testProp': 'testValue' });
-		}
+		logger.logError(new Error('Test'), { 'testProp': 'testValue' });
+		logger.logError('testerror', { 'testProp': 'testValue' });
 	}));
 }
