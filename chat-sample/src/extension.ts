@@ -128,13 +128,11 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(cat.onDidReceiveFeedback((feedback: vscode.ChatResultFeedback) => {
-        if (logger.isUsageEnabled) {
-            // Log chat result feedback to be able to compute the success matric of the participant
-            // unhelpful / totalRequests is a good success metric
-            logger.logUsage('chatResultFeedback', {
-                kind: feedback.kind
-            });
-        }
+        // Log chat result feedback to be able to compute the success matric of the participant
+        // unhelpful / totalRequests is a good success metric
+        logger.logUsage('chatResultFeedback', {
+            kind: feedback.kind
+        });
     }));
 
     context.subscriptions.push(
@@ -201,9 +199,7 @@ function handleError(logger: vscode.TelemetryLogger, err: any, stream: vscode.Ch
     // - model does not exist
     // - user consent not given
     // - quote limits exceeded
-    if (logger.isErrorsEnabled) {
-        logger.logError(err);
-    }
+    logger.logError(err);
     
     if (err instanceof vscode.LanguageModelError) {
         console.log(err.message, err.code, err.cause);
