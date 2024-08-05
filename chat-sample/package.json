@@ -29,6 +29,13 @@
                 "description": "I use tools",
                 "isSticky": true
             }
+        ],
+        "languageModelTools": [
+            {
+                "name": "chat-sample.activeTabCount",
+                "description": "The number of active tabs in the editor",
+                "displayName": "Text tab count"
+            }
         ]
     },
     "main": "./out/extension.js",
