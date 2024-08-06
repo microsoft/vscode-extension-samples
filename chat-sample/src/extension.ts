@@ -28,14 +28,15 @@ function registerChatParticipant() {
         const model = models[0];
         stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.name).join(', ')}\n\n`);
 
+        const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatFunction => {
+            return {
+                name: tool.name.replace(/\./g, '_'),
+                description: tool.description,
+                parametersSchema: tool.parametersSchema ?? {}
+            };
+        });
+
         const options: vscode.LanguageModelChatRequestOptions = {
-            tools: vscode.lm.tools.map((tool): vscode.LanguageModelChatFunction => {
-                return {
-                    name: tool.name.replace(/\./g, '_'),
-                    description: tool.description,
-                    parametersSchema: tool.parametersSchema ?? {}
-                };
-            }),
             justification: 'Just because!',
         };
 
@@ -44,6 +45,15 @@ function registerChatParticipant() {
             vscode.LanguageModelChatMessage.User(request.prompt),
         ];
         const runWithFunctions = async () => {
+            const requestedTool = request.requestedTools?.shift();
+            if (requestedTool) {
+                options.toolChoice = requestedTool;
+                options.tools = allTools.filter(tool => tool.name === requestedTool);
+            } else {
+                options.toolChoice = undefined;
+                options.tools = allTools;
+            }
+
             let didReceiveFunctionUse = false;
 
             const response = await model.sendRequest(messages, options, token);
@@ -66,7 +76,9 @@ function registerChatParticipant() {
                     }
 
                     const resultPromise = vscode.lm.invokeTool(tool.name, JSON.parse(part.parameters), token);
-                    stream.progress(`FUNCTION_CALL: ${tool.name} with ${part.parameters}`);
+                    stream.progress(`FUNCTION_CALL: ${tool.name} with ${part.parameters}`, async () => {
+                        await resultPromise;
+                    });
 
                     const result = await resultPromise;
 
