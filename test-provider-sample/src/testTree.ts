@@ -107,9 +107,19 @@ export class TestCase {
 		if (actual === this.expected) {
 			options.passed(item, duration);
 		} else {
-			const message = vscode.TestMessage.diff(`Expected ${item.label}`, String(this.expected), String(actual));
-			message.location = new vscode.Location(item.uri!, item.range!);
-			options.failed(item, message, duration);
+			if (this.expected === 5) {
+				const message = new vscode.TestMessage(new vscode.MarkdownString(`${this.expected} != ${String(actual)}\n\n`.repeat(100)));
+				message.location = new vscode.Location(item.uri!, item.range!);
+				options.failed(item, message, duration);
+			} else if (this.expected === 6) {
+				const message = vscode.TestMessage.diff('incorrect result', String(this.expected), (String(actual) + '\n').repeat(100));
+				message.location = new vscode.Location(item.uri!, item.range!);
+				options.failed(item, message, duration);
+			} else if (this.expected === 7) {
+				const message = new vscode.TestMessage(`${this.expected} != ${String(actual)}\n`.repeat(100));
+				message.location = new vscode.Location(item.uri!, item.range!);
+				options.failed(item, message, duration);
+			}
 		}
 	}
 
