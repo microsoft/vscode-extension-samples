@@ -6,6 +6,10 @@
 		"outDir": "out",
 		"sourceMap": true,
 		"strict": true,
+		
+		"jsx": "react",
+		"jsxFactory": "vscpp",
+		"jsxFragmentFactory": "vscppf",
 		"rootDir": "src"
 	},
 	"exclude": ["node_modules", ".vscode-test"]
