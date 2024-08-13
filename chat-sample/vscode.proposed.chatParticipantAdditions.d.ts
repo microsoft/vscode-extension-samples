@@ -188,38 +188,11 @@ declare module 'vscode' {
 		 * The `data` for any confirmations that were rejected
 		 */
 		rejectedConfirmationData?: any[];
-
-		requestedTools?: string[];
 	}
 
 	// TODO@API fit this into the stream
 	export interface ChatUsedContext {
 		documents: ChatDocumentContext[];
-	}
-
-	export interface ChatParticipant {
-		/**
-		 * Provide a set of variables that can only be used with this participant.
-		 */
-		participantVariableProvider?: { provider: ChatParticipantCompletionItemProvider; triggerCharacters: string[] };
-	}
-
-	export interface ChatParticipantCompletionItemProvider {
-		provideCompletionItems(query: string, token: CancellationToken): ProviderResult<ChatCompletionItem[]>;
-	}
-
-	export class ChatCompletionItem {
-		id: string;
-		label: string | CompletionItemLabel;
-		values: ChatVariableValue[];
-		fullName?: string;
-		icon?: ThemeIcon;
-		insertText?: string;
-		detail?: string;
-		documentation?: string | MarkdownString;
-		command?: Command;
-
-		constructor(id: string, label: string | CompletionItemLabel, values: ChatVariableValue[]);
 	}
 
 	export type ChatExtendedRequestHandler = (request: ChatRequest, context: ChatContext, response: ChatResponseStream, token: CancellationToken) => ProviderResult<ChatResult | void>;
@@ -245,23 +218,17 @@ declare module 'vscode' {
 		 * The chat extension should not activate if it doesn't support the current version.
 		 */
 		export const _version: 1 | number;
-
-		export function registerChatParticipantDetectionProvider(participantDetectionProvider: ChatParticipantDetectionProvider): Disposable;
 	}
 
 	export interface ChatParticipantMetadata {
 		participant: string;
 		command?: string;
-		description?: string;
+		disambiguation: { categoryName: string; description: string; examples: string[] }[];
 	}
 
 	export interface ChatParticipantDetectionResult {
 		participant: string;
 		command?: string;
-	}
-
-	export interface ChatParticipantDetectionProvider {
-		provideParticipantDetection(chatRequest: ChatRequest, context: ChatContext, options: { participants?: ChatParticipantMetadata[]; location: ChatLocation }, token: CancellationToken): ProviderResult<ChatParticipantDetectionResult>;
 	}
 
 	/*

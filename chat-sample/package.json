@@ -33,9 +33,13 @@
         ],
         "languageModelTools": [
             {
-                "name": "chat-sample.activeTabCount",
-                "description": "The number of active tabs in the editor",
-                "displayName": "Text tab count"
+                "id": "chat-sample_tabCount",
+                "name": "tabCount",
+                "displayName": "Tab Count",
+                "modelDescription": "The number of active tabs in the editor",
+                "userDescription": "The number of active tabs in the editor",
+                "icon": "$(files)",
+                "canBeInvokedManually": true
             }
         ]
     },
