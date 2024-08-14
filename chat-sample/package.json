@@ -27,17 +27,7 @@
 				"commands": [
 					{
 						"name": "randomTeach",
-						"description": "Pick at random a computer science concept then explain it in purfect way of a cat",
-						"disambiguation": [
-							{
-								"categoryName": "cat_random_teach",
-								"description": "The user wants to learn a random computer science topic in an informal way.",
-								"examples": [
-									"Teach me anything about computer science using code samples",
-									"I want to understand computer science topics better"
-								]
-							}
-						]
+						"description": "Pick at random a computer science concept then explain it in purfect way of a cat"
 					},
 					{
 						"name": "play",
