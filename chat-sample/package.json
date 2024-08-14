@@ -33,6 +33,21 @@
 						"name": "play",
 						"description": "Do whatever you want, you are a cat after all"
 					}
+				],
+				"disambiguation": [
+					{
+						"categoryName": "cat_teach",
+						"description": "The user wants to learn a simple computer science topic in an informal way.",
+						"examples": ["Teach me C++ pointers using metaphors",
+							"Explain to me what is a linked list in a simple way",
+							"Can you explain to me what is a function in programming?"]
+					},
+					{
+						"categoryName": "cat_play",
+						"description": "The user just wants to relax and see the cat play.",
+						"examples": ["Enough learning, let the cat play with a ball of yarn",
+							"Can you show me a cat playing with a laser pointer?"]
+					}
 				]
 			}
 		],
