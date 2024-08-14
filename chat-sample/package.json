@@ -26,12 +26,33 @@
 				"isSticky": true,
 				"commands": [
 					{
-						"name": "teach",
+						"name": "randomTeach",
 						"description": "Pick at random a computer science concept then explain it in purfect way of a cat"
 					},
 					{
 						"name": "play",
-						"description": "Do whatever you want, you are a cat after all"
+						"description": "Do whatever you want, you are a cat after all",
+						"disambiguation": [
+							{
+								"categoryName": "cat_play",
+								"description": "The user just wants to relax and see the cat play.",
+								"examples": [
+									"Enough learning, let the cat play with a ball of yarn",
+									"Can you show me a cat playing with a laser pointer?"
+								]
+							}
+						]
+					}
+				],
+				"disambiguation": [
+					{
+						"categoryName": "cat",
+						"description": "The user wants to learn a specific computer science topic in an informal way.",
+						"examples": [
+							"Teach me C++ pointers using metaphors",
+							"Explain to me what is a linked list in a simple way",
+							"Can you explain to me what is a function in programming?"
+						]
 					}
 				]
 			}
