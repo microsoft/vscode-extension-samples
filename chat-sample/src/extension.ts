@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
-        if (request.command === 'teach') {
+        if (request.command === 'randomTeach') {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             try {
@@ -47,8 +47,8 @@ export function activate(context: vscode.ExtensionContext) {
                 title: vscode.l10n.t('Use Cat Names in Editor')
             });
             
-            logger.logUsage('request', { kind: 'teach'});
-            return { metadata: { command: 'teach' } };
+            logger.logUsage('request', { kind: 'randomTeach'});
+            return { metadata: { command: 'randomTeach' } };
         } else if (request.command === 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             try {
