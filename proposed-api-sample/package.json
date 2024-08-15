@@ -28,7 +28,11 @@
 		"languageModelTools": [
 			{
 				"name": "myTestTool",
-				"description": "My test tool"
+				"id": "myTestTool",
+				"canBeInvokedManually": true,
+				"displayName": "myTestTool",
+				"parametersSchema": {},
+				"modelDescription": "asdf"
 			}
 		]
 	},

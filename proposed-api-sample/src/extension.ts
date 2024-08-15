@@ -1,6 +1,6 @@
-import { renderPrompt } from '@vscode/prompt-tsx';
+import { renderPrompt, renderElementJSON } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
-import { myPromptEl, TestPrompt } from './asdf';
+import { MyCustomPrompt, TestPrompt } from './asdf';
 
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "proposed-api-sample" is now active!');
@@ -11,21 +11,20 @@ export function activate(context: vscode.ExtensionContext) {
 	 */
 
 	vscode.lm.registerTool('myTestTool', {
-		invoke(parameters, token): Promise<vscode.LanguageModelToolResult> {
-			return Promise.resolve({
-				'application/json': {
-					foo: 'bar'
-				},
-				'mytype': myPromptEl,
+		async invoke(context, token): Promise<vscode.LanguageModelToolResult> {
+			return {
+				'mytype': await renderElementJSON(MyCustomPrompt, {}, context, token),
 				toString() {
-					return 'hello world!'
+					return 'hello world!';
 				}
-			});
+			};
 		},
 	});
 
 	const disposable = vscode.commands.registerCommand('extension.helloWorld', async () => {
-		const result = await vscode.lm.invokeTool('myTestTool', {}, new vscode.CancellationTokenSource().token);
+		const result = await vscode.lm.invokeTool('myTestTool', {
+			parameters: {},
+		}, new vscode.CancellationTokenSource().token);
 
 		console.log(result);
 
