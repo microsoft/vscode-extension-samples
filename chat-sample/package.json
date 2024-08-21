@@ -9,7 +9,7 @@
     },
     "version": "0.1.0",
     "engines": {
-        "vscode": "^1.90.0"
+        "vscode": "^1.93.0"
     },
     "categories": [
         "AI",
@@ -28,7 +28,8 @@
                 "fullName": "Tool User",
                 "name": "tools",
                 "description": "I use tools",
-                "isSticky": true
+                "isSticky": true,
+                "supportsToolReferences": true
             }
         ],
         "languageModelTools": [
