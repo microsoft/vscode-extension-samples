@@ -28,7 +28,7 @@ function registerChatParticipant() {
         const model = models[0];
         stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
 
-        const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatFunction => {
+        const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
             return {
                 name: tool.id,
                 description: tool.modelDescription,
@@ -62,7 +62,7 @@ function registerChatParticipant() {
             for await (const part of response.stream) {
                 if (part instanceof vscode.LanguageModelChatResponseTextPart) {
                     stream.markdown(part.value);
-                } else if (part instanceof vscode.LanguageModelChatResponseFunctionUsePart) {
+                } else if (part instanceof vscode.LanguageModelChatResponseToolCallPart) {
                     const tool = vscode.lm.tools.find(tool => tool.id === part.name);
                     if (!tool) {
                         // BAD tool choice?
@@ -77,11 +77,15 @@ function registerChatParticipant() {
                     }
 
                     stream.progress(`Calling tool: ${tool.id} with ${part.parameters}`);
-                    const result = await vscode.lm.invokeTool(tool.id, JSON.parse(part.parameters), token);
+                    const result = await vscode.lm.invokeTool(tool.id, { parameters: JSON.parse(part.parameters) }, token);
 
+                    let assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
+                    assistantMsg.content2 = [new vscode.LanguageModelChatResponseToolCallPart(tool.id, part.toolCallId, part.parameters)];
+                    messages.push(assistantMsg);
+                    
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     let message = vscode.LanguageModelChatMessage.User('');
-                    message.content2 = new vscode.LanguageModelChatMessageFunctionResultPart(tool.id.replace(/\./g, '_'), result.toString());
+                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(part.toolCallId, result.toString())];
                     messages.push(message);
 
                     // IMPORTANT 
