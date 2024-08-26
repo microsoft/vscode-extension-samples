@@ -137,6 +137,9 @@ export namespace calculator._ {
 		export const functions: Map<string, $wcm.FunctionType> = new Map([
 			['log', $.imports.log]
 		]);
+		export const interfaces: Map<string, $wcm.InterfaceType> = new Map<string, $wcm.InterfaceType>([
+			['Types', Types._]
+		]);
 		export function create(service: calculator.Imports, context: $wcm.WasmContext): Imports {
 			return $wcm.$imports.create<Imports>(_, service, context);
 		}
