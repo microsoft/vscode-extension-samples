@@ -41,6 +41,15 @@
                 "userDescription": "The number of active tabs in the editor",
                 "icon": "$(files)",
                 "canBeInvokedManually": true
+            },
+            {
+                "id": "chat-sample_catVoice",
+                "name": "catVoice",
+                "displayName": "Cat Voice",
+                "modelDescription": "Speak in a cat voice",
+                "userDescription": "Speak in a cat voice",
+                "icon": "$(files)",
+                "canBeInvokedManually": true
             }
         ]
     },
@@ -57,7 +66,7 @@
     "devDependencies": {
         "@types/node": "^20.5.9",
         "@types/vscode": "^1.90.0",
-        "@vscode/prompt-tsx": "^0.1.10-alpha",
+        "@vscode/prompt-tsx": "^0.2.7-alpha",
         "eslint": "^7.22.0",
         "run-script-os": "^1.1.6",
         "tslint": "^6.1.3",

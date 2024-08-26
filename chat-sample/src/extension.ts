@@ -1,4 +1,6 @@
+import { contentType, renderElementJSON } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
+import { CatToolPrompt } from './play';
 
 export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(registerChatTool());
@@ -6,6 +8,17 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function registerChatTool() {
+    vscode.lm.registerTool('chat-sample_catVoice', {
+        async invoke(parameters, token) {
+            return {
+                [contentType]: await renderElementJSON(CatToolPrompt, {}, parameters.tokenOptions, token),
+                toString() {
+                    return 'Reply in the voice of a cat! Use cat analogies when appropriate.';
+                },
+            };
+        },
+    });
+
     return vscode.lm.registerTool('chat-sample_tabCount', {
         async invoke(parameters, token) {
             return {
