@@ -29,7 +29,7 @@
 		]
 	},
 	"dependencies": {
-		"@vscode/wasm-component-model": "0.1.0-pre.11"
+		"@vscode/wasm-component-model": "0.1.0-pre.13"
 	},
 	"devDependencies": {
 		"@types/vscode": "1.88.0",
