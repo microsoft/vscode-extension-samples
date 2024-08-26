@@ -79,9 +79,21 @@ export namespace calculator {
 	export type Imports = {
 		log: (msg: string) => void;
 	};
+	export namespace Imports {
+		export type Promisified = $wcm.$imports.Promisify<Imports>
+	}
+	export namespace imports {
+		export type Promisify<T> = $wcm.$imports.Promisify<T>;
+	}
 	export type Exports = {
 		calc: (o: Operation) => u32;
 	};
+	export namespace Exports {
+		export type Promisified = $wcm.$exports.Promisify<Exports>
+	}
+	export namespace exports {
+		export type Promisify<T> = $wcm.$exports.Promisify<T>;
+	}
 }
 
 export namespace Types.$ {
@@ -120,9 +132,6 @@ export namespace calculator._ {
 	export type $Root = {
 		'log': (msg_ptr: i32, msg_len: i32) => void;
 	};
-	export type Imports = {
-		'$root': $Root;
-	};
 	export namespace imports {
 		export const functions: Map<string, $wcm.FunctionType> = new Map([
 			['log', $.imports.log]
@@ -131,21 +140,29 @@ export namespace calculator._ {
 			['Types', Types._]
 		]);
 		export function create(service: calculator.Imports, context: $wcm.WasmContext): Imports {
-			return $wcm.Imports.create<Imports>(_, service, context);
+			return $wcm.$imports.create<Imports>(_, service, context);
 		}
 		export function loop(service: calculator.Imports, context: $wcm.WasmContext): calculator.Imports {
-			return $wcm.Imports.loop(_, service, context);
+			return $wcm.$imports.loop(_, service, context);
 		}
 	}
-	export type Exports = {
-		'calc': (o_Operation_case: i32, o_Operation_0: i32, o_Operation_1: i32) => i32;
+	export type Imports = {
+		'$root': $Root;
 	};
 	export namespace exports {
 		export const functions: Map<string, $wcm.FunctionType> = new Map([
 			['calc', $.exports.calc]
 		]);
 		export function bind(exports: Exports, context: $wcm.WasmContext): calculator.Exports {
-			return $wcm.Exports.bind<calculator.Exports>(_, exports, context);
+			return $wcm.$exports.bind<calculator.Exports>(_, exports, context);
 		}
+	}
+	export type Exports = {
+		'calc': (o_Operation_case: i32, o_Operation_0: i32, o_Operation_1: i32) => i32;
+	};
+	export function bind(service: calculator.Imports, code: $wcm.Code, context?: $wcm.ComponentModelContext): Promise<calculator.Exports>;
+	export function bind(service: $wcm.$imports.Promisify<calculator.Imports>, code: $wcm.Code, port: $wcm.RAL.ConnectionPort, context?: $wcm.ComponentModelContext): Promise<$wcm.$exports.Promisify<calculator.Exports>>;
+	export function bind(service: calculator.Imports | $wcm.$imports.Promisify<calculator.Imports>, code: $wcm.Code, portOrContext?: $wcm.RAL.ConnectionPort | $wcm.ComponentModelContext, context?: $wcm.ComponentModelContext | undefined): Promise<calculator.Exports> | Promise<$wcm.$exports.Promisify<calculator.Exports>> {
+		return $wcm.$main.bind(_, service, code, portOrContext, context);
 	}
 }
