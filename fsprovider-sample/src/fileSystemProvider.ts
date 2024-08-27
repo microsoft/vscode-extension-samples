@@ -46,6 +46,65 @@ export class Directory implements vscode.FileStat {
 	}
 }
 
+export class MemFSSearch implements vscode.TextSearchProviderNew {
+	constructor(private readonly memFS: MemFS) { }
+
+	async provideTextSearchResults(query: vscode.TextSearchQueryNew, options: vscode.TextSearchProviderOptions, progress: vscode.Progress<vscode.TextSearchResultNew>, token: vscode.CancellationToken): Promise<vscode.TextSearchCompleteNew> {
+		options.folderOptions.forEach(folderQuery => this.searchFolder(folderQuery, query, progress));
+
+		return { limitHit: false };
+	}
+
+	private searchFolder(folderQuery: vscode.TextSearchProviderOptions['folderOptions'][0], query: vscode.TextSearchQueryNew, progress: vscode.Progress<vscode.TextSearchResultNew>): void {
+		this.memFS.readDirectory(folderQuery.folder).forEach(([name, type]) => {
+			if (type === vscode.FileType.File) {
+				const uri = vscode.Uri.joinPath(folderQuery.folder, name);
+				const data = this.memFS.readFile(uri);
+				const text = new TextDecoder().decode(data);
+				this.textSearch(text, uri, query, progress);
+			}
+		});
+	}
+
+	private textSearch(file: string, fileUri: vscode.Uri, query: vscode.TextSearchQueryNew, progress: vscode.Progress<vscode.TextSearchResultNew>) {
+		let regPattern = query.isRegExp ? query.pattern : escapeRegExpCharacters(query.pattern);
+		if (query.isWordMatch) {
+			regPattern = `\\b${regPattern}\\b`;
+		}
+
+		const flags: string[] = ['g'];
+		if (!query.isCaseSensitive) {
+			flags.push('i');
+		}
+		if (query.isMultiline) {
+			flags.push('m');
+		}
+		const regExp = new RegExp(regPattern, flags.join(''));
+
+		for (const match of file.matchAll(regExp)) {
+			const startIdx = match.index;
+			const endIdx = match[0].length + startIdx;
+
+			// This is really inefficient!
+			const matchStartLine = file.substring(0, startIdx).split('\n').length - 1;
+			const matchEndLine = match[0].split('\n').length - 1 + matchStartLine;
+			const matchStartChar = startIdx - file.substring(0, startIdx).lastIndexOf('\n') - 1;
+			const matchEndChar = endIdx - file.substring(0, endIdx).lastIndexOf('\n') - 1;
+
+			const searchMatch = new vscode.TextSearchMatchNew(fileUri, [{
+				sourceRange: new vscode.Range(new vscode.Position(matchStartLine, matchStartChar), new vscode.Position(matchEndLine, matchEndChar)),
+				previewRange: new vscode.Range(new vscode.Position(0, 0), new vscode.Position(0, 10)) // todo
+			}], match[0]);
+			console.log(searchMatch);
+			progress.report(searchMatch);
+		}
+	}
+}
+
+function escapeRegExpCharacters(value: string): string {
+	return value.replace(/[\\{}*+?|^$.[\]()]/g, '\\$&');
+}
+
 export type Entry = File | Directory;
 
 export class MemFS implements vscode.FileSystemProvider {

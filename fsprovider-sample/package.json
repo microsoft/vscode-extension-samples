@@ -16,6 +16,9 @@
 	"categories": [
 		"Other"
 	],
+	"enabledApiProposals": [
+		"textSearchProviderNew"
+	],
 	"activationEvents": [
 		"onFileSystem:memfs"
 	],

@@ -1,7 +1,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import { MemFS } from './fileSystemProvider';
+import { MemFS, MemFSSearch } from './fileSystemProvider';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -9,6 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	const memFs = new MemFS();
 	context.subscriptions.push(vscode.workspace.registerFileSystemProvider('memfs', memFs, { isCaseSensitive: true }));
+	context.subscriptions.push(vscode.workspace.registerTextSearchProviderNew('memfs', new MemFSSearch(memFs)));
 	let initialized = false;
 
 	context.subscriptions.push(vscode.commands.registerCommand('memfs.reset', _ => {
