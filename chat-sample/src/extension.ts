@@ -9,9 +9,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 function registerChatTool() {
     vscode.lm.registerTool('chat-sample_catVoice', {
-        async invoke(parameters, token) {
+        async invoke(options, token) {
             return {
-                [contentType]: await renderElementJSON(CatToolPrompt, {}, parameters.tokenOptions, token),
+                [contentType]: await renderElementJSON(CatToolPrompt, {}, options.tokenOptions, token),
                 toString() {
                     return 'Reply in the voice of a cat! Use cat analogies when appropriate.';
                 },
@@ -19,12 +19,24 @@ function registerChatTool() {
         },
     });
 
+    interface ITabCountParameters {
+        tabGroup?: number;
+    }
+
     return vscode.lm.registerTool('chat-sample_tabCount', {
-        async invoke(parameters, token) {
+        async invoke(options, token) {
             return {
                 toString() {
-                    const activeTabCount = vscode.window.tabGroups.activeTabGroup.tabs.length;
-                    return `There are ${activeTabCount} tabs open.`;
+                    const params = options.parameters as ITabCountParameters;
+                    if (typeof params.tabGroup === 'number') {
+                        const group = vscode.window.tabGroups.all[Math.max(params.tabGroup - 1, 0)];
+                        const nth = params.tabGroup === 1 ? '1st' : params.tabGroup === 2 ? '2nd' : params.tabGroup === 3 ? '3rd' : `${params.tabGroup}th`;
+                        return `There are ${group.tabs.length} tabs open in the ${nth} tab group.`;
+                    } else {
+                        const group = vscode.window.tabGroups.activeTabGroup;
+                        return `There are ${group.tabs.length} tabs open.`;
+                    }
+                
                 },
             };
         },

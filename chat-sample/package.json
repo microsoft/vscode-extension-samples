@@ -37,10 +37,19 @@
                 "id": "chat-sample_tabCount",
                 "name": "tabCount",
                 "displayName": "Tab Count",
-                "modelDescription": "The number of active tabs in the editor",
-                "userDescription": "The number of active tabs in the editor",
+                "modelDescription": "The number of active tabs in a tab group",
                 "icon": "$(files)",
-                "canBeInvokedManually": true
+                "canBeInvokedManually": true,
+                "parametersSchema": {
+                    "type": "object",
+                    "properties": {
+                        "tabGroup": {
+                            "type": "number",
+                            "description": "The index of the tab group to check. This is optional- if not specified, the active tab group will be checked.",
+                            "default": 0
+                        }
+                    }
+                }
             },
             {
                 "id": "chat-sample_catVoice",
