@@ -4,7 +4,7 @@
  *--------------------------------------------------------------------------------------------*/
 /* eslint-disable @typescript-eslint/ban-types */
 import * as $wcm from '@vscode/wasm-component-model';
-import type { u32, i32 } from '@vscode/wasm-component-model';
+import type { u32, i32, ptr, result } from '@vscode/wasm-component-model';
 
 export namespace Types {
 	export type Operands = {
@@ -71,12 +71,27 @@ export namespace Types {
 		}
 	}
 	export type Operation = Operation.Add | Operation.Sub | Operation.Mul | Operation.Div;
+
+	export enum ErrorCode {
+		none = 'none',
+		overflow = 'overflow',
+		divideByZero = 'divideByZero'
+	}
+	export namespace ErrorCode {
+		export class Error_ extends $wcm.ResultError<ErrorCode> {
+			constructor(cause: ErrorCode) {
+				super(`ErrorCode: ${cause}`, cause);
+			}
+		}
+	}
 }
 export type Types = {
 };
 export namespace calculator {
 	export type Operation = Types.Operation;
 	export const Operation = Types.Operation;
+	export type ErrorCode = Types.ErrorCode;
+	export const ErrorCode = Types.ErrorCode;
 	export type Imports = {
 		log: (msg: string) => void;
 	};
@@ -87,6 +102,9 @@ export namespace calculator {
 		export type Promisify<T> = $wcm.$imports.Promisify<T>;
 	}
 	export type Exports = {
+		/**
+		 * @throws ErrorCode.Error_
+		 */
 		calc: (o: Operation) => u32;
 	};
 	export namespace Exports {
@@ -103,19 +121,22 @@ export namespace Types.$ {
 		['right', $wcm.u32],
 	]);
 	export const Operation = new $wcm.VariantType<Types.Operation, Types.Operation._tt, Types.Operation._vt>([['add', Operands], ['sub', Operands], ['mul', Operands], ['div', Operands]], Types.Operation._ctor);
+	export const ErrorCode = new $wcm.EnumType<Types.ErrorCode>(['none', 'overflow', 'divideByZero']);
 }
 export namespace Types._ {
 	export const id = 'vscode:example/types' as const;
 	export const witName = 'types' as const;
 	export const types: Map<string, $wcm.AnyComponentModelType> = new Map<string, $wcm.AnyComponentModelType>([
 		['Operands', $.Operands],
-		['Operation', $.Operation]
+		['Operation', $.Operation],
+		['ErrorCode', $.ErrorCode]
 	]);
 	export type WasmInterface = {
 	};
 }
 export namespace calculator.$ {
 	export const Operation = Types.$.Operation;
+	export const ErrorCode = Types.$.ErrorCode;
 	export namespace imports {
 		export const log = new $wcm.FunctionType<calculator.Imports['log']>('log',[
 			['msg', $wcm.wstring],
@@ -124,7 +145,7 @@ export namespace calculator.$ {
 	export namespace exports {
 		export const calc = new $wcm.FunctionType<calculator.Exports['calc']>('calc',[
 			['o', Operation],
-		], $wcm.u32);
+		], new $wcm.ResultType<u32, calculator.ErrorCode>($wcm.u32, ErrorCode, Types.ErrorCode.Error_));
 	}
 }
 export namespace calculator._ {
@@ -159,7 +180,7 @@ export namespace calculator._ {
 		}
 	}
 	export type Exports = {
-		'calc': (o_Operation_case: i32, o_Operation_0: i32, o_Operation_1: i32) => i32;
+		'calc': (o_Operation_case: i32, o_Operation_0: i32, o_Operation_1: i32, result: ptr<result<u32, ErrorCode>>) => void;
 	};
 	export function bind(service: calculator.Imports, code: $wcm.Code, context?: $wcm.ComponentModelContext): Promise<calculator.Exports>;
 	export function bind(service: calculator.Imports.Promisified, code: $wcm.Code, port: $wcm.RAL.ConnectionPort, context?: $wcm.ComponentModelContext): Promise<calculator.Exports.Promisified>;

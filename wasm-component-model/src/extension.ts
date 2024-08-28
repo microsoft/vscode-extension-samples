@@ -54,5 +54,12 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 		channel.appendLine(`Mul ${api.calc(mul)}`);
 		const div = Types.Operation.Div({ left: 10, right: 2 });
 		channel.appendLine(`Div ${api.calc(div)}`);
+		try {
+			channel.appendLine(`Divide by Zero ${api.calc(Types.Operation.Div({ left: 10, right: 0 }))}`);
+		} catch (error) {
+			if (error instanceof Types.ErrorCode.Error_ && error.cause === Types.ErrorCode.divideByZero) {
+				channel.appendLine('Division by zero not allowed');
+			}
+		}
 	}));
 }
