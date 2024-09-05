@@ -3,12 +3,12 @@ import * as vscode from 'vscode';
 import { CatToolPrompt } from './play';
 
 export function activate(context: vscode.ExtensionContext) {
-    context.subscriptions.push(registerChatTool());
-    context.subscriptions.push(registerChatParticipant());
+    registerChatTool(context);
+    registerChatParticipant(context);
 }
 
-function registerChatTool() {
-    vscode.lm.registerTool('chat-sample_catVoice', {
+function registerChatTool(context: vscode.ExtensionContext) {
+    context.subscriptions.push(vscode.lm.registerTool('chat-sample_catVoice', {
         async invoke(options, token) {
             return {
                 [contentType]: await renderElementJSON(CatToolPrompt, {}, options.tokenOptions, token),
@@ -17,13 +17,13 @@ function registerChatTool() {
                 },
             };
         },
-    });
+    }));
 
     interface ITabCountParameters {
         tabGroup?: number;
     }
 
-    return vscode.lm.registerTool('chat-sample_tabCount', {
+    context.subscriptions.push(vscode.lm.registerTool('chat-sample_tabCount', {
         async invoke(options, token) {
             return {
                 toString() {
@@ -36,14 +36,13 @@ function registerChatTool() {
                         const group = vscode.window.tabGroups.activeTabGroup;
                         return `There are ${group.tabs.length} tabs open.`;
                     }
-                
                 },
             };
         },
-    });
+    }));
 }
 
-function registerChatParticipant() {
+function registerChatParticipant(context: vscode.ExtensionContext) {
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
         const models = await vscode.lm.selectChatModels({
             vendor: 'copilot',
@@ -132,8 +131,7 @@ function registerChatParticipant() {
 
     const toolUser = vscode.chat.createChatParticipant('chat-sample.tools', handler);
     toolUser.iconPath = new vscode.ThemeIcon('tools');
-
-    return toolUser;
+    context.subscriptions.push(toolUser);
 }
 
 
