@@ -42,6 +42,12 @@ function registerChatTool(context: vscode.ExtensionContext) {
     }));
 }
 
+interface IToolCall {
+    tool: vscode.LanguageModelToolDescription;
+    call: vscode.LanguageModelChatResponseToolCallPart;
+    result: Thenable<vscode.LanguageModelToolResult>;
+}
+
 function registerChatParticipant(context: vscode.ExtensionContext) {
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
         const models = await vscode.lm.selectChatModels({
@@ -69,7 +75,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
             vscode.LanguageModelChatMessage.User(request.prompt),
         ];
         const toolReferences = [...request.toolReferences];
-        const runWithFunctions = async () => {
+        const runWithFunctions = async (): Promise<void> => {
             const requestedTool = toolReferences.shift();
             if (requestedTool) {
                 options.toolChoice = requestedTool.id;
@@ -79,7 +85,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                 options.tools = allTools;
             }
 
-            let didReceiveFunctionUse = false;
+            const toolCalls: IToolCall[] = [];
 
             const response = await model.sendRequest(messages, options, token);
 
@@ -101,26 +107,30 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                     }
 
                     stream.progress(`Calling tool: ${tool.id} with ${part.parameters}`);
-                    const result = await vscode.lm.invokeTool(tool.id, { parameters: JSON.parse(part.parameters) }, token);
-
-                    let assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
-                    assistantMsg.content2 = [new vscode.LanguageModelChatResponseToolCallPart(tool.id, part.toolCallId, part.parameters)];
-                    messages.push(assistantMsg);
-                    
-                    // NOTE that the result of calling a function is a special content type of a USER-message
-                    let message = vscode.LanguageModelChatMessage.User('');
-                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(part.toolCallId, result.toString())];
-                    messages.push(message);
-
-                    // IMPORTANT 
-                    // IMPORTANT working around CAPI always wanting to end with a `User`-message
-                    // IMPORTANT 
-                    messages.push(vscode.LanguageModelChatMessage.User(`Above is the result of calling the function ${tool.id}. The user cannot see this result, so you should explain it to the user if referencing it in your answer.`));
-                    didReceiveFunctionUse = true;
+                    toolCalls.push({
+                        call: part,
+                        result: vscode.lm.invokeTool(tool.id, { parameters: JSON.parse(part.parameters) }, token),
+                        tool
+                    });
                 }
             }
 
-            if (didReceiveFunctionUse) {
+            if (toolCalls.length) {
+                for (const toolCall of toolCalls) {
+                    let assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
+                    assistantMsg.content2 = [new vscode.LanguageModelChatResponseToolCallPart(toolCall.tool.id, toolCall.call.toolCallId, toolCall.call.parameters)];
+                    messages.push(assistantMsg);
+    
+                    // NOTE that the result of calling a function is a special content type of a USER-message
+                    let message = vscode.LanguageModelChatMessage.User('');
+                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result).toString())];
+                    messages.push(message);
+    
+                }
+
+                // IMPORTANT The prompt must end with a USER message (with no tool call)
+                messages.push(vscode.LanguageModelChatMessage.User(`Above is the result of calling the functions ${toolCalls.map(call => call.tool.id).join(', ')}. The user cannot see this result, so you should explain it to the user if referencing it in your answer.`));
+                
                 // RE-enter
                 return runWithFunctions();
             }
