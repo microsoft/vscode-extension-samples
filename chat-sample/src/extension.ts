@@ -116,16 +116,14 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
             }
 
             if (toolCalls.length) {
+                let assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
+                assistantMsg.content2 = toolCalls.map(toolCall => new vscode.LanguageModelChatResponseToolCallPart(toolCall.tool.id, toolCall.call.toolCallId, toolCall.call.parameters));
+                messages.push(assistantMsg);
                 for (const toolCall of toolCalls) {
-                    let assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
-                    assistantMsg.content2 = [new vscode.LanguageModelChatResponseToolCallPart(toolCall.tool.id, toolCall.call.toolCallId, toolCall.call.parameters)];
-                    messages.push(assistantMsg);
-    
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     let message = vscode.LanguageModelChatMessage.User('');
                     message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result).toString())];
                     messages.push(message);
-    
                 }
 
                 // IMPORTANT The prompt must end with a USER message (with no tool call)
