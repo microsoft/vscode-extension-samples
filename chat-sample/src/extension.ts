@@ -96,7 +96,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                     const tool = vscode.lm.tools.find(tool => tool.id === part.name);
                     if (!tool) {
                         // BAD tool choice?
-                        continue;
+                        throw new Error('Got invalid tool choice: ' + part.name);
                     }
 
                     let parameters: any;
@@ -109,7 +109,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                     stream.progress(`Calling tool: ${tool.id} with ${part.parameters}`);
                     toolCalls.push({
                         call: part,
-                        result: vscode.lm.invokeTool(tool.id, { parameters: JSON.parse(part.parameters) }, token),
+                        result: vscode.lm.invokeTool(tool.id, { parameters: JSON.parse(part.parameters), toolInvocationToken: request.toolInvocationToken }, token),
                         tool
                     });
                 }
