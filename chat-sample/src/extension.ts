@@ -125,7 +125,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     const message = vscode.LanguageModelChatMessage.User('');
 
-                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result).toString())];
+                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result)['text/plain'])];
                     messages.push(message);
                 }
 
