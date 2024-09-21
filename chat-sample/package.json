@@ -49,7 +49,10 @@
                             "default": 0
                         }
                     }
-                }
+                },
+                "supportedContentTypes": [
+                    "text/plain"
+                ]
             },
             {
                 "id": "chat-sample_catVoice",
@@ -58,7 +61,11 @@
                 "modelDescription": "Speak in a cat voice",
                 "userDescription": "Speak in a cat voice",
                 "icon": "$(files)",
-                "canBeInvokedManually": true
+                "canBeInvokedManually": true,
+                "supportedContentTypes": [
+                    "text/plain",
+                    "application/vnd.codechat.prompt+json.1"
+                ]
             }
         ]
     },

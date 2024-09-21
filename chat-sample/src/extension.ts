@@ -1,6 +1,6 @@
-import { contentType, renderElementJSON } from '@vscode/prompt-tsx';
+import { contentType as promptTsxContentType, renderElementJSON } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
-import { CatToolPrompt } from './play';
+import { CatVoiceToolResult } from './tools';
 
 export function activate(context: vscode.ExtensionContext) {
     registerChatTool(context);
@@ -10,12 +10,16 @@ export function activate(context: vscode.ExtensionContext) {
 function registerChatTool(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.lm.registerTool('chat-sample_catVoice', {
         async invoke(options, token) {
-            return {
-                [contentType]: await renderElementJSON(CatToolPrompt, {}, options.tokenOptions, token),
-                toString() {
-                    return 'Reply in the voice of a cat! Use cat analogies when appropriate.';
-                },
-            };
+            const result: vscode.LanguageModelToolResult = {};
+            if (options.requestedContentTypes.includes(promptTsxContentType)) {
+                result[promptTsxContentType] = await renderElementJSON(CatVoiceToolResult, {}, options.tokenOptions, token);
+            }
+
+            if (options.requestedContentTypes.includes('text/plain')) {
+                result['text/plain'] = 'Reply in the voice of a cat! Use cat analogies when appropriate.';
+            }
+
+            return result;
         },
     }));
 
@@ -25,19 +29,15 @@ function registerChatTool(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.lm.registerTool('chat-sample_tabCount', {
         async invoke(options, token) {
-            return {
-                toString() {
-                    const params = options.parameters as ITabCountParameters;
-                    if (typeof params.tabGroup === 'number') {
-                        const group = vscode.window.tabGroups.all[Math.max(params.tabGroup - 1, 0)];
-                        const nth = params.tabGroup === 1 ? '1st' : params.tabGroup === 2 ? '2nd' : params.tabGroup === 3 ? '3rd' : `${params.tabGroup}th`;
-                        return `There are ${group.tabs.length} tabs open in the ${nth} tab group.`;
-                    } else {
-                        const group = vscode.window.tabGroups.activeTabGroup;
-                        return `There are ${group.tabs.length} tabs open.`;
-                    }
-                },
-            };
+            const params = options.parameters as ITabCountParameters;
+            if (typeof params.tabGroup === 'number') {
+                const group = vscode.window.tabGroups.all[Math.max(params.tabGroup - 1, 0)];
+                const nth = params.tabGroup === 1 ? '1st' : params.tabGroup === 2 ? '2nd' : params.tabGroup === 3 ? '3rd' : `${params.tabGroup}th`;
+                return { 'text/plain': `There are ${group.tabs.length} tabs open in the ${nth} tab group.` };
+            } else {
+                const group = vscode.window.tabGroups.activeTabGroup;
+                return { 'text/plain': `There are ${group.tabs.length} tabs open.` };
+            }
         },
     }));
 }
@@ -107,28 +107,31 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                     }
 
                     stream.progress(`Calling tool: ${tool.id} with ${part.parameters}`);
+                    // TODO support prompt-tsx here
+                    const requestedContentType = 'text/plain';
                     toolCalls.push({
                         call: part,
-                        result: vscode.lm.invokeTool(tool.id, { parameters: JSON.parse(part.parameters), toolInvocationToken: request.toolInvocationToken }, token),
+                        result: vscode.lm.invokeTool(tool.id, { parameters: JSON.parse(part.parameters), toolInvocationToken: request.toolInvocationToken, requestedContentTypes: [requestedContentType] }, token),
                         tool
                     });
                 }
             }
 
             if (toolCalls.length) {
-                let assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
+                const assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
                 assistantMsg.content2 = toolCalls.map(toolCall => new vscode.LanguageModelChatResponseToolCallPart(toolCall.tool.id, toolCall.call.toolCallId, toolCall.call.parameters));
                 messages.push(assistantMsg);
                 for (const toolCall of toolCalls) {
                     // NOTE that the result of calling a function is a special content type of a USER-message
-                    let message = vscode.LanguageModelChatMessage.User('');
+                    const message = vscode.LanguageModelChatMessage.User('');
+
                     message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result).toString())];
                     messages.push(message);
                 }
 
                 // IMPORTANT The prompt must end with a USER message (with no tool call)
                 messages.push(vscode.LanguageModelChatMessage.User(`Above is the result of calling the functions ${toolCalls.map(call => call.tool.id).join(', ')}. The user cannot see this result, so you should explain it to the user if referencing it in your answer.`));
-                
+
                 // RE-enter
                 return runWithFunctions();
             }
