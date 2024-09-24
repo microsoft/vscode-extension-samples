@@ -52,7 +52,8 @@
                 },
                 "supportedContentTypes": [
                     "text/plain"
-                ]
+                ],
+                "requiresConfirmation": true
             },
             {
                 "id": "chat-sample_catVoice",

@@ -21,6 +21,7 @@ function registerChatTool(context: vscode.ExtensionContext) {
 
             return result;
         },
+        provideToolInvocationMessage: async () => 'Speaking in the voice of a cat',
     }));
 
     interface ITabCountParameters {
@@ -29,6 +30,7 @@ function registerChatTool(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(vscode.lm.registerTool('chat-sample_tabCount', {
         async invoke(options, token) {
+            await new Promise(resolve => setTimeout(resolve, 5000));
             const params = options.parameters as ITabCountParameters;
             if (typeof params.tabGroup === 'number') {
                 const group = vscode.window.tabGroups.all[Math.max(params.tabGroup - 1, 0)];
@@ -39,6 +41,14 @@ function registerChatTool(context: vscode.ExtensionContext) {
                 return { 'text/plain': `There are ${group.tabs.length} tabs open.` };
             }
         },
+        provideToolInvocationMessage: async () => 'Counting the number of tabs',
+        provideToolConfirmationMessages: async (options) => {
+            const params = options.parameters as ITabCountParameters;
+            return { 
+                title: 'Count the number of open tabs', 
+                message: new vscode.MarkdownString(`${options.participantName} will count the number of **open tabs**` + (params.tabGroup !== undefined ? ` in tab group ${params.tabGroup}` : '')) 
+            };
+        }
     }));
 }
 
@@ -56,7 +66,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
         });
 
         const model = models[0];
-        stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
+        // stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
 
         const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
             return {
@@ -106,7 +116,6 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                         throw new Error(`Got invalid tool use parameters: "${part.parameters}". (${(err as Error).message})`);
                     }
 
-                    stream.progress(`Calling tool: ${tool.id} with ${part.parameters}`);
                     // TODO support prompt-tsx here
                     const requestedContentType = 'text/plain';
                     toolCalls.push({
