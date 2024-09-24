@@ -46,7 +46,7 @@ function registerChatTool(context: vscode.ExtensionContext) {
             const params = options.parameters as ITabCountParameters;
             return { 
                 title: 'Count the number of open tabs', 
-                message: new vscode.MarkdownString(`${options.participantName} will count the number of **open tabs**` + (params.tabGroup !== undefined ? ` in tab group ${params.tabGroup}` : '')) 
+                message: new vscode.MarkdownString(`${options.participantName} will count the number of open tabs` + (params.tabGroup !== undefined ? ` in tab group ${params.tabGroup}` : '')) 
             };
         }
     }));
