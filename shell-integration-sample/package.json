@@ -4,25 +4,22 @@
   "description": "",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.88.0"
+    "vscode": "^1.93.0"
   },
-  "enabledApiProposals": [
-    "terminalShellIntegration"
-  ],
   "categories": [
     "Other"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
-	"terminal": {
-		"profiles": [
-			{
-				"id": "shell-integration-sample.track-editor-directory",
-				"title": "Track Editor Directory"
-			}
-		]
-	}
+    "terminal": {
+      "profiles": [
+        {
+          "id": "shell-integration-sample.track-editor-directory",
+          "title": "Track Editor Directory"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -31,8 +28,8 @@
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
-    "@types/vscode": "^1.88.0",
     "@types/node": "18.x",
+    "@types/vscode": "^1.93.0",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.14.0",
     "eslint": "^8.57.0",
