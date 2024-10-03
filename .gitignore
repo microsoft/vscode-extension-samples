@@ -7,3 +7,4 @@ Thumbs.db
 tsconfig.lsif.json
 *.lsif
 *.db
+*.tsbuildinfo
