@@ -282,6 +282,13 @@ const samples = [
     contributions: []
   },
   {
+    description: 'Chat Tutorial',
+    path: 'chat-tutorial',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
     description: 'Notifications Sample',
     path: 'notifications-sample',
     guide: null,
