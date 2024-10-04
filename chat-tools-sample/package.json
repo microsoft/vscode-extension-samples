@@ -1,8 +1,8 @@
 {
-    "name": "chat-sample",
+    "name": "chat-tool-sample",
     "publisher": "vscode-samples",
-    "displayName": "Copilot Chat Sample",
-    "description": "Sample chat extension, a trusty cat tutor that will can teach you computer science topics.",
+    "displayName": "Copilot Chat Tools Sample",
+    "description": "Sample chat extension that registers and uses LanguageModelTools",
     "repository": {
         "type": "git",
         "url": "https://github.com/Microsoft/vscode-extension-samples"
@@ -17,14 +17,12 @@
     ],
     "activationEvents": [],
     "enabledApiProposals": [
-        "chatVariableResolver",
-        "chatParticipantAdditions",
         "lmTools"
     ],
     "contributes": {
         "chatParticipants": [
             {
-                "id": "chat-sample.tools",
+                "id": "chat-tools-sample.tools",
                 "fullName": "Tool User",
                 "name": "tools",
                 "description": "I use tools",
@@ -34,6 +32,7 @@
         ],
         "languageModelTools": [
             {
+                "tags": ["editors", "chat-sample"],
                 "id": "chat-sample_tabCount",
                 "name": "tabCount",
                 "displayName": "Tab Count",
@@ -54,19 +53,6 @@
                     "text/plain"
                 ],
                 "requiresConfirmation": true
-            },
-            {
-                "id": "chat-sample_catVoice",
-                "name": "catVoice",
-                "displayName": "Cat Voice",
-                "modelDescription": "Speak in a cat voice",
-                "userDescription": "Speak in a cat voice",
-                "icon": "$(files)",
-                "canBeInvokedManually": true,
-                "supportedContentTypes": [
-                    "text/plain",
-                    "application/vnd.codechat.prompt+json.1"
-                ]
             }
         ]
     },

@@ -8,27 +8,11 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function registerChatTool(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.lm.registerTool('chat-sample_catVoice', {
-        async invoke(options, token) {
-            const result: vscode.LanguageModelToolResult = {};
-            if (options.requestedContentTypes.includes(promptTsxContentType)) {
-                result[promptTsxContentType] = await renderElementJSON(CatVoiceToolResult, {}, options.tokenOptions, token);
-            }
-
-            if (options.requestedContentTypes.includes('text/plain')) {
-                result['text/plain'] = 'Reply in the voice of a cat! Use cat analogies when appropriate.';
-            }
-
-            return result;
-        },
-        provideToolInvocationMessage: async () => 'Speaking in the voice of a cat',
-    }));
-
     interface ITabCountParameters {
         tabGroup?: number;
     }
 
-    context.subscriptions.push(vscode.lm.registerTool('chat-sample_tabCount', {
+    context.subscriptions.push(vscode.lm.registerTool<ITabCountParameters>('chat-sample_tabCount', {
         async invoke(options, token) {
             await new Promise(resolve => setTimeout(resolve, 5000));
             const params = options.parameters as ITabCountParameters;
@@ -41,14 +25,17 @@ function registerChatTool(context: vscode.ExtensionContext) {
                 return { 'text/plain': `There are ${group.tabs.length} tabs open.` };
             }
         },
-        provideToolInvocationMessage: async () => 'Counting the number of tabs',
-        provideToolConfirmationMessages: async (options) => {
-            const params = options.parameters as ITabCountParameters;
-            return { 
-                title: 'Count the number of open tabs', 
-                message: new vscode.MarkdownString(`${options.participantName} will count the number of open tabs` + (params.tabGroup !== undefined ? ` in tab group ${params.tabGroup}` : '')) 
+        prepareToolInvocation: async (options) => {
+            const confirmationMessages = {
+                title: 'Count the number of open tabs',
+                message: new vscode.MarkdownString(`${options.participantName} will count the number of open tabs` + (options.parameters.tabGroup !== undefined ? ` in tab group ${options.parameters.tabGroup}` : ''))
             };
-        }
+            
+            return {
+                invocationMessage: 'Counting the number of tabs',
+                confirmationMessages
+            }
+        },
     }));
 }
 
@@ -58,6 +45,12 @@ interface IToolCall {
     result: Thenable<vscode.LanguageModelToolResult>;
 }
 
+const llmInstructions = `Instructions: 
+- The user will ask a question, or ask you to perform a task, and it may require lots of research to answer correctly. There is a selection of tools that let you perform actions or retrieve helpful context to answer the user's question. 
+- If you aren't sure which tool is relevant, you can call multiple tools. You can call tools repeatedly to take actions or gather as much context as needed until you have completed the task fully. Don't give up unless you are sure the request cannot be fulfilled with the tools you have. 
+- Don't ask the user for confirmation to use tools, just use them.
+- After editing a file, DO NOT show the user a codeblock with the edit or new file contents. Assume that the user can see the result.`
+
 function registerChatParticipant(context: vscode.ExtensionContext) {
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
         const models = await vscode.lm.selectChatModels({
@@ -66,12 +59,12 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
         });
 
         const model = models[0];
-        // stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
+        stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
 
         const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
             return {
                 name: tool.id,
-                description: tool.modelDescription,
+                description: tool.description,
                 parametersSchema: tool.parametersSchema ?? {}
             };
         });
@@ -81,9 +74,14 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
         };
 
         const messages = [
-            vscode.LanguageModelChatMessage.User(`There is a selection of tools that may give helpful context to answer the user's query. If you aren't sure which tool is relevant, you can call multiple tools.`),
-            vscode.LanguageModelChatMessage.User(request.prompt),
+            vscode.LanguageModelChatMessage.User(llmInstructions),
         ];
+        messages.push(...await getHistoryMessages(chatContext));
+        if (request.references.length) {
+            messages.push(vscode.LanguageModelChatMessage.User(await getContextMessage(request.references)));
+        }
+        messages.push(vscode.LanguageModelChatMessage.User(request.prompt));
+
         const toolReferences = [...request.toolReferences];
         const runWithFunctions = async (): Promise<void> => {
             const requestedTool = toolReferences.shift();
@@ -134,7 +132,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     const message = vscode.LanguageModelChatMessage.User('');
 
-                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result)['text/plain'])];
+                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result)['text/plain']!)];
                     messages.push(message);
                 }
 
@@ -149,9 +147,56 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
         await runWithFunctions();
     };
 
-    const toolUser = vscode.chat.createChatParticipant('chat-sample.tools', handler);
+    const toolUser = vscode.chat.createChatParticipant('chat-tools-sample.tools', handler);
     toolUser.iconPath = new vscode.ThemeIcon('tools');
     context.subscriptions.push(toolUser);
+}
+
+async function getContextMessage(references: ReadonlyArray<vscode.ChatPromptReference>): Promise<string> {
+    const contextParts = (await Promise.all(references.map(async ref => {
+        if (ref.value instanceof vscode.Uri) {
+            const fileContents = (await vscode.workspace.fs.readFile(ref.value)).toString();
+            return `${ref.value.fsPath}:\n\`\`\`\n${fileContents}\n\`\`\``;
+        } else if (ref.value instanceof vscode.Location) {
+            const rangeText = (await vscode.workspace.openTextDocument(ref.value.uri)).getText(ref.value.range);
+            return `${ref.value.uri.fsPath}:${ref.value.range.start.line + 1}-${ref.value.range.end.line + 1}\n\`\`\`${rangeText}\`\`\``;
+        } else if (typeof ref.value === 'string') {
+            return ref.value;
+        }
+        return null;
+    }))).filter(part => part !== null) as string[];
+
+    const context = contextParts
+        .map(part => `<context>\n${part}\n</context>`)
+        .join('\n');
+    return `The user has provided these references:\n${context}`;
+}
+
+async function getHistoryMessages(context: vscode.ChatContext): Promise<vscode.LanguageModelChatMessage[]> {
+    const messages: vscode.LanguageModelChatMessage[] = [];
+    for (const message of context.history) {
+        if (message instanceof vscode.ChatRequestTurn) {
+            if (message.references.length) {
+                messages.push(vscode.LanguageModelChatMessage.User(await getContextMessage(message.references)));
+            }
+            messages.push(vscode.LanguageModelChatMessage.User(message.prompt));
+        } else if (message instanceof vscode.ChatResponseTurn) {
+            const strResponse = message.response.map(part => {
+                if (part instanceof vscode.ChatResponseMarkdownPart) {
+                    return part.value.value;
+                } else if (part instanceof vscode.ChatResponseAnchorPart) {
+                    if (part.value instanceof vscode.Location) {
+                        return ` ${part.value.uri.fsPath}:${part.value.range.start.line}-${part.value.range.end.line} `;
+                    } else if (part.value instanceof vscode.Uri) {
+                        return ` ${part.value.fsPath} `;
+                    }
+                }
+            }).join('');
+            messages.push(vscode.LanguageModelChatMessage.Assistant(strResponse));
+        }
+    }
+
+    return messages;
 }
 
 
