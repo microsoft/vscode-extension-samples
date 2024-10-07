@@ -1,5 +1,5 @@
 {
-    "name": "chat-tool-sample",
+    "name": "chat-tools-sample",
     "publisher": "vscode-samples",
     "displayName": "Copilot Chat Tools Sample",
     "description": "Sample chat extension that registers and uses LanguageModelTools",
@@ -32,8 +32,8 @@
         ],
         "languageModelTools": [
             {
-                "tags": ["editors", "chat-sample"],
-                "id": "chat-sample_tabCount",
+                "id": "chat-tools-sample_tabCount",
+                "tags": ["editors", "chat-tools-sample"],
                 "name": "tabCount",
                 "displayName": "Tab Count",
                 "modelDescription": "The number of active tabs in a tab group",
@@ -51,6 +51,53 @@
                 },
                 "supportedContentTypes": [
                     "text/plain"
+                ]
+            },
+            {
+                "id": "chat-tools-sample_findFiles",
+                "tags": [
+                    "files",
+                    "search",
+                    "chat-tools-sample"
+                ],
+                "displayName": "Find Files",
+                "modelDescription": "Search for files in the current workspace",
+                "parametersSchema": {
+                    "type": "object",
+                    "properties": {
+                        "pattern": {
+                            "type": "string",
+                            "description": "Search for files that match this glob pattern"
+                        }
+                    },
+                    "required": ["pattern"]
+                },
+                "supportedContentTypes": [
+                    "text/plain"
+                ]
+            },
+            {
+                "id": "chat-tools-sample_runInTerminal",
+                "tags": [
+                    "terminal",
+                    "chat-tools-sample"
+                ],
+                "displayName": "Run in Terminal",
+                "modelDescription": "Run a command in a terminal and return the output",
+                "parametersSchema": {
+                    "type": "object",
+                    "properties": {
+                        "command": {
+                            "type": "string",
+                            "description": "The command to run"
+                        }
+                    },
+                    "required": [
+                        "command"
+                    ]
+                },
+                "supportedContentTypes": [
+                    "text/plain"
                 ],
                 "requiresConfirmation": true
             }
@@ -64,7 +111,7 @@
     },
     "devDependencies": {
         "@types/node": "^20.5.9",
-        "@types/vscode": "^1.90.0",
+        "@types/vscode": "^1.94.0",
         "@vscode/prompt-tsx": "^0.2.7-alpha",
         "eslint": "^7.22.0",
         "run-script-os": "^1.1.6",

@@ -1,6 +1,5 @@
-import { contentType as promptTsxContentType, renderElementJSON } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
-import { CatVoiceToolResult } from './tools';
+import { FindFilesTool, RunInTerminalTool, TabCountTool } from './tools';
 
 export function activate(context: vscode.ExtensionContext) {
     registerChatTool(context);
@@ -8,35 +7,9 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 function registerChatTool(context: vscode.ExtensionContext) {
-    interface ITabCountParameters {
-        tabGroup?: number;
-    }
-
-    context.subscriptions.push(vscode.lm.registerTool<ITabCountParameters>('chat-sample_tabCount', {
-        async invoke(options, token) {
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            const params = options.parameters as ITabCountParameters;
-            if (typeof params.tabGroup === 'number') {
-                const group = vscode.window.tabGroups.all[Math.max(params.tabGroup - 1, 0)];
-                const nth = params.tabGroup === 1 ? '1st' : params.tabGroup === 2 ? '2nd' : params.tabGroup === 3 ? '3rd' : `${params.tabGroup}th`;
-                return { 'text/plain': `There are ${group.tabs.length} tabs open in the ${nth} tab group.` };
-            } else {
-                const group = vscode.window.tabGroups.activeTabGroup;
-                return { 'text/plain': `There are ${group.tabs.length} tabs open.` };
-            }
-        },
-        prepareToolInvocation: async (options) => {
-            const confirmationMessages = {
-                title: 'Count the number of open tabs',
-                message: new vscode.MarkdownString(`${options.participantName} will count the number of open tabs` + (options.parameters.tabGroup !== undefined ? ` in tab group ${options.parameters.tabGroup}` : ''))
-            };
-            
-            return {
-                invocationMessage: 'Counting the number of tabs',
-                confirmationMessages
-            }
-        },
-    }));
+    context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_tabCount', new TabCountTool()));
+    context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_findFiles', new FindFilesTool()));
+    context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_runInTerminal', new RunInTerminalTool()));
 }
 
 interface IToolCall {
@@ -48,6 +21,7 @@ interface IToolCall {
 const llmInstructions = `Instructions: 
 - The user will ask a question, or ask you to perform a task, and it may require lots of research to answer correctly. There is a selection of tools that let you perform actions or retrieve helpful context to answer the user's question. 
 - If you aren't sure which tool is relevant, you can call multiple tools. You can call tools repeatedly to take actions or gather as much context as needed until you have completed the task fully. Don't give up unless you are sure the request cannot be fulfilled with the tools you have. 
+- Don't make assumptions about the situation- gather context first, then perform the task or answer the question.
 - Don't ask the user for confirmation to use tools, just use them.
 - After editing a file, DO NOT show the user a codeblock with the edit or new file contents. Assume that the user can see the result.`
 

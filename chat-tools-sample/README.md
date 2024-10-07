@@ -13,9 +13,4 @@ This sample shows
 	- Run the extension in a new VS Code window
 
 ## TODO
-- Read files from references
-- Tools
-	- Something to collect some vscode window context (tab count)
-	- Something that has a side effect and confirmation- run in terminal?
-	- Something that returns a large amount of data and uses Prompt-TSX and references- findFiles
-- Use prompt-tsx for main prompt
+- Use prompt-tsx for main prompt and tools
