@@ -72,7 +72,7 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
-		"@vscode/prompt-tsx": "^0.2.3-alpha"
+		"@vscode/prompt-tsx": "^0.2.8-alpha"
 	},
 	"devDependencies": {
 		"@types/node": "^20.5.9",
