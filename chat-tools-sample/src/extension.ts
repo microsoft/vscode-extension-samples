@@ -45,6 +45,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
 
         const options: vscode.LanguageModelChatRequestOptions = {
             justification: 'Just because!',
+			tools: allTools
         };
 
         const messages = [
@@ -56,17 +57,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
         }
         messages.push(vscode.LanguageModelChatMessage.User(request.prompt));
 
-        const toolReferences = [...request.toolReferences];
         const runWithFunctions = async (): Promise<void> => {
-            const requestedTool = toolReferences.shift();
-            if (requestedTool) {
-                options.toolChoice = requestedTool.id;
-                options.tools = allTools.filter(tool => tool.name === requestedTool.id);
-            } else {
-                options.toolChoice = undefined;
-                options.tools = allTools;
-            }
-
             const toolCalls: IToolCall[] = [];
 
             const response = await model.sendRequest(messages, options, token);
