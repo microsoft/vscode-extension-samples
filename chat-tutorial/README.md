@@ -6,7 +6,7 @@ This GitHub Copilot Extension sample shows:
 
 - How to contribute a chat participant to the GitHub Copilot Chat view.
 
-![demo](./demo.png)
+![A screenshot of the running extension, showing the @tutor /exercise command](./demo.png)
 
 Documentation can be found here:
 - https://code.visualstudio.com/api/extension-guides/chat
