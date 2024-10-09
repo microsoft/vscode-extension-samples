@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-// version: 7
+// version: 8
 // https://github.com/microsoft/vscode/issues/213274
 
 declare module 'vscode' {
@@ -30,7 +30,7 @@ declare module 'vscode' {
 	}
 
 	// LM -> USER: function that should be used
-	export class LanguageModelChatResponseToolCallPart {
+	export class LanguageModelToolCallPart {
 		name: string;
 		toolCallId: string;
 		parameters: any;
@@ -39,24 +39,23 @@ declare module 'vscode' {
 	}
 
 	// LM -> USER: text chunk
-	export class LanguageModelChatResponseTextPart {
+	export class LanguageModelTextPart {
 		value: string;
 
 		constructor(value: string);
 	}
 
 	export interface LanguageModelChatResponse {
-		stream: AsyncIterable<LanguageModelChatResponseTextPart | LanguageModelChatResponseToolCallPart>;
+		stream: AsyncIterable<LanguageModelTextPart | LanguageModelToolCallPart>;
 	}
 
 
 	// USER -> LM: the result of a function call
-	export class LanguageModelChatMessageToolResultPart {
+	export class LanguageModelToolResultPart {
 		toolCallId: string;
 		content: string;
-		isError: boolean;
 
-		constructor(toolCallId: string, content: string, isError?: boolean);
+		constructor(toolCallId: string, content: string);
 	}
 
 	export interface LanguageModelChatMessage {
@@ -65,10 +64,10 @@ declare module 'vscode' {
 		 * Some parts would be message-type specific for some models and wouldn't go together,
 		 * but it's up to the chat provider to decide what to do about that.
 		 * Can drop parts that are not valid for the message type.
-		 * LanguageModelChatMessageToolResultPart: only on User messages
-		 * LanguageModelChatResponseToolCallPart: only on Assistant messages
+		 * LanguageModelToolResultPart: only on User messages
+		 * LanguageModelToolCallPart: only on Assistant messages
 		 */
-		content2: (string | LanguageModelChatMessageToolResultPart | LanguageModelChatResponseToolCallPart)[];
+		content2: (string | LanguageModelToolResultPart | LanguageModelToolCallPart)[];
 	}
 
 	// Tool registration/invoking between extensions
@@ -76,25 +75,23 @@ declare module 'vscode' {
 	/**
 	 * A result returned from a tool invocation.
 	 */
+	// TODO@API should we align this with NotebookCellOutput and NotebookCellOutputItem
 	export interface LanguageModelToolResult {
 		/**
 		 * The result can contain arbitrary representations of the content. A tool user can set
 		 * {@link LanguageModelToolInvocationOptions.requested} to request particular types, and a tool implementation should only
-		 * compute the types that were requested. `text/plain` is required to be supported by all tools. Another example might be
-		 * a `PromptElementJSON` from `@vscode/prompt-tsx`, using the `contentType` exported by that library.
+		 * compute the types that were requested. `text/plain` is recommended to be supported by all tools, which would indicate
+		 * any text-based content. Another example might be a `PromptElementJSON` from `@vscode/prompt-tsx`, using the
+		 * `contentType` exported by that library.
 		 */
 		[contentType: string]: any;
-
-		/**
-		 * A string representation of the result.
-		 */
-		'text/plain'?: string;
 	}
 
 	export namespace lm {
 		/**
 		 * Register a LanguageModelTool. The tool must also be registered in the package.json `languageModelTools` contribution
-		 * point. A registered tool is available in the {@link lm.tools} list for any extension to invoke.
+		 * point. A registered tool is available in the {@link lm.tools} list for any extension to see. But in order for it to
+		 * be seen by a language model, it must be passed in the list of available tools in {@link LanguageModelChatRequestOptions.tools}.
 		 */
 		export function registerTool<T>(id: string, tool: LanguageModelTool<T>): Disposable;
 
@@ -134,7 +131,7 @@ declare module 'vscode' {
 
 		/**
 		 * A tool user can request that particular content types be returned from the tool, depending on what the tool user
-		 * supports. All tools are required to support `text/plain`. See {@link LanguageModelToolResult}.
+		 * supports. All tools are recommended to support `text/plain`. See {@link LanguageModelToolResult}.
 		 */
 		requestedContentTypes: string[];
 

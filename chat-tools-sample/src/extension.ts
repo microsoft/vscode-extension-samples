@@ -14,7 +14,7 @@ function registerChatTool(context: vscode.ExtensionContext) {
 
 interface IToolCall {
     tool: vscode.LanguageModelToolDescription;
-    call: vscode.LanguageModelChatResponseToolCallPart;
+    call: vscode.LanguageModelToolCallPart;
     result: Thenable<vscode.LanguageModelToolResult>;
 }
 
@@ -72,9 +72,9 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
             const response = await model.sendRequest(messages, options, token);
 
             for await (const part of response.stream) {
-                if (part instanceof vscode.LanguageModelChatResponseTextPart) {
+                if (part instanceof vscode.LanguageModelTextPart) {
                     stream.markdown(part.value);
-                } else if (part instanceof vscode.LanguageModelChatResponseToolCallPart) {
+                } else if (part instanceof vscode.LanguageModelToolCallPart) {
                     const tool = vscode.lm.tools.find(tool => tool.id === part.name);
                     if (!tool) {
                         // BAD tool choice?
@@ -100,13 +100,13 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
 
             if (toolCalls.length) {
                 const assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
-                assistantMsg.content2 = toolCalls.map(toolCall => new vscode.LanguageModelChatResponseToolCallPart(toolCall.tool.id, toolCall.call.toolCallId, toolCall.call.parameters));
+                assistantMsg.content2 = toolCalls.map(toolCall => new vscode.LanguageModelToolCallPart(toolCall.tool.id, toolCall.call.toolCallId, toolCall.call.parameters));
                 messages.push(assistantMsg);
                 for (const toolCall of toolCalls) {
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     const message = vscode.LanguageModelChatMessage.User('');
 
-                    message.content2 = [new vscode.LanguageModelChatMessageToolResultPart(toolCall.call.toolCallId, (await toolCall.result)['text/plain']!)];
+                    message.content2 = [new vscode.LanguageModelToolResultPart(toolCall.call.toolCallId, (await toolCall.result)['text/plain']!)];
                     messages.push(message);
                 }
 
