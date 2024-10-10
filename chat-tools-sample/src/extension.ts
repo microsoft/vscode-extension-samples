@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { FindFilesTool, RunInTerminalTool, TabCountTool } from './tools';
 import { renderPrompt } from '@vscode/prompt-tsx';
-import { ToolResultMetadata, ToolUserPrompt } from './toolsPrompt';
+import { ToolCallRound, ToolResultMetadata, ToolUserPrompt } from './toolsPrompt';
 
 export function activate(context: vscode.ExtensionContext) {
     registerChatTool(context);
@@ -215,13 +215,15 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
             {
                 context: chatContext,
                 request,
-                toolCalls: [],
+                toolCallRounds: [],
+                toolCallResults: new Map()
             },
             { modelMaxPromptTokens: model.maxInputTokens },
             model)
 
         const toolReferences = [...request.toolReferences];
         const accumulatedToolCalls = new Map<string, vscode.LanguageModelToolResult>();
+        const toolCallRounds: ToolCallRound[] = [];
         const runWithFunctions = async (): Promise<void> => {
             const requestedTool = toolReferences.shift();
             if (requestedTool) {
@@ -249,19 +251,25 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
             }
 
             if (toolCalls.length) {
+                toolCallRounds.push({
+                    response: responseStr,
+                    toolCalls
+                });
                 const result = (await renderPrompt(
                     ToolUserPrompt,
                     {
                         context: chatContext,
                         request,
-                        toolCalls,
+                        toolCallRounds,
+                        toolCallResults: accumulatedToolCalls
                     },
                     { modelMaxPromptTokens: model.maxInputTokens },
                     model));
                 messages = result.messages;
-                const toolResultMetadata = result.metadatas.get(ToolResultMetadata)
-                if (toolResultMetadata) {
-                    toolResultMetadata.resultMap.forEach((value, key) => accumulatedToolCalls.set(key, value));
+                const toolResultMetadata = result.metadatas.getAll(ToolResultMetadata)
+                if (toolResultMetadata?.length) {
+                    // TODO flatten
+                    toolResultMetadata.forEach(meta => meta.resultMap.forEach((value, key) => accumulatedToolCalls.set(key, value)));
                 }
 
                 // RE-enter

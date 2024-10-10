@@ -13,10 +13,16 @@ import {
 import { Chunk, ToolMessage, ToolResult } from '@vscode/prompt-tsx/dist/base/promptElements';
 import * as vscode from 'vscode';
 
+export interface ToolCallRound {
+	response: string;
+	toolCalls: vscode.LanguageModelToolCallPart[];
+}
+
 export interface ToolUserProps extends BasePromptElementProps {
 	request: vscode.ChatRequest;
 	context: vscode.ChatContext;
-	toolCalls: vscode.LanguageModelToolCallPart[];
+	toolCallRounds: ToolCallRound[];
+	toolCallResults: Map<string, vscode.LanguageModelToolResult>;
 }
 
 export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
@@ -46,14 +52,19 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 					priority={30}
 				/>
 				<UserMessage priority={40}>{this.props.request.prompt}</UserMessage>
-				<ToolCalls toolCalls={this.props.toolCalls} toolInvocationToken={this.props.request.toolInvocationToken}></ToolCalls>
+				<ToolCalls
+					toolCallRounds={this.props.toolCallRounds}
+					toolInvocationToken={this.props.request.toolInvocationToken}
+					toolCallResults={this.props.toolCallResults}>
+				</ToolCalls>
 			</>
 		);
 	}
 }
 
 interface ToolCallsProps extends BasePromptElementProps {
-	toolCalls: vscode.LanguageModelToolCallPart[];
+	toolCallRounds: ToolCallRound[];
+	toolCallResults: Map<string, vscode.LanguageModelToolResult>;
 	toolInvocationToken: vscode.ChatParticipantToolToken;
 }
 
@@ -62,45 +73,54 @@ const dummyCancellationToken: vscode.CancellationToken = new vscode.Cancellation
 
 class ToolCalls extends PromptElement<ToolCallsProps, void> {
 	async render(state: void, sizing: PromptSizing) {
-		if (!this.props.toolCalls.length) {
+		if (!this.props.toolCallRounds.length) {
 			return undefined;
 		}
-		
+
+		return <>
+			{await Promise.all(this.props.toolCallRounds.map(round => this.renderOneToolCallRound(round, sizing)))}
+		</>
+	}
+
+	private async renderOneToolCallRound(round: ToolCallRound, sizing: PromptSizing) {
 		// TODO- prompt-tsx export this type?
 		// TODO- at what level do the parameters get stringified?
-		const assistantToolCalls: any[] = this.props.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
+		const assistantToolCalls: any[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
 		// TODO@prompt-tsx- don't remove "empty" assistant messages!
 
 		const toolResultMap = new Map<string, vscode.LanguageModelToolResult>();
-		const budget = Math.floor(sizing.tokenBudget / this.props.toolCalls.length);
+		const budget = Math.floor(sizing.tokenBudget / round.toolCalls.length);
+		// TODO@prompt-tsx- this would be a bit easier with a ToolCall element, but we can only return one instance of a metadata right now
+		const toolCallSizing: PromptSizing = {
+			...sizing,
+			tokenBudget: budget,
+		};
+
 		return <Chunk>
 			<meta value={new ToolResultMetadata(toolResultMap)}></meta>
-			<AssistantMessage toolCalls={assistantToolCalls}>todo</AssistantMessage>
-			{await Promise.all(this.props.toolCalls.map(async toolCall => {
-				// TODO@prompt-tsx- this would be a bit easier with a ToolCall element, but we can only return one instance of a metadata right now
-				const toolCallSizing: PromptSizing = {
-					...sizing,
-					tokenBudget: budget,
-				};
+			<AssistantMessage toolCalls={assistantToolCalls}>{round.response || 'TODO'}</AssistantMessage>
+			{await Promise.all(round.toolCalls.map(async toolCall => {
 				const result = await this.renderOneToolCall(toolCall, toolCallSizing, this.props.toolInvocationToken);
-				toolResultMap.set(toolCall.toolCallId, result);
+				if (result.toolResult) {
+					toolResultMap.set(toolCall.toolCallId, result.toolResult);
+				}
 				return result.message;
 			}))}
 			<UserMessage priority={100}>Above is the result of calling one or more tools. The user cannot see the results, so you should explain them to the user if referencing them in your answer.</UserMessage>
 		</Chunk>;
 	}
 
-	private async renderOneToolCall(toolCall: vscode.LanguageModelToolCallPart, sizing: PromptSizing, toolInvocationToken: vscode.ChatParticipantToolToken): Promise<{ message: ToolMessage; toolResult: vscode.LanguageModelToolResult; }> {
+	private async renderOneToolCall(toolCall: vscode.LanguageModelToolCallPart, sizing: PromptSizing, toolInvocationToken: vscode.ChatParticipantToolToken): Promise<{ message: ToolMessage; toolResult?: vscode.LanguageModelToolResult; }> {
 		const tool = vscode.lm.tools.find(t => t.id === toolCall.name);
 		if (!tool) {
 			console.error(`Tool not found: ${toolCall.name}`);
-			return <ToolMessage toolCallId={toolCall.toolCallId}>Tool not found</ToolMessage>;
+			return { message: <ToolMessage toolCallId={toolCall.toolCallId}>Tool not found</ToolMessage> };
 		}
 
 		const contentType = agentSupportedContentTypes.find(type => tool.supportedContentTypes.includes(type));
 		if (!contentType) {
 			console.error(`Tool does not support any of the agent's content types: ${tool.id}`);
-			return <ToolMessage toolCallId={toolCall.toolCallId}>Tool unsupported</ToolMessage>;
+			return { message: <ToolMessage toolCallId={toolCall.toolCallId}>Tool unsupported</ToolMessage> };
 		}
 
 		const tokenOptions: vscode.LanguageModelToolInvocationOptions<unknown>['tokenOptions'] = {
@@ -108,12 +128,17 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 			countTokens: async (content: string) => sizing.countTokens(content),
 		};
 
-		const result = await vscode.lm.invokeTool(toolCall.name, { parameters: toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: toolInvocationToken, tokenOptions }, dummyCancellationToken);
-		return <ToolMessage toolCallId={toolCall.toolCallId}>
+		const toolResult = this.props.toolCallResults.get(toolCall.toolCallId) ??
+			await vscode.lm.invokeTool(toolCall.name, { parameters: toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: toolInvocationToken, tokenOptions }, dummyCancellationToken);
+		const message = <ToolMessage toolCallId={toolCall.toolCallId}>
 			{contentType === 'text/plain' ?
-				result[contentType] :
-				<elementJSON data={result[contentType]}></elementJSON>}
+				toolResult[contentType] :
+				<elementJSON data={toolResult[contentType]}></elementJSON>}
 		</ToolMessage>;
+		return {
+			message, 
+			toolResult: toolResult
+		};
 	}
 }
 
