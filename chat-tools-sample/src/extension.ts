@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { FindFilesTool, RunInTerminalTool, TabCountTool } from './tools';
 import { renderPrompt } from '@vscode/prompt-tsx';
-import { ToolUserPrompt } from './toolsPrompt';
+import { ToolResultMetadata, ToolUserPrompt } from './toolsPrompt';
 
 export function activate(context: vscode.ExtensionContext) {
     registerChatTool(context);
@@ -221,6 +221,7 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
             model)
 
         const toolReferences = [...request.toolReferences];
+        const accumulatedToolCalls = new Map<string, vscode.LanguageModelToolResult>();
         const runWithFunctions = async (): Promise<void> => {
             const requestedTool = toolReferences.shift();
             if (requestedTool) {
@@ -248,7 +249,7 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
             }
 
             if (toolCalls.length) {
-                messages = (await renderPrompt(
+                const result = (await renderPrompt(
                     ToolUserPrompt,
                     {
                         context: chatContext,
@@ -256,7 +257,12 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                         toolCalls,
                     },
                     { modelMaxPromptTokens: model.maxInputTokens },
-                    model)).messages;
+                    model));
+                messages = result.messages;
+                const toolResultMetadata = result.metadatas.get(ToolResultMetadata)
+                if (toolResultMetadata) {
+                    toolResultMetadata.resultMap.forEach((value, key) => accumulatedToolCalls.set(key, value));
+                }
 
                 // RE-enter
                 return runWithFunctions();

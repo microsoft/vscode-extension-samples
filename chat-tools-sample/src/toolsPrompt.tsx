@@ -8,8 +8,9 @@ import {
 	PromptPiece,
 	PromptSizing,
 	UserMessage,
+	PromptMetadata,
 } from '@vscode/prompt-tsx';
-import { ToolMessage, ToolResult } from '@vscode/prompt-tsx/dist/base/promptElements';
+import { Chunk, ToolMessage, ToolResult } from '@vscode/prompt-tsx/dist/base/promptElements';
 import * as vscode from 'vscode';
 
 export interface ToolUserProps extends BasePromptElementProps {
@@ -56,43 +57,50 @@ interface ToolCallsProps extends BasePromptElementProps {
 	toolInvocationToken: vscode.ChatParticipantToolToken;
 }
 
+const agentSupportedContentTypes = [promptTsxContentType, 'text/plain'];
+const dummyCancellationToken: vscode.CancellationToken = new vscode.CancellationTokenSource().token;
+
 class ToolCalls extends PromptElement<ToolCallsProps, void> {
-	render(state: void, sizing: PromptSizing) {
+	async render(state: void, sizing: PromptSizing) {
+		if (!this.props.toolCalls.length) {
+			return undefined;
+		}
+		
 		// TODO- prompt-tsx export this type?
 		// TODO- at what level do the parameters get stringified?
 		const assistantToolCalls: any[] = this.props.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
 		// TODO@prompt-tsx- don't remove "empty" assistant messages!
-		return <>
+
+		const toolResultMap = new Map<string, vscode.LanguageModelToolResult>();
+		const budget = Math.floor(sizing.tokenBudget / this.props.toolCalls.length);
+		return <Chunk>
+			<meta value={new ToolResultMetadata(toolResultMap)}></meta>
 			<AssistantMessage toolCalls={assistantToolCalls}>todo</AssistantMessage>
-			{this.props.toolCalls.map(toolCall => {
-				const tool = vscode.lm.tools.find(t => t.id === toolCall.name);
-				if (!tool) {
-					console.error(`Tool not found: ${toolCall.name}`);
-					return undefined;
-				}
-
-				return <ToolCall tool={tool} toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken}></ToolCall>;
-			})}
+			{await Promise.all(this.props.toolCalls.map(async toolCall => {
+				// TODO@prompt-tsx- this would be a bit easier with a ToolCall element, but we can only return one instance of a metadata right now
+				const toolCallSizing: PromptSizing = {
+					...sizing,
+					tokenBudget: budget,
+				};
+				const result = await this.renderOneToolCall(toolCall, toolCallSizing, this.props.toolInvocationToken);
+				toolResultMap.set(toolCall.toolCallId, result);
+				return result.message;
+			}))}
 			<UserMessage priority={100}>Above is the result of calling one or more tools. The user cannot see the results, so you should explain them to the user if referencing them in your answer.</UserMessage>
-		</>;
+		</Chunk>;
 	}
-}
 
-interface ToolCallProps extends BasePromptElementProps {
-	tool: vscode.LanguageModelToolDescription;
-	toolCall: vscode.LanguageModelToolCallPart;
-	toolInvocationToken: vscode.ChatParticipantToolToken;
-}
+	private async renderOneToolCall(toolCall: vscode.LanguageModelToolCallPart, sizing: PromptSizing, toolInvocationToken: vscode.ChatParticipantToolToken): Promise<{ message: ToolMessage; toolResult: vscode.LanguageModelToolResult; }> {
+		const tool = vscode.lm.tools.find(t => t.id === toolCall.name);
+		if (!tool) {
+			console.error(`Tool not found: ${toolCall.name}`);
+			return <ToolMessage toolCallId={toolCall.toolCallId}>Tool not found</ToolMessage>;
+		}
 
-const agentSupportedContentTypes = [promptTsxContentType, 'text/plain'];
-
-const dummyCancellationToken: vscode.CancellationToken = new vscode.CancellationTokenSource().token;
-class ToolCall extends PromptElement<ToolCallProps, void> {
-	async render(state: void, sizing: PromptSizing) {
-		const contentType = agentSupportedContentTypes.find(type => this.props.tool.supportedContentTypes.includes(type));
+		const contentType = agentSupportedContentTypes.find(type => tool.supportedContentTypes.includes(type));
 		if (!contentType) {
-			console.error(`Tool does not support any of the agent's content types: ${this.props.tool.id}`);
-			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool unsupported</ToolMessage>;
+			console.error(`Tool does not support any of the agent's content types: ${tool.id}`);
+			return <ToolMessage toolCallId={toolCall.toolCallId}>Tool unsupported</ToolMessage>;
 		}
 
 		const tokenOptions: vscode.LanguageModelToolInvocationOptions<unknown>['tokenOptions'] = {
@@ -100,14 +108,20 @@ class ToolCall extends PromptElement<ToolCallProps, void> {
 			countTokens: async (content: string) => sizing.countTokens(content),
 		};
 
-		const result = await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: this.props.toolInvocationToken, tokenOptions }, dummyCancellationToken);
-		return <>
-			<ToolMessage toolCallId={this.props.toolCall.toolCallId}>
-				{contentType === 'text/plain' ?
-					result[contentType] :
-					<elementJSON data={result[contentType]}></elementJSON>}
-			</ToolMessage>
-		</>
+		const result = await vscode.lm.invokeTool(toolCall.name, { parameters: toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: toolInvocationToken, tokenOptions }, dummyCancellationToken);
+		return <ToolMessage toolCallId={toolCall.toolCallId}>
+			{contentType === 'text/plain' ?
+				result[contentType] :
+				<elementJSON data={result[contentType]}></elementJSON>}
+		</ToolMessage>;
+	}
+}
+
+export class ToolResultMetadata extends PromptMetadata {
+	constructor(
+		public resultMap: Map<string, vscode.LanguageModelToolResult>,
+	) {
+		super();
 	}
 }
 

@@ -41,7 +41,10 @@
         "languageModelTools": [
             {
                 "id": "chat-tools-sample_tabCount",
-                "tags": ["editors", "chat-tools-sample"],
+                "tags": [
+                    "editors",
+                    "chat-tools-sample"
+                ],
                 "name": "tabCount",
                 "displayName": "Tab Count",
                 "modelDescription": "The number of active tabs in a tab group",
@@ -78,7 +81,9 @@
                             "description": "Search for files that match this glob pattern"
                         }
                     },
-                    "required": ["pattern"]
+                    "required": [
+                        "pattern"
+                    ]
                 },
                 "supportedContentTypes": [
                     "text/plain"
@@ -120,7 +125,7 @@
     "devDependencies": {
         "@types/node": "^20.5.9",
         "@types/vscode": "^1.94.0",
-        "@vscode/prompt-tsx": "^0.2.7-alpha",
+        "@vscode/prompt-tsx": "^0.3.0-alpha.2",
         "eslint": "^7.22.0",
         "run-script-os": "^1.1.6",
         "tslint": "^6.1.3",
