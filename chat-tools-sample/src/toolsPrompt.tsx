@@ -61,8 +61,9 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 		// TODO- prompt-tsx export this type?
 		// TODO- at what level do the parameters get stringified?
 		const assistantToolCalls: any[] = this.props.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
+		// TODO@prompt-tsx- don't remove "empty" assistant messages!
 		return <>
-			<AssistantMessage toolCalls={assistantToolCalls}>test</AssistantMessage>
+			<AssistantMessage toolCalls={assistantToolCalls}>todo</AssistantMessage>
 			{this.props.toolCalls.map(toolCall => {
 				const tool = vscode.lm.tools.find(t => t.id === toolCall.name);
 				if (!tool) {
@@ -100,11 +101,13 @@ class ToolCall extends PromptElement<ToolCallProps, void> {
 		};
 
 		const result = await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: this.props.toolInvocationToken, tokenOptions }, dummyCancellationToken);
-		return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>
-			{contentType === 'text/plain' ?
-				result[contentType] :
-				<elementJSON data={result[contentType]}></elementJSON>}
-		</ToolMessage>;
+		return <>
+			<ToolMessage toolCallId={this.props.toolCall.toolCallId}>
+				{contentType === 'text/plain' ?
+					result[contentType] :
+					<elementJSON data={result[contentType]}></elementJSON>}
+			</ToolMessage>
+		</>
 	}
 }
 
