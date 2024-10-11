@@ -233,7 +233,7 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
             justification: 'Just because!',
         };
 
-        let { messages } = await renderPrompt(
+        let { messages, references } = await renderPrompt(
             ToolUserPrompt,
             {
                 context: chatContext,
@@ -242,7 +242,12 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                 toolCallResults: {}
             },
             { modelMaxPromptTokens: model.maxInputTokens },
-            model)
+            model);
+        references.forEach(ref => {
+            if (ref.anchor instanceof vscode.Uri || ref.anchor instanceof vscode.Location) {
+                stream.reference(ref.anchor);
+            }
+        });
 
         const toolReferences = [...request.toolReferences];
         const accumulatedToolResults: Record<string, vscode.LanguageModelToolResult> = {};
@@ -292,12 +297,6 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                 if (toolResultMetadata?.length) {
                     toolResultMetadata.forEach(meta => accumulatedToolResults[meta.toolCallId] = meta.result);
                 }
-
-                result.references.forEach(ref => {
-                    if (ref.anchor instanceof vscode.Uri || ref.anchor instanceof vscode.Location) {
-                        stream.reference(ref.anchor);
-                    }
-                });
 
                 return runWithFunctions();
             }

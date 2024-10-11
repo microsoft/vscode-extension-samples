@@ -161,13 +161,13 @@ class History extends PromptElement<HistoryProps, void> {
 					if (message instanceof vscode.ChatRequestTurn) {
 						return (
 							<>
-								{<PromptReferences references={message.references} />}
+								{<PromptReferences references={message.references} excludeReferences={true} />}
 								<UserMessage>{message.prompt}</UserMessage>
 							</>
 						);
 					} else if (message instanceof vscode.ChatResponseTurn) {
 						const toolInfo = message.result.metadata?.toolInfo;
-						if (isTsxToolUserMetadata(toolInfo)) {
+						if (isTsxToolUserMetadata(toolInfo) && toolInfo.toolCallRounds.length > 0) {
 							return <ToolCalls toolCallResults={toolInfo.toolCallResults} toolCallRounds={toolInfo.toolCallRounds} toolInvocationToken={undefined} />;
 						}
 
@@ -199,6 +199,7 @@ function chatResponseToString(response: vscode.ChatResponseTurn): string {
 
 interface PromptReferencesProps extends BasePromptElementProps {
 	references: ReadonlyArray<vscode.ChatPromptReference>;
+	excludeReferences?: boolean;
 }
 
 class PromptReferences extends PromptElement<PromptReferencesProps, void> {
@@ -206,7 +207,7 @@ class PromptReferences extends PromptElement<PromptReferencesProps, void> {
 		return (
 			<UserMessage>
 				{this.props.references.map((ref, index) => (
-					<PromptReferenceElement ref={ref} />
+					<PromptReferenceElement ref={ref} excludeReferences={this.props.excludeReferences} />
 				))}
 			</UserMessage>
 		);
@@ -215,6 +216,7 @@ class PromptReferences extends PromptElement<PromptReferencesProps, void> {
 
 interface PromptReferenceProps extends BasePromptElementProps {
 	ref: vscode.ChatPromptReference;
+	excludeReferences?: boolean;
 }
 
 class PromptReferenceElement extends PromptElement<PromptReferenceProps> {
@@ -225,7 +227,7 @@ class PromptReferenceElement extends PromptElement<PromptReferenceProps> {
 			const fileContents = (await vscode.workspace.fs.readFile(value)).toString();
 			return (
 				<Tag name="context">
-					<references value={[new PromptReference(value)]} />
+					{!this.props.excludeReferences && <references value={[new PromptReference(value)]} />}
 					{value.fsPath}:<br />
 					``` <br />
 					{fileContents}<br />
@@ -236,7 +238,7 @@ class PromptReferenceElement extends PromptElement<PromptReferenceProps> {
 			const rangeText = (await vscode.workspace.openTextDocument(value.uri)).getText(value.range);
 			return (
 				<Tag name="context">
-					<references value={[new PromptReference(value)]} />
+					{!this.props.excludeReferences && <references value={[new PromptReference(value)]} /> }
 					{value.uri.fsPath}:{value.range.start.line + 1}-$<br />
 					{value.range.end.line + 1}: <br />
 					```<br />
