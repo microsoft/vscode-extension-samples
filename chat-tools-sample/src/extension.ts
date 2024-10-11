@@ -188,6 +188,29 @@ df\`\`\``),
     context.subscriptions.push(toolUser);
 }
 
+interface TsxToolUserMetadata {
+    toolCallRounds: ToolCallRound[];
+    toolCallResults: Record<string, vscode.LanguageModelToolResult>;
+}
+
+export function isTsxToolUserMetadata(obj: unknown): obj is TsxToolUserMetadata {
+    if (typeof obj !== 'object' || obj === null) {
+        return false;
+    }
+
+    const metadata = obj as TsxToolUserMetadata;
+    if (!Array.isArray(metadata.toolCallRounds)) {
+        return false;
+    }
+
+    if (typeof metadata.toolCallResults !== 'object' || metadata.toolCallResults === null) {
+        return false;
+    }
+
+    // If you ever change the shape of ToolCallRound, remember to make this stricter
+    return true;
+}
+
 function registerChatParticipant2(context: vscode.ExtensionContext) {
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
         const models = await vscode.lm.selectChatModels({
@@ -216,13 +239,13 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                 context: chatContext,
                 request,
                 toolCallRounds: [],
-                toolCallResults: new Map()
+                toolCallResults: {}
             },
             { modelMaxPromptTokens: model.maxInputTokens },
             model)
 
         const toolReferences = [...request.toolReferences];
-        const accumulatedToolCalls = new Map<string, vscode.LanguageModelToolResult>();
+        const accumulatedToolResults: Record<string, vscode.LanguageModelToolResult> = {};
         const toolCallRounds: ToolCallRound[] = [];
         const runWithFunctions = async (): Promise<void> => {
             const requestedTool = toolReferences.shift();
@@ -261,7 +284,7 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                         context: chatContext,
                         request,
                         toolCallRounds,
-                        toolCallResults: accumulatedToolCalls
+                        toolCallResults: accumulatedToolResults
                     },
                     { modelMaxPromptTokens: model.maxInputTokens },
                     model));
@@ -269,7 +292,7 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                 const toolResultMetadata = result.metadatas.getAll(ToolResultMetadata)
                 if (toolResultMetadata?.length) {
                     // TODO flatten
-                    toolResultMetadata.forEach(meta => meta.resultMap.forEach((value, key) => accumulatedToolCalls.set(key, value)));
+                    toolResultMetadata.forEach(meta => meta.resultMap.forEach((value, key) => accumulatedToolResults[key] = value));
                 }
 
                 // RE-enter
@@ -278,6 +301,15 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
         };
 
         await runWithFunctions();
+
+        return {
+            metadata: {
+                toolInfo: {
+                    toolCallResults: accumulatedToolResults,
+                    toolCallRounds
+                } satisfies TsxToolUserMetadata
+            }
+        }
     };
 
     const toolUser = vscode.chat.createChatParticipant('chat-tools-sample.tools2', handler);
