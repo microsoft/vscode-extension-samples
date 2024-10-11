@@ -35,7 +35,13 @@
                 "name": "toolsTSX",
                 "description": "I use tools with prompt-tsx",
                 "isSticky": true,
-                "supportsToolReferences": true
+                "supportsToolReferences": true,
+                "commands": [
+                    {
+                        "name": "list",
+                        "description": "List all available tools"
+                    }
+                ]
             }
         ],
         "languageModelTools": [

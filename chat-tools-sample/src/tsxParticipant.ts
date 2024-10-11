@@ -14,21 +14,24 @@ export interface ToolCallsMetadata {
 
 export function isTsxToolUserMetadata(obj: unknown): obj is TsxToolUserMetadata {
     // If you change the metadata format, you would have to make this stricter or handle old objects in old ChatRequest metadata
-    return !!obj && 
+    return !!obj &&
         !!(obj as TsxToolUserMetadata).toolCallsMetadata &&
         Array.isArray((obj as TsxToolUserMetadata).toolCallsMetadata.toolCallRounds);
 }
 
 export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
+        if (request.command === 'list') {
+            stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
+            return;
+        }
+
         const models = await vscode.lm.selectChatModels({
             vendor: 'copilot',
             family: 'gpt-4o'
         });
 
         const model = models[0];
-        stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
-
         const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
             return {
                 name: tool.id,
