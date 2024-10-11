@@ -15,7 +15,7 @@ import {
 	PromptReference,
 } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
-import { isTsxToolUserMetadata } from './extension';
+import { isTsxToolUserMetadata } from './tsxParticipant';
 
 export interface ToolCallRound {
 	response: string;
@@ -166,9 +166,9 @@ class History extends PromptElement<HistoryProps, void> {
 							</>
 						);
 					} else if (message instanceof vscode.ChatResponseTurn) {
-						const toolInfo = message.result.metadata?.toolInfo;
-						if (isTsxToolUserMetadata(toolInfo) && toolInfo.toolCallRounds.length > 0) {
-							return <ToolCalls toolCallResults={toolInfo.toolCallResults} toolCallRounds={toolInfo.toolCallRounds} toolInvocationToken={undefined} />;
+						const metadata = message.result.metadata;
+						if (isTsxToolUserMetadata(metadata) && metadata.toolCallsMetadata.toolCallRounds.length > 0) {
+							return <ToolCalls toolCallResults={metadata.toolCallsMetadata.toolCallResults} toolCallRounds={metadata.toolCallsMetadata.toolCallRounds} toolInvocationToken={undefined} />;
 						}
 
 						return <AssistantMessage>{chatResponseToString(message)}</AssistantMessage>;
