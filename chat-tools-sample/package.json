@@ -9,7 +9,7 @@
     },
     "version": "0.1.0",
     "engines": {
-        "vscode": "^1.93.0"
+        "vscode": "^1.95.0"
     },
     "categories": [
         "AI",
@@ -46,12 +46,12 @@
         ],
         "languageModelTools": [
             {
-                "id": "chat-tools-sample_tabCount",
+                "name": "chat-tools-sample_tabCount",
                 "tags": [
                     "editors",
                     "chat-tools-sample"
                 ],
-                "name": "tabCount",
+                "name2": "tabCount",
                 "displayName": "Tab Count",
                 "modelDescription": "The number of active tabs in a tab group",
                 "icon": "$(files)",
@@ -71,7 +71,7 @@
                 ]
             },
             {
-                "id": "chat-tools-sample_findFiles",
+                "name": "chat-tools-sample_findFiles",
                 "tags": [
                     "files",
                     "search",
@@ -96,7 +96,7 @@
                 ]
             },
             {
-                "id": "chat-tools-sample_runInTerminal",
+                "name": "chat-tools-sample_runInTerminal",
                 "tags": [
                     "terminal",
                     "chat-tools-sample"
@@ -117,8 +117,7 @@
                 },
                 "supportedContentTypes": [
                     "text/plain"
-                ],
-                "requiresConfirmation": true
+                ]
             }
         ]
     },
