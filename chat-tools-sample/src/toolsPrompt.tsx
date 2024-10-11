@@ -9,8 +9,11 @@ import {
 	PromptSizing,
 	UserMessage,
 	PromptMetadata,
+	ToolCall,
+	Chunk,
+	ToolMessage,
+	PromptReference,
 } from '@vscode/prompt-tsx';
-import { Chunk, ToolMessage, ToolResult } from '@vscode/prompt-tsx/dist/base/promptElements';
 import * as vscode from 'vscode';
 import { isTsxToolUserMetadata } from './extension';
 
@@ -30,7 +33,7 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 	render(state: void, sizing: PromptSizing) {
 		return (
 			<>
-				<UserMessage priority={50}>
+				<UserMessage>
 					Instructions: <br />
 					- The user will ask a question, or ask you to perform a task, and it may
 					require lots of research to answer correctly. There is a selection of
@@ -47,12 +50,12 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 					<br />- After editing a file, DO NOT show the user a codeblock with the
 					edit or new file contents. Assume that the user can see the result.
 				</UserMessage>
-				<History context={this.props.context} priority={20}></History>
+				<History context={this.props.context} priority={10}></History>
 				<PromptReferences
 					references={this.props.request.references}
-					priority={30}
+					priority={20}
 				/>
-				<UserMessage priority={40}>{this.props.request.prompt}</UserMessage>
+				<UserMessage>{this.props.request.prompt}</UserMessage>
 				<ToolCalls
 					toolCallRounds={this.props.toolCallRounds}
 					toolInvocationToken={this.props.request.toolInvocationToken}
@@ -78,49 +81,43 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 			return undefined;
 		}
 
+		// Note- the final prompt must end with a UserMessage
 		return <>
-			{await Promise.all(this.props.toolCallRounds.map(round => this.renderOneToolCallRound(round, sizing)))}
-			<UserMessage priority={100}>Above is the result of calling one or more tools. The user cannot see the results, so you should explain them to the user if referencing them in your answer.</UserMessage>
+			{this.props.toolCallRounds.map(round => this.renderOneToolCallRound(round, sizing))}
+			<UserMessage>Above is the result of calling one or more tools. The user cannot see the results, so you should explain them to the user if referencing them in your answer.</UserMessage>
 		</>
 	}
 
-	private async renderOneToolCallRound(round: ToolCallRound, sizing: PromptSizing) {
-		// TODO- prompt-tsx export this type?
-		// TODO- at what level do the parameters get stringified?
-		const assistantToolCalls: any[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
-
-		const toolResultMap = new Map<string, vscode.LanguageModelToolResult>();
-		const budget = Math.floor(sizing.tokenBudget / round.toolCalls.length);
-		// TODO refactor into multiple elements
-		const toolCallSizing: PromptSizing = {
-			...sizing,
-			tokenBudget: budget,
-		};
-
-		return <Chunk>
-			<meta value={new ToolResultMetadata(toolResultMap)}></meta>
-			<AssistantMessage toolCalls={assistantToolCalls}>{round.response}</AssistantMessage>
-			{await Promise.all(round.toolCalls.map(async toolCall => {
-				const result = await this.renderOneToolCall(toolCall, toolCallSizing, this.props.toolInvocationToken);
-				if (result.toolResult) {
-					toolResultMap.set(toolCall.toolCallId, result.toolResult);
-				}
-				return result.message;
-			}))}
-		</Chunk>;
+	private renderOneToolCallRound(round: ToolCallRound, sizing: PromptSizing) {
+		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
+		// TODO- just need to adopt prompt-tsx update in vscode-copilot
+		return (
+			<Chunk>
+				<AssistantMessage toolCalls={assistantToolCalls}>{round.response || 'placeholder'}</AssistantMessage>
+				{round.toolCalls.map(toolCall =>
+					<ToolCallElement toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken} toolCallResult={this.props.toolCallResults[toolCall.toolCallId]}></ToolCallElement>)}
+			</Chunk>);
 	}
+}
 
-	private async renderOneToolCall(toolCall: vscode.LanguageModelToolCallPart, sizing: PromptSizing, toolInvocationToken: vscode.ChatParticipantToolToken): Promise<{ message: ToolMessage; toolResult?: vscode.LanguageModelToolResult; }> {
-		const tool = vscode.lm.tools.find(t => t.id === toolCall.name);
+interface ToolCallElementProps extends BasePromptElementProps {
+	toolCall: vscode.LanguageModelToolCallPart;
+	toolInvocationToken: vscode.ChatParticipantToolToken | undefined;
+	toolCallResult: vscode.LanguageModelToolResult | undefined;
+}
+
+class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
+	async render(state: void, sizing: PromptSizing): Promise<PromptPiece | undefined> {
+		const tool = vscode.lm.tools.find(t => t.id === this.props.toolCall.name);
 		if (!tool) {
-			console.error(`Tool not found: ${toolCall.name}`);
-			return { message: <ToolMessage toolCallId={toolCall.toolCallId}>Tool not found</ToolMessage> };
+			console.error(`Tool not found: ${this.props.toolCall.name}`);
+			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool not found</ToolMessage>;
 		}
 
 		const contentType = agentSupportedContentTypes.find(type => tool.supportedContentTypes.includes(type));
 		if (!contentType) {
 			console.error(`Tool does not support any of the agent's content types: ${tool.id}`);
-			return { message: <ToolMessage toolCallId={toolCall.toolCallId}>Tool unsupported</ToolMessage> };
+			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool unsupported</ToolMessage>;
 		}
 
 		const tokenOptions: vscode.LanguageModelToolInvocationOptions<unknown>['tokenOptions'] = {
@@ -128,23 +125,24 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 			countTokens: async (content: string) => sizing.countTokens(content),
 		};
 
-		const toolResult = this.props.toolCallResults[toolCall.toolCallId] ??
-			await vscode.lm.invokeTool(toolCall.name, { parameters: toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: toolInvocationToken, tokenOptions }, dummyCancellationToken);
-		const message = <ToolMessage toolCallId={toolCall.toolCallId}>
-			{contentType === 'text/plain' ?
-				toolResult[contentType] :
-				<elementJSON data={toolResult[contentType]}></elementJSON>}
-		</ToolMessage>;
-		return {
-			message, 
-			toolResult: toolResult
-		};
+		const toolResult = this.props.toolCallResult ??
+			await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: this.props.toolInvocationToken, tokenOptions }, dummyCancellationToken);
+		const message = (
+			<ToolMessage toolCallId={this.props.toolCall.toolCallId}>
+				<meta value={new ToolResultMetadata(this.props.toolCall.toolCallId, toolResult)}></meta>
+				{contentType === 'text/plain' ?
+					toolResult[contentType] :
+					<elementJSON data={toolResult[contentType]}></elementJSON>}
+			</ToolMessage>
+		);
+		return message;
 	}
 }
 
 export class ToolResultMetadata extends PromptMetadata {
 	constructor(
-		public resultMap: Map<string, vscode.LanguageModelToolResult>,
+		public toolCallId: string,
+		public result: vscode.LanguageModelToolResult,
 	) {
 		super();
 	}
@@ -170,14 +168,10 @@ class History extends PromptElement<HistoryProps, void> {
 					} else if (message instanceof vscode.ChatResponseTurn) {
 						const toolInfo = message.result.metadata?.toolInfo;
 						if (isTsxToolUserMetadata(toolInfo)) {
-							return <ToolCalls toolCallResults={toolInfo.toolCallResults} toolCallRounds={toolInfo.toolCallRounds} toolInvocationToken={undefined}></ToolCalls>
+							return <ToolCalls toolCallResults={toolInfo.toolCallResults} toolCallRounds={toolInfo.toolCallRounds} toolInvocationToken={undefined} />;
 						}
-						
-						return (
-							<AssistantMessage>
-								{chatResponseToString(message)}
-							</AssistantMessage>
-						);
+
+						return <AssistantMessage>{chatResponseToString(message)}</AssistantMessage>;
 					}
 				})}
 			</PrioritizedList>
@@ -212,7 +206,7 @@ class PromptReferences extends PromptElement<PromptReferencesProps, void> {
 		return (
 			<UserMessage>
 				{this.props.references.map((ref, index) => (
-					<PromptReference ref={ref}></PromptReference>
+					<PromptReferenceElement ref={ref} />
 				))}
 			</UserMessage>
 		);
@@ -223,13 +217,15 @@ interface PromptReferenceProps extends BasePromptElementProps {
 	ref: vscode.ChatPromptReference;
 }
 
-class PromptReference extends PromptElement<PromptReferenceProps> {
+class PromptReferenceElement extends PromptElement<PromptReferenceProps> {
 	async render(state: void, sizing: PromptSizing): Promise<PromptPiece | undefined> {
 		const value = this.props.ref.value;
+		// TODO make context a list of TextChunks so that it can be trimmed
 		if (value instanceof vscode.Uri) {
 			const fileContents = (await vscode.workspace.fs.readFile(value)).toString();
 			return (
 				<Tag name="context">
+					<references value={[new PromptReference(value)]} />
 					{value.fsPath}:<br />
 					``` <br />
 					{fileContents}<br />
@@ -240,8 +236,10 @@ class PromptReference extends PromptElement<PromptReferenceProps> {
 			const rangeText = (await vscode.workspace.openTextDocument(value.uri)).getText(value.range);
 			return (
 				<Tag name="context">
+					<references value={[new PromptReference(value)]} />
 					{value.uri.fsPath}:{value.range.start.line + 1}-$<br />
-					{value.range.end.line + 1}: ```<br />
+					{value.range.end.line + 1}: <br />
+					```<br />
 					{rangeText}<br />
 					```
 				</Tag>

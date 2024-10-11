@@ -268,7 +268,6 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                 } else if (part instanceof vscode.LanguageModelToolCallPart) {
                     // TODO vscode should be doing this
                     part.parameters = JSON.parse(part.parameters);
-
                     toolCalls.push(part);
                 }
             }
@@ -291,11 +290,15 @@ function registerChatParticipant2(context: vscode.ExtensionContext) {
                 messages = result.messages;
                 const toolResultMetadata = result.metadatas.getAll(ToolResultMetadata)
                 if (toolResultMetadata?.length) {
-                    // TODO flatten
-                    toolResultMetadata.forEach(meta => meta.resultMap.forEach((value, key) => accumulatedToolResults[key] = value));
+                    toolResultMetadata.forEach(meta => accumulatedToolResults[meta.toolCallId] = meta.result);
                 }
 
-                // RE-enter
+                result.references.forEach(ref => {
+                    if (ref.anchor instanceof vscode.Uri || ref.anchor instanceof vscode.Location) {
+                        stream.reference(ref.anchor);
+                    }
+                });
+
                 return runWithFunctions();
             }
         };
