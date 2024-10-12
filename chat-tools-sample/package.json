@@ -51,7 +51,7 @@
                     "editors",
                     "chat-tools-sample"
                 ],
-                "name2": "tabCount",
+                "toolReferenceName": "tabCount",
                 "displayName": "Tab Count",
                 "modelDescription": "The number of active tabs in a tab group",
                 "icon": "$(files)",

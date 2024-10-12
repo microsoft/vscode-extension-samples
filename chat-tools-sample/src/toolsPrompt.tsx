@@ -83,12 +83,12 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 
 		// Note- the final prompt must end with a UserMessage
 		return <>
-			{this.props.toolCallRounds.map(round => this.renderOneToolCallRound(round, sizing))}
+			{this.props.toolCallRounds.map(round => this.renderOneToolCallRound(round))}
 			<UserMessage>Above is the result of calling one or more tools. The user cannot see the results, so you should explain them to the user if referencing them in your answer.</UserMessage>
 		</>
 	}
 
-	private renderOneToolCallRound(round: ToolCallRound, sizing: PromptSizing) {
+	private renderOneToolCallRound(round: ToolCallRound) {
 		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
 		// TODO- just need to adopt prompt-tsx update in vscode-copilot
 		return (
@@ -108,7 +108,7 @@ interface ToolCallElementProps extends BasePromptElementProps {
 
 class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
 	async render(state: void, sizing: PromptSizing): Promise<PromptPiece | undefined> {
-		const tool = vscode.lm.tools.find(t => t.id === this.props.toolCall.name);
+		const tool = vscode.lm.tools.find(t => t.name === this.props.toolCall.name);
 		if (!tool) {
 			console.error(`Tool not found: ${this.props.toolCall.name}`);
 			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool not found</ToolMessage>;
@@ -116,7 +116,7 @@ class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
 
 		const contentType = agentSupportedContentTypes.find(type => tool.supportedContentTypes.includes(type));
 		if (!contentType) {
-			console.error(`Tool does not support any of the agent's content types: ${tool.id}`);
+			console.error(`Tool does not support any of the agent's content types: ${tool.name}`);
 			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool unsupported</ToolMessage>;
 		}
 

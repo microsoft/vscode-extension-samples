@@ -22,7 +22,7 @@ export function isTsxToolUserMetadata(obj: unknown): obj is TsxToolUserMetadata 
 export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
         if (request.command === 'list') {
-            stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.id).join(', ')}\n\n`);
+            stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.name).join(', ')}\n\n`);
             return;
         }
 
@@ -34,7 +34,7 @@ export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
         const model = models[0];
         const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
             return {
-                name: tool.id,
+                name: tool.name,
                 description: tool.description,
                 parametersSchema: tool.parametersSchema ?? {}
             };
@@ -82,8 +82,6 @@ export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
                     stream.markdown(part.value);
                     responseStr += part.value;
                 } else if (part instanceof vscode.LanguageModelToolCallPart) {
-                    // TODO vscode should be doing this
-                    part.parameters = JSON.parse(part.parameters);
                     toolCalls.push(part);
                 }
             }

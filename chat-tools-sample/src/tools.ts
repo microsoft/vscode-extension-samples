@@ -36,7 +36,7 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 		const confirmationMessages = {
 			title: 'Count the number of open tabs',
 			message: new vscode.MarkdownString(
-				`${options.participantName} will count the number of open tabs` +
+				`Count the number of open tabs?` +
 					(options.parameters.tabGroup !== undefined
 						? ` in tab group ${options.parameters.tabGroup}`
 						: '')
@@ -159,7 +159,7 @@ export class RunInTerminalTool
 		const confirmationMessages = {
 			title: 'Run command in terminal',
 			message: new vscode.MarkdownString(
-				`${options.participantName} will run this command in a terminal:` +
+				`Run this command in a terminal?` +
 					`\n\n\`\`\`\n${options.parameters.command}\n\`\`\`\n`
 			),
 		};
