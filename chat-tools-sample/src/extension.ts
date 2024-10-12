@@ -78,13 +78,6 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                         throw new Error('Got invalid tool choice: ' + part.name);
                     }
 
-                    let parameters: any;
-                    try {
-                        parameters = part.parameters;
-                    } catch (err) {
-                        throw new Error(`Got invalid tool use parameters: "${part.parameters}". (${(err as Error).message})`);
-                    }
-
                     // TODO support prompt-tsx here
                     const requestedContentType = 'text/plain';
                     toolCalls.push({
