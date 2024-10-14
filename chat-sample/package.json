@@ -34,7 +34,7 @@
 						"description": "Do whatever you want, you are a cat after all",
 						"disambiguation": [
 							{
-								"categoryName": "cat_play",
+								"category": "cat_play",
 								"description": "The user just wants to relax and see the cat play.",
 								"examples": [
 									"Enough learning, let the cat play with a ball of yarn",
@@ -46,7 +46,7 @@
 				],
 				"disambiguation": [
 					{
-						"categoryName": "cat",
+						"category": "cat",
 						"description": "The user wants to learn a specific computer science topic in an informal way.",
 						"examples": [
 							"Teach me C++ pointers using metaphors",
