@@ -34,7 +34,7 @@
 						"description": "Do whatever you want, you are a cat after all",
 						"disambiguation": [
 							{
-								"categoryName": "cat_play",
+								"category": "cat_play",
 								"description": "The user just wants to relax and see the cat play.",
 								"examples": [
 									"Enough learning, let the cat play with a ball of yarn",
@@ -46,7 +46,7 @@
 				],
 				"disambiguation": [
 					{
-						"categoryName": "cat",
+						"category": "cat",
 						"description": "The user wants to learn a specific computer science topic in an informal way.",
 						"examples": [
 							"Teach me C++ pointers using metaphors",
@@ -72,14 +72,14 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
-		"@vscode/prompt-tsx": "^0.2.8-alpha"
+		"@vscode/prompt-tsx": "^0.2.11-alpha"
 	},
 	"devDependencies": {
-		"@types/node": "^20.5.9",
+		"@types/node": "^20",
 		"@types/vscode": "1.90.0",
 		"@typescript-eslint/eslint-plugin": "^7.14.0",
 		"@typescript-eslint/parser": "^7.14.0",
 		"eslint": "^8.26.0",
-		"typescript": "^5.5.2"
+		"typescript": "^5.6.2"
 	}
 }
