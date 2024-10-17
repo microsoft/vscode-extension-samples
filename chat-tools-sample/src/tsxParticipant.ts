@@ -66,10 +66,10 @@ export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
         const runWithFunctions = async (): Promise<void> => {
             const requestedTool = toolReferences.shift();
             if (requestedTool) {
-                options.toolChoice = requestedTool.id;
-                options.tools = allTools.filter(tool => tool.name === requestedTool.id);
+                options.toolMode = vscode.LanguageModelChatToolMode.Required;
+                options.tools = allTools.filter(tool => tool.name === requestedTool.name);
             } else {
-                options.toolChoice = undefined;
+                options.toolMode = undefined;
                 options.tools = allTools;
             }
 

@@ -89,13 +89,13 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 	}
 
 	private renderOneToolCallRound(round: ToolCallRound) {
-		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
+		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.callId }));
 		// TODO- just need to adopt prompt-tsx update in vscode-copilot
 		return (
 			<Chunk>
 				<AssistantMessage toolCalls={assistantToolCalls}>{round.response || 'placeholder'}</AssistantMessage>
 				{round.toolCalls.map(toolCall =>
-					<ToolCallElement toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken} toolCallResult={this.props.toolCallResults[toolCall.toolCallId]}></ToolCallElement>)}
+					<ToolCallElement toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken} toolCallResult={this.props.toolCallResults[toolCall.callId]}></ToolCallElement>)}
 			</Chunk>);
 	}
 }
@@ -111,28 +111,28 @@ class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
 		const tool = vscode.lm.tools.find(t => t.name === this.props.toolCall.name);
 		if (!tool) {
 			console.error(`Tool not found: ${this.props.toolCall.name}`);
-			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool not found</ToolMessage>;
+			return <ToolMessage toolCallId={this.props.toolCall.callId}>Tool not found</ToolMessage>;
 		}
 
-		const contentType = agentSupportedContentTypes.find(type => tool.supportedContentTypes.includes(type));
+		const contentType = agentSupportedContentTypes.find(type => tool.supportedResultMimeTypes.includes(type));
 		if (!contentType) {
 			console.error(`Tool does not support any of the agent's content types: ${tool.name}`);
-			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool unsupported</ToolMessage>;
+			return <ToolMessage toolCallId={this.props.toolCall.callId}>Tool unsupported</ToolMessage>;
 		}
 
-		const tokenOptions: vscode.LanguageModelToolInvocationOptions<unknown>['tokenOptions'] = {
+		const tokenizationOptions: vscode.LanguageModelToolTokenizationOptions = {
 			tokenBudget: sizing.tokenBudget,
 			countTokens: async (content: string) => sizing.countTokens(content),
 		};
 
 		const toolResult = this.props.toolCallResult ??
-			await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: this.props.toolInvocationToken, tokenOptions }, dummyCancellationToken);
+			await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, requestedMimeTypes: [contentType], toolInvocationToken: this.props.toolInvocationToken, tokenizationOptions }, dummyCancellationToken);
 		const message = (
-			<ToolMessage toolCallId={this.props.toolCall.toolCallId}>
-				<meta value={new ToolResultMetadata(this.props.toolCall.toolCallId, toolResult)}></meta>
+			<ToolMessage toolCallId={this.props.toolCall.callId}>
+				<meta value={new ToolResultMetadata(this.props.toolCall.callId, toolResult)}></meta>
 				{contentType === 'text/plain' ?
-					toolResult[contentType] :
-					<elementJSON data={toolResult[contentType]}></elementJSON>}
+					toolResult.items[0].data :
+					<elementJSON data={toolResult.items[0].data}></elementJSON>}
 			</ToolMessage>
 		);
 		return message;
