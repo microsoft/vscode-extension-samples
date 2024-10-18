@@ -20,10 +20,10 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 					: params.tabGroup === 3
 					? '3rd'
 					: `${params.tabGroup}th`;
-			return new vscode.LanguageModelToolResult([vscode.LanguageModelToolResultItem.text(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
+			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
 		} else {
 			const group = vscode.window.tabGroups.activeTabGroup;
-			return new vscode.LanguageModelToolResult([vscode.LanguageModelToolResultItem.text(`There are ${group.tabs.length} tabs open.`)]);
+			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open.`)]);
 		}
 	}
 
@@ -65,13 +65,8 @@ export class FindFilesTool implements vscode.LanguageModelTool<IFindFilesParamet
 			token
 		);
 
-		const items: vscode.LanguageModelToolResultItem[] = [];
-		if (options.requestedMimeTypes.includes('text/plain')) {
-			const strFiles = files.map((f) => f.fsPath).join('\n');
-			items.push(vscode.LanguageModelToolResultItem.text(`Found ${files.length} files matching "${params.pattern}":\n${strFiles}`));
-		}
-
-		return new vscode.LanguageModelToolResult(items);
+		const strFiles = files.map((f) => f.fsPath).join('\n');
+		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`Found ${files.length} files matching "${params.pattern}":\n${strFiles}`)]);
 	}
 
 	async prepareInvocation(
@@ -119,7 +114,6 @@ export class RunInTerminalTool
 		options: vscode.LanguageModelToolInvocationOptions<IRunInTerminalParameters>,
 		token: vscode.CancellationToken
 	) {
-		const items: vscode.LanguageModelToolResultItem[] = [];
 		const params = options.parameters as IRunInTerminalParameters;
 
 		const terminal = vscode.window.createTerminal('Language Model Tool User');
@@ -127,10 +121,7 @@ export class RunInTerminalTool
 		try {
 			await waitForShellIntegration(terminal, 5000);
 		} catch(e) {
-			if (options.requestedMimeTypes.includes('text/plain')) {
-				items.push(vscode.LanguageModelToolResultItem.text((e as Error).message));
-			}
-			return new vscode.LanguageModelToolResult(items);
+			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart((e as Error).message)]);
 		}
 
 		const execution = terminal.shellIntegration!.executeCommand(params.command);
@@ -141,11 +132,7 @@ export class RunInTerminalTool
 			terminalResult += chunk;
 		}
 
-		if (options.requestedMimeTypes.includes('text/plain')) {
-			items.push(vscode.LanguageModelToolResultItem.text(terminalResult));
-		}
-
-		return new vscode.LanguageModelToolResult(items);
+		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(terminalResult)]);
 	}
 
 	async prepareInvocation(

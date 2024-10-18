@@ -29,18 +29,19 @@ declare module 'vscode' {
 		parametersSchema?: object;
 	}
 
+	/**
+	 * A tool-calling mode for the language model to use.
+	 */
 	export enum LanguageModelChatToolMode {
 		/**
-		 * The language model can choose to call a tool or generate a message. The default.
+		 * The language model can choose to call a tool or generate a message. Is the default.
 		 */
 		Auto = 1,
 
 		/**
-		 * The language model must call one of the provided tools. An extension can force a particular tool to be used by using the
-		 * Required mode and only providing that one tool.
-		 * TODO@API 'required' is not supported by CAPI
-		 * The LM provider can throw if more than one tool is provided. But this mode is supported by different models and it makes sense
-		 * to represent it in the API. We can note the limitation here.
+		 * The language model must call one of the provided tools. Note- some models only support a single tool when using this
+		 * mode. TODO@API - do we throw, or just pick the first tool? Or only offer an API that allows callers to pick a single
+		 * tool? Go back to `toolChoice?: string`?
 		 */
 		Required = 2
 	}
@@ -61,7 +62,7 @@ declare module 'vscode' {
 		tools?: LanguageModelChatTool[];
 
 		/**
-		 * 	The tool calling mode to use. {@link LanguageModelChatToolMode.Auto} by default.
+		 * 	The tool-selecting mode to use. {@link LanguageModelChatToolMode.Auto} by default.
 		 */
 		toolMode?: LanguageModelChatToolMode;
 	}
@@ -104,6 +105,23 @@ declare module 'vscode' {
 		constructor(value: string);
 	}
 
+	/**
+	 * A language model response part containing a PromptElementJSON from `@vscode/prompt-tsx`.
+	 */
+	export class LanguageModelPromptTsxPart {
+		/**
+		 * The content of the part.
+		 */
+		value: unknown;
+
+		/**
+		 * The mimeType of this part, exported from the `@vscode/prompt-tsx` library.
+		 */
+		mime: string;
+
+		constructor(value: unknown, mime: string);
+	}
+
 	export interface LanguageModelChatResponse {
 		/**
 		 * A stream of parts that make up the response. Could be extended with more types in the future.
@@ -123,9 +141,9 @@ declare module 'vscode' {
 		/**
 		 * The value of the tool result.
 		 */
-		value: string;
+		content: (LanguageModelTextPart | LanguageModelPromptTsxPart | unknown)[];
 
-		constructor(callId: string, value: string);
+		constructor(callId: string, content: (LanguageModelTextPart | LanguageModelPromptTsxPart | unknown)[]);
 	}
 
 	export interface LanguageModelChatMessage {
@@ -137,48 +155,12 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * One result item from a {@link LanguageModelToolResult}.
-	 */
-	export class LanguageModelToolResultItem {
-		/**
-		 * Construct a string content item with a 'text/plain' mime type.
-		 * @param content The content of the item.
-		 */
-		static text(content: string): LanguageModelToolResultItem;
-
-		/**
-		 * The mime type which determines how the {@link LanguageModelToolResultItem.data} property is interpreted.
-		 */
-		mime: string;
-
-		/**
-		 * The data of the result item. The type of this property depends on the {@link LanguageModelToolResultItem.mime mime}
-		 * property. For example, an item with a `text/plain` mime will have string-type data.
-		 */
-		data: any;
-
-		/**
-		 * Construct a new result item.
-		 * @param data The item data.
-		 * @param mime The mimeType of the item data.
-		 */
-		constructor(data: any, mime: string);
-	}
-
-	/**
 	 * A result returned from a tool invocation.
 	 */
 	export class LanguageModelToolResult {
-		/**
-		 * A list of {@link LanguageModelToolResultItem}, which are mimeType/data pairs. The result can contain arbitrary
-		 * representations of the content. A tool user can set {@link LanguageModelToolInvocationOptions.requestedMimeTypes} to
-		 * request particular types, and a tool implementation should only compute the types that were requested. `text/plain` is
-		 * recommended to be supported by all tools, which would indicate any kind of string-based content. Another example might
-		 * be a `PromptElementJSON` from `@vscode/prompt-tsx`, using the `contentType` exported by that library.
-		 */
-		items: LanguageModelToolResultItem[];
+		content: (LanguageModelTextPart | LanguageModelPromptTsxPart | unknown)[];
 
-		constructor(items: LanguageModelToolResultItem[]);
+		constructor(content: (LanguageModelTextPart | LanguageModelPromptTsxPart | unknown)[]);
 	}
 
 	export namespace lm {
@@ -196,7 +178,7 @@ declare module 'vscode' {
 
 		/**
 		 * Invoke a tool with the given parameters.
-		 * TODO describe content types and token options here
+		 * TODO@API describe tool calling flow here, LanguageModelToolInvocationOptions
 		 */
 		export function invokeTool(name: string, options: LanguageModelToolInvocationOptions<object>, token: CancellationToken): Thenable<LanguageModelToolResult>;
 	}
@@ -225,13 +207,6 @@ declare module 'vscode' {
 		 * {@link LanguageModelToolInformation.parametersSchema}
 		 */
 		parameters: T;
-
-		/**
-		 * A tool can return multiple types of content. A tool user must specifically request one or more types of content to be
-		 * returned, based on what the tool user supports. The typical type is `text/plain` to return string-type content, and all
-		 * tools are recommended to support `text/plain`. See {@link LanguageModelToolResult} for more.
-		 */
-		requestedMimeTypes: string[];
 
 		/**
 		 * Options to hint at how many tokens the tool should return in its response, and enable the tool to count tokens
@@ -273,11 +248,6 @@ declare module 'vscode' {
 		 * A JSON schema for the parameters this tool accepts.
 		 */
 		readonly parametersSchema: object | undefined;
-
-		/**
-		 * The list of mime types that the tool is able to return as a result. See {@link LanguageModelToolResult}.
-		 */
-		readonly supportedResultMimeTypes: readonly string[];
 
 		/**
 		 * A set of tags, declared by the tool, that roughly describe the tool's capabilities. A tool user may use these to filter

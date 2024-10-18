@@ -77,11 +77,9 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                         throw new Error('Got invalid tool choice: ' + part.name);
                     }
 
-                    // TODO support prompt-tsx here
-                    const requestedMimeType = 'text/plain';
                     toolCalls.push({
                         call: part,
-                        result: vscode.lm.invokeTool(tool.name, { parameters: part.parameters, toolInvocationToken: request.toolInvocationToken, requestedMimeTypes: [requestedMimeType] }, token),
+                        result: vscode.lm.invokeTool(tool.name, { parameters: part.parameters, toolInvocationToken: request.toolInvocationToken }, token),
                         tool
                     });
                 }
@@ -95,8 +93,7 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     const message = vscode.LanguageModelChatMessage.User('');
 
-                    const textPlain = (await toolCall.result).items.find(item => item.mime === 'text/plain');
-                    message.content2 = [new vscode.LanguageModelToolResultPart(toolCall.call.callId, textPlain!.data)];
+                    message.content2 = [new vscode.LanguageModelToolResultPart(toolCall.call.callId, (await toolCall.result).content)];
                     messages.push(message);
                 }
 
