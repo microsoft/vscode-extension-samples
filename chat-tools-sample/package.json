@@ -65,10 +65,7 @@
                             "default": 0
                         }
                     }
-                },
-                "supportedResultMimeTypes": [
-                    "text/plain"
-                ]
+                }
             },
             {
                 "name": "chat-tools-sample_findFiles",
@@ -90,10 +87,7 @@
                     "required": [
                         "pattern"
                     ]
-                },
-                "supportedResultMimeTypes": [
-                    "text/plain"
-                ]
+                }
             },
             {
                 "name": "chat-tools-sample_runInTerminal",
@@ -114,10 +108,7 @@
                     "required": [
                         "command"
                     ]
-                },
-                "supportedResultMimeTypes": [
-                    "text/plain"
-                ]
+                }
             }
         ]
     },
