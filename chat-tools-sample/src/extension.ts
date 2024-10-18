@@ -17,7 +17,7 @@ function registerChatTool(context: vscode.ExtensionContext) {
 }
 
 interface IToolCall {
-    tool: vscode.LanguageModelToolDescription;
+    tool: vscode.LanguageModelToolInformation;
     call: vscode.LanguageModelToolCallPart;
     result: Thenable<vscode.LanguageModelToolResult>;
 }
@@ -58,11 +58,10 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
         const runWithFunctions = async (): Promise<void> => {
             const requestedTool = toolReferences.shift();
             if (requestedTool) {
-                options.toolChoice = requestedTool.id;
-                // options.tools = allTools.filter(tool => tool.name === requestedTool.id);
-                options.tools = JSON.parse(`[{"type":"function","function":{"name":"copilot_codebase","description":"Search for relevant file chunks, symbols, and other info about the current workspace or codebase","parameters":{"type":"object","properties":{"query":{"type":"string","description":"The query to search the codebase for. Should contain all relevant context. Can be a full natural language sentence, or keywords."}},"required":["query"]}}},{"type":"function","function":{"name":"copilot_vscodeAPI","description":"Use VS Code API references to answer questions about VS Code extension development.","parameters":{"type":"object","properties":{"query":{"type":"string","description":"The query to search vscode documentation for. Should contain all relevant context."}},"required":["query"]}}},{"type":"function","function":{"name":"ada-data_findFiles","description":"Search for files in the current workspace","parameters":{"type":"object","properties":{"pattern":{"type":"string","description":"Search for files that match this glob pattern"}},"required":["pattern"]}}},{"type":"function","function":{"name":"ada-data_runPython","description":"Execute Python code locally using Pyodide, providing access to Python's extensive functionality. This tool extends the LLM's capabilities by allowing it to run Python code for a wide range of computational tasks and data manipulations that it cannot perform directly. When you know the workspace folder path and the file path, use the relative path to the file when generating code.","parameters":{"type":"object","properties":{"code":{"type":"string","description":"The Python code to run"}},"required":["code"]}}}`)
+                options.toolMode = vscode.LanguageModelChatToolMode.Required;
+                options.tools = allTools.filter(tool => tool.name === requestedTool.name);
             } else {
-                options.toolChoice = undefined;
+                options.toolMode = undefined;
                 options.tools = [...allTools];
             }
 
@@ -78,11 +77,9 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
                         throw new Error('Got invalid tool choice: ' + part.name);
                     }
 
-                    // TODO support prompt-tsx here
-                    const requestedContentType = 'text/plain';
                     toolCalls.push({
                         call: part,
-                        result: vscode.lm.invokeTool(tool.name, { parameters: part.parameters, toolInvocationToken: request.toolInvocationToken, requestedContentTypes: [requestedContentType] }, token),
+                        result: vscode.lm.invokeTool(tool.name, { parameters: part.parameters, toolInvocationToken: request.toolInvocationToken }, token),
                         tool
                     });
                 }
@@ -90,13 +87,13 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
 
             if (toolCalls.length) {
                 const assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
-                assistantMsg.content2 = toolCalls.map(toolCall => new vscode.LanguageModelToolCallPart(toolCall.tool.name, toolCall.call.toolCallId, toolCall.call.parameters));
+                assistantMsg.content2 = toolCalls.map(toolCall => new vscode.LanguageModelToolCallPart(toolCall.tool.name, (toolCall.call.callId), toolCall.call.parameters));
                 messages.push(assistantMsg);
                 for (const toolCall of toolCalls) {
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     const message = vscode.LanguageModelChatMessage.User('');
 
-                    message.content2 = [new vscode.LanguageModelToolResultPart(toolCall.call.toolCallId, (await toolCall.result)['text/plain']!)];
+                    message.content2 = [new vscode.LanguageModelToolResultPart(toolCall.call.callId, (await toolCall.result).content)];
                     messages.push(message);
                 }
 

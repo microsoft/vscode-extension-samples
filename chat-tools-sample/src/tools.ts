@@ -20,16 +20,14 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 					: params.tabGroup === 3
 					? '3rd'
 					: `${params.tabGroup}th`;
-			return {
-				'text/plain': `There are ${group.tabs.length} tabs open in the ${nth} tab group.`,
-			};
+			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
 		} else {
 			const group = vscode.window.tabGroups.activeTabGroup;
-			return { 'text/plain': `There are ${group.tabs.length} tabs open.` };
+			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open.`)]);
 		}
 	}
 
-	async prepareToolInvocation(
+	async prepareInvocation(
 		options: vscode.LanguageModelToolInvocationPrepareOptions<ITabCountParameters>,
 		token: vscode.CancellationToken
 	) {
@@ -67,18 +65,11 @@ export class FindFilesTool implements vscode.LanguageModelTool<IFindFilesParamet
 			token
 		);
 
-		const result: vscode.LanguageModelToolResult = {};
-		if (options.requestedContentTypes.includes('text/plain')) {
-			const strFiles = files.map((f) => f.fsPath).join('\n');
-			result[
-				'text/plain'
-			] = `Found ${files.length} files matching "${params.pattern}":\n${strFiles}`;
-		}
-
-		return result;
+		const strFiles = files.map((f) => f.fsPath).join('\n');
+		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`Found ${files.length} files matching "${params.pattern}":\n${strFiles}`)]);
 	}
 
-	async prepareToolInvocation(
+	async prepareInvocation(
 		options: vscode.LanguageModelToolInvocationPrepareOptions<IFindFilesParameters>,
 		token: vscode.CancellationToken
 	) {
@@ -123,7 +114,6 @@ export class RunInTerminalTool
 		options: vscode.LanguageModelToolInvocationOptions<IRunInTerminalParameters>,
 		token: vscode.CancellationToken
 	) {
-		const result: vscode.LanguageModelToolResult = {};
 		const params = options.parameters as IRunInTerminalParameters;
 
 		const terminal = vscode.window.createTerminal('Language Model Tool User');
@@ -131,10 +121,7 @@ export class RunInTerminalTool
 		try {
 			await waitForShellIntegration(terminal, 5000);
 		} catch(e) {
-			if (options.requestedContentTypes.includes('text/plain')) {
-				result['text/plain'] = (e as Error).message;
-			}
-			return result;
+			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart((e as Error).message)]);
 		}
 
 		const execution = terminal.shellIntegration!.executeCommand(params.command);
@@ -145,14 +132,10 @@ export class RunInTerminalTool
 			terminalResult += chunk;
 		}
 
-		if (options.requestedContentTypes.includes('text/plain')) {
-			result['text/plain'] = terminalResult;
-		}
-
-		return result;
+		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(terminalResult)]);
 	}
 
-	async prepareToolInvocation(
+	async prepareInvocation(
 		options: vscode.LanguageModelToolInvocationPrepareOptions<IRunInTerminalParameters>,
 		token: vscode.CancellationToken
 	) {

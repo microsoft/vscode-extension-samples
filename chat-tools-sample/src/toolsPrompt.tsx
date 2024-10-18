@@ -13,9 +13,12 @@ import {
 	Chunk,
 	ToolMessage,
 	PromptReference,
+	TextChunk,
 } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
 import { isTsxToolUserMetadata } from './tsxParticipant';
+import { PromptElementJSON } from '@vscode/prompt-tsx/dist/base/jsonTypes';
+import { ToolResult } from '@vscode/prompt-tsx/dist/base/promptElements';
 
 export interface ToolCallRound {
 	response: string;
@@ -89,13 +92,13 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 	}
 
 	private renderOneToolCallRound(round: ToolCallRound) {
-		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.toolCallId }));
+		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.callId }));
 		// TODO- just need to adopt prompt-tsx update in vscode-copilot
 		return (
 			<Chunk>
-				<AssistantMessage toolCalls={assistantToolCalls}>{round.response || 'placeholder'}</AssistantMessage>
+				<AssistantMessage toolCalls={assistantToolCalls}>{round.response}</AssistantMessage>
 				{round.toolCalls.map(toolCall =>
-					<ToolCallElement toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken} toolCallResult={this.props.toolCallResults[toolCall.toolCallId]}></ToolCallElement>)}
+					<ToolCallElement toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken} toolCallResult={this.props.toolCallResults[toolCall.callId]}></ToolCallElement>)}
 			</Chunk>);
 	}
 }
@@ -111,31 +114,34 @@ class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
 		const tool = vscode.lm.tools.find(t => t.name === this.props.toolCall.name);
 		if (!tool) {
 			console.error(`Tool not found: ${this.props.toolCall.name}`);
-			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool not found</ToolMessage>;
+			return <ToolMessage toolCallId={this.props.toolCall.callId}>Tool not found</ToolMessage>;
 		}
 
-		const contentType = agentSupportedContentTypes.find(type => tool.supportedContentTypes.includes(type));
-		if (!contentType) {
-			console.error(`Tool does not support any of the agent's content types: ${tool.name}`);
-			return <ToolMessage toolCallId={this.props.toolCall.toolCallId}>Tool unsupported</ToolMessage>;
-		}
-
-		const tokenOptions: vscode.LanguageModelToolInvocationOptions<unknown>['tokenOptions'] = {
+		const tokenizationOptions: vscode.LanguageModelToolTokenizationOptions = {
 			tokenBudget: sizing.tokenBudget,
 			countTokens: async (content: string) => sizing.countTokens(content),
 		};
 
 		const toolResult = this.props.toolCallResult ??
-			await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, requestedContentTypes: [contentType], toolInvocationToken: this.props.toolInvocationToken, tokenOptions }, dummyCancellationToken);
-		const message = (
-			<ToolMessage toolCallId={this.props.toolCall.toolCallId}>
-				<meta value={new ToolResultMetadata(this.props.toolCall.toolCallId, toolResult)}></meta>
-				{contentType === 'text/plain' ?
-					toolResult[contentType] :
-					<elementJSON data={toolResult[contentType]}></elementJSON>}
+			await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, toolInvocationToken: this.props.toolInvocationToken, tokenizationOptions }, dummyCancellationToken);
+
+		// Important- since these parts may have been serialized/deserialized via ChatResult metadata, we need to check their types
+		// in a more flexible way. Extensions should not have to do this, vscode will have a better solution in the future.
+		toolResult.content = toolResult.content.map(part => {
+			if (part instanceof vscode.LanguageModelTextPart || part instanceof vscode.LanguageModelPromptTsxPart) {
+				return part;
+			} else if ((part as vscode.LanguageModelPromptTsxPart).mime) {
+				return new vscode.LanguageModelPromptTsxPart((part as vscode.LanguageModelPromptTsxPart).value, (part as vscode.LanguageModelPromptTsxPart).mime);
+			} else if (typeof (part as vscode.LanguageModelTextPart).value === 'string') {
+				return new vscode.LanguageModelTextPart((part as vscode.LanguageModelTextPart).value);
+			}
+		})
+		return (
+			<ToolMessage toolCallId={this.props.toolCall.callId}>
+				<meta value={new ToolResultMetadata(this.props.toolCall.callId, toolResult)}></meta>
+				<ToolResult data={toolResult} />
 			</ToolMessage>
 		);
-		return message;
 	}
 }
 
