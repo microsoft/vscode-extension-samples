@@ -135,7 +135,7 @@ class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
 			} else if (typeof (part as vscode.LanguageModelTextPart).value === 'string') {
 				return new vscode.LanguageModelTextPart((part as vscode.LanguageModelTextPart).value);
 			}
-		})
+		});
 		return (
 			<ToolMessage toolCallId={this.props.toolCall.callId}>
 				<meta value={new ToolResultMetadata(this.props.toolCall.callId, toolResult)}></meta>
@@ -244,7 +244,7 @@ class PromptReferenceElement extends PromptElement<PromptReferenceProps> {
 			const rangeText = (await vscode.workspace.openTextDocument(value.uri)).getText(value.range);
 			return (
 				<Tag name="context">
-					{!this.props.excludeReferences && <references value={[new PromptReference(value)]} /> }
+					{!this.props.excludeReferences && <references value={[new PromptReference(value)]} />}
 					{value.uri.fsPath}:{value.range.start.line + 1}-$<br />
 					{value.range.end.line + 1}: <br />
 					```<br />
