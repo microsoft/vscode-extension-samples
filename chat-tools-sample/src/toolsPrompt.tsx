@@ -125,17 +125,6 @@ class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
 		const toolResult = this.props.toolCallResult ??
 			await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, toolInvocationToken: this.props.toolInvocationToken, tokenizationOptions }, dummyCancellationToken);
 
-		// Important- since these parts may have been serialized/deserialized via ChatResult metadata, we need to check their types
-		// in a more flexible way. Extensions should not have to do this, vscode will have a better solution in the future.
-		toolResult.content = toolResult.content.map(part => {
-			if (part instanceof vscode.LanguageModelTextPart || part instanceof vscode.LanguageModelPromptTsxPart) {
-				return part;
-			} else if ((part as vscode.LanguageModelPromptTsxPart).mime) {
-				return new vscode.LanguageModelPromptTsxPart((part as vscode.LanguageModelPromptTsxPart).value, (part as vscode.LanguageModelPromptTsxPart).mime);
-			} else if (typeof (part as vscode.LanguageModelTextPart).value === 'string') {
-				return new vscode.LanguageModelTextPart((part as vscode.LanguageModelTextPart).value);
-			}
-		});
 		return (
 			<ToolMessage toolCallId={this.props.toolCall.callId}>
 				<meta value={new ToolResultMetadata(this.props.toolCall.callId, toolResult)}></meta>

@@ -87,13 +87,13 @@ function registerChatParticipant(context: vscode.ExtensionContext) {
 
             if (toolCalls.length) {
                 const assistantMsg = vscode.LanguageModelChatMessage.Assistant('');
-                assistantMsg.content2 = toolCalls.map(toolCall => new vscode.LanguageModelToolCallPart(toolCall.tool.name, (toolCall.call.callId), toolCall.call.parameters));
+                assistantMsg.content = toolCalls.map(toolCall => new vscode.LanguageModelToolCallPart(toolCall.tool.name, (toolCall.call.callId), toolCall.call.parameters));
                 messages.push(assistantMsg);
                 for (const toolCall of toolCalls) {
                     // NOTE that the result of calling a function is a special content type of a USER-message
                     const message = vscode.LanguageModelChatMessage.User('');
 
-                    message.content2 = [new vscode.LanguageModelToolResultPart(toolCall.call.callId, (await toolCall.result).content)];
+                    message.content = [new vscode.LanguageModelToolResultPart(toolCall.call.callId, (await toolCall.result).content)];
                     messages.push(message);
                 }
 
