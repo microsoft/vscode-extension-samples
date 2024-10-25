@@ -9,7 +9,7 @@
 	},
 	"version": "0.1.0",
 	"engines": {
-		"vscode": "^1.92.0"
+		"vscode": "^1.95.0"
 	},
 	"categories": [
 		"AI",
@@ -72,11 +72,11 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
-		"@vscode/prompt-tsx": "^0.2.11-alpha"
+		"@vscode/prompt-tsx": "^0.3.0-alpha"
 	},
 	"devDependencies": {
 		"@types/node": "^20",
-		"@types/vscode": "1.90.0",
+		"@types/vscode": "1.94.0",
 		"@typescript-eslint/eslint-plugin": "^7.14.0",
 		"@typescript-eslint/parser": "^7.14.0",
 		"eslint": "^8.26.0",
