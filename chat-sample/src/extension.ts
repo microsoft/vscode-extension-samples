@@ -11,9 +11,6 @@ interface ICatChatResult extends vscode.ChatResult {
     }
 }
 
-// Use gpt-4o since it is fast and high quality. gpt-3.5-turbo and gpt-4 are also available.
-const MODEL_SELECTOR: vscode.LanguageModelChatSelector = { vendor: 'copilot', family: 'gpt-4o' };
-
 export function activate(context: vscode.ExtensionContext) {
 
     // Define a Cat chat handler. 
@@ -25,19 +22,16 @@ export function activate(context: vscode.ExtensionContext) {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
             try {
-                // To get a list of all available models, do not pass any selector to the selectChatModels.
-                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-                if (model) {
-                    const messages = [
-                        vscode.LanguageModelChatMessage.User('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
-                        vscode.LanguageModelChatMessage.User(topic)
-                    ];
+                const messages = [
+                    vscode.LanguageModelChatMessage.User('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
+                    vscode.LanguageModelChatMessage.User(topic)
+                ];
 
-                    const chatResponse = await model.sendRequest(messages, {}, token);
-                    for await (const fragment of chatResponse.text) {
-                        stream.markdown(fragment);
-                    }
+                const chatResponse = await request.model.sendRequest(messages, {}, token);
+                for await (const fragment of chatResponse.text) {
+                    stream.markdown(fragment);
                 }
+                
             } catch(err) {
                 handleError(logger, err, stream);
             }
@@ -52,20 +46,18 @@ export function activate(context: vscode.ExtensionContext) {
         } else if (request.command === 'play') {
             stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
             try {
-                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-                if (model) {
-                    // Here's an example of how to use the prompt-tsx library to build a prompt
-                    const { messages } = await renderPrompt(
-                        PlayPrompt,
-                        { userQuery: request.prompt },
-                        { modelMaxPromptTokens: model.maxInputTokens },
-                        model);
-                    
-                    const chatResponse = await model.sendRequest(messages, {}, token);
-                    for await (const fragment of chatResponse.text) {
-                        stream.markdown(fragment);
-                    }
+                // Here's an example of how to use the prompt-tsx library to build a prompt
+                const { messages } = await renderPrompt(
+                    PlayPrompt,
+                    { userQuery: request.prompt },
+                    { modelMaxPromptTokens: request.model.maxInputTokens },
+                    request.model);
+                
+                const chatResponse = await request.model.sendRequest(messages, {}, token);
+                for await (const fragment of chatResponse.text) {
+                    stream.markdown(fragment);
                 }
+                
             } catch(err) {
                 handleError(logger, err, stream);
             }
@@ -74,21 +66,18 @@ export function activate(context: vscode.ExtensionContext) {
             return { metadata: { command: 'play' } };
         } else {
             try {
-                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
-                if (model) {
-                    const messages = [
-                        vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
-                            Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-                        vscode.LanguageModelChatMessage.User(request.prompt)
-                    ];
-                    
-                    const chatResponse = await model.sendRequest(messages, {}, token);
-                    for await (const fragment of chatResponse.text) {
-                        // Process the output from the language model
-                        // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
-                        const catFragment = fragment.replaceAll('def', 'meow');
-                        stream.markdown(catFragment);
-                    }
+                const messages = [
+                    vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
+                        Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
+                    vscode.LanguageModelChatMessage.User(request.prompt)
+                ];
+                
+                const chatResponse = await request.model.sendRequest(messages, {}, token);
+                for await (const fragment of chatResponse.text) {
+                    // Process the output from the language model
+                    // Replace all python function definitions with cat sounds to make the user stop looking at the code and start playing with the cat
+                    const catFragment = fragment.replaceAll('def', 'meow');
+                    stream.markdown(catFragment);
                 }
             } catch(err) {
                 handleError(logger, err, stream);
@@ -144,7 +133,8 @@ export function activate(context: vscode.ExtensionContext) {
 
             let chatResponse: vscode.LanguageModelChatResponse | undefined;
             try {
-                const [model] = await vscode.lm.selectChatModels(MODEL_SELECTOR);
+                // Use gpt-4o since it is fast and high quality.
+                const [model] = await vscode.lm.selectChatModels({ vendor: 'copilot', family: 'gpt-4o' });
                 if (!model) {
                     console.log('Model not found. Please make sure the GitHub Copilot Chat extension is installed and enabled.');
                     return;
