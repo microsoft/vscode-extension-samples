@@ -53,7 +53,6 @@ export class FiddleSourceControl implements vscode.Disposable {
 
 	private static async fromFiddle(fiddleSlug: string, fiddleVersion: number, workspaceFolder: vscode.WorkspaceFolder, context: vscode.ExtensionContext, overwrite: boolean): Promise<FiddleSourceControl> {
 		const fiddle = await downloadFiddle(fiddleSlug, fiddleVersion);
-		const workspacePath = workspaceFolder.uri.fsPath;
 		return new FiddleSourceControl(context, workspaceFolder, fiddle, overwrite);
 	}
 
@@ -130,7 +129,6 @@ export class FiddleSourceControl implements vscode.Disposable {
 		if (newVersion === this.fiddle.version) { return; } // the same version was selected
 
 		if (this.changedResources.resourceStates.length) {
-			const changedResourcesCount = this.changedResources.resourceStates.length;
 			vscode.window.showErrorMessage(`There is one or more changed resources. Discard or commit your local changes before checking out another version.`);
 		}
 		else {
@@ -279,10 +277,9 @@ export class FiddleSourceControl implements vscode.Disposable {
 		let latestVersion = this.fiddle.version || 0;
 		while (true) {
 			try {
-				const latestFiddle = await downloadFiddle(this.fiddle.slug, latestVersion);
 				this.latestFiddleVersion = latestVersion;
 				latestVersion++;
-			} catch (ex) {
+			} catch {
 				// typically the ex.statusCode == 404, when there is no further version
 				break;
 			}
@@ -309,7 +306,7 @@ export class FiddleSourceControl implements vscode.Disposable {
 				if (areIdentical(this.fiddle.data, latestFiddle.data)) {
 					currentFiddle = latestFiddle;
 				}
-			} catch (ex) {
+			} catch {
 				// typically the ex.statusCode == 404, when there is no further version
 				break;
 			}

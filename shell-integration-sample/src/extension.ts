@@ -5,11 +5,11 @@ const terminalProfileName = 'Tracking Editor';
 
 
 export function activate(context: vscode.ExtensionContext) {
-	const trackedTerminals: Set<vscode.Terminal> = new Set();
+	const trackedTerminals = new Set<vscode.Terminal>();
 
 	context.subscriptions.push(
 		vscode.window.registerTerminalProfileProvider('shell-integration-sample.track-editor-directory', {
-			provideTerminalProfile(token) {
+			provideTerminalProfile(_token) {
 				return {
 					options: {
 						name: terminalProfileName

@@ -323,10 +323,18 @@ const samples = [
   { description: 'shell-integration-sample', excludeFromReadme: true, path: 'shell-integration-sample', guide: null, apis: [], contributions: [] },
   { description: 'tabs-api-sample', excludeFromReadme: true, path: 'tabs-api-sample', guide: null, apis: [], contributions: [] },
   { description: 'telemetry-sample', excludeFromReadme: true, path: 'telemetry-sample', guide: null, apis: [], contributions: [] },
+  { description: 'lm-api-tutorial', excludeFromReadme: true, path: 'lm-api-tutorial', guide: null, apis: [], contributions: [] },
+  { description: 'wasm-component-model', excludeFromReadme: true, path: 'wasm-component-model', guide: null, apis: [], contributions: [] },
+  { description: 'wasm-component-model-async', excludeFromReadme: true, path: 'wasm-component-model-async', guide: null, apis: [], contributions: [] },
+  { description: 'wasm-component-model-resource', excludeFromReadme: true, path: 'wasm-component-model-resource', guide: null, apis: [], contributions: [] },
 ]
 
-/** LSP specific samples */
-/** @type {Sample[]} */
+/**
+ * LSP specific samples
+ * DO NOT add non-LSP items here. Add it to `samples` list.
+ * 
+ * @type {Sample[]}
+ */
 const lspSamples = [
   {
     description: 'Snippet Sample',
@@ -378,11 +386,28 @@ const lspSamples = [
     apis: [],
     contributions: []
   },
-]
-/**
- * LSP specific samples
- * DO NOT add non-LSP items here. Add it to `samples` list.
- */
+  {
+    description: 'LSP Embedded Language Service',
+    path: 'lsp-embedded-language-service',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'LSP Embedded Request Forwarding',
+    path: 'lsp-embedded-request-forwarding',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'Wasm language server',
+    path: 'wasm-language-server',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+];
 
 // eslint-disable-next-line no-undef
 module.exports = {

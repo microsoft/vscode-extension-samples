@@ -8,7 +8,7 @@ import { Motion, Motions } from './motions';
 import { Operator, Operators } from './operators';
 import { IController, Command, AbstractCommandDescriptor, ModifierKeys } from './common';
 
-const CHAR_TO_BINDING: { [char: string]: any; } = {};
+const CHAR_TO_BINDING: Record<string, any> = {};
 function defineBinding(char: string, value: any, modifierKeys: ModifierKeys): void {
 	const key = modifierKeys.ctrl ? 'CTRL + ' + char : char;
 	CHAR_TO_BINDING[key] = value;

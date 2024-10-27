@@ -2,8 +2,7 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-
-import { ExtensionContext, StatusBarAlignment, window, StatusBarItem, Selection, workspace, TextEditor, commands, ProgressLocation } from 'vscode';
+import { commands, ExtensionContext, ProgressLocation, window } from 'vscode';
 
 export function activate(context: ExtensionContext) {
 	context.subscriptions.push(commands.registerCommand('extension.startTask', () => {

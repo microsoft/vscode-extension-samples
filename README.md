@@ -67,6 +67,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [notebook-extend-markdown-renderer-sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/notebook-extend-markdown-renderer-sample) | [/api/extension-guides/notebook#notebook-renderer](https://code.visualstudio.com/api/extension-guides/notebook#notebook-renderer) | [contributes.notebookRenderer](https://code.visualstudio.com/api/references/contribution-points#contributes.notebookRenderer) |
 | [jupyter-server-provider-sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/jupyter-server-provider-sample) | N/A |  |
 | [Chat Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-sample) | N/A |  |
+| [Chat Tutorial](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-tutorial) | N/A |  |
 | [Notifications Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/notifications-sample) | N/A |  |
 <!-- SAMPLES_END -->
 
@@ -82,6 +83,9 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [LSP Multi Root Server Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/lsp-multi-server-sample) | https://github.com/Microsoft/vscode/wiki/Extension-Authoring:-Adopting-Multi-Root-Workspace-APIs#language-client--language-server |  |
 | [LSP Web Extension Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/lsp-web-extension-sample) | [/api/language-extensions/language-server-extension-guide](https://code.visualstudio.com/api/language-extensions/language-server-extension-guide) |  |
 | [LSP User Input Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/lsp-user-input-sample) | N/A |  |
+| [LSP Embedded Language Service](https://github.com/Microsoft/vscode-extension-samples/tree/main/lsp-embedded-language-service) | N/A |  |
+| [LSP Embedded Request Forwarding](https://github.com/Microsoft/vscode-extension-samples/tree/main/lsp-embedded-request-forwarding) | N/A |  |
+| [Wasm language server](https://github.com/Microsoft/vscode-extension-samples/tree/main/wasm-language-server) | N/A |  |
 <!-- LSP_SAMPLES_END -->
 
 ## License

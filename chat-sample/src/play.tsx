@@ -10,7 +10,7 @@ export interface PromptProps extends BasePromptElementProps {
 }
 
 export class PlayPrompt extends PromptElement<PromptProps, void> {
-	render(state: void, sizing: PromptSizing) {
+	render(_state: void, _sizing: PromptSizing) {
 		return (
 			<>
 				<UserMessage>

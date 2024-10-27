@@ -47,7 +47,9 @@ export async function activate(context: ExtensionContext) {
 		client.error(`Start failed`, error, 'force');
 	}
 
-	type CountFileParams = { folder: string };
+	interface CountFileParams {
+		readonly folder: string
+	};
 	const CountFilesRequest = new RequestType<CountFileParams, number, void>('wasm-language-server/countFiles');
 	context.subscriptions.push(commands.registerCommand('vscode-samples.wasm-language-server.countFiles', async () => {
 		// We assume we do have a folder.

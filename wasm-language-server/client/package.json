@@ -31,7 +31,7 @@
 	"scripts": {
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
-		"lint": "eslint ./src --ext .ts,.tsx",
+		"lint": "eslint",
 		"esbuild": "node ./bin/esbuild"
 	}
 }

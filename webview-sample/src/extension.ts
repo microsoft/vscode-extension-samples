@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
 	if (vscode.window.registerWebviewPanelSerializer) {
 		// Make sure we register a serializer in activation event
 		vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
-			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: any) {
+			async deserializeWebviewPanel(webviewPanel: vscode.WebviewPanel, state: unknown) {
 				console.log(`Got state: ${state}`);
 				// Reset the webview options so we use latest uri for `localResourceRoots`.
 				webviewPanel.webview.options = getWebviewOptions(context.extensionUri);
@@ -98,7 +98,7 @@ class CatCodingPanel {
 
 		// Update the content based on view changes
 		this._panel.onDidChangeViewState(
-			e => {
+			() => {
 				if (this._panel.visible) {
 					this._update();
 				}

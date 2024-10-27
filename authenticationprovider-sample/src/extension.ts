@@ -18,7 +18,7 @@ export function activate(context: vscode.ExtensionContext) {
 		new AzureDevOpsAuthenticationProvider(context.secrets),
 	));
 
-	let disposable = vscode.commands.registerCommand('vscode-authenticationprovider-sample.login', async () => {
+	const disposable = vscode.commands.registerCommand('vscode-authenticationprovider-sample.login', async () => {
 		// Get our PAT session.
 		const session = await vscode.authentication.getSession(AzureDevOpsAuthenticationProvider.id, [], { createIfNone: true });
 
@@ -28,7 +28,6 @@ export function activate(context: vscode.ExtensionContext) {
 			const req = await fetch('https://app.vssps.visualstudio.com/_apis/profile/profiles/me?api-version=6.0', {
 				headers: {
 					authorization: `Basic ${Buffer.from(`:${session.accessToken}`).toString('base64')}`,
-					// eslint-disable-next-line @typescript-eslint/naming-convention
 					'content-type': 'application/json',
 				},
 			});
@@ -37,8 +36,8 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 			const res = await req.json() as { displayName: string };
 			vscode.window.showInformationMessage(`Hello ${res.displayName}`);
-		} catch (e: any) {
-			if (e.message === 'Unauthorized') {
+		} catch (e) {
+			if (e instanceof Error && e.message === 'Unauthorized') {
 				vscode.window.showErrorMessage('Failed to get profile. You need to use a PAT that has access to all organizations. Please sign out and try again.');
 			}
 			throw e;
