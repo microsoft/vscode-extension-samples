@@ -133,7 +133,7 @@ export class Controller implements IController {
 	private _isInComposition = false;
 	private _composingText = '';
 
-	public compositionStart(editor: TextEditor): void {
+	public compositionStart(_editor: TextEditor): void {
 		this._isInComposition = true;
 		this._composingText = '';
 	}

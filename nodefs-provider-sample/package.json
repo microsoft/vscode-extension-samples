@@ -23,7 +23,7 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "eslint \"src/**/*.ts\"",
+		"lint": "eslint",
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
@@ -31,14 +31,15 @@
 		"rimraf": "^2.6.2"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^20",
 		"@types/promisify-node": "^0.4.0",
 		"@types/rimraf": "^2.0.2",
 		"@types/vscode": "^1.34.0",
-		"@typescript-eslint/eslint-plugin": "^7.14.0",
-		"@typescript-eslint/parser": "^7.14.0",
-		"eslint": "^8.26.0",
-		"typescript": "^5.6.2"
+		"eslint": "^9.13.0",
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.11.0"
 	}
 }

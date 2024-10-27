@@ -18,7 +18,10 @@ function validateSamplesAreListed() {
 	}
 
 	for (const fileName of fs.readdirSync(root)) {
-		if (!fileName.endsWith('-sample') || fileName.startsWith('.')) {
+		if (fileName === 'node_modules'
+			|| fileName.startsWith('.')
+			|| !fs.lstatSync(path.join(root, fileName)).isDirectory()
+		) {
 			continue;
 		}
 

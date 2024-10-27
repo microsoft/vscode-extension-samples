@@ -15,7 +15,7 @@ export const disposable = vscode.commands.registerTextEditorCommand('code-tutor.
 	const codeWithLineNumbers = getVisibleCodeWithLineNumbers(textEditor);
 
 	// select the 4o chat model
-	let [model] = await vscode.lm.selectChatModels({
+	const [model] = await vscode.lm.selectChatModels({
 		vendor: 'copilot',
 		family: 'gpt-4o',
 	});
@@ -30,7 +30,7 @@ export const disposable = vscode.commands.registerTextEditorCommand('code-tutor.
 	if (model) {
 
 		// send the messages array to the model and get the response
-		let chatResponse = await model.sendRequest(messages, {}, new vscode.CancellationTokenSource().token);
+		const chatResponse = await model.sendRequest(messages, {}, new vscode.CancellationTokenSource().token);
 
 		// handle chat response
 		await parseChatResponse(chatResponse, textEditor);
@@ -51,7 +51,7 @@ async function parseChatResponse(chatResponse: vscode.LanguageModelChatResponse,
 				// reset the accumulator for the next line
 				accumulatedResponse = "";
 			}
-			catch (e) {
+			catch {
 				// do nothing
 			}
 		}

@@ -7,7 +7,7 @@ export function activate(context: vscode.ExtensionContext) {
 	 * You can use proposed API here. `vscode.` should start auto complete
 	 * Proposed API as defined in vscode.proposed.<proposalName>.d.ts.
 	 */
-	const activityMap: Map<vscode.Tab, number> = new Map();
+	const activityMap = new Map<vscode.Tab, number>();
 
 	context.subscriptions.push(vscode.window.tabGroups.onDidChangeTabGroups(() => {
 		const tabs = vscode.window.tabGroups.all.map(group => group.tabs).flat(1);

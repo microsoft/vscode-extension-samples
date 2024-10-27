@@ -12,7 +12,7 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
-"contributes": {
+  "contributes": {
     "chatParticipants": [
       {
         "id": "chat-tutorial.code-tutor",
@@ -34,19 +34,20 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.93.0",
+    "@eslint/js": "^9.13.0",
+    "@stylistic/eslint-plugin": "^2.9.0",
     "@types/mocha": "^10.0.3",
     "@types/node": "18.x",
-    "@typescript-eslint/eslint-plugin": "^6.9.0",
-    "@typescript-eslint/parser": "^6.9.0",
-    "eslint": "^8.52.0",
+    "@types/vscode": "^1.93.0",
+    "@vscode/test-electron": "^2.3.6",
+    "eslint": "^9.13.0",
     "glob": "^10.3.10",
     "mocha": "^10.2.0",
     "typescript": "^5.2.2",
-    "@vscode/test-electron": "^2.3.6"
+    "typescript-eslint": "^8.11.0"
   }
 }

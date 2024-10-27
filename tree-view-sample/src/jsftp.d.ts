@@ -13,9 +13,7 @@ declare namespace JSFtp {
 		useList?: boolean
 	}
 
-	interface Callback<T> {
-		(err: any, result: T): void;
-	}
+	type Callback<T> = (err: any, result: T) => void;
 
 	interface Entry {
 		name: string;
@@ -37,9 +35,7 @@ interface JSFtp extends EventEmitter {
 	raw<T>(command: string, args: any[], callback: JSFtp.Callback<T>): void;
 }
 
-interface JSFtpConstructor {
-	new(options: JSFtp.JSFtpOptions): JSFtp;
-}
+type JSFtpConstructor = new(options: JSFtp.JSFtpOptions) => JSFtp;
 
 declare const JSFtp: JSFtpConstructor;
 

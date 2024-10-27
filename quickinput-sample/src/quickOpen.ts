@@ -49,7 +49,7 @@ class MessageItem implements QuickPickItem {
 async function pickFile() {
 	const disposables: Disposable[] = [];
 	try {
-		return await new Promise<Uri | undefined>((resolve, reject) => {
+		return await new Promise<Uri | undefined>((resolve) => {
 			const input = window.createQuickPick<FileItem | MessageItem>();
 			input.placeholder = 'Type to search for files';
 			let rgs: cp.ChildProcess[] = [];
@@ -77,7 +77,8 @@ async function pickFile() {
 											.map(relative => new FileItem(Uri.file(cwd), Uri.file(path.join(cwd, relative))))
 									);
 								}
-								if (err && !(<any>err).killed && (<any>err).code !== 1 && err.message) {
+								// eslint-disable-next-line @typescript-eslint/no-explicit-any
+								if (err && !(err as any).killed && (err as any).code !== 1 && err.message) {
 									input.items = input.items.concat([
 										new MessageItem(Uri.file(cwd), err.message)
 									]);

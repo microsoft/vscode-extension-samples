@@ -52,7 +52,7 @@ class RepeatingMotion extends Motion {
 }
 
 class NextCharacterMotion extends Motion {
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(doc: TextDocument, pos: Position, _state: MotionState): Position {
 		if (pos.character === doc.lineAt(pos.line).text.length) {
 			// on last character
 			return ((pos.line + 1 < doc.lineCount) ? new Position(pos.line + 1, 0) : pos);
@@ -62,8 +62,9 @@ class NextCharacterMotion extends Motion {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class LeftMotion extends Motion {
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(_doc: TextDocument, pos: Position, state: MotionState): Position {
 		const line = pos.line;
 
 		if (pos.character > 0) {
@@ -75,6 +76,7 @@ class LeftMotion extends Motion {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class DownMotion extends Motion {
 	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
 		let line = pos.line;
@@ -90,6 +92,7 @@ class DownMotion extends Motion {
 	}
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class UpMotion extends Motion {
 	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
 		let line = pos.line;
@@ -120,13 +123,13 @@ class RightMotion extends Motion {
 }
 
 class EndOfLineMotion extends Motion {
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(doc: TextDocument, pos: Position, _state: MotionState): Position {
 		return new Position(pos.line, doc.lineAt(pos.line).text.length);
 	}
 }
 
 class StartOfLineMotion extends Motion {
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(_doc: TextDocument, pos: Position, _state: MotionState): Position {
 		return new Position(pos.line, 0);
 	}
 }
@@ -186,7 +189,7 @@ class NextWordEndMotion extends Motion {
 }
 
 class GoToLineUndefinedMotion extends Motion {
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(_doc: TextDocument, pos: Position, _state: MotionState): Position {
 		// does not do anything
 		return pos;
 	}
@@ -217,13 +220,13 @@ abstract class GoToLineMotion extends Motion {
 }
 
 class GoToFirstLineMotion extends GoToLineMotion {
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(doc: TextDocument, _pos: Position, _state: MotionState): Position {
 		return new Position(0, this.firstNonWhitespaceChar(doc, 0));
 	}
 }
 
 class GoToLastLineMotion extends GoToLineMotion {
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(doc: TextDocument, _pos: Position, _state: MotionState): Position {
 		const lastLine = doc.lineCount - 1;
 		return new Position(lastLine, this.firstNonWhitespaceChar(doc, lastLine));
 	}
@@ -237,7 +240,7 @@ class GoToLineDefinedMotion extends GoToLineMotion {
 		this._lineNumber = lineNumber;
 	}
 
-	public run(doc: TextDocument, pos: Position, state: MotionState): Position {
+	public run(doc: TextDocument, _pos: Position, _state: MotionState): Position {
 		const line = Math.min(doc.lineCount - 1, Math.max(0, this._lineNumber - 1));
 		return new Position(line, this.firstNonWhitespaceChar(doc, line));
 	}
@@ -289,7 +292,7 @@ class RevealCurrentLineCommand extends AbstractCommandDescriptor {
 		super();
 	}
 
-	public createCommand(args?: any): Command {
+	public createCommand(_args?: any): Command {
 		const lineNumber = window.activeTextEditor.selection.start.line;
 		const revealLineArgs: any = {
 			lineNumber,

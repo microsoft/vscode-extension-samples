@@ -73,7 +73,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 	private pathExists(p: string): boolean {
 		try {
 			fs.accessSync(p);
-		} catch (err) {
+		} catch {
 			return false;
 		}
 

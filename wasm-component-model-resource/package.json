@@ -32,14 +32,15 @@
 		"@vscode/wasm-component-model": "1.0.0"
 	},
 	"devDependencies": {
-		"@types/vscode": "1.88.0",
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/node": "^20",
-		"@typescript-eslint/eslint-plugin": "^7.6.0",
-		"@typescript-eslint/parser": "^7.6.0",
-		"eslint": "^8.57.0",
-		"typescript": "^5.6.2",
+		"@types/vscode": "1.88.0",
 		"esbuild": "^0.20.2",
-		"serve": "^14.2.1"
+		"eslint": "^9.13.0",
+		"serve": "^14.2.1",
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.11.0"
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -47,7 +48,7 @@
 		"wit-bindgen": "wit-bindgen rust --out-dir ./src ./wit",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
-		"lint": "eslint ./src --ext .ts,.tsx",
+		"lint": "eslint",
 		"esbuild": "node ./bin/esbuild.js",
 		"generate:model": "wit2ts --outDir ./src ./wit",
 		"serve": "serve --cors -l 5000 --ssl-cert $HOME/certs/localhost.pem --ssl-key $HOME/certs/localhost-key.pem"

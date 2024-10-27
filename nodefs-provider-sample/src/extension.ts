@@ -9,7 +9,7 @@ import * as path from 'path';
 import * as rimraf from 'rimraf';
 import * as vscode from 'vscode';
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(_context: vscode.ExtensionContext) {
 	vscode.workspace.registerFileSystemProvider('datei', new DateiFileSystemProvider(), {
 		isCaseSensitive: process.platform === 'linux'
 	});
@@ -61,8 +61,7 @@ class DateiFileSystemProvider implements vscode.FileSystemProvider {
 		const children = await _.readdir(uri.fsPath);
 
 		const result: [string, vscode.FileType][] = [];
-		for (let i = 0; i < children.length; i++) {
-			const child = children[i];
+		for (const child of children) {
 			const stat = await this._stat(path.join(uri.fsPath, child));
 			result.push([child, stat.type]);
 		}
@@ -139,6 +138,7 @@ export interface IStatAndLink {
 	isSymbolicLink: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-namespace
 namespace _ {
 
 	function handleResult<T>(resolve: (result: T) => void, reject: (error: Error) => void, error: Error | null | undefined, result: T | undefined): void {

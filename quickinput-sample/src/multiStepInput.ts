@@ -105,7 +105,7 @@ export async function multiStepInput(context: ExtensionContext) {
 
 	function shouldResume() {
 		// Could show a notification with the option to resume.
-		return new Promise<boolean>((resolve, reject) => {
+		return new Promise<boolean>((_resolve, _reject) => {
 			// noop
 		});
 	}
@@ -116,7 +116,7 @@ export async function multiStepInput(context: ExtensionContext) {
 		return name === 'vscode' ? 'Name not unique' : undefined;
 	}
 
-	async function getAvailableRuntimes(resourceGroup: QuickPickItem | string, token?: CancellationToken): Promise<QuickPickItem[]> {
+	async function getAvailableRuntimes(_resourceGroup: QuickPickItem | string, _token?: CancellationToken): Promise<QuickPickItem[]> {
 		// ...retrieve...
 		await new Promise(resolve => setTimeout(resolve, 1000));
 		return ['Node 8.9', 'Node 6.11', 'Node 4.5']
@@ -168,7 +168,7 @@ interface InputBoxParameters {
 
 class MultiStepInput {
 
-	static async run<T>(start: InputStep) {
+	static async run(start: InputStep) {
 		const input = new MultiStepInput();
 		return input.stepThrough(start);
 	}
@@ -176,7 +176,7 @@ class MultiStepInput {
 	private current?: QuickInput;
 	private steps: InputStep[] = [];
 
-	private async stepThrough<T>(start: InputStep) {
+	private async stepThrough(start: InputStep) {
 		let step: InputStep | void = start;
 		while (step) {
 			this.steps.push(step);
@@ -227,7 +227,8 @@ class MultiStepInput {
 						if (item === QuickInputButtons.Back) {
 							reject(InputFlowAction.back);
 						} else {
-							resolve(<any>item);
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							resolve((item as any));
 						}
 					}),
 					input.onDidChangeSelection(items => resolve(items[0])),
@@ -271,7 +272,8 @@ class MultiStepInput {
 						if (item === QuickInputButtons.Back) {
 							reject(InputFlowAction.back);
 						} else {
-							resolve(<any>item);
+							// eslint-disable-next-line @typescript-eslint/no-explicit-any
+							resolve(item as any);
 						}
 					}),
 					input.onDidAccept(async () => {

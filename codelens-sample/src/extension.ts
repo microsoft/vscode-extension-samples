@@ -8,7 +8,7 @@ import { CodelensProvider } from './CodelensProvider';
 
 let disposables: Disposable[] = [];
 
-export function activate(context: ExtensionContext) {
+export function activate(_context: ExtensionContext) {
 	const codelensProvider = new CodelensProvider();
 
 	languages.registerCodeLensProvider("*", codelensProvider);
@@ -21,7 +21,7 @@ export function activate(context: ExtensionContext) {
 		workspace.getConfiguration("codelens-sample").update("enableCodeLens", false, true);
 	});
 
-	commands.registerCommand("codelens-sample.codelensAction", (args: any) => {
+	commands.registerCommand("codelens-sample.codelensAction", (args: unknown) => {
 		window.showInformationMessage(`CodeLens action clicked with args=${args}`);
 	});
 }
