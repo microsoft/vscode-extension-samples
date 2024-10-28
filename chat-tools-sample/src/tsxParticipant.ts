@@ -1,6 +1,5 @@
-import * as vscode from 'vscode';
-import { FindFilesTool, RunInTerminalTool, TabCountTool } from './tools';
 import { renderPrompt } from '@vscode/prompt-tsx';
+import * as vscode from 'vscode';
 import { ToolCallRound, ToolResultMetadata, ToolUserPrompt } from './toolsPrompt';
 
 export interface TsxToolUserMetadata {
@@ -29,7 +28,7 @@ export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
         const models = await vscode.lm.selectChatModels({
             vendor: 'copilot',
             family: 'gpt-4o'
-        });
+        }); 
 
         const model = models[0];
         const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
