@@ -16,9 +16,6 @@
         "Chat"
     ],
     "activationEvents": [],
-    "enabledApiProposals": [
-        "lmTools"
-    ],
     "contributes": {
         "chatParticipants": [
             {
@@ -27,15 +24,6 @@
                 "name": "tools",
                 "description": "I use tools",
                 "isSticky": true,
-                "supportsToolReferences": true
-            },
-            {
-                "id": "chat-tools-sample.tools2",
-                "fullName": "Tool User TSX",
-                "name": "toolsTSX",
-                "description": "I use tools with prompt-tsx",
-                "isSticky": true,
-                "supportsToolReferences": true,
                 "commands": [
                     {
                         "name": "list",
