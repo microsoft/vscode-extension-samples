@@ -2,7 +2,6 @@
 
 An example demonstrating how to use the component model to integrate WebAssembly code into VS Code.
 
-
 ## Functionality
 
 A simple calculator that can perform add, sub, mul and div. The calculator is implemented in Rust and compiled to WebAssembly code and then call from JavaScript.

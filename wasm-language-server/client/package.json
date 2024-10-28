@@ -3,7 +3,7 @@
 	"description": "The language client",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
-	"version": "1.0.0",
+	"version": "0.1.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
@@ -17,21 +17,21 @@
 		"Language Server"
 	],
 	"engines": {
-		"vscode": "^1.88.0"
+		"vscode": "^1.89.0"
 	},
 	"main": "./out/extension",
 	"browser": "./dist/web/extension",
 	"dependencies": {
-		"@vscode/wasm-wasi-lsp": "0.1.0-pre.1"
+		"@vscode/wasm-wasi-lsp": "0.1.0-pre.6"
 	},
 	"devDependencies": {
-		"@types/vscode": "1.88.0",
-		"@types/node": "^18.14.6"
+		"@types/vscode": "1.89.0",
+		"@types/node": "^20"
 	},
 	"scripts": {
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
-		"lint": "eslint ./src --ext .ts,.tsx",
+		"lint": "eslint",
 		"esbuild": "node ./bin/esbuild"
 	}
 }

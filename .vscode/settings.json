@@ -3,5 +3,12 @@
 	"prettier.semi": true,
 	"prettier.printWidth": 92,
 	"prettier.singleQuote": true,
-	"prettier.useTabs": true
+	"prettier.useTabs": true,
+	"git.branchProtection": [
+        "main"
+    ],
+    "git.branchProtectionPrompt": "alwaysCommitToNewBranch",
+    "git.branchRandomName.enable": true,
+    "githubPullRequests.assignCreated": "${user}",
+    "githubPullRequests.defaultMergeMethod": "squash"
 }

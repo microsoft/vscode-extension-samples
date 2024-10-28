@@ -75,7 +75,7 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 		}
 	}
 
-	provideDocumentLinks(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.DocumentLink[] | undefined {
+	provideDocumentLinks(document: vscode.TextDocument, _token: vscode.CancellationToken): vscode.DocumentLink[] | undefined {
 		// While building the virtual document we have already created the links.
 		// Those are composed from the range inside the document and a target uri
 		// to which they point
@@ -94,6 +94,6 @@ export function encodeLocation(uri: vscode.Uri, pos: vscode.Position): vscode.Ur
 }
 
 export function decodeLocation(uri: vscode.Uri): [vscode.Uri, vscode.Position] {
-	const [target, line, character] = <[string, number, number]>JSON.parse(uri.query);
+	const [target, line, character] = JSON.parse(uri.query) as [string, number, number];
 	return [vscode.Uri.parse(target), new vscode.Position(line, character)];
 }

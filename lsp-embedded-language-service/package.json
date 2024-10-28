@@ -14,7 +14,9 @@
 	"engines": {
 		"vscode": "^1.74.0"
 	},
-	"activationEvents": [],
+	"activationEvents": [
+		"onLanguage:html1"
+	],
 	"main": "./client/out/extension",
 	"contributes": {
 		"languages": [
@@ -37,15 +39,16 @@
 		"vscode:prepublish": "cd client && npm install && cd .. && npm run compile",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
-		"lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
+		"lint": "eslint",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd .."
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/mocha": "^5.2.7",
-		"@types/node": "^16.18.34",
-		"@typescript-eslint/eslint-plugin": "^6.7.0",
-		"@typescript-eslint/parser": "^6.7.0",
-		"eslint": "^7.21.0",
-		"typescript": "^5.4.2"
+		"@types/node": "^20",
+		"eslint": "^9.13.0",
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.11.0"
 	}
 }

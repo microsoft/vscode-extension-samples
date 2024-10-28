@@ -13,7 +13,7 @@ const connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager. The text document manager
 // supports full document sync only
-const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+const documents = new TextDocuments(TextDocument);
 
 const htmlLanguageService = getLanguageService();
 
@@ -29,7 +29,7 @@ connection.onInitialize((_params: InitializeParams) => {
 	};
 });
 
-connection.onCompletion(async (textDocumentPosition, token) => {
+connection.onCompletion(async (textDocumentPosition, _token) => {
 	const document = documents.get(textDocumentPosition.textDocument.uri);
 	if (!document) {
 		return null;

@@ -22,8 +22,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
 	try {
 		await initializeFromConfigurationFile(context);
-	}
-	catch (err) {
+	} catch (err) {
 		console.log('Failed to initialize a Fiddle workspace.');
 		vscode.window.showErrorMessage(err);
 	}
@@ -39,27 +38,37 @@ export async function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.refresh",
 		async (sourceControlPane: vscode.SourceControl) => {
 			const sourceControl = await pickSourceControl(sourceControlPane);
-			if (sourceControl) { sourceControl.refresh(); }
+			if (sourceControl) {
+				sourceControl.refresh();
+			}
 		}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.discard",
 		async (sourceControlPane: vscode.SourceControl) => {
 			const sourceControl = await pickSourceControl(sourceControlPane);
-			if (sourceControl) { sourceControl.resetFilesToCheckedOutVersion(); }
+			if (sourceControl) {
+				sourceControl.resetFilesToCheckedOutVersion();
+			}
 		}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.commit",
 		async (sourceControlPane: vscode.SourceControl) => {
 			const sourceControl = await pickSourceControl(sourceControlPane);
-			if (sourceControl) { sourceControl.commitAll(); }
+			if (sourceControl) {
+				sourceControl.commitAll();
+			}
 		}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.checkout",
 		async (sourceControl: FiddleSourceControl, newVersion?: number) => {
 			sourceControl = sourceControl || await pickSourceControl(null);
-			if (sourceControl) { sourceControl.tryCheckout(newVersion); }
+			if (sourceControl) {
+				sourceControl.tryCheckout(newVersion);
+			}
 		}));
 	context.subscriptions.push(vscode.commands.registerCommand("extension.source-control.browse",
 		async (sourceControlPane: vscode.SourceControl) => {
 			const sourceControl = await pickSourceControl(sourceControlPane);
-			if (sourceControl) { sourceControl.openInBrowser(); }
+			if (sourceControl) {
+				sourceControl.openInBrowser();
+			}
 		}));
 
 
@@ -87,9 +96,11 @@ async function pickSourceControl(sourceControlPane: vscode.SourceControl): Promi
 
 	// todo: when/if the SourceControl exposes a 'selected' property, use that instead
 
-	if (fiddleSourceControlRegister.size === 0) { return undefined; }
-	else if (fiddleSourceControlRegister.size === 1) { return [...fiddleSourceControlRegister.values()][0]; }
-	else {
+	if (fiddleSourceControlRegister.size === 0) {
+		return undefined;
+	} else if (fiddleSourceControlRegister.size === 1) {
+		return [...fiddleSourceControlRegister.values()][0];
+	} else {
 
 		const picks = [...fiddleSourceControlRegister.values()].map(fsc => new RepositoryPick(fsc));
 
@@ -112,15 +123,16 @@ async function pickSourceControl(sourceControlPane: vscode.SourceControl): Promi
 async function tryOpenFiddle(context: vscode.ExtensionContext, fiddleId?: string, workspaceUri?: vscode.Uri): Promise<void> {
 	try {
 		await openFiddle(context, fiddleId, workspaceUri);
-	}
-	catch (ex) {
+	} catch (ex) {
 		vscode.window.showErrorMessage(ex);
 		console.log(ex);
 	}
 }
 
 async function openFiddle(context: vscode.ExtensionContext, fiddleId?: string, workspaceUri?: vscode.Uri) {
-	if (workspaceUri && fiddleSourceControlRegister.has(workspaceUri)) { vscode.window.showErrorMessage("Another Fiddle was already open in this workspace. Open a new workspace first."); }
+	if (workspaceUri && fiddleSourceControlRegister.has(workspaceUri)) {
+		vscode.window.showErrorMessage("Another Fiddle was already open in this workspace. Open a new workspace first.");
+	}
 
 	if (!fiddleId) {
 		fiddleId = (await vscode.window.showInputBox({ prompt: 'Paste JSFiddle ID and optionally version', placeHolder: 'slug or slug/version, e.g. u8B29/1', value: 'demo' })) || '';
@@ -131,7 +143,9 @@ async function openFiddle(context: vscode.ExtensionContext, fiddleId?: string, w
 			vscode.workspace.getWorkspaceFolder(workspaceUri) :
 			await selectWorkspaceFolder(context, fiddleId);
 
-	if (! await clearWorkspaceFolder(workspaceFolder.uri)) { return; }
+	if (! await clearWorkspaceFolder(workspaceFolder.uri)) {
+		return;
+	}
 
 	// show the file explorer with the three new files
 	vscode.commands.executeCommand("workbench.view.explorer");
@@ -182,7 +196,9 @@ function unregisterFiddleSourceControl(folderUri: vscode.Uri): void {
  * @param context extension context
  */
 async function initializeFromConfigurationFile(context: vscode.ExtensionContext): Promise<void> {
-	if (!vscode.workspace.workspaceFolders) { return; }
+	if (!vscode.workspace.workspaceFolders) {
+		return;
+	}
 
 	const folderPromises = vscode.workspace.workspaceFolders.map(async (folder) => await initializeFolderFromConfigurationFile(folder, context));
 	await Promise.all(folderPromises);
@@ -195,7 +211,7 @@ async function initializeFolderFromConfigurationFile(folder: vscode.WorkspaceFol
 
 	if (configFileExists) {
 		const data = await afs.readFile(configurationPath);
-		const fiddleConfiguration = <FiddleConfiguration>JSON.parse(data.toString(UTF8));
+		const fiddleConfiguration: FiddleConfiguration = JSON.parse(data.toString(UTF8));
 		const fiddleSourceControl = await FiddleSourceControl.fromConfiguration(fiddleConfiguration, folder, context, !fiddleConfiguration.downloaded);
 		registerFiddleSourceControl(fiddleSourceControl, context);
 		if (!fiddleConfiguration.downloaded) {
@@ -229,7 +245,9 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 				canPickMany: false, ignoreFocusOut: true, placeHolder: 'Pick workspace folder to create files in.'
 			});
 
-	if (!selectedFolderPick) { return null; }
+	if (!selectedFolderPick) {
+		return null;
+	}
 
 	if (selectedFolderPick instanceof ExistingWorkspaceFolderPick) {
 		selectedFolder = selectedFolderPick.workspaceFolder;
@@ -248,10 +266,12 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 
 		workspaceFolderUri = folderUris[0];
 		// was such workspace folder already open?
-		workspaceFolderIndex = vscode.workspace.workspaceFolders && firstIndex(vscode.workspace.workspaceFolders, (folder1: any) => folder1.uri.toString() === workspaceFolderUri!.toString());
+		workspaceFolderIndex = vscode.workspace.workspaceFolders && firstIndex(vscode.workspace.workspaceFolders, (folder1) => folder1.uri.toString() === workspaceFolderUri!.toString());
 	}
 
-	if (! await clearWorkspaceFolder(workspaceFolderUri)) { return null; }
+	if (! await clearWorkspaceFolder(workspaceFolderUri)) {
+		return null;
+	}
 
 	const fiddleConfiguration = parseFiddleId(fiddleId);
 
@@ -260,14 +280,15 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 
 	if (folderOpeningMode === FolderOpeningMode.AddToWorkspace || folderOpeningMode === undefined) {
 		const workSpacesToReplace = typeof workspaceFolderIndex === 'number' && workspaceFolderIndex > -1 ? 1 : 0;
-		if (workspaceFolderIndex === undefined || workspaceFolderIndex < 0) { workspaceFolderIndex = 0; }
+		if (workspaceFolderIndex === undefined || workspaceFolderIndex < 0) {
+			workspaceFolderIndex = 0;
+		}
 
 		// replace or insert the workspace
 		if (workspaceFolderUri) {
 			vscode.workspace.updateWorkspaceFolders(workspaceFolderIndex, workSpacesToReplace, { uri: workspaceFolderUri });
 		}
-	}
-	else if (folderOpeningMode === FolderOpeningMode.OpenFolder) {
+	} else if (folderOpeningMode === FolderOpeningMode.OpenFolder) {
 		vscode.commands.executeCommand("vscode.openFolder", workspaceFolderUri);
 	}
 
@@ -276,14 +297,18 @@ async function selectWorkspaceFolder(context: vscode.ExtensionContext, fiddleId:
 
 async function clearWorkspaceFolder(workspaceFolderUri: vscode.Uri): Promise<boolean> {
 
-	if (!workspaceFolderUri) { return undefined; }
+	if (!workspaceFolderUri) {
+		return undefined;
+	}
 
 	// check if the workspace is empty, or clear it
 	const existingWorkspaceFiles: string[] = await afs.readdir(workspaceFolderUri.fsPath);
 	if (existingWorkspaceFiles.length > 0) {
 		const answer = await vscode.window.showQuickPick(["Yes", "No"],
 			{ placeHolder: `Remove ${existingWorkspaceFiles.length} file(s) from the folder ${workspaceFolderUri.fsPath} before cloning the remote repository?` });
-		if (!answer) { return false; }
+		if (!answer) {
+			return false;
+		}
 
 		if (answer === "Yes") {
 			existingWorkspaceFiles
@@ -343,7 +368,9 @@ class NewWorkspaceFolderPick extends WorkspaceFolderPick {
 	}
 }
 
-enum FolderOpeningMode { AddToWorkspace, OpenFolder }
+enum FolderOpeningMode {
+	AddToWorkspace, OpenFolder
+}
 
 const newWorkspaceFolderPick = new NewWorkspaceFolderPick("Select/create a local folder to add to this workspace...", FolderOpeningMode.AddToWorkspace);
 const newFolderPick = new NewWorkspaceFolderPick("Select/create a local folder...", FolderOpeningMode.OpenFolder);

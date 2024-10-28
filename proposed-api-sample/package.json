@@ -27,18 +27,19 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "eslint \"src/**/*.ts\"",
+		"lint": "eslint",
 		"watch": "tsc -watch -p ./",
 		"download-api": "dts dev",
 		"postdownload-api": "dts main",
 		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
-		"@types/node": "^18",
-		"@typescript-eslint/eslint-plugin": "^6.7.0",
-		"@typescript-eslint/parser": "^6.7.0",
-		"eslint": "^8.26.0",
-		"typescript": "^5.4.2",
-		"@vscode/dts": "^0.4.0"
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^20",
+		"@vscode/dts": "^0.4.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.11.0"
 	}
 }

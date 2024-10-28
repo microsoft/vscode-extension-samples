@@ -2,12 +2,10 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-'use strict';
-
 import * as vscode from 'vscode';
 import { posix } from 'path';
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(_context: vscode.ExtensionContext) {
 
 	// Command #1 - Check and show a JavaScript-file for a TypeScript-file
 	// * shows how to derive a new uri from an existing uri

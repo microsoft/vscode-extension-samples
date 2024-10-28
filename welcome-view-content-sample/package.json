@@ -32,18 +32,19 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@stylistic/eslint-plugin": "^2.9.0",
     "@types/glob": "^7.1.3",
-    "@types/node": "^18",
+    "@types/node": "^20",
     "@types/vscode": "^1.73.0",
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
-    "@typescript-eslint/parser": "^6.7.0",
     "@vscode/test-electron": "^2.3.9",
-    "eslint": "^8.26.0",
+    "eslint": "^9.13.0",
     "glob": "^7.1.6",
-    "typescript": "^5.4.2"
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.11.0"
   }
 }

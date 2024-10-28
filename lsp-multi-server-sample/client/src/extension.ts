@@ -12,7 +12,7 @@ import {
 } from 'vscode-languageclient/node';
 
 let defaultClient: LanguageClient;
-const clients: Map<string, LanguageClient> = new Map();
+const clients = new Map<string, LanguageClient>();
 
 let _sortedWorkspaceFolders: string[] | undefined;
 function sortedWorkspaceFolders(): string[] {

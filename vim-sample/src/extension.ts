@@ -13,7 +13,7 @@ export function activate(context: vscode.ExtensionContext) {
 		context.subscriptions.push(vscode.commands.registerCommand(commandId, run));
 	}
 	function registerCtrlKeyBinding(key: string): void {
-		registerCommandNice(key, function(args) {
+		registerCommandNice(key, function() {
 			if (!vscode.window.activeTextEditor) {
 				return;
 			}
@@ -35,22 +35,22 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 		vimExt.replacePrevChar(args.text, args.replaceCharCnt);
 	});
-	registerCommandNice('compositionStart', function(args) {
+	registerCommandNice('compositionStart', function() {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.compositionStart();
 	});
-	registerCommandNice('compositionEnd', function(args) {
+	registerCommandNice('compositionEnd', function() {
 		if (!vscode.window.activeTextEditor) {
 			return;
 		}
 		vimExt.compositionEnd();
 	});
-	registerCommandNice('vim.goToNormalMode', function(args) {
+	registerCommandNice('vim.goToNormalMode', function() {
 		vimExt.goToNormalMode();
 	});
-	registerCommandNice('vim.clearInput', function(args) {
+	registerCommandNice('vim.clearInput', function() {
 		vimExt.clearInput();
 	});
 	// registerCommandNice('paste', function(args) {

@@ -21,7 +21,7 @@ const connection = createConnection(ProposedFeatures.all);
 
 // Create a simple text document manager. The text document manager
 // supports full document sync only
-const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+const documents = new TextDocuments(TextDocument);
 
 let languageModes: LanguageModes;
 
@@ -82,7 +82,7 @@ async function validateTextDocument(textDocument: TextDocument) {
 	}
 }
 
-connection.onCompletion(async (textDocumentPosition, token) => {
+connection.onCompletion(async (textDocumentPosition, _token) => {
 	const document = documents.get(textDocumentPosition.textDocument.uri);
 	if (!document) {
 		return null;

@@ -164,7 +164,14 @@ const samples = [
   {
     description: 'webpack-sample',
     path: 'webpack-sample',
-    guide: null,
+    guide: '/api/working-with-extensions/bundling-extension',
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'esbuild-sample',
+    path: 'esbuild-sample',
+    guide: '/api/working-with-extensions/bundling-extension',
     apis: [],
     contributions: []
   },
@@ -267,6 +274,27 @@ const samples = [
     apis: [],
     contributions: []
   },
+  {
+    description: 'Chat Sample',
+    path: 'chat-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'Chat Tutorial',
+    path: 'chat-tutorial',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'Notifications Sample',
+    path: 'notifications-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
   { description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
   { description: 'contentprovider-sample', excludeFromReadme: true, path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
   { description: 'nodefs-provider-sample', excludeFromReadme: true, path: 'nodefs-provider-sample', guide: null, apis: [], contributions: [] },
@@ -276,22 +304,37 @@ const samples = [
   { description: 'fsconsumer-sample', excludeFromReadme: true, path: 'fsconsumer-sample', guide: null, apis: [], contributions: [] },
   { description: 'github-authentication-sample', excludeFromReadme: true, path: 'github-authentication-sample', guide: null, apis: [], contributions: [] },
   { description: 'helloworld-sample', excludeFromReadme: true, path: 'helloworld-sample', guide: null, apis: [], contributions: [] },
+  { description: 'helloworld-minimal-sample', excludeFromReadme: true, path: 'helloworld-minimal-sample', guide: null, apis: [], contributions: [] },
   { description: 'helloworld-test-sample', excludeFromReadme: true, path: 'helloworld-test-sample', guide: null, apis: [], contributions: [] },
   { description: 'helloworld-web-sample', excludeFromReadme: true, path: 'helloworld-web-sample', guide: null, apis: [], contributions: [] },
+  { description: 'helloworld-test-cli-sample', excludeFromReadme: true, path: 'helloworld-test-cli-sample', guide: null, apis: [], contributions: [] },
   { description: 'inline-completions', excludeFromReadme: true, path: 'inline-completions', guide: null, apis: [], contributions: [] },
   { description: 'notebook-renderer-react-sample', excludeFromReadme: true, path: 'notebook-renderer-react-sample', guide: null, apis: [], contributions: [] },
+  { description: 'notebook-format-code-action-sample', excludeFromReadme: true, path: 'notebook-format-code-action-sample', guide: null, apis: [], contributions: [] },
+  { description: 'notebook-serializer-sample', excludeFromReadme: true, path: 'notebook-serializer-sample', guide: null, apis: [], contributions: [] },
   { description: 'proposed-api-sample', excludeFromReadme: true, path: 'proposed-api-sample', guide: null, apis: [], contributions: [] },
   { description: 'virtual-document-sample', excludeFromReadme: true, path: 'virtual-document-sample', guide: null, apis: [], contributions: [] },
-  { description: 'webpack-sample', excludeFromReadme: true, path: 'webpack-sample', guide: null, apis: [], contributions: [] },
   { description: 'welcome-view-content-sample', excludeFromReadme: true, path: 'welcome-view-content-sample', guide: null, apis: [], contributions: [] },
   { description: 'document-paste', excludeFromReadme: true, path: 'document-paste', guide: null, apis: [], contributions: [] },
   { description: 'drop-on-document', excludeFromReadme: true, path: 'drop-on-document', guide: null, apis: [], contributions: [] },
   { description: 'uri-handler-sample', excludeFromReadme: true, path: 'uri-handler-sample', guide: null, apis: [], contributions: [] },
   { description: 'authenticationprovider-sample', excludeFromReadme: true, path: 'authenticationprovider-sample', guide: null, apis: [], contributions: [] },
+  { description: 'jupyter-kernel-execution-sample', excludeFromReadme: true, path: 'jupyter-kernel-execution-sample', guide: null, apis: [], contributions: [] },
+  { description: 'shell-integration-sample', excludeFromReadme: true, path: 'shell-integration-sample', guide: null, apis: [], contributions: [] },
+  { description: 'tabs-api-sample', excludeFromReadme: true, path: 'tabs-api-sample', guide: null, apis: [], contributions: [] },
+  { description: 'telemetry-sample', excludeFromReadme: true, path: 'telemetry-sample', guide: null, apis: [], contributions: [] },
+  { description: 'lm-api-tutorial', excludeFromReadme: true, path: 'lm-api-tutorial', guide: null, apis: [], contributions: [] },
+  { description: 'wasm-component-model', excludeFromReadme: true, path: 'wasm-component-model', guide: null, apis: [], contributions: [] },
+  { description: 'wasm-component-model-async', excludeFromReadme: true, path: 'wasm-component-model-async', guide: null, apis: [], contributions: [] },
+  { description: 'wasm-component-model-resource', excludeFromReadme: true, path: 'wasm-component-model-resource', guide: null, apis: [], contributions: [] },
 ]
 
-/** LSP specific samples */
-/** @type {Sample[]} */
+/**
+ * LSP specific samples
+ * DO NOT add non-LSP items here. Add it to `samples` list.
+ * 
+ * @type {Sample[]}
+ */
 const lspSamples = [
   {
     description: 'Snippet Sample',
@@ -336,11 +379,35 @@ const lspSamples = [
     apis: [],
     contributions: []
   },
-]
-/**
- * LSP specific samples
- * DO NOT add non-LSP items here. Add it to `samples` list.
- */
+  {
+    description: 'LSP User Input Sample',
+    path: 'lsp-user-input-sample',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'LSP Embedded Language Service',
+    path: 'lsp-embedded-language-service',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'LSP Embedded Request Forwarding',
+    path: 'lsp-embedded-request-forwarding',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+  {
+    description: 'Wasm language server',
+    path: 'wasm-language-server',
+    guide: null,
+    apis: [],
+    contributions: []
+  },
+];
 
 // eslint-disable-next-line no-undef
 module.exports = {
