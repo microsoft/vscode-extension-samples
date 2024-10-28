@@ -41,5 +41,8 @@
 		"eslint": "^9.13.0",
 		"typescript": "^5.6.2",
 		"typescript-eslint": "^8.11.0"
-	}
+	},
+  "dependencies": {
+		"@vscode/codicons": "0.0.20"
+  }
 }
