@@ -23,7 +23,7 @@
     "viewsWelcome": [
       {
         "view": "workbench.explorer.emptyView",
-        "contents": "You can have paragraphs of text here. You can have [links](https://code.visualstudio.com) to external sources or [internal commands](command:welcome-view-content-sample.hello).\nUse new lines to have new paragraphs.\nPlace a link alone in a paragraph to make it a button\n[Hello](command:welcome-view-content-sample.hello)"
+        "contents": "You can have paragraphs of text here. You can have [links](https://code.visualstudio.com) to external sources or [internal commands](command:welcome-view-content-sample.hello).\nUse new lines to have new paragraphs.\nPlace a link alone in a paragraph to make it a button\n[Hello](command:welcome-view-content-sample.hello)\n You can also render [codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) using the $(...) syntax like: $(vscode) $(heart) $(github)\nAdd a little $(sparkle) to your welcome views!"
       }
     ]
   },
