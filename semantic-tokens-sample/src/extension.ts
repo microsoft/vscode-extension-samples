@@ -87,7 +87,7 @@ class DocumentSemanticTokensProvider implements vscode.DocumentSemanticTokensPro
 					tokenModifiers: tokenData.tokenModifiers
 				});
 				currentOffset = closeOffset;
-			// eslint-disable-next-line no-constant-condition
+				// eslint-disable-next-line no-constant-condition
 			} while (true);
 		}
 		return r;

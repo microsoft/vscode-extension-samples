@@ -1,16 +1,15 @@
-// @ts-check
 /**
  * Update a dependency to a version in all relevant samples
  */
-const fs = require('fs');
-const path = require('path');
-const child_process = require('child_process');
-const { samples } = require('./samples');
+import * as child_process from 'child_process';
+import * as fs from 'fs';
+import * as path from 'path';
+import { Sample, samples } from './samples';
 
 function setVersion(
-	/** @type {string} */ dependencyName,
-	/** @type {string} */ version,
-	/** @type {import('./samples').Sample} */ sample
+	dependencyName: string,
+	version: string,
+	sample: Sample
 ) {
 	const packageJsonPath = path.join(sample.path, 'package.json');
 	const packageJsonContents = fs.readFileSync(packageJsonPath).toString();

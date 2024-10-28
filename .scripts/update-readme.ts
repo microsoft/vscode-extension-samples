@@ -1,6 +1,5 @@
-// @ts-check
-const fs = require('fs')
-const { samples, lspSamples } = require('./samples')
+import * as fs from 'fs';
+import { lspSamples, Sample, samples } from './samples';
 
 const TABLE_HEAD = `<!-- SAMPLES_BEGIN -->
 | Sample | Guide on VS Code Website | API & Contribution |
@@ -11,7 +10,7 @@ const LSP_TABLE_HEAD = `<!-- LSP_SAMPLES_BEGIN -->
 | ------ | ----- | --- |`
 const LSP_TABLE_END = `<!-- LSP_SAMPLES_END -->`
 
-const getTableRow = sample => {
+const getTableRow = (sample: Sample) => {
 	const descriptionCell = `[${sample.description}](https://github.com/Microsoft/vscode-extension-samples/tree/main/${sample.path})`
 	let guideCell
 	if (!sample.guide) {
@@ -33,7 +32,7 @@ const getTableRow = sample => {
 	return `| ${descriptionCell} | ${guideCell} | ${apiAndContributionCell} |`
 }
 
-const getSamplesTable = samples => {
+const getSamplesTable = (samples: readonly Sample[]) => {
 	const samplesMd = samples.map(s => getTableRow(s)).join('\n')
 
 	return `${TABLE_HEAD.trim()}
@@ -41,7 +40,7 @@ ${samplesMd}
 ${TABLE_END.trim()}`
 }
 
-const getLSPSamplesTable = samples => {
+const getLSPSamplesTable = (samples: readonly Sample[]) => {
 	const samplesMd = samples.map(s => getTableRow(s)).join('\n')
 
 	return `${LSP_TABLE_HEAD.trim()}
@@ -52,9 +51,9 @@ ${LSP_TABLE_END.trim()}`
 /**
  * Update the README with the latest samples.
  * 
- * @returns {boolean} true if the README was updated, false otherwise.
+ * @returns true if the README was updated, false otherwise.
  */
-function updateReadme(dryRun = false) {
+export function updateReadme(dryRun = false): boolean {
 	const readme = fs.readFileSync('README.md', 'utf-8')
 	const newReadme = readme
 		.replace(/<!-- SAMPLES_BEGIN -->(.|\n)*<!-- SAMPLES_END -->/gm, getSamplesTable(samples.filter(x => !x.excludeFromReadme)))
@@ -69,8 +68,6 @@ function updateReadme(dryRun = false) {
 		return false;
 	}
 }
-
-exports.updateReadme = updateReadme;
 
 if (require.main === module) {
 	updateReadme();

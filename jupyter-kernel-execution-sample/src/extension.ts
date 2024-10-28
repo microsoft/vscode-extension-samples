@@ -67,7 +67,7 @@ async function executeCode(kernel: Kernel, code: string, logger: OutputChannel) 
 		}
 		logger.appendLine('Code execution completed');
 		logger.appendLine(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`);
-	} catch (ex){
+	} catch (ex) {
 		logger.appendLine(`Code execution failed with an error '${ex}'`);
 		logger.appendLine(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`);
 	} finally {

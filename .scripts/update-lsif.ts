@@ -1,7 +1,6 @@
-const fs = require('fs').promises;
-const path = require('path');
-
-const { samples, lspSamples } = require('./samples')
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { samples } from './samples';
 
 const root = path.join(__dirname, '..');
 
@@ -22,9 +21,11 @@ async function main() {
 		},
 		files: [
 		],
-		references: references.map(reference => { return { path: reference }})
+		references: references.map(reference => { return { path: reference } })
 	}
 	await fs.writeFile(path.join(root, 'tsconfig.lsif.json'), JSON.stringify(tsconfig, undefined, '\t'), { encoding: 'utf8' });
 }
 
-main().catch(console.error);
+if (require.main === module) {
+	main().catch(console.error);
+}

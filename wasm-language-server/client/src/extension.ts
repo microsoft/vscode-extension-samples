@@ -35,7 +35,7 @@ export async function activate(context: ExtensionContext) {
 	};
 
 	const clientOptions: LanguageClientOptions = {
-		documentSelector: [ { language: 'plaintext' } ],
+		documentSelector: [{ language: 'plaintext' }],
 		outputChannel: channel,
 		uriConverters: createUriConverters(),
 	};

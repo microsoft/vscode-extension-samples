@@ -137,12 +137,12 @@ export namespace calculator.$ {
 	export const Operation = Types.$.Operation;
 	export const ErrorCode = Types.$.ErrorCode;
 	export namespace imports {
-		export const log = new $wcm.FunctionType<calculator.Imports['log']>('log',[
+		export const log = new $wcm.FunctionType<calculator.Imports['log']>('log', [
 			['msg', $wcm.wstring],
 		], undefined);
 	}
 	export namespace exports {
-		export const calc = new $wcm.FunctionType<calculator.Exports['calc']>('calc',[
+		export const calc = new $wcm.FunctionType<calculator.Exports['calc']>('calc', [
 			['o', Operation],
 		], new $wcm.ResultType<u32, calculator.ErrorCode>($wcm.u32, ErrorCode, Types.ErrorCode.Error_));
 	}

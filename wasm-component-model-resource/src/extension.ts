@@ -32,22 +32,22 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	// Bind the JavaScript Api
 	const api = calculator._.exports.bind(instance.exports as calculator._.Exports, wasmContext);
 
-context.subscriptions.push(vscode.commands.registerCommand('vscode-samples.wasm-component-model.run', () => {
-	channel.show();
-	channel.appendLine('Running calculator example');
+	context.subscriptions.push(vscode.commands.registerCommand('vscode-samples.wasm-component-model.run', () => {
+		channel.show();
+		channel.appendLine('Running calculator example');
 
-	// Create a new calculator engine
-	const calculator = new api.types.Engine();
+		// Create a new calculator engine
+		const calculator = new api.types.Engine();
 
-	// Push some operands and operations
-	calculator.pushOperand(10);
-	calculator.pushOperand(20);
-	calculator.pushOperation(Types.Operation.add);
-	calculator.pushOperand(2);
-	calculator.pushOperation(Types.Operation.mul);
+		// Push some operands and operations
+		calculator.pushOperand(10);
+		calculator.pushOperand(20);
+		calculator.pushOperation(Types.Operation.add);
+		calculator.pushOperand(2);
+		calculator.pushOperation(Types.Operation.mul);
 
-	// Calculate the result
-	const result = calculator.execute();
-	channel.appendLine(`Result: ${result}`);
-}));
+		// Calculate the result
+		const result = calculator.execute();
+		channel.appendLine(`Result: ${result}`);
+	}));
 }

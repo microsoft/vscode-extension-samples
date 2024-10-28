@@ -35,7 +35,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 	context.subscriptions.push(vscode.commands.registerCommand('vscode-samples.wasm-component-model-async.run', async () => {
 		channel.show();
 		channel.appendLine('Running calculator example');
-		const add = Types.Operation.Add({ left: 1, right: 2});
+		const add = Types.Operation.Add({ left: 1, right: 2 });
 		channel.appendLine(`Add ${await api.calc(add)}`);
 		const sub = Types.Operation.Sub({ left: 10, right: 8 });
 		channel.appendLine(`Sub ${await api.calc(sub)}`);
