@@ -75,7 +75,6 @@ interface ToolCallsProps extends BasePromptElementProps {
 	toolInvocationToken: vscode.ChatParticipantToolToken | undefined;
 }
 
-const agentSupportedContentTypes = [promptTsxContentType, 'text/plain'];
 const dummyCancellationToken: vscode.CancellationToken = new vscode.CancellationTokenSource().token;
 
 class ToolCalls extends PromptElement<ToolCallsProps, void> {

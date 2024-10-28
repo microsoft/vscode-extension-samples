@@ -18,19 +18,23 @@ export function isTsxToolUserMetadata(obj: unknown): obj is TsxToolUserMetadata 
         Array.isArray((obj as TsxToolUserMetadata).toolCallsMetadata.toolCallRounds);
 }
 
-export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
+export function registerToolUserChatParticipant(context: vscode.ExtensionContext) {
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
         if (request.command === 'list') {
             stream.markdown(`Available tools: ${vscode.lm.tools.map(tool => tool.name).join(', ')}\n\n`);
             return;
         }
 
-        const models = await vscode.lm.selectChatModels({
-            vendor: 'copilot',
-            family: 'gpt-4o'
-        }); 
+        let model = request.model;
+        if (model.vendor === 'copilot' && model.family.startsWith('o1')) {
+            // The o1 models do not currently support tools
+            const models = await vscode.lm.selectChatModels({
+                vendor: 'copilot',
+                family: 'gpt-4o'
+            });
+            model = models[0];
+        }
 
-        const model = models[0];
         const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
             return {
                 name: tool.name,
@@ -40,7 +44,7 @@ export function registerTsxChatParticipant(context: vscode.ExtensionContext) {
         });
 
         const options: vscode.LanguageModelChatRequestOptions = {
-            justification: 'Just because!',
+            justification: 'To make a request to @toolsTSX',
         };
 
         let { messages, references } = await renderPrompt(
