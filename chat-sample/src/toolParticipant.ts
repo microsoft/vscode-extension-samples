@@ -36,7 +36,7 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
         }
 
         // Use all tools, or tools with the tags that are relevant.
-        const allTools = request.command === 'all' ?
+        const tools = request.command === 'all' ?
             vscode.lm.tools :
             vscode.lm.tools.filter(tool => tool.tags.includes('chat-tools-sample'));
         const options: vscode.LanguageModelChatRequestOptions = {
@@ -69,10 +69,10 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
             const requestedTool = toolReferences.shift();
             if (requestedTool) {
                 options.toolMode = vscode.LanguageModelChatToolMode.Required;
-                options.tools = allTools.filter(tool => tool.name === requestedTool.name);
+                options.tools = vscode.lm.tools.filter(tool => tool.name === requestedTool.name);
             } else {
                 options.toolMode = undefined;
-                options.tools = [...allTools];
+                options.tools = [...tools];
             }
 
             // Send the request to the LanguageModelChat

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { FindFilesTool, RunInTerminalTool, TabCountTool } from './tools';
-import { registerToolUserChatParticipant } from './participant';
+import { registerToolUserChatParticipant } from './toolParticipant';
 import { registerSimpleParticipant } from './simple';
 
 export function activate(context: vscode.ExtensionContext) {

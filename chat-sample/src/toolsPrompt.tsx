@@ -15,7 +15,7 @@ import {
 } from '@vscode/prompt-tsx';
 import { ToolResult } from '@vscode/prompt-tsx/dist/base/promptElements';
 import * as vscode from 'vscode';
-import { isTsxToolUserMetadata } from './participant';
+import { isTsxToolUserMetadata } from './toolParticipant';
 
 export interface ToolCallRound {
 	response: string;
