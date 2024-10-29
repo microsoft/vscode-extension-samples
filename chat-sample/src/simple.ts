@@ -11,7 +11,7 @@ interface ICatChatResult extends vscode.ChatResult {
     }
 }
 
-export function registerSimpleParticipant(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
 
     // Define a Cat chat handler. 
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult> => {
@@ -94,7 +94,7 @@ export function registerSimpleParticipant(context: vscode.ExtensionContext) {
     const cat = vscode.chat.createChatParticipant(CAT_PARTICIPANT_ID, handler);
     cat.iconPath = vscode.Uri.joinPath(context.extensionUri, 'cat.jpeg');
     cat.followupProvider = {
-        provideFollowups(_result: ICatChatResult, _context: vscode.ChatContext, _token: vscode.CancellationToken) {
+        provideFollowups(result: ICatChatResult, context: vscode.ChatContext, token: vscode.CancellationToken) {
             return [{
                 prompt: 'let us play',
                 label: vscode.l10n.t('Play with the cat'),
@@ -177,7 +177,7 @@ export function registerSimpleParticipant(context: vscode.ExtensionContext) {
                 await textEditor.edit(edit => {
                     const lastLine = textEditor.document.lineAt(textEditor.document.lineCount - 1);
                     const position = new vscode.Position(lastLine.lineNumber, lastLine.text.length);
-                    edit.insert(position, (err as Error).message);
+                    edit.insert(position, (<Error>err).message);
                 });
             }
         }),
@@ -220,3 +220,5 @@ function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatRes
 
     return topicsNoRepetition[Math.floor(Math.random() * topicsNoRepetition.length)] || 'I have taught you everything I know. Meow!';
 }
+
+export function deactivate() { }
