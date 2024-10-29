@@ -28,6 +28,10 @@
                     {
                         "name": "list",
                         "description": "List all available tools"
+                    },
+                    {
+                        "name": "all",
+                        "description": "Use all registered tools. By default, only this extension's tools are used."
                     }
                 ]
             }
@@ -43,8 +47,7 @@
                 "displayName": "Tab Count",
                 "modelDescription": "The number of active tabs in a tab group",
                 "icon": "$(files)",
-                "canBeInvokedManually": true,
-                "parametersSchema": {
+                "inputSchema": {
                     "type": "object",
                     "properties": {
                         "tabGroup": {
@@ -64,7 +67,7 @@
                 ],
                 "displayName": "Find Files",
                 "modelDescription": "Search for files in the current workspace",
-                "parametersSchema": {
+                "inputSchema": {
                     "type": "object",
                     "properties": {
                         "pattern": {
@@ -85,7 +88,7 @@
                 ],
                 "displayName": "Run in Terminal",
                 "modelDescription": "Run a command in a terminal and return the output",
-                "parametersSchema": {
+                "inputSchema": {
                     "type": "object",
                     "properties": {
                         "command": {

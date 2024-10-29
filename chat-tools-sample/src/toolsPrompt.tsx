@@ -91,7 +91,7 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 	}
 
 	private renderOneToolCallRound(round: ToolCallRound) {
-		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.callId }));
+		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.input) }, id: tc.callId }));
 		return (
 			<Chunk>
 				<AssistantMessage toolCalls={assistantToolCalls}>{round.response}</AssistantMessage>
@@ -124,7 +124,7 @@ class ToolResultElement extends PromptElement<ToolResultElementProps, void> {
 		};
 
 		const toolResult = this.props.toolCallResult ??
-			await vscode.lm.invokeTool(this.props.toolCall.name, { parameters: this.props.toolCall.parameters, toolInvocationToken: this.props.toolInvocationToken, tokenizationOptions }, dummyCancellationToken);
+			await vscode.lm.invokeTool(this.props.toolCall.name, { input: this.props.toolCall.input, toolInvocationToken: this.props.toolInvocationToken, tokenizationOptions }, dummyCancellationToken);
 
 		return (
 			<ToolMessage toolCallId={this.props.toolCall.callId}>

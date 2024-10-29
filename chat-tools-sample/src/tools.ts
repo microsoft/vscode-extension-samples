@@ -9,7 +9,7 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 		options: vscode.LanguageModelToolInvocationOptions<ITabCountParameters>,
 		token: vscode.CancellationToken
 	) {
-		const params = options.parameters;
+		const params = options.input;
 		if (typeof params.tabGroup === 'number') {
 			const group = vscode.window.tabGroups.all[Math.max(params.tabGroup - 1, 0)];
 			const nth =
@@ -35,8 +35,8 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 			title: 'Count the number of open tabs',
 			message: new vscode.MarkdownString(
 				`Count the number of open tabs?` +
-					(options.parameters.tabGroup !== undefined
-						? ` in tab group ${options.parameters.tabGroup}`
+					(options.input.tabGroup !== undefined
+						? ` in tab group ${options.input.tabGroup}`
 						: '')
 			),
 		};
@@ -57,7 +57,7 @@ export class FindFilesTool implements vscode.LanguageModelTool<IFindFilesParamet
 		options: vscode.LanguageModelToolInvocationOptions<IFindFilesParameters>,
 		token: vscode.CancellationToken
 	) {
-		const params = options.parameters as IFindFilesParameters;
+		const params = options.input as IFindFilesParameters;
 		const files = await vscode.workspace.findFiles(
 			params.pattern,
 			'**/node_modules/**',
@@ -74,7 +74,7 @@ export class FindFilesTool implements vscode.LanguageModelTool<IFindFilesParamet
 		token: vscode.CancellationToken
 	) {
 		return {
-			invocationMessage: `Searching workspace for "${options.parameters.pattern}"`,
+			invocationMessage: `Searching workspace for "${options.input.pattern}"`,
 		};
 	}
 }
@@ -114,7 +114,7 @@ export class RunInTerminalTool
 		options: vscode.LanguageModelToolInvocationOptions<IRunInTerminalParameters>,
 		token: vscode.CancellationToken
 	) {
-		const params = options.parameters as IRunInTerminalParameters;
+		const params = options.input as IRunInTerminalParameters;
 
 		const terminal = vscode.window.createTerminal('Language Model Tool User');
 		terminal.show();
@@ -143,7 +143,7 @@ export class RunInTerminalTool
 			title: 'Run command in terminal',
 			message: new vscode.MarkdownString(
 				`Run this command in a terminal?` +
-					`\n\n\`\`\`\n${options.parameters.command}\n\`\`\`\n`
+					`\n\n\`\`\`\n${options.input.command}\n\`\`\`\n`
 			),
 		};
 
