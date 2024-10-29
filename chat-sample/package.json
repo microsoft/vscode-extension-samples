@@ -55,6 +55,89 @@
 						]
 					}
 				]
+			},
+			{
+				"id": "chat-tools-sample.tools",
+				"fullName": "Tool User",
+				"name": "tools",
+				"description": "I use tools",
+				"isSticky": true,
+				"commands": [
+					{
+						"name": "list",
+						"description": "List all available tools"
+					},
+					{
+						"name": "all",
+						"description": "Use all registered tools. By default, only this extension's tools are used."
+					}
+				]
+			}
+		],
+		"languageModelTools": [
+			{
+				"name": "chat-tools-sample_tabCount",
+				"tags": [
+					"editors",
+					"chat-tools-sample"
+				],
+				"toolReferenceName": "tabCount",
+				"displayName": "Tab Count",
+				"modelDescription": "The number of active tabs in a tab group",
+				"icon": "$(files)",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"tabGroup": {
+							"type": "number",
+							"description": "The index of the tab group to check. This is optional- if not specified, the active tab group will be checked.",
+							"default": 0
+						}
+					}
+				}
+			},
+			{
+				"name": "chat-tools-sample_findFiles",
+				"tags": [
+					"files",
+					"search",
+					"chat-tools-sample"
+				],
+				"displayName": "Find Files",
+				"modelDescription": "Search for files in the current workspace",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"pattern": {
+							"type": "string",
+							"description": "Search for files that match this glob pattern"
+						}
+					},
+					"required": [
+						"pattern"
+					]
+				}
+			},
+			{
+				"name": "chat-tools-sample_runInTerminal",
+				"tags": [
+					"terminal",
+					"chat-tools-sample"
+				],
+				"displayName": "Run in Terminal",
+				"modelDescription": "Run a command in a terminal and return the output",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"command": {
+							"type": "string",
+							"description": "The command to run"
+						}
+					},
+					"required": [
+						"command"
+					]
+				}
 			}
 		],
 		"commands": [
@@ -72,15 +155,14 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
-		"@vscode/prompt-tsx": "^0.3.0-alpha"
+		"@vscode/prompt-tsx": "^0.3.0-alpha.12"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/node": "^20",
-		"@types/vscode": "1.94.0",
 		"eslint": "^9.13.0",
-		"typescript-eslint": "^8.11.0",
-		"typescript": "^5.6.2"
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.11.0"
 	}
 }
