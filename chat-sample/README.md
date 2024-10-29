@@ -10,7 +10,7 @@ This GitHub Copilot Extension sample shows:
 
 - How to contribute a simple chat participant to the GitHub Copilot Chat view.
 - How to use the Language Model API to request access to the Language Model (gpt-4o, gpt-3.5-turbo, gpt-4).
-- How to contribute a more sophisticated chat participant view that uses the LanguageModelTool API to contribute and invoke tools.
+- How to contribute a more sophisticated chat participant that uses the LanguageModelTool API to contribute and invoke tools.
 
 ![demo](./demo.png)
 
