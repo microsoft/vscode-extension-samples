@@ -25,7 +25,7 @@ export function activate(_context: vscode.ExtensionContext) {
 				if (position.line - offset < 0) {
 					break;
 				}
-				
+
 				const lineBefore = document.lineAt(position.line - offset).text;
 				const matches = lineBefore.match(regexp);
 				if (!matches) {
@@ -73,7 +73,7 @@ export function activate(_context: vscode.ExtensionContext) {
 		handleDidPartiallyAcceptCompletionItem(
 			_completionItem: vscode.InlineCompletionItem,
 			_info: vscode.PartialAcceptInfo | number
-		): void { 
+		): void {
 			console.log('handleDidPartiallyAcceptCompletionItem');
 		},
 	};

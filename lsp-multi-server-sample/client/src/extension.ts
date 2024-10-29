@@ -107,7 +107,7 @@ export function activate(context: ExtensionContext) {
 	Workspace.onDidOpenTextDocument(didOpenTextDocument);
 	Workspace.textDocuments.forEach(didOpenTextDocument);
 	Workspace.onDidChangeWorkspaceFolders((event) => {
-		for (const folder  of event.removed) {
+		for (const folder of event.removed) {
 			const client = clients.get(folder.uri.toString());
 			if (client) {
 				clients.delete(folder.uri.toString());

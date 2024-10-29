@@ -2,15 +2,12 @@
 /**
  * Try running install for all the samples
  */
-const fs = require('fs');
-const path = require('path');
-const child_process = require('child_process');
-const { samples, lspSamples } = require('./samples');
+import * as child_process from 'child_process';
+import * as fs from 'fs';
+import * as path from 'path';
+import { lspSamples, Sample, samples } from './samples';
 
-async function tryRunCommand(
-	/** @type {string} */ command,
-	/** @type {import('./samples').Sample} */ sample,
-) {
+async function tryRunCommand(command: string, sample: Sample) {
 	const packageJsonPath = path.join(sample.path, 'package.json');
 	if (fs.existsSync(packageJsonPath)) {
 		try {
@@ -28,7 +25,9 @@ async function tryRunCommand(
 	}
 }
 
-const command = process.argv.slice(2).join(' ');
-for (const sample of [...samples, ...lspSamples]) {
-	tryRunCommand(command, sample);
+if (require.main === module) {
+	const command = process.argv.slice(2).join(' ');
+	for (const sample of [...samples, ...lspSamples]) {
+		tryRunCommand(command, sample);
+	}
 }

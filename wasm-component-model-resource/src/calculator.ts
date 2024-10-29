@@ -24,7 +24,7 @@ export namespace Types {
 		export type Statics = {
 			$new?(): Interface;
 		};
-		export type Class = Statics & (new() => Interface);
+		export type Class = Statics & (new () => Interface);
 	}
 	export type Engine = Engine.Interface;
 }

@@ -116,12 +116,12 @@ export namespace Types._ {
 export namespace calculator.$ {
 	export const Operation = Types.$.Operation;
 	export namespace imports {
-		export const log = new $wcm.FunctionType<calculator.Imports['log']>('log',[
+		export const log = new $wcm.FunctionType<calculator.Imports['log']>('log', [
 			['msg', $wcm.wstring],
 		], undefined);
 	}
 	export namespace exports {
-		export const calc = new $wcm.FunctionType<calculator.Exports['calc']>('calc',[
+		export const calc = new $wcm.FunctionType<calculator.Exports['calc']>('calc', [
 			['o', Operation],
 		], $wcm.u32);
 	}

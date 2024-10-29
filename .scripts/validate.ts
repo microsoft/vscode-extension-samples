@@ -1,10 +1,9 @@
-// @ts-check
-const path = require('path');
-
-const { samples, lspSamples } = require('./samples');
-const fs = require('fs');
+import * as fs from 'fs';
+import * as path from 'path';
+import { lspSamples, samples } from './samples';
 
 const root = path.join(__dirname, '..');
+console.log(root);
 
 /**
  * Validates that all samples are correctly listed in `.scripts/samples.js`.
