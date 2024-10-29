@@ -16,7 +16,7 @@ import {
 	TextChunk,
 } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
-import { isTsxToolUserMetadata } from './tsxParticipant';
+import { isTsxToolUserMetadata } from './participant';
 import { PromptElementJSON } from '@vscode/prompt-tsx/dist/base/jsonTypes';
 import { ToolResult } from '@vscode/prompt-tsx/dist/base/promptElements';
 
@@ -50,10 +50,8 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 					- Don't make assumptions about the situation- gather context first, then
 					perform the task or answer the question. <br />
 					- Don't ask the user for confirmation to use tools, just use them.
-					<br />- After editing a file, DO NOT show the user a codeblock with the
-					edit or new file contents. Assume that the user can see the result.
 				</UserMessage>
-				<History context={this.props.context} priority={10}></History>
+				<History context={this.props.context} priority={10} />
 				<PromptReferences
 					references={this.props.request.references}
 					priority={20}
@@ -62,8 +60,7 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 				<ToolCalls
 					toolCallRounds={this.props.toolCallRounds}
 					toolInvocationToken={this.props.request.toolInvocationToken}
-					toolCallResults={this.props.toolCallResults}>
-				</ToolCalls>
+					toolCallResults={this.props.toolCallResults}/>
 			</>
 		);
 	}
@@ -77,13 +74,16 @@ interface ToolCallsProps extends BasePromptElementProps {
 
 const dummyCancellationToken: vscode.CancellationToken = new vscode.CancellationTokenSource().token;
 
+/**
+ * Render a set of tool calls, which look like an AssistantMessage with a set of tool calls followed by the associated UserMessages containing results.
+ */
 class ToolCalls extends PromptElement<ToolCallsProps, void> {
 	async render(state: void, sizing: PromptSizing) {
 		if (!this.props.toolCallRounds.length) {
 			return undefined;
 		}
 
-		// Note- the final prompt must end with a UserMessage
+		// Note- for the copilot models, the final prompt must end with a non-tool-result UserMessage
 		return <>
 			{this.props.toolCallRounds.map(round => this.renderOneToolCallRound(round))}
 			<UserMessage>Above is the result of calling one or more tools. The user cannot see the results, so you should explain them to the user if referencing them in your answer.</UserMessage>
@@ -92,23 +92,25 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 
 	private renderOneToolCallRound(round: ToolCallRound) {
 		const assistantToolCalls: ToolCall[] = round.toolCalls.map(tc => ({ type: 'function', function: { name: tc.name, arguments: JSON.stringify(tc.parameters) }, id: tc.callId }));
-		// TODO- just need to adopt prompt-tsx update in vscode-copilot
 		return (
 			<Chunk>
 				<AssistantMessage toolCalls={assistantToolCalls}>{round.response}</AssistantMessage>
 				{round.toolCalls.map(toolCall =>
-					<ToolCallElement toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken} toolCallResult={this.props.toolCallResults[toolCall.callId]}></ToolCallElement>)}
+					<ToolResultElement toolCall={toolCall} toolInvocationToken={this.props.toolInvocationToken} toolCallResult={this.props.toolCallResults[toolCall.callId]} />)}
 			</Chunk>);
 	}
 }
 
-interface ToolCallElementProps extends BasePromptElementProps {
+interface ToolResultElementProps extends BasePromptElementProps {
 	toolCall: vscode.LanguageModelToolCallPart;
 	toolInvocationToken: vscode.ChatParticipantToolToken | undefined;
 	toolCallResult: vscode.LanguageModelToolResult | undefined;
 }
 
-class ToolCallElement extends PromptElement<ToolCallElementProps, void> {
+/**
+ * One tool call result, which either comes from the cache or from invoking the tool.
+ */
+class ToolResultElement extends PromptElement<ToolResultElementProps, void> {
 	async render(state: void, sizing: PromptSizing): Promise<PromptPiece | undefined> {
 		const tool = vscode.lm.tools.find(t => t.name === this.props.toolCall.name);
 		if (!tool) {
@@ -147,6 +149,9 @@ interface HistoryProps extends BasePromptElementProps {
 	context: vscode.ChatContext;
 }
 
+/**
+ * Render the chat history, including previous tool call/results.
+ */
 class History extends PromptElement<HistoryProps, void> {
 	render(state: void, sizing: PromptSizing) {
 		return (
@@ -173,6 +178,9 @@ class History extends PromptElement<HistoryProps, void> {
 	}
 }
 
+/**
+ * Convert the stream of chat response parts into something that can be rendered in the prompt.
+ */
 function chatResponseToString(response: vscode.ChatResponseTurn): string {
 	return response.response
 		.map((r) => {
@@ -196,6 +204,9 @@ interface PromptReferencesProps extends BasePromptElementProps {
 	excludeReferences?: boolean;
 }
 
+/**
+ * Render references that were included in the user's request, eg files and selections.
+ */
 class PromptReferences extends PromptElement<PromptReferencesProps, void> {
 	render(state: void, sizing: PromptSizing): PromptPiece {
 		return (
@@ -216,7 +227,6 @@ interface PromptReferenceProps extends BasePromptElementProps {
 class PromptReferenceElement extends PromptElement<PromptReferenceProps> {
 	async render(state: void, sizing: PromptSizing): Promise<PromptPiece | undefined> {
 		const value = this.props.ref.value;
-		// TODO make context a list of TextChunks so that it can be trimmed
 		if (value instanceof vscode.Uri) {
 			const fileContents = (await vscode.workspace.fs.readFile(value)).toString();
 			return (
@@ -246,11 +256,11 @@ class PromptReferenceElement extends PromptElement<PromptReferenceProps> {
 	}
 }
 
-export type TagProps = PromptElementProps<{
+type TagProps = PromptElementProps<{
 	name: string;
 }>;
 
-export class Tag extends PromptElement<TagProps> {
+class Tag extends PromptElement<TagProps> {
 	private static readonly _regex = /^[a-zA-Z_][\w\.\-]*$/;
 
 	render() {

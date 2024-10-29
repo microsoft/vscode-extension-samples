@@ -35,18 +35,12 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
             model = models[0];
         }
 
-        const allTools = vscode.lm.tools.map((tool): vscode.LanguageModelChatTool => {
-            return {
-                name: tool.name,
-                description: tool.description,
-                parametersSchema: tool.parametersSchema ?? {}
-            };
-        });
-
+        const allTools = vscode.lm.tools;
         const options: vscode.LanguageModelChatRequestOptions = {
             justification: 'To make a request to @toolsTSX',
         };
 
+        // Render the initial prompt
         let { messages, references } = await renderPrompt(
             ToolUserPrompt,
             {
@@ -66,19 +60,22 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
         const toolReferences = [...request.toolReferences];
         const accumulatedToolResults: Record<string, vscode.LanguageModelToolResult> = {};
         const toolCallRounds: ToolCallRound[] = [];
-        const runWithFunctions = async (): Promise<void> => {
+        const runWithTools = async (): Promise<void> => {
+            // If a toolReference is present, force the model to call that tool
             const requestedTool = toolReferences.shift();
             if (requestedTool) {
                 options.toolMode = vscode.LanguageModelChatToolMode.Required;
                 options.tools = allTools.filter(tool => tool.name === requestedTool.name);
             } else {
                 options.toolMode = undefined;
-                options.tools = allTools;
+                options.tools = [...allTools];
             }
 
-            const toolCalls: vscode.LanguageModelToolCallPart[] = [];
-
+            // Send the request to the LanguageModelChat
             const response = await model.sendRequest(messages, options, token);
+
+            // Stream text output and collect tool calls from the response
+            const toolCalls: vscode.LanguageModelToolCallPart[] = [];
             let responseStr = '';
             for await (const part of response.stream) {
                 if (part instanceof vscode.LanguageModelTextPart) {
@@ -90,6 +87,8 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
             }
 
             if (toolCalls.length) {
+                // If the model called any tools, then we do another round- render the prompt with those tool calls (rendering the PromptElements will invoke the tools)
+                // and include the tool results in the prompt for the next request.
                 toolCallRounds.push({
                     response: responseStr,
                     toolCalls
@@ -107,17 +106,20 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
                 messages = result.messages;
                 const toolResultMetadata = result.metadatas.getAll(ToolResultMetadata)
                 if (toolResultMetadata?.length) {
+                    // Cache tool results for later, so they can be incorporated into later prompts without calling the tool again
                     toolResultMetadata.forEach(meta => accumulatedToolResults[meta.toolCallId] = meta.result);
                 }
 
-                return runWithFunctions();
+                // This loops until the model doesn't want to call any more tools, then the request is done.
+                return runWithTools();
             }
         };
 
-        await runWithFunctions();
+        await runWithTools();
 
         return {
             metadata: {
+                // Return tool call metadata so it can be used in prompt history on the next request
                 toolCallsMetadata: {
                     toolCallResults: accumulatedToolResults,
                     toolCallRounds
@@ -126,7 +128,7 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
         }
     };
 
-    const toolUser = vscode.chat.createChatParticipant('chat-tools-sample.tools2', handler);
+    const toolUser = vscode.chat.createChatParticipant('chat-tools-sample.tools', handler);
     toolUser.iconPath = new vscode.ThemeIcon('tools');
     context.subscriptions.push(toolUser);
 }
