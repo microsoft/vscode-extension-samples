@@ -9,7 +9,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// define a chat handler
 	const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
 
-		// initialize the prompt and model
+		// initialize the prompt
 		let prompt = BASE_PROMPT;
 
 		if (request.command === 'exercise') {
