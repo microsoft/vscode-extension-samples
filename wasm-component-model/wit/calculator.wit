@@ -13,10 +13,16 @@ interface types {
 		mul(operands),
 		div(operands)
 	}
+
+	enum error-code {
+		none,
+		overflow,
+		divide-by-zero
+	}
 }
 world calculator {
-	use types.{ operation };
+	use types.{ operation, error-code };
 	import log: func(msg: string);
 
-	export calc: func(o: operation) -> u32;
+	export calc: func(o: operation) -> result<u32, error-code>;
 }

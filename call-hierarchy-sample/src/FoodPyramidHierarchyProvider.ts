@@ -3,7 +3,7 @@ import { FoodPyramid, FoodRelation } from './model';
 
 export class FoodPyramidHierarchyProvider implements vscode.CallHierarchyProvider {
 
-	prepareCallHierarchy(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.CallHierarchyItem | undefined {
+	prepareCallHierarchy(document: vscode.TextDocument, position: vscode.Position, _token: vscode.CancellationToken): vscode.CallHierarchyItem | undefined {
 		const range = document.getWordRangeAtPosition(position);
 		if (range) {
 			const word = document.getText(range);
@@ -13,7 +13,7 @@ export class FoodPyramidHierarchyProvider implements vscode.CallHierarchyProvide
 		}
 	}
 
-	async provideCallHierarchyOutgoingCalls(item: vscode.CallHierarchyItem, token: vscode.CancellationToken): Promise<vscode.CallHierarchyOutgoingCall[] | undefined> {
+	async provideCallHierarchyOutgoingCalls(item: vscode.CallHierarchyItem, _token: vscode.CancellationToken): Promise<vscode.CallHierarchyOutgoingCall[] | undefined> {
 		const document = await vscode.workspace.openTextDocument(item.uri);
 		const parser = new FoodPyramidParser();
 		parser.parse(document);
@@ -32,8 +32,7 @@ export class FoodPyramidHierarchyProvider implements vscode.CallHierarchyProvide
 				const outgoingCallItem = new vscode.CallHierarchyOutgoingCall(verbItem, [outgoingCallRange]);
 				outgoingCallItems.push(outgoingCallItem);
 			});
-		}
-		else if (model.isNoun(item.name)) {
+		} else if (model.isNoun(item.name)) {
 			const outgoingCallMap = groupBy(model.getSubjectRelations(item.name), relation => relation.verb);
 
 			outgoingCallMap.forEach((relations, verb) => {
@@ -47,7 +46,7 @@ export class FoodPyramidHierarchyProvider implements vscode.CallHierarchyProvide
 		return outgoingCallItems;
 	}
 
-	async provideCallHierarchyIncomingCalls(item: vscode.CallHierarchyItem, token: vscode.CancellationToken): Promise<vscode.CallHierarchyIncomingCall[]> {
+	async provideCallHierarchyIncomingCalls(item: vscode.CallHierarchyItem, _token: vscode.CancellationToken): Promise<vscode.CallHierarchyIncomingCall[]> {
 		const document = await vscode.workspace.openTextDocument(item.uri);
 		const parser = new FoodPyramidParser();
 		parser.parse(document);
@@ -66,8 +65,7 @@ export class FoodPyramidHierarchyProvider implements vscode.CallHierarchyProvide
 				const outgoingCallItem = new vscode.CallHierarchyIncomingCall(verbItem, [outgoingCallRange]);
 				outgoingCallItems.push(outgoingCallItem);
 			});
-		}
-		else if (model.isNoun(item.name)) {
+		} else if (model.isNoun(item.name)) {
 			const outgoingCallMap = groupBy(model.getObjectRelations(item.name), relation => relation.verb);
 
 			outgoingCallMap.forEach((relations, verb) => {
@@ -113,7 +111,7 @@ class FoodPyramidParser {
  * @param array array to be grouped
  * @param keyGetter grouping key selector
  */
-function groupBy<K, V>(array: Array<V>, keyGetter: (value: V) => K): Map<K, V[]> {
+function groupBy<K, V>(array: V[], keyGetter: (value: V) => K): Map<K, V[]> {
 	const map = new Map();
 	array.forEach((item) => {
 		const key = keyGetter(item);

@@ -10,7 +10,7 @@ import { quickOpen } from './quickOpen';
 
 export function activate(context: ExtensionContext) {
 	context.subscriptions.push(commands.registerCommand('samples.quickInput', async () => {
-		const options: { [key: string]: (context: ExtensionContext) => Promise<void> } = {
+		const options: Record<string, (context: ExtensionContext) => Promise<void>> = {
 			showQuickPick,
 			showInputBox,
 			multiStepInput,

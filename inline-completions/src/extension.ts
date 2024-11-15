@@ -1,14 +1,14 @@
 import * as vscode from 'vscode';
 import { Range } from 'vscode';
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(_context: vscode.ExtensionContext) {
 	console.log('inline-completions demo started');
 	vscode.commands.registerCommand('demo-ext.command1', async (...args) => {
 		vscode.window.showInformationMessage('command1: ' + JSON.stringify(args));
 	});
 
 	const provider: vscode.InlineCompletionItemProvider = {
-		async provideInlineCompletionItems(document, position, context, token) {
+		async provideInlineCompletionItems(document, position, _context, _token) {
 			console.log('provideInlineCompletionItems triggered');
 			const regexp = /\/\/ \[(.+?),(.+?)\)(.*?):(.*)/;
 			if (position.line <= 0) {
@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 				if (position.line - offset < 0) {
 					break;
 				}
-				
+
 				const lineBefore = document.lineAt(position.line - offset).text;
 				const matches = lineBefore.match(regexp);
 				if (!matches) {
@@ -62,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
 			return result;
 		},
 
-		handleDidShowCompletionItem(completionItem: vscode.InlineCompletionItem): void {
+		handleDidShowCompletionItem(_completionItem: vscode.InlineCompletionItem): void {
 			console.log('handleDidShowCompletionItem');
 		},
 
@@ -71,9 +71,9 @@ export function activate(context: vscode.ExtensionContext) {
 		 * @param acceptedLength The length of the substring of the inline completion that was accepted already.
 		 */
 		handleDidPartiallyAcceptCompletionItem(
-			completionItem: vscode.InlineCompletionItem,
-			info: vscode.PartialAcceptInfo | number
-		): void { 
+			_completionItem: vscode.InlineCompletionItem,
+			_info: vscode.PartialAcceptInfo | number
+		): void {
 			console.log('handleDidPartiallyAcceptCompletionItem');
 		},
 	};

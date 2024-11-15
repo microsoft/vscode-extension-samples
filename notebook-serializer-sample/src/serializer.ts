@@ -20,13 +20,13 @@ interface RawNotebookCell {
 export class SampleContentSerializer implements vscode.NotebookSerializer {
 	public readonly label: string = 'My Sample Content Serializer';
 
-	public async deserializeNotebook(data: Uint8Array, token: vscode.CancellationToken): Promise<vscode.NotebookData> {
+	public async deserializeNotebook(data: Uint8Array, _token: vscode.CancellationToken): Promise<vscode.NotebookData> {
 		const contents = new TextDecoder().decode(data); // convert to String
 
 		// Read file contents
 		let raw: RawNotebookData;
 		try {
-			raw = <RawNotebookData>JSON.parse(contents);
+			raw = JSON.parse(contents);
 		} catch {
 			raw = { cells: [] };
 		}
@@ -41,7 +41,7 @@ export class SampleContentSerializer implements vscode.NotebookSerializer {
 		return new vscode.NotebookData(cells);
 	}
 
-	public async serializeNotebook(data: vscode.NotebookData, token: vscode.CancellationToken): Promise<Uint8Array> {
+	public async serializeNotebook(data: vscode.NotebookData, _token: vscode.CancellationToken): Promise<Uint8Array> {
 		// Map the Notebook data into the format we want to save the Notebook data as
 		const contents: RawNotebookData = { cells: [] };
 

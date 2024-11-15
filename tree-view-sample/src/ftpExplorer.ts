@@ -1,11 +1,6 @@
 import * as vscode from 'vscode';
 import * as Client from 'ftp';
-import { basename, dirname, join } from 'path';
-
-interface IEntry {
-	name: string;
-	type: string;
-}
+import { basename, dirname } from 'path';
 
 export interface FtpNode {
 
@@ -116,7 +111,7 @@ export class FtpTreeDataProvider implements vscode.TreeDataProvider<FtpNode>, vs
 
 	constructor(private readonly model: FtpModel) { }
 
-	public refresh(): any {
+	public refresh() {
 		this._onDidChangeTreeData.fire(undefined);
 	}
 
@@ -142,7 +137,7 @@ export class FtpTreeDataProvider implements vscode.TreeDataProvider<FtpNode>, vs
 		return parent.path !== '//' ? { resource: parent, isDirectory: true } : undefined;
 	}
 
-	public provideTextDocumentContent(uri: vscode.Uri, token: vscode.CancellationToken): vscode.ProviderResult<string> {
+	public provideTextDocumentContent(uri: vscode.Uri, _token: vscode.CancellationToken): vscode.ProviderResult<string> {
 		return this.model.getContent(uri).then(content => content);
 	}
 }

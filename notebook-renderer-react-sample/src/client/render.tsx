@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import React from "react";
 import type { RendererContext } from 'vscode-notebook-renderer';
 
@@ -10,7 +9,7 @@ interface IRenderInfo {
 }
 
 interface GitHubIssuesValue {
-	title: string;
+	title: string
 	url: string;
 	body: string;
 }

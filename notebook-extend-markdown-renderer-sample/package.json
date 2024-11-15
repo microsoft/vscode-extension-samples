@@ -28,18 +28,19 @@
     "webpack": "webpack --mode development",
     "webpack-dev": "webpack --mode development --watch",
     "test-compile": "tsc -p ./",
-    "lint": "eslint src --ext .ts"
+    "lint": "eslint"
   },
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@stylistic/eslint-plugin": "^2.9.0",
     "@types/markdown-it": "^12.2.3",
     "@types/vscode-notebook-renderer": "^1.57.8",
     "@types/webpack-env": "^1.17.0",
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
-    "@typescript-eslint/parser": "^6.7.0",
-    "eslint": "^8.26.0",
+    "eslint": "^9.13.0",
     "markdown-it-emoji": "^2.0.2",
     "ts-loader": "^9.2.2",
-    "typescript": "^5.4.2",
+    "typescript": "^5.6.2",
+    "typescript-eslint": "^8.11.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"
   }

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": ["../src/extension.ts", "../src/math.ts"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAIA,aAAwB;;;ACCjB,SAAS,IAAI,GAAW,GAAmB;AACjD,SAAO,IAAI;AACZ;;;ADAO,SAAS,SAAS,SAAkC;AAE1D,UAAQ,IAAI,iEAAiE;AAE7E,QAAM,aAAoB,gBAAS,gBAAgB,gCAAgC,MAAM;AACxF,IAAO,cAAO,uBAAuB,YAAY,IAAI,IAAI,CAAC,CAAC,EAAE;AAAA,EAC9D,CAAC;AAED,UAAQ,cAAc,KAAK,UAAU;AACtC;AAEO,SAAS,aAAa;AAAC;",
+  "names": []
+}
