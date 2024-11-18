@@ -13,7 +13,7 @@ interface ICatChatResult extends vscode.ChatResult {
 
 export function registerSimpleParticipant(context: vscode.ExtensionContext) {
 
-    // Define a Cat chat handler. 
+    // Define a Cat chat handler.
     const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult> => {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
