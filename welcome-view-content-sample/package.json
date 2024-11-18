@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.95.0"
   },
   "categories": [
     "Other"
@@ -23,7 +23,7 @@
     "viewsWelcome": [
       {
         "view": "workbench.explorer.emptyView",
-        "contents": "You can have paragraphs of text here. You can have [links](https://code.visualstudio.com) to external sources or [internal commands](command:welcome-view-content-sample.hello).\nUse new lines to have new paragraphs.\nPlace a link alone in a paragraph to make it a button\n[Hello](command:welcome-view-content-sample.hello)"
+        "contents": "You can have paragraphs of text here. You can have [links](https://code.visualstudio.com) to external sources or [internal commands](command:welcome-view-content-sample.hello).\nUse new lines to have new paragraphs.\nPlace a link alone in a paragraph to make it a button\n[Hello](command:welcome-view-content-sample.hello)\n You can also render [codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) using the $(...) syntax like: $(vscode) $(heart) $(github)\nAdd a little $(sparkle) to your welcome views!"
       }
     ]
   },
@@ -40,7 +40,7 @@
     "@stylistic/eslint-plugin": "^2.9.0",
     "@types/glob": "^7.1.3",
     "@types/node": "^20",
-    "@types/vscode": "^1.73.0",
+    "@types/vscode": "^1.94.0",
     "@vscode/test-electron": "^2.3.9",
     "eslint": "^9.13.0",
     "glob": "^7.1.6",
