@@ -5,4 +5,5 @@
     "git.branchProtection": [
         "main"
     ],
+    "files.trimTrailingWhitespace": true
 }

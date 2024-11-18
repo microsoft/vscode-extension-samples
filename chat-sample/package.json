@@ -72,6 +72,19 @@
 						"description": "Use all registered tools. By default, only this extension's tools are used."
 					}
 				]
+			},
+			{
+				"id": "chat-tools-sample.catTools",
+				"fullName": "Cat (Tools)",
+				"name": "catTools",
+				"description": "I use tools, implemented using @vscode/chat-extension-utils, and am also a cat",
+				"isSticky": true,
+				"commands": [
+					{
+						"name": "all",
+						"description": "Use all registered tools. By default, only this extension's tools are used."
+					}
+				]
 			}
 		],
 		"languageModelTools": [
@@ -155,12 +168,14 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
+		"@vscode/chat-extension-utils": "^0.0.0-alpha.1",
 		"@vscode/prompt-tsx": "^0.3.0-alpha.12"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/node": "^20",
+		"@types/vscode": "^1.95.0",
 		"eslint": "^9.13.0",
 		"typescript": "^5.6.2",
 		"typescript-eslint": "^8.11.0"
