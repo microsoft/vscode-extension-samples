@@ -32,6 +32,6 @@
 		"@vscode/jupyter-extension": "^1.0.0",
 		"eslint": "^9.13.0",
 		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.11.0"
+		"typescript-eslint": "^8.16.0"
 	}
 }

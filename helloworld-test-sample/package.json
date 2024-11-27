@@ -42,6 +42,6 @@
 		"mocha": "^10.2.0",
 		"source-map-support": "^0.5.12",
 		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.11.0"
+		"typescript-eslint": "^8.16.0"
 	}
 }
