@@ -31,7 +31,7 @@ export function run(): Promise<void> {
 						resolve();
 					}
 				});
-			})
+			});
 		} catch (err) {
 			console.error(err);
 			throw err;

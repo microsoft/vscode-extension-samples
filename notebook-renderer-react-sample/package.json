@@ -54,7 +54,7 @@
     "style-loader": "^1.2.1",
     "ts-loader": "^9.4.2",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.11.0",
+    "typescript-eslint": "^8.16.0",
     "vscode-notebook-error-overlay": "^1.0.1",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0"

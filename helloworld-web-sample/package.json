@@ -45,7 +45,7 @@
 		"process": "^0.11.10",
 		"ts-loader": "^9.2.5",
 		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.11.0",
+		"typescript-eslint": "^8.16.0",
 		"webpack": "^5.52.1",
 		"webpack-cli": "^4.8.0"
 	}

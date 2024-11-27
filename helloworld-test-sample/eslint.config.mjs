@@ -11,7 +11,8 @@ import stylistic from '@stylistic/eslint-plugin';
 export default tseslint.config(
 	{
 		ignores: [
-			'out'
+			'out',
+			'.vscode-test',
 		]
 	},
 	js.configs.recommended,
