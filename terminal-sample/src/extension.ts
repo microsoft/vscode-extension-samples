@@ -156,8 +156,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// vscode.window.registerTerminalLinkProvider
 	context.subscriptions.push(vscode.commands.registerCommand('terminalTest.registerTerminalLinkProvider', () => {
-		vscode.window.registerTerminalLinkProvider({
-			provideTerminalLinks: (context, _token) => {
+		type CustomTerminalLink = vscode.TerminalLink & {
+			data: string;
+		};
+
+		vscode.window.registerTerminalLinkProvider(new class implements vscode.TerminalLinkProvider<CustomTerminalLink> {
+			provideTerminalLinks(context: vscode.TerminalLinkContext, _token: vscode.CancellationToken) {
 				// Detect the first instance of the word "link" if it exists and linkify it
 				const startIndex = (context.line as string).indexOf('link');
 				if (startIndex === -1) {
@@ -172,8 +176,9 @@ export function activate(context: vscode.ExtensionContext) {
 						data: 'Example data'
 					}
 				];
-			},
-			handleTerminalLink: (link) => {
+			}
+			
+			handleTerminalLink(link: CustomTerminalLink) {
 				vscode.window.showInformationMessage(`Link activated (data = ${link.data})`);
 			}
 		});
