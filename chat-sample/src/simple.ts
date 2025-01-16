@@ -14,13 +14,25 @@ interface ICatChatResult extends vscode.ChatResult {
 export function registerSimpleParticipant(context: vscode.ExtensionContext) {
 
     // Define a Cat chat handler.
-    const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult> => {
+    const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, context: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken): Promise<ICatChatResult | undefined> => {
+        switch (request.choiceData?.[0]) {
+            case 'Yes':
+                break;
+            case 'No':
+                vscode.window.showInformationMessage('sorry!');
+                break;
+            default:
+                stream.markdown('First I need to check to make sure you\'re allowed to talk to me...');
+                stream.choices({title:'Are you cool?', message: 'Only cool people are allowed', disableAfterUse: true}, 'Yes', 'No', 'Always!');
+                return;
+        }
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
         if (request.command === 'randomTeach') {
             stream.progress('Picking the right topic to teach...');
             const topic = getTopic(context.history);
+
             try {
                 const messages = [
                     vscode.LanguageModelChatMessage.User('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
