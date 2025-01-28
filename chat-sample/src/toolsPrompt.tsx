@@ -57,7 +57,7 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 				<ToolCalls
 					toolCallRounds={this.props.toolCallRounds}
 					toolInvocationToken={this.props.request.toolInvocationToken}
-					toolCallResults={this.props.toolCallResults}/>
+					toolCallResults={this.props.toolCallResults} />
 			</>
 		);
 	}

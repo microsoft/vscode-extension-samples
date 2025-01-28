@@ -1,5 +1,11 @@
 import * as vscode from 'vscode';
 
+export function registerChatTools(context: vscode.ExtensionContext) {
+	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_tabCount', new TabCountTool()));
+	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_findFiles', new FindFilesTool()));
+	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_runInTerminal', new RunInTerminalTool()));
+}
+
 interface ITabCountParameters {
 	tabGroup?: number;
 }
@@ -7,7 +13,7 @@ interface ITabCountParameters {
 export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameters> {
 	async invoke(
 		options: vscode.LanguageModelToolInvocationOptions<ITabCountParameters>,
-		token: vscode.CancellationToken
+		_token: vscode.CancellationToken
 	) {
 		const params = options.input;
 		if (typeof params.tabGroup === 'number') {
@@ -16,10 +22,10 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 				params.tabGroup === 1
 					? '1st'
 					: params.tabGroup === 2
-					? '2nd'
-					: params.tabGroup === 3
-					? '3rd'
-					: `${params.tabGroup}th`;
+						? '2nd'
+						: params.tabGroup === 3
+							? '3rd'
+							: `${params.tabGroup}th`;
 			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
 		} else {
 			const group = vscode.window.tabGroups.activeTabGroup;
@@ -29,15 +35,15 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 
 	async prepareInvocation(
 		options: vscode.LanguageModelToolInvocationPrepareOptions<ITabCountParameters>,
-		token: vscode.CancellationToken
+		_token: vscode.CancellationToken
 	) {
 		const confirmationMessages = {
 			title: 'Count the number of open tabs',
 			message: new vscode.MarkdownString(
 				`Count the number of open tabs?` +
-					(options.input.tabGroup !== undefined
-						? ` in tab group ${options.input.tabGroup}`
-						: '')
+				(options.input.tabGroup !== undefined
+					? ` in tab group ${options.input.tabGroup}`
+					: '')
 			),
 		};
 
@@ -71,7 +77,7 @@ export class FindFilesTool implements vscode.LanguageModelTool<IFindFilesParamet
 
 	async prepareInvocation(
 		options: vscode.LanguageModelToolInvocationPrepareOptions<IFindFilesParameters>,
-		token: vscode.CancellationToken
+		_token: vscode.CancellationToken
 	) {
 		return {
 			invocationMessage: `Searching workspace for "${options.input.pattern}"`,
@@ -89,7 +95,7 @@ async function waitForShellIntegration(
 ): Promise<void> {
 	let resolve: () => void;
 	let reject: (e: Error) => void;
-	let p = new Promise<void>((_resolve, _reject) => {
+	const p = new Promise<void>((_resolve, _reject) => {
 		resolve = _resolve;
 		reject = _reject;
 	});
@@ -108,11 +114,10 @@ async function waitForShellIntegration(
 }
 
 export class RunInTerminalTool
-	implements vscode.LanguageModelTool<IRunInTerminalParameters>
-{
+	implements vscode.LanguageModelTool<IRunInTerminalParameters> {
 	async invoke(
 		options: vscode.LanguageModelToolInvocationOptions<IRunInTerminalParameters>,
-		token: vscode.CancellationToken
+		_token: vscode.CancellationToken
 	) {
 		const params = options.input as IRunInTerminalParameters;
 
@@ -120,7 +125,7 @@ export class RunInTerminalTool
 		terminal.show();
 		try {
 			await waitForShellIntegration(terminal, 5000);
-		} catch(e) {
+		} catch (e) {
 			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart((e as Error).message)]);
 		}
 
@@ -137,13 +142,13 @@ export class RunInTerminalTool
 
 	async prepareInvocation(
 		options: vscode.LanguageModelToolInvocationPrepareOptions<IRunInTerminalParameters>,
-		token: vscode.CancellationToken
+		_token: vscode.CancellationToken
 	) {
 		const confirmationMessages = {
 			title: 'Run command in terminal',
 			message: new vscode.MarkdownString(
 				`Run this command in a terminal?` +
-					`\n\n\`\`\`\n${options.input.command}\n\`\`\`\n`
+				`\n\n\`\`\`\n${options.input.command}\n\`\`\`\n`
 			),
 		};
 

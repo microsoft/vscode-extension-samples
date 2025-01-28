@@ -2,43 +2,40 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
-
 import * as path from 'path';
 import * as Mocha from 'mocha';
-import * as glob from 'glob';
+import { glob } from 'glob';
 
 export function run(): Promise<void> {
 	// Create the mocha test
 	const mocha = new Mocha({
-		ui: 'bdd',
-		color: true,
-		timeout: 5000
+		ui: 'tdd',
+		color: true
 	});
+	mocha.timeout(100000);
 
-	const testsRoot = path.resolve(__dirname, '..');
+	const testsRoot = __dirname;
 
-	return new Promise((c, e) => {
-		glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
-			if (err) {
-				return e(err);
-			}
+	return glob.glob('**.test.js', { cwd: testsRoot }).then(async files => {
 
-			// Add files to the test suite
-			files.forEach(f => mocha.addFile(path.resolve(testsRoot, f)));
+		// Add files to the test suite
+		files.forEach(f => mocha.addFile(path.resolve(testsRoot, f)));
 
-			try {
-				// Run the mocha test
+		try {
+			// Run the mocha test
+			await new Promise<void>((resolve, reject) => {
 				mocha.run(failures => {
 					if (failures > 0) {
-						e(new Error(`${failures} tests failed.`));
+						reject(`${failures} tests failed.`);
 					} else {
-						c();
+						resolve();
 					}
 				});
-			} catch (err) {
-				console.error(err);
-				e(err);
-			}
-		});
+			});
+		} catch (err) {
+			console.error(err);
+			throw err;
+		}
 	});
+
 }

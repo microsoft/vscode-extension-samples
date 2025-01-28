@@ -43,8 +43,8 @@
 		"esbuild": "^0.21.3",
 		"eslint": "^9.13.0",
 		"serve": "^14.2.3",
-		"typescript": "^5.6.2",
-		"typescript-eslint": "^8.11.0"
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.16.0"
 	},
 	"scripts": {
 		"postinstall": "cd client && npm install && cd ..",

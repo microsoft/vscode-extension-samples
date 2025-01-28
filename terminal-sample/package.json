@@ -13,6 +13,10 @@
 	"engines": {
 		"vscode": "^1.74.0"
 	},
+	"enabledApiProposals": [
+		"terminalDataWriteEvent",
+		"terminalDimensions"
+	],
 	"categories": [
 		"Other"
 	],
@@ -109,7 +113,9 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"lint": "eslint"
+		"lint": "eslint",
+		"download-api": "dts dev",
+		"postinstall": "npm run download-api"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
@@ -117,7 +123,10 @@
 		"@types/node": "^20",
 		"@types/vscode": "^1.73.0",
 		"eslint": "^9.13.0",
-		"typescript": "^5.6.2",
-		"typescript-eslint": "^8.11.0"
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.16.0"
+	},
+	"dependencies": {
+		"@vscode/dts": "^0.4.1"
 	}
 }
