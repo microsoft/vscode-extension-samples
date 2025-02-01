@@ -1,0 +1,42 @@
+{
+  "name": "shacl-extension",
+  "displayName": "SHACL Shapes Editor",
+  "description": "An extension for authoring, creating, and editing SHACL Shapes for RDF graphs.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:shaclExtension.createShape"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "shaclExtension.createShape",
+        "title": "Create SHACL Shape"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.37",
+    "@types/vscode": "^1.60.0",
+    "eslint": "^7.22.0",
+    "typescript": "^4.2.3",
+    "vscode-test": "^1.5.0"
+  },
+  "dependencies": {
+    "rdf-ext": "^2.0.0"
+  }
+}
