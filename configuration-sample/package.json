@@ -104,7 +104,7 @@
 					"conf.resource.insertEmptyLastLine": {
 						"type": "object",
 						"default": {},
-						"description": "Resource configuration: Configure files using glob patterns to have an empty last line always",
+						"description": "Resource configuration: Configure files using names to have an empty last line always",
 						"scope": "resource"
 					},
 					"conf.language.showSize": {
