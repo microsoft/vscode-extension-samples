@@ -21,8 +21,8 @@
 
 	const errorContainer = document.createElement('div');
 	document.body.appendChild(errorContainer);
-	errorContainer.className = 'error'
-	errorContainer.style.display = 'none'
+	errorContainer.className = 'error';
+	errorContainer.style.display = 'none';
 
 	/**
 	 * Render the document in the webview.

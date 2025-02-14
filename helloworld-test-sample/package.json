@@ -24,23 +24,24 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "eslint \"src/**/*.ts\"",
+		"lint": "eslint",
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile",
 		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/glob": "^7.1.1",
 		"@types/mocha": "^10.0.1",
-		"@types/node": "^18",
+		"@types/node": "^20",
 		"@types/vscode": "^1.73.0",
-		"@typescript-eslint/eslint-plugin": "^7.14.0",
-		"@typescript-eslint/parser": "^7.14.0",
 		"@vscode/test-electron": "^2.3.9",
-		"eslint": "^8.26.0",
+		"eslint": "^9.13.0",
 		"glob": "^7.1.4",
 		"mocha": "^10.2.0",
 		"source-map-support": "^0.5.12",
-		"typescript": "^5.5.2"
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.16.0"
 	}
 }

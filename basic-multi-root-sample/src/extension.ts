@@ -2,8 +2,8 @@
  * Copyright (C) Microsoft Corporation. All rights reserved.
  *--------------------------------------------------------*/
 
-import { ExtensionContext, StatusBarAlignment, window, StatusBarItem, Selection, workspace, TextEditor, commands } from 'vscode';
 import { basename } from 'path';
+import { ExtensionContext, StatusBarAlignment, StatusBarItem, window, workspace } from 'vscode';
 
 export function activate(context: ExtensionContext) {
 
@@ -12,16 +12,16 @@ export function activate(context: ExtensionContext) {
 	context.subscriptions.push(status);
 
 	// Update status bar item based on events for multi root folder changes
-	context.subscriptions.push(workspace.onDidChangeWorkspaceFolders(e => updateStatus(status)));
+	context.subscriptions.push(workspace.onDidChangeWorkspaceFolders(() => updateStatus(status)));
 
 	// Update status bar item based on events for configuration
-	context.subscriptions.push(workspace.onDidChangeConfiguration(e => updateStatus(status)));
+	context.subscriptions.push(workspace.onDidChangeConfiguration(() => updateStatus(status)));
 
 	// Update status bar item based on events around the active editor
-	context.subscriptions.push(window.onDidChangeActiveTextEditor(e => updateStatus(status)));
-	context.subscriptions.push(window.onDidChangeTextEditorViewColumn(e => updateStatus(status)));
-	context.subscriptions.push(workspace.onDidOpenTextDocument(e => updateStatus(status)));
-	context.subscriptions.push(workspace.onDidCloseTextDocument(e => updateStatus(status)));
+	context.subscriptions.push(window.onDidChangeActiveTextEditor(() => updateStatus(status)));
+	context.subscriptions.push(window.onDidChangeTextEditorViewColumn(() => updateStatus(status)));
+	context.subscriptions.push(workspace.onDidOpenTextDocument(() => updateStatus(status)));
+	context.subscriptions.push(workspace.onDidCloseTextDocument(() => updateStatus(status)));
 
 	updateStatus(status);
 }

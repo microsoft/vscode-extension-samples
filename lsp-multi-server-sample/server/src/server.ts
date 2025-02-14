@@ -16,7 +16,7 @@ import {
 const connection = createConnection(ProposedFeatures.all);
 
 // Create a manager for open text documents
-const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+const documents = new TextDocuments(TextDocument);
 
 // The workspace folder this server is operating on
 let workspaceFolder: string | null;

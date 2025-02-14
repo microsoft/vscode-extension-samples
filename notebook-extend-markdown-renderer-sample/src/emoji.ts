@@ -15,6 +15,7 @@ export async function activate(ctx: RendererContext<void>) {
 		throw new Error(`Could not load 'vscode.markdown-it-renderer'`);
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const emoji = require('markdown-it-emoji');
 	markdownItRenderer.extendMarkdownIt((md: MarkdownIt) => {
 		return md.use(emoji, {});

@@ -40,8 +40,8 @@ class PawDrawDocument extends Disposable implements vscode.CustomDocument {
 	private readonly _uri: vscode.Uri;
 
 	private _documentData: Uint8Array;
-	private _edits: Array<PawDrawEdit> = [];
-	private _savedEdits: Array<PawDrawEdit> = [];
+	private _edits: PawDrawEdit[] = [];
+	private _savedEdits: PawDrawEdit[] = [];
 
 	private readonly _delegate: PawDrawDocumentDelegate;
 

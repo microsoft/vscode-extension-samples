@@ -5,7 +5,7 @@
 
 import { ExtensionContext, Uri, window, workspace, commands } from 'vscode';
 import { LanguageClient, LanguageClientOptions, ServerOptions, RequestType } from 'vscode-languageclient/node';
-import { Wasm, ProcessOptions } from '@vscode/wasm-wasi';
+import { Wasm, ProcessOptions } from '@vscode/wasm-wasi/v1';
 import { createStdioOptions, createUriConverters, startServer } from '@vscode/wasm-wasi-lsp';
 
 let client: LanguageClient;
@@ -35,7 +35,7 @@ export async function activate(context: ExtensionContext) {
 	};
 
 	const clientOptions: LanguageClientOptions = {
-		documentSelector: [ { language: 'plaintext' } ],
+		documentSelector: [{ language: 'plaintext' }],
 		outputChannel: channel,
 		uriConverters: createUriConverters(),
 	};
@@ -47,7 +47,9 @@ export async function activate(context: ExtensionContext) {
 		client.error(`Start failed`, error, 'force');
 	}
 
-	type CountFileParams = { folder: string };
+	interface CountFileParams {
+		readonly folder: string
+	};
 	const CountFilesRequest = new RequestType<CountFileParams, number, void>('wasm-language-server/countFiles');
 	context.subscriptions.push(commands.registerCommand('vscode-samples.wasm-language-server.countFiles', async () => {
 		// We assume we do have a folder.

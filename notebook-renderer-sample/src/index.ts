@@ -3,7 +3,6 @@ import errorOverlay from 'vscode-notebook-error-overlay';
 import type { ActivationFunction } from 'vscode-notebook-renderer';
 
 // Fix the public path so that any async import()'s work as expected.
-// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __webpack_relative_entrypoint_to_root__: string;
 declare const scriptUrl: string;
 

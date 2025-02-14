@@ -1,11 +1,10 @@
 # WASM Component Model Example
 
-An example demonstrating how to use the component model to integrate WebAssembly code into VS Code.
-
+An example demonstrating how to use component model resources to integrate WebAssembly code into VS Code.
 
 ## Functionality
 
-A simple calculator that can perform add, sub, mul and div. The calculator is implemented in Rust and compiled to WebAssembly code and then call from JavaScript.
+Defines a resource that implements a calculator supporting the reverse Polish notation, similar to those used in Hewlett-Packard hand-held calculators.
 
 ## Pre-requisites
 

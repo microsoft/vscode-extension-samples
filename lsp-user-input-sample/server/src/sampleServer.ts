@@ -2,8 +2,6 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
-'use strict';
-
 import {
 	CodeAction, CodeActionKind, Command, createConnection, Diagnostic, DiagnosticSeverity, Position, Range, TextDocumentEdit,
 	TextDocuments, TextDocumentSyncKind, TextEdit
@@ -13,7 +11,7 @@ import { TextDocument } from 'vscode-languageserver-textdocument';
 const connection = createConnection();
 connection.console.info(`Sample server running in node ${process.version}`);
 
-const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
+const documents = new TextDocuments(TextDocument);
 documents.listen(connection);
 
 connection.onInitialize(() => {
@@ -36,7 +34,7 @@ function validate(document: TextDocument): void {
 		uri: document.uri,
 		version: document.version,
 		diagnostics: [
-			Diagnostic.create(Range.create(0,0,0, 10), 'Something is wrong here', DiagnosticSeverity.Warning)
+			Diagnostic.create(Range.create(0, 0, 0, 10), 'Something is wrong here', DiagnosticSeverity.Warning)
 		]
 	});
 }
@@ -59,7 +57,7 @@ connection.onCodeAction((params) => {
 });
 
 connection.onExecuteCommand(async (params) => {
-	if (params.command !== 'sample.fixMe' || params.arguments ===  undefined) {
+	if (params.command !== 'sample.fixMe' || params.arguments === undefined) {
 		return;
 	}
 

@@ -45,7 +45,7 @@ export function isInsideStyleRegion(
 		}
 		token = scanner.scan();
 	}
-	
+
 	return false;
 }
 

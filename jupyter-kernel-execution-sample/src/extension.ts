@@ -11,7 +11,7 @@ import {
 	workspace,
 } from 'vscode';
 import { Jupyter, Kernel } from '@vscode/jupyter-extension';
-import path = require('path');
+import * as path from 'path';
 import { TextDecoder } from 'util';
 
 export function activate(context: ExtensionContext) {
@@ -40,10 +40,10 @@ export function activate(context: ExtensionContext) {
 }
 
 const ErrorMimeType = NotebookCellOutputItem.error(new Error('')).mime;
-const StdOutMimeType = NotebookCellOutputItem.stdout('').mime;
-const StdErrMimeType = NotebookCellOutputItem.stderr('').mime;
-const MarkdownMimeType = 'text/markdown';
-const HtmlMimeType = 'text/html';
+// const StdOutMimeType = NotebookCellOutputItem.stdout('').mime;
+// const StdErrMimeType = NotebookCellOutputItem.stderr('').mime;
+// const MarkdownMimeType = 'text/markdown';
+// const HtmlMimeType = 'text/html';
 const textDecoder = new TextDecoder();
 async function executeCode(kernel: Kernel, code: string, logger: OutputChannel) {
 	logger.show();
@@ -67,7 +67,7 @@ async function executeCode(kernel: Kernel, code: string, logger: OutputChannel) 
 		}
 		logger.appendLine('Code execution completed');
 		logger.appendLine(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`);
-	} catch (ex){
+	} catch (ex) {
 		logger.appendLine(`Code execution failed with an error '${ex}'`);
 		logger.appendLine(`<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<`);
 	} finally {
@@ -135,7 +135,7 @@ async function selectKernel(): Promise<Kernel | undefined> {
 		Promise.all(
 			workspace.notebookDocuments.map(async (document) => {
 				const kernel = await api.kernels.getKernel(document.uri);
-				if (kernel && (kernel as any).language === 'python') {
+				if (kernel && kernel.language === 'python') {
 					quickPickItems.push({
 						label: `Kernel for ${path.basename(document.uri.fsPath)}`,
 						kernel,

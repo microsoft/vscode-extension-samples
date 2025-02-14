@@ -79,17 +79,18 @@
 		"watch:client": "tsc -w -p ./client/tsconfig.json",
 		"watch:server": "tsc -w -p ./server/tsconfig.json",
 		"compile": "npm run compile:client && npm run compile:server",
-		"lint": "eslint ./client/src ./server/src --ext .ts,.tsx",
+		"lint": "eslint",
 		"postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
 		"test": "sh ./scripts/e2e.sh"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/mocha": "^10.0.1",
-		"@types/node": "^16.18.34",
-		"@typescript-eslint/eslint-plugin": "^7.14.0",
-		"@typescript-eslint/parser": "^7.14.0",
-		"eslint": "^8.26.0",
+		"@types/node": "^20",
+		"eslint": "^9.13.0",
 		"mocha": "^10.2.0",
-		"typescript": "^5.5.2"
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.16.0"
 	}
 }

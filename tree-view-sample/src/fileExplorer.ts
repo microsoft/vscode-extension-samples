@@ -196,8 +196,7 @@ export class FileSystemProvider implements vscode.TreeDataProvider<Entry>, vscod
 		const children = await _.readdir(uri.fsPath);
 
 		const result: [string, vscode.FileType][] = [];
-		for (let i = 0; i < children.length; i++) {
-			const child = children[i];
+		for (const child of children) {
 			const stat = await this._stat(path.join(uri.fsPath, child));
 			result.push([child, stat.type]);
 		}

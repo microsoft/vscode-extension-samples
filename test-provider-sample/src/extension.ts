@@ -202,7 +202,7 @@ async function findInitialFiles(controller: vscode.TestController, pattern: vsco
 }
 
 function startWatchingWorkspace(controller: vscode.TestController, fileChangedEmitter: vscode.EventEmitter<vscode.Uri>) {
-	return getWorkspaceTestPatterns().map(({ workspaceFolder, pattern }) => {
+	return getWorkspaceTestPatterns().map(({ pattern }) => {
 		const watcher = vscode.workspace.createFileSystemWatcher(pattern);
 
 		watcher.onDidCreate(uri => {

@@ -3,12 +3,20 @@
 	"license": "MIT",
 	"publisher": "Microsoft",
 	"version": "0.0.1",
+	"private": true,
 	"scripts": {
-		"compile": "node .scripts/run-script.js compile",
-		"lint": "node .scripts/run-script.js lint",
-		"install": "node .scripts/run-command.js npm install",
-		"auditFix": "node .scripts/run-command.js npm audit fix",
-		"update-readme": "node .scripts/update-readme.js",
-		"update-lsif": "node .scripts/update-lsif.js"
+		"compile": "tsx .scripts/run-script.ts compile",
+		"lint": "tsx .scripts/run-script.ts lint",
+		"install": "tsx .scripts/run-command.ts npm install",
+		"auditFix": "tsx .scripts/run-command.ts npm audit fix",
+		"update-readme": "tsx .scripts/update-readme.ts",
+		"update-lsif": "tsx .scripts/update-lsif.ts",
+		"validate": "tsx .scripts/validate.ts"
+	},
+	"devDependencies": {
+		"@types/node": "^22.8.2",
+		"glob": "^11.0.0",
+		"tsx": "^4.19.2",
+		"typescript": "^5.7.2"
 	}
 }

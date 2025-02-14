@@ -9,7 +9,7 @@
 	},
 	"version": "0.1.0",
 	"engines": {
-		"vscode": "^1.92.0"
+		"vscode": "^1.95.0"
 	},
 	"categories": [
 		"AI",
@@ -26,14 +26,131 @@
 				"isSticky": true,
 				"commands": [
 					{
-						"name": "teach",
+						"name": "randomTeach",
 						"description": "Pick at random a computer science concept then explain it in purfect way of a cat"
 					},
 					{
 						"name": "play",
-						"description": "Do whatever you want, you are a cat after all"
+						"description": "Do whatever you want, you are a cat after all",
+						"disambiguation": [
+							{
+								"category": "cat_play",
+								"description": "The user just wants to relax and see the cat play.",
+								"examples": [
+									"Enough learning, let the cat play with a ball of yarn",
+									"Can you show me a cat playing with a laser pointer?"
+								]
+							}
+						]
+					}
+				],
+				"disambiguation": [
+					{
+						"category": "cat",
+						"description": "The user wants to learn a specific computer science topic in an informal way.",
+						"examples": [
+							"Teach me C++ pointers using metaphors",
+							"Explain to me what is a linked list in a simple way",
+							"Can you explain to me what is a function in programming?"
+						]
 					}
 				]
+			},
+			{
+				"id": "chat-tools-sample.tools",
+				"fullName": "Tool User",
+				"name": "tools",
+				"description": "I use tools",
+				"isSticky": true,
+				"commands": [
+					{
+						"name": "list",
+						"description": "List all available tools"
+					},
+					{
+						"name": "all",
+						"description": "Use all registered tools. By default, only this extension's tools are used."
+					}
+				]
+			},
+			{
+				"id": "chat-tools-sample.catTools",
+				"fullName": "Cat (Tools)",
+				"name": "catTools",
+				"description": "I use tools, implemented using @vscode/chat-extension-utils, and am also a cat",
+				"isSticky": true,
+				"commands": [
+					{
+						"name": "all",
+						"description": "Use all registered tools. By default, only this extension's tools are used."
+					}
+				]
+			}
+		],
+		"languageModelTools": [
+			{
+				"name": "chat-tools-sample_tabCount",
+				"tags": [
+					"editors",
+					"chat-tools-sample"
+				],
+				"toolReferenceName": "tabCount",
+				"displayName": "Tab Count",
+				"modelDescription": "The number of active tabs in a tab group",
+				"icon": "$(files)",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"tabGroup": {
+							"type": "number",
+							"description": "The index of the tab group to check. This is optional- if not specified, the active tab group will be checked.",
+							"default": 0
+						}
+					}
+				}
+			},
+			{
+				"name": "chat-tools-sample_findFiles",
+				"tags": [
+					"files",
+					"search",
+					"chat-tools-sample"
+				],
+				"displayName": "Find Files",
+				"modelDescription": "Search for files in the current workspace",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"pattern": {
+							"type": "string",
+							"description": "Search for files that match this glob pattern"
+						}
+					},
+					"required": [
+						"pattern"
+					]
+				}
+			},
+			{
+				"name": "chat-tools-sample_runInTerminal",
+				"tags": [
+					"terminal",
+					"chat-tools-sample"
+				],
+				"displayName": "Run in Terminal",
+				"modelDescription": "Run a command in a terminal and return the output",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"command": {
+							"type": "string",
+							"description": "The command to run"
+						}
+					},
+					"required": [
+						"command"
+					]
+				}
 			}
 		],
 		"commands": [
@@ -47,18 +164,20 @@
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
-		"lint": "eslint \"src/**/*.ts\"",
+		"lint": "eslint",
 		"watch": "tsc -watch -p ./"
 	},
 	"dependencies": {
-		"@vscode/prompt-tsx": "^0.2.3-alpha"
+		"@vscode/chat-extension-utils": "^0.0.0-alpha.1",
+		"@vscode/prompt-tsx": "^0.3.0-alpha.12"
 	},
 	"devDependencies": {
-		"@types/node": "^20.5.9",
-		"@types/vscode": "1.90.0",
-		"@typescript-eslint/eslint-plugin": "^7.14.0",
-		"@typescript-eslint/parser": "^7.14.0",
-		"eslint": "^8.26.0",
-		"typescript": "^5.5.2"
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^20",
+		"@types/vscode": "^1.95.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.7.2",
+		"typescript-eslint": "^8.16.0"
 	}
 }

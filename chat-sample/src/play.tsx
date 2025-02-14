@@ -10,7 +10,7 @@ export interface PromptProps extends BasePromptElementProps {
 }
 
 export class PlayPrompt extends PromptElement<PromptProps, void> {
-	render(state: void, sizing: PromptSizing) {
+	render(_state: void, _sizing: PromptSizing) {
 		return (
 			<>
 				<UserMessage>
@@ -18,7 +18,6 @@ export class PlayPrompt extends PromptElement<PromptProps, void> {
 					appropriate. Be concise to prepare for cat play time. Give a small random
 					python code sample (that has cat names for variables).
 				</UserMessage>
-				<UserMessage>{this.props.userQuery}</UserMessage>
 			</>
 		);
 	}

@@ -37,7 +37,6 @@ export const activate: ActivationFunction = context => {
 				ReactDOM.render(<IssuesList info={{ container: node, mime: outputItem.mime, value: outputItem.json(), context }} />, root);
 			});
 		},
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		disposeOutputItem(_outputId) {
 			// Do any teardown here. outputId is the cell output being deleted, or
 			// undefined if we're clearing all outputs.

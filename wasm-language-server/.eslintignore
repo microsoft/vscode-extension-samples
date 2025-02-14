@@ -1,7 +1,0 @@
-node_modules/**
-client/node_modules/**
-client/out/**
-client/bin/**
-cient/dist/**
-server/node_modules/**
-server/out/**
