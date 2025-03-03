@@ -64,7 +64,7 @@
 		"@types/mocha": "^5.2.0",
 		"@types/node": "^20",
 		"eslint": "^9.13.0",
-		"typescript": "^5.7.2",
+		"typescript": "^5.8.2",
 		"typescript-eslint": "^8.16.0"
 	}
 }

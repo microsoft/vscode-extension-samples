@@ -49,7 +49,7 @@
 		"eslint": "^9.13.0",
 		"glob": "^7.2.0",
 		"mocha": "^9.2.2",
-		"typescript": "^5.7.2",
+		"typescript": "^5.8.2",
 		"typescript-eslint": "^8.16.0"
 	},
 	"dependencies": {
