@@ -32,6 +32,6 @@
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint",
-		"esbuild": "node ./bin/esbuild"
+		"esbuild": "^0.25.0"
 	}
 }
