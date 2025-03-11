@@ -51,7 +51,7 @@
 		"vscode:prepublish": "npm run build",
 		"build": "cd client && npm run compile && cd ../server && npm run build && cd ..",
 		"lint": "cd client && npm run lint && cd ..",
-		"esbuild": "^0.25.0",
+		"esbuild": "node ./bin/esbuild.js",
 		"serve": "serve --cors -l 5000 --ssl-cert $HOME/certs/localhost.pem --ssl-key $HOME/certs/localhost-key.pem"
 	}
 }

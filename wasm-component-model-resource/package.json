@@ -49,7 +49,7 @@
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
 		"lint": "eslint",
-		"esbuild": "^0.25.0",
+		"esbuild": "node ./bin/esbuild.js",
 		"generate:model": "wit2ts --outDir ./src ./wit",
 		"serve": "serve --cors -l 5000 --ssl-cert $HOME/certs/localhost.pem --ssl-key $HOME/certs/localhost-key.pem"
 	}
