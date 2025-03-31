@@ -97,6 +97,7 @@
 				"toolReferenceName": "tabCount",
 				"displayName": "Tab Count",
 				"modelDescription": "The number of active tabs in a tab group",
+				"canBeReferencedInPrompt": true,
 				"icon": "$(files)",
 				"inputSchema": {
 					"type": "object",
@@ -118,6 +119,7 @@
 				],
 				"displayName": "Find Files",
 				"modelDescription": "Search for files in the current workspace",
+				"canBeReferencedInPrompt": true,
 				"inputSchema": {
 					"type": "object",
 					"properties": {
@@ -139,6 +141,7 @@
 				],
 				"displayName": "Run in Terminal",
 				"modelDescription": "Run a command in a terminal and return the output",
+				"canBeReferencedInPrompt": false,
 				"inputSchema": {
 					"type": "object",
 					"properties": {
