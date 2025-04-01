@@ -94,7 +94,7 @@
 					"editors",
 					"chat-tools-sample"
 				],
-				"toolReferenceName": "tabCount",
+				"toolReferenceName": "countTabs",
 				"displayName": "Tab Count",
 				"modelDescription": "The number of active tabs in a tab group",
 				"canBeReferencedInPrompt": true,
@@ -117,6 +117,7 @@
 					"search",
 					"chat-tools-sample"
 				],
+				"toolReferenceName": "findFiles",
 				"displayName": "Find Files",
 				"modelDescription": "Search for files in the current workspace",
 				"canBeReferencedInPrompt": true,
