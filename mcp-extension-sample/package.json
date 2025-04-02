@@ -1,0 +1,51 @@
+{
+	"enabledApiProposals": [
+		"mcpConfigurationProvider"
+	],
+	"name": "mcp-extension-sample",
+	"displayName": "mcp-extension-sample",
+	"description": "Sample showing how to use Proposed API",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples",
+	"engines": {
+		"vscode": "^1.99.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "mcp-extension-sample.addGist",
+				"title": "MCP Extension Sample: Add Gist Source"
+			},
+			{
+				"command": "mcp-extension-sample.removeGist",
+				"title": "MCP Extension Sample: Remove Gist Source"
+			}
+		],
+		"modelContextServerCollections": [
+			{
+				"id": "exampleGist",
+				"label": "Github Gists"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"download-api": "dts dev",
+		"postdownload-api": "dts main",
+		"postinstall": "npm run download-api"
+	},
+	"devDependencies": {
+		"@types/node": "^20",
+		"@vscode/dts": "^0.4.1",
+		"typescript": "^5.8.2"
+	}
+}
