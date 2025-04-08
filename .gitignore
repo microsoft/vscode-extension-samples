@@ -8,3 +8,4 @@ tsconfig.lsif.json
 *.lsif
 *.db
 *.tsbuildinfo
+.qodo
