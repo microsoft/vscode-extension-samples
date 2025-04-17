@@ -8,7 +8,7 @@ export interface TsxToolUserMetadata {
 
 export interface ToolCallsMetadata {
     toolCallRounds: ToolCallRound[];
-    toolCallResults: Record<string, vscode.LanguageModelToolResult>;
+    toolCallResults: Record<string, vscode.LanguageModelToolResult2>;
 }
 
 export function isTsxToolUserMetadata(obj: unknown): obj is TsxToolUserMetadata {
@@ -62,7 +62,7 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
         });
 
         const toolReferences = [...request.toolReferences];
-        const accumulatedToolResults: Record<string, vscode.LanguageModelToolResult> = {};
+        const accumulatedToolResults: Record<string, vscode.LanguageModelToolResult2> = {};
         const toolCallRounds: ToolCallRound[] = [];
         const runWithTools = async (): Promise<void> => {
             // If a toolReference is present, force the model to call that tool

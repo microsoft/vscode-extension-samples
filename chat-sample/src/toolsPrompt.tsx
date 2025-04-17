@@ -26,7 +26,7 @@ export interface ToolUserProps extends BasePromptElementProps {
 	request: vscode.ChatRequest;
 	context: vscode.ChatContext;
 	toolCallRounds: ToolCallRound[];
-	toolCallResults: Record<string, vscode.LanguageModelToolResult>;
+	toolCallResults: Record<string, vscode.LanguageModelToolResult2>;
 }
 
 export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
@@ -65,7 +65,7 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 
 interface ToolCallsProps extends BasePromptElementProps {
 	toolCallRounds: ToolCallRound[];
-	toolCallResults: Record<string, vscode.LanguageModelToolResult>;
+	toolCallResults: Record<string, vscode.LanguageModelToolResult2>;
 	toolInvocationToken: vscode.ChatParticipantToolToken | undefined;
 }
 
@@ -101,7 +101,7 @@ class ToolCalls extends PromptElement<ToolCallsProps, void> {
 interface ToolResultElementProps extends BasePromptElementProps {
 	toolCall: vscode.LanguageModelToolCallPart;
 	toolInvocationToken: vscode.ChatParticipantToolToken | undefined;
-	toolCallResult: vscode.LanguageModelToolResult | undefined;
+	toolCallResult: vscode.LanguageModelToolResult2 | undefined;
 }
 
 /**
@@ -135,7 +135,7 @@ class ToolResultElement extends PromptElement<ToolResultElementProps, void> {
 export class ToolResultMetadata extends PromptMetadata {
 	constructor(
 		public toolCallId: string,
-		public result: vscode.LanguageModelToolResult,
+		public result: vscode.LanguageModelToolResult2,
 	) {
 		super();
 	}
