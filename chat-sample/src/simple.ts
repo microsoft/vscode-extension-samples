@@ -1,6 +1,7 @@
-import { renderPrompt } from '@vscode/prompt-tsx';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import screenshot from 'screenshot-desktop';
 import * as vscode from 'vscode';
-import { PlayPrompt } from './play';
 
 const CAT_NAMES_COMMAND_ID = 'cat.namesInEditor';
 const CAT_PARTICIPANT_ID = 'chat-sample.cat';
@@ -18,13 +19,18 @@ export function registerSimpleParticipant(context: vscode.ExtensionContext) {
         // To talk to an LLM in your subcommand handler implementation, your
         // extension can use VS Code's `requestChatAccess` API to access the Copilot API.
         // The GitHub Copilot Chat extension implements this provider.
-        if (request.command === 'randomTeach') {
-            stream.progress('Picking the right topic to teach...');
-            const topic = getTopic(context.history);
+        if (request.command === 'catTakePhoto') {
+            stream.progress('Somehow the cat is taking a photo...');
             try {
+                // 
+                const imageBuffer = await screenshot({ format: 'png' });
+                const imageData = Uint8Array.from(imageBuffer);
                 const messages = [
-                    vscode.LanguageModelChatMessage.User('You are a cat! Your job is to explain computer science concepts in the funny manner of a cat. Always start your response by stating what concept you are explaining. Always include code samples.'),
-                    vscode.LanguageModelChatMessage.User(topic)
+                    vscode.LanguageModelChatMessage2.User([new vscode.LanguageModelDataPart({ 
+                        data: imageData, 
+                        mimeType: vscode.ChatImageMimeType.PNG,
+                    })]),
+                    vscode.LanguageModelChatMessage.User('tell me about this image. make sure to be very detailed and start the sentence with "meow i am a cat"'),
                 ];
 
                 const chatResponse = await request.model.sendRequest(messages, {}, token);
@@ -36,40 +42,43 @@ export function registerSimpleParticipant(context: vscode.ExtensionContext) {
                 handleError(logger, err, stream);
             }
 
-            stream.button({
-                command: CAT_NAMES_COMMAND_ID,
-                title: vscode.l10n.t('Use Cat Names in Editor')
-            });
-
-            logger.logUsage('request', { kind: 'randomTeach' });
-            return { metadata: { command: 'randomTeach' } };
+            logger.logUsage('request', { kind: 'catTakePhoto' });
+            return { metadata: { command: 'catTakePhoto' } };
         } else if (request.command === 'play') {
-            stream.progress('Throwing away the computer science books and preparing to play with some Python code...');
-            try {
-                // Here's an example of how to use the prompt-tsx library to build a prompt
-                const { messages } = await renderPrompt(
-                    PlayPrompt,
-                    { userQuery: request.prompt },
-                    { modelMaxPromptTokens: request.model.maxInputTokens },
-                    request.model);
+                stream.progress('Analysing image...');
+                try {
+                    const match = request.prompt.match(/(.*)'(.*)'/);
+                    if (!match) {
+                        stream.markdown(vscode.l10n.t('Please provide a question followed by a path to an image in quotes.'));
+                        return { metadata: { command: 'play' } };
+                    }
 
-                const chatResponse = await request.model.sendRequest(messages, {}, token);
-                for await (const fragment of chatResponse.text) {
-                    stream.markdown(fragment);
+                    const imageBuffer = await fs.readFile(path.join(match[2]));
+                    const imageData = Uint8Array.from(imageBuffer);
+                    const messages = [
+                        vscode.LanguageModelChatMessage2.User([new vscode.LanguageModelDataPart({
+                            data: imageData,
+                            mimeType: vscode.ChatImageMimeType.PNG,
+                        })]),
+                        vscode.LanguageModelChatMessage2.User(match[1]),
+                    ];
+
+                    const chatResponse = await request.model.sendRequest(messages, {}, token);
+                    for await (const fragment of chatResponse.text) {
+                        stream.markdown(fragment);
+                    }
+
+                } catch (err) {
+                    handleError(logger, err, stream);
                 }
-
-            } catch (err) {
-                handleError(logger, err, stream);
-            }
-
-            logger.logUsage('request', { kind: 'play' });
-            return { metadata: { command: 'play' } };
+                return { metadata: { command: 'play' } };
+ 
         } else {
             try {
                 const messages = [
-                    vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
+                    vscode.LanguageModelChatMessage2.User(`You are a cat! Think carefully and step by step like a cat would.
                         Your job is to explain computer science concepts in the funny manner of a cat, using cat metaphors. Always start your response by stating what concept you are explaining. Always include code samples.`),
-                    vscode.LanguageModelChatMessage.User(request.prompt)
+                    vscode.LanguageModelChatMessage2.User(request.prompt)
                 ];
 
                 const chatResponse = await request.model.sendRequest(messages, {}, token);
@@ -141,9 +150,9 @@ export function registerSimpleParticipant(context: vscode.ExtensionContext) {
                 }
 
                 const messages = [
-                    vscode.LanguageModelChatMessage.User(`You are a cat! Think carefully and step by step like a cat would.
+                    vscode.LanguageModelChatMessage2.User(`You are a cat! Think carefully and step by step like a cat would.
                     Your job is to replace all variable names in the following code with funny cat variable names. Be creative. IMPORTANT respond just with code. Do not use markdown!`),
-                    vscode.LanguageModelChatMessage.User(text)
+                    vscode.LanguageModelChatMessage2.User(text)
                 ];
                 chatResponse = await model.sendRequest(messages, {}, new vscode.CancellationTokenSource().token);
 
@@ -204,20 +213,20 @@ function handleError(logger: vscode.TelemetryLogger, err: any, stream: vscode.Ch
 }
 
 // Get a random topic that the cat has not taught in the chat history yet
-function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatResponseTurn>): string {
-    const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
-    // Filter the chat history to get only the responses from the cat
-    const previousCatResponses = history.filter(h => {
-        return h instanceof vscode.ChatResponseTurn && h.participant === CAT_PARTICIPANT_ID;
-    }) as vscode.ChatResponseTurn[];
-    // Filter the topics to get only the topics that have not been taught by the cat yet
-    const topicsNoRepetition = topics.filter(topic => {
-        return !previousCatResponses.some(catResponse => {
-            return catResponse.response.some(r => {
-                return r instanceof vscode.ChatResponseMarkdownPart && r.value.value.includes(topic);
-            });
-        });
-    });
+// function getTopic(history: ReadonlyArray<vscode.ChatRequestTurn | vscode.ChatResponseTurn>): string {
+//     const topics = ['linked list', 'recursion', 'stack', 'queue', 'pointers'];
+//     // Filter the chat history to get only the responses from the cat
+//     const previousCatResponses = history.filter(h => {
+//         return h instanceof vscode.ChatResponseTurn && h.participant === CAT_PARTICIPANT_ID;
+//     }) as vscode.ChatResponseTurn[];
+//     // Filter the topics to get only the topics that have not been taught by the cat yet
+//     const topicsNoRepetition = topics.filter(topic => {
+//         return !previousCatResponses.some(catResponse => {
+//             return catResponse.response.some(r => {
+//                 return r instanceof vscode.ChatResponseMarkdownPart && r.value.value.includes(topic);
+//             });
+//         });
+//     });
 
-    return topicsNoRepetition[Math.floor(Math.random() * topicsNoRepetition.length)] || 'I have taught you everything I know. Meow!';
-}
+//     return topicsNoRepetition[Math.floor(Math.random() * topicsNoRepetition.length)] || 'I have taught you everything I know. Meow!';
+// }
