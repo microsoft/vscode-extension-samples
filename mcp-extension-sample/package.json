@@ -1,7 +1,4 @@
 {
-	"enabledApiProposals": [
-		"mcpConfigurationProvider"
-	],
 	"name": "mcp-extension-sample",
 	"displayName": "mcp-extension-sample",
 	"description": "Sample showing how to use Proposed API",
@@ -11,7 +8,7 @@
 	"license": "MIT",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples",
 	"engines": {
-		"vscode": "^1.99.0"
+		"vscode": "^1.101.0"
 	},
 	"categories": [
 		"Other"
@@ -28,7 +25,7 @@
 				"title": "MCP Extension Sample: Remove Gist Source"
 			}
 		],
-		"modelContextServerCollections": [
+		"mcpServerDefinitionProviders": [
 			{
 				"id": "exampleGist",
 				"label": "Github Gists"
