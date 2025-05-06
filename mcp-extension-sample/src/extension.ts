@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 
 	context.subscriptions.push(vscode.lm.registerMcpServerDefinitionProvider('exampleGist', {
-		onDidChangeServerDefinitions: didChangeEmitter.event,
+		onDidChangeMcpServerDefinitions: didChangeEmitter.event,
 		provideMcpServerDefinitions: async () => {
 			let output: vscode.McpServerDefinition[] = [];
 			await Promise.all(gists.map(g => fetchGistContents(g).then(content => {
