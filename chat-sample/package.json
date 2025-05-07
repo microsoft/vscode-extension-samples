@@ -1,6 +1,6 @@
 {
 	"name": "chat-sample",
-	"publisher": "vscode-samples",
+	"publisher": "vscode-samples-justin",
 	"displayName": "Copilot Chat Sample",
 	"description": "Sample chat extension, a trusty cat tutor that will can teach you computer science topics.",
 	"repository": {
@@ -15,6 +15,9 @@
 		"AI",
 		"Chat"
 	],
+	"enabledApiProposals": [
+		"languageModelDataPart"
+	],
 	"activationEvents": [],
 	"contributes": {
 		"chatParticipants": [
@@ -26,8 +29,8 @@
 				"isSticky": true,
 				"commands": [
 					{
-						"name": "randomTeach",
-						"description": "Pick at random a computer science concept then explain it in purfect way of a cat"
+						"name": "catTakePhoto",
+						"description": "The cat is trying to take a photo."
 					},
 					{
 						"name": "play",
@@ -155,6 +158,26 @@
 						"command"
 					]
 				}
+			},
+			{
+				"name": "chat-tools-sample_capture",
+				"tags": [
+					"terminal",
+					"chat-tools-sample",
+					"screenshot",
+					"capture"
+				],
+				"displayName": "Capture Screenshot",
+				"modelDescription": "Capture a screenshot and return the image",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"screenshot": {
+							"type": "string",
+							"description": "Take a screenshot of a simulator."
+						}
+					}
+				}
 			}
 		],
 		"commands": [
@@ -173,12 +196,14 @@
 	},
 	"dependencies": {
 		"@vscode/chat-extension-utils": "^0.0.0-alpha.1",
-		"@vscode/prompt-tsx": "^0.3.0-alpha.12"
+		"@vscode/prompt-tsx": "file:vscode-prompt-tsx-0.3.0-alpha.23.tgz",
+		"screenshot-desktop": "^1.15.1"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/node": "^20",
+		"@types/screenshot-desktop": "^1.12.3",
 		"@types/vscode": "^1.95.0",
 		"eslint": "^9.13.0",
 		"typescript": "^5.8.2",

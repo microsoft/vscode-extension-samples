@@ -1,9 +1,11 @@
 import * as vscode from 'vscode';
+import { captureScreenshot, listSimulators } from './listSimulators';
 
 export function registerChatTools(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_tabCount', new TabCountTool()));
 	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_findFiles', new FindFilesTool()));
 	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_runInTerminal', new RunInTerminalTool()));
+	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_capture', new CaptureTool()));
 }
 
 interface ITabCountParameters {
@@ -26,10 +28,10 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 						: params.tabGroup === 3
 							? '3rd'
 							: `${params.tabGroup}th`;
-			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
 		} else {
 			const group = vscode.window.tabGroups.activeTabGroup;
-			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open.`)]);
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open.`)]);
 		}
 	}
 
@@ -72,7 +74,7 @@ export class FindFilesTool implements vscode.LanguageModelTool<IFindFilesParamet
 		);
 
 		const strFiles = files.map((f) => f.fsPath).join('\n');
-		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`Found ${files.length} files matching "${params.pattern}":\n${strFiles}`)]);
+		return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(`Found ${files.length} files matching "${params.pattern}":\n${strFiles}`)]);
 	}
 
 	async prepareInvocation(
@@ -126,7 +128,7 @@ export class RunInTerminalTool
 		try {
 			await waitForShellIntegration(terminal, 5000);
 		} catch (e) {
-			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart((e as Error).message)]);
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart((e as Error).message)]);
 		}
 
 		const execution = terminal.shellIntegration!.executeCommand(params.command);
@@ -137,7 +139,7 @@ export class RunInTerminalTool
 			terminalResult += chunk;
 		}
 
-		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(terminalResult)]);
+		return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(terminalResult)]);
 	}
 
 	async prepareInvocation(
@@ -158,3 +160,35 @@ export class RunInTerminalTool
 		};
 	}
 }
+
+interface CaptureToolOptions {
+	prompt?: string;
+}
+
+class CaptureTool implements vscode.LanguageModelTool<CaptureToolOptions> {
+	async invoke(_options: vscode.LanguageModelToolInvocationOptions<CaptureToolOptions>, _token: vscode.CancellationToken): Promise<vscode.LanguageModelToolResult2> {
+		try {
+			// List available simulators
+			const simulators = await listSimulators();
+
+			if (simulators.length === 0) {
+				throw new Error('No iOS simulators found. Please make sure Xcode is installed and iOS simulators are set up.');
+			}
+
+			// Use the first available simulator
+			const simulator = simulators[0];
+			const screenshot = await captureScreenshot(simulator.udid);
+
+			if (!screenshot) {
+				throw new Error('Failed to capture simulator screenshot.');
+			}
+
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelDataPart({ mimeType: vscode.ChatImageMimeType.PNG, data: screenshot})]);
+		} catch (error) {
+			throw error instanceof Error ? error : new Error(String(error));
+		}
+	}
+}
+
+
+export function deactivate() { }
