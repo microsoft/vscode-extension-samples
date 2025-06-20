@@ -94,9 +94,10 @@
 					"editors",
 					"chat-tools-sample"
 				],
-				"toolReferenceName": "tabCount",
+				"toolReferenceName": "countTabs",
 				"displayName": "Tab Count",
 				"modelDescription": "The number of active tabs in a tab group",
+				"canBeReferencedInPrompt": true,
 				"icon": "$(files)",
 				"inputSchema": {
 					"type": "object",
@@ -116,8 +117,10 @@
 					"search",
 					"chat-tools-sample"
 				],
+				"toolReferenceName": "findFiles",
 				"displayName": "Find Files",
 				"modelDescription": "Search for files in the current workspace",
+				"canBeReferencedInPrompt": true,
 				"inputSchema": {
 					"type": "object",
 					"properties": {
@@ -139,6 +142,7 @@
 				],
 				"displayName": "Run in Terminal",
 				"modelDescription": "Run a command in a terminal and return the output",
+				"canBeReferencedInPrompt": false,
 				"inputSchema": {
 					"type": "object",
 					"properties": {
@@ -177,7 +181,7 @@
 		"@types/node": "^20",
 		"@types/vscode": "^1.95.0",
 		"eslint": "^9.13.0",
-		"typescript": "^5.7.2",
-		"typescript-eslint": "^8.16.0"
+		"typescript": "^5.8.2",
+		"typescript-eslint": "^8.26.0"
 	}
 }
