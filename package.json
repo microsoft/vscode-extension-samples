@@ -5,10 +5,10 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"compile": "tsx .scripts/run-script.ts compile",
-		"lint": "tsx .scripts/run-script.ts lint",
-		"install": "tsx .scripts/run-command.ts npm install",
-		"auditFix": "tsx .scripts/run-command.ts npm audit fix",
+		"compile-all": "tsx .scripts/run-script.ts compile",
+		"lint-all": "tsx .scripts/run-script.ts lint",
+		"install-all": "tsx .scripts/run-command.ts npm install",
+		"audit-fix-all": "tsx .scripts/run-command.ts npm audit fix",
 		"update-readme": "tsx .scripts/update-readme.ts",
 		"update-lsif": "tsx .scripts/update-lsif.ts",
 		"validate": "tsx .scripts/validate.ts"
