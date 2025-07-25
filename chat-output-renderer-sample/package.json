@@ -55,6 +55,7 @@
 		],
 		"chatOutputRenderer": [
 			{
+				"viewType": "vscode-samples.mermaid",
 				"mimeTypes": [
 					"application/vnd.chat-output-renderer.mermaid"
 				]
