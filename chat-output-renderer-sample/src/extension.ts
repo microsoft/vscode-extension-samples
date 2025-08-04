@@ -52,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// It can also be invoked when rendering old Mermaid diagrams in the chat history.
 	context.subscriptions.push(
 		vscode.chat.registerChatOutputRenderer(viewType, {
-			async renderChatOutput({value}, webview, _ctx, _token) {
+			async renderChatOutput({ value }, webview, _ctx, _token) {
 				const mermaidSource = new TextDecoder().decode(value);
 
 				// Set the options for the webview
