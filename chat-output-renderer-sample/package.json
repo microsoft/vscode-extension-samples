@@ -53,7 +53,7 @@
 				}
 			}
 		],
-		"chatOutputRenderer": [
+		"chatOutputRenderers": [
 			{
 				"viewType": "vscode-samples.mermaid",
 				"mimeTypes": [
