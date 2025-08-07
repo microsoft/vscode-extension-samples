@@ -19,7 +19,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
 	// Load the Wasm module
 	const filename = vscode.Uri.joinPath(context.extensionUri, 'target', 'wasm32-unknown-unknown', 'debug', 'calculator.wasm');
-	const bits = await vscode.workspace.fs.readFile(filename);
+	const bits = await vscode.workspace.fs.readFile(filename) as Uint8Array<ArrayBuffer>;
 	const module = await WebAssembly.compile(bits);
 
 	// The implementation of the log function that is called from WASM

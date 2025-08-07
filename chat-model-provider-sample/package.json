@@ -1,6 +1,8 @@
 {
 	"name": "chat-model-provider-sample",
-	"enabledApiProposals": ["chatProvider"],
+	"enabledApiProposals": [
+		"chatProvider"
+	],
 	"publisher": "vscode-samples",
 	"displayName": "Copilot Model Provider Sample",
 	"description": "Sample extension which provides chat models via the LM API.",
@@ -37,17 +39,14 @@
 		"lint": "eslint",
 		"watch": "tsc -watch -p ./"
 	},
-	"dependencies": {
-
-	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/node": "^22",
-		"@vscode/dts": "^0.4.1",
 		"@types/vscode": "^1.102.0",
+		"@vscode/dts": "^0.4.1",
 		"eslint": "^9.13.0",
-		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.26.0"
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
 	}
 }

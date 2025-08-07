@@ -58,8 +58,8 @@
 		"eslint": "^9.13.0",
 		"path-browserify": "^1.0.1",
 		"ts-loader": "^9.5.1",
-		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.26.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0",
 		"webpack": "^5.90.1",
 		"webpack-cli": "^5.1.4"
 	}

@@ -13,6 +13,7 @@ export default tseslint.config(
 		ignores: [
 			'.vscode-test',
 			'out',
+			'**/vscode*.d.ts'
 		]
 	},
 	js.configs.recommended,

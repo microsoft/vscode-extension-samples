@@ -3,7 +3,6 @@
  *--------------------------------------------------------*/
 
 import * as vscode from 'vscode';
-import { CodeActionKind } from 'vscode';
 
 export async function activate(context: vscode.ExtensionContext) {
 	const notebookSelector: vscode.DocumentSelector = {
@@ -27,7 +26,7 @@ export async function activate(context: vscode.ExtensionContext) {
  * Takes all mentions of import "xx" or from "xx" and extracts them to a new top code cell.
  */
 export class ExtractNotebookImports implements vscode.CodeActionProvider {
-	static readonly providedKind = CodeActionKind.Notebook.append('format.extensionName');
+	static readonly providedKind = vscode.CodeActionKind.Notebook.append('format.extensionName');
 
 	public provideCodeActions(
 		document: vscode.TextDocument,

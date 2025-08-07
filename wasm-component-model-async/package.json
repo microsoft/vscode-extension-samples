@@ -34,13 +34,13 @@
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
-		"@types/node": "^20",
+		"@types/node": "^22",
 		"@types/vscode": "1.89.0",
 		"esbuild": "^0.25.0",
 		"eslint": "^9.13.0",
 		"serve": "^14.2.1",
-		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.26.0"
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
