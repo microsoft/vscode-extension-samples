@@ -4,7 +4,7 @@
 	"description": "Examples of notification types and various configurations",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.74.0"
+		"vscode": "^1.100.0"
 	},
 	"categories": [
 		"Other"
@@ -60,7 +60,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
-		"@types/vscode": "^1.69.0",
+		"@types/vscode": "^1.100.0",
 		"eslint": "^9.13.0",
 		"typescript": "^5.9.2",
 		"typescript-eslint": "^8.39.0"

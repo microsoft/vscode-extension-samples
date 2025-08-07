@@ -12,7 +12,7 @@
 	"categories": [],
 	"keywords": [],
 	"engines": {
-		"vscode": "^1.74.0"
+		"vscode": "^1.100.0"
 	},
 	"activationEvents": [
 		"onLanguage:html1"

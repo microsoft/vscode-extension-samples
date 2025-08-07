@@ -17,7 +17,7 @@
 		"Language Server"
 	],
 	"engines": {
-		"vscode": "^1.88.0"
+		"vscode": "^1.100.0"
 	},
 	"main": "./client/out/extension",
 	"browser": "./client/dist/web/extension",

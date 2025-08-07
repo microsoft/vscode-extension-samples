@@ -13,10 +13,10 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples/issues"
 	},
 	"engines": {
-		"vscode": "^1.84.0"
+		"vscode": "^1.100.0"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.84.0"
+		"@types/vscode": "^1.100.0"
 	},
 	"dependencies": {
 		"vscode-languageclient": "^9.0.1"

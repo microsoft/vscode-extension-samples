@@ -6,7 +6,7 @@
 	"publisher": "vscode-samples",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-sample",
 	"engines": {
-		"vscode": "^1.74.0"
+		"vscode": "^1.100.0"
 	},
 	"categories": [
 		"Other"
@@ -33,7 +33,7 @@
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/mocha": "^10.0.1",
 		"@types/node": "^22",
-		"@types/vscode": "^1.73.0",
+		"@types/vscode": "^1.100.0",
 		"@vscode/test-cli": "^0.0.8",
 		"@vscode/test-electron": "^2.3.9",
 		"eslint": "^9.13.0",
