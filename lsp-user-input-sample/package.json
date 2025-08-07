@@ -30,13 +30,13 @@
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
-		"@types/node": "^20",
+		"@types/node": "^22",
 		"eslint": "^9.13.0",
 		"merge-options": "^3.0.4",
 		"rimraf": "^5.0.5",
 		"ts-loader": "^9.5.1",
-		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.26.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0",
 		"webpack": "^5.89.0",
 		"webpack-cli": "^5.1.4"
 	}

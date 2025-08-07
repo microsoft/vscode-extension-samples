@@ -75,12 +75,12 @@
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/jsdom": "^21.1.7",
-		"@types/node": "^20",
+		"@types/node": "^22",
 		"@types/vscode": "^1.73.0",
 		"@vscode/dts": "^0.4.0",
 		"eslint": "^9.13.0",
-		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.16.0"
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
 	},
 	"dependencies": {
 		"dompurify": "^3.2.6",

@@ -28,14 +28,10 @@
 		"lint": "eslint"
 	},
 	"devDependencies": {
-		"@types/glob": "^8.1.0",
-		"@types/mocha": "^10.0.1",
-		"@types/node": "^20",
 		"@types/vscode": "^1.73.0",
-		"@vscode/test-electron": "^2.3.0",
 		"eslint": "^8.36.0",
 		"glob": "^8.1.0",
-		"mocha": "^10.2.0",
-		"typescript": "^5.8.2"
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
 	}
 }
