@@ -1,11 +1,14 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "es2020",
+		"target": "ES2024",
 		"outDir": "out",
 		"sourceMap": true,
 		"rootDir": "src",
 		"strict": true
 	},
-	"exclude": ["node_modules", ".vscode-test"]
+	"exclude": [
+		"node_modules",
+		".vscode-test"
+	]
 }

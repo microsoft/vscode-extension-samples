@@ -1,46 +1,46 @@
 {
-  "name": "welcome-view-content-sample",
-  "publisher": "vscode-samples",
-  "description": "Uri Handler Sample",
-  "version": "0.0.1",
-  "private": true,
-  "license": "MIT",
-  "engines": {
-    "vscode": "^1.95.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "welcome-view-content-sample.hello",
-        "title": "Hello World!"
-      }
-    ],
-    "viewsWelcome": [
-      {
-        "view": "workbench.explorer.emptyView",
-        "contents": "You can have paragraphs of text here. You can have [links](https://code.visualstudio.com) to external sources or [internal commands](command:welcome-view-content-sample.hello).\nUse new lines to have new paragraphs.\nPlace a link alone in a paragraph to make it a button\n[Hello](command:welcome-view-content-sample.hello)\n You can also render [codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) using the $(...) syntax like: $(vscode) $(heart) $(github)\nAdd a little $(sparkle) to your welcome views!"
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint",
-    "test": "node ./out/test/runTest.js"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.13.0",
-    "@stylistic/eslint-plugin": "^2.9.0",
-    "@types/vscode": "^1.94.0",
-    "eslint": "^9.13.0",
-    "typescript": "^5.9.2",
-    "typescript-eslint": "^8.39.0"
-  }
+	"name": "welcome-view-content-sample",
+	"publisher": "vscode-samples",
+	"description": "Uri Handler Sample",
+	"version": "0.0.1",
+	"private": true,
+	"license": "MIT",
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "welcome-view-content-sample.hello",
+				"title": "Hello World!"
+			}
+		],
+		"viewsWelcome": [
+			{
+				"view": "workbench.explorer.emptyView",
+				"contents": "You can have paragraphs of text here. You can have [links](https://code.visualstudio.com) to external sources or [internal commands](command:welcome-view-content-sample.hello).\nUse new lines to have new paragraphs.\nPlace a link alone in a paragraph to make it a button\n[Hello](command:welcome-view-content-sample.hello)\n You can also render [codicons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) using the $(...) syntax like: $(vscode) $(heart) $(github)\nAdd a little $(sparkle) to your welcome views!"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/vscode": "^1.100.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	}
 }

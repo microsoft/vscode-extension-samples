@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"engines": {
-		"vscode": "^1.74.0"
+		"vscode": "^1.100.0"
 	},
 	"private": true,
 	"license": "MIT",
@@ -37,7 +37,7 @@
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/node": "^22",
-		"@types/vscode": "1.74.0",
+		"@types/vscode": "^1.100.0",
 		"eslint": "^9.13.0",
 		"typescript": "^5.9.2",
 		"typescript-eslint": "^8.39.0"

@@ -5,7 +5,7 @@
 	"publisher": "vscode-samples",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples",
 	"engines": {
-		"vscode": "^1.38.0"
+		"vscode": "^1.100.0"
 	},
 	"contributes": {
 		"html": {

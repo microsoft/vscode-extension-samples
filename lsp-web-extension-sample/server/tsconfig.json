@@ -1,12 +1,20 @@
 {
 	"compilerOptions": {
-		"target": "es2020",
-		"lib": ["es2020", "WebWorker"],
+		"target": "ES2024",
+		"lib": [
+			"ES2024",
+			"WebWorker"
+		],
 		"module": "commonjs",
 		"moduleResolution": "node",
 		"sourceMap": true,
 		"strict": true
 	},
-	"include": ["src"],
-	"exclude": ["node_modules", ".vscode-test-web"]
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"node_modules",
+		".vscode-test-web"
+	]
 }
