@@ -1,0 +1,678 @@
+export type Category = {
+  name: string
+  slug: string
+  blurb: string
+  image: string
+}
+
+export type Product = {
+  id: string
+  name: string
+  price: number
+  image: string
+  category: string // slug
+  tags?: string[]
+  colors?: string[]
+}
+
+export const categories: Category[] = [
+  {
+    name: "Oversized T‑Shirts",
+    slug: "oversized-t-shirts",
+    blurb: "Relaxed fit. Effortless style. Premium cotton feel.",
+    image:
+      "/placeholder-z2ukd.png",
+  },
+  {
+    name: "Hoodies",
+    slug: "hoodies",
+    blurb: "Cozy warmth with bold graphics and modern cuts.",
+    image:
+      "/oversized-hoodie-editorial.png",
+  },
+  {
+    name: "Cargo Pants",
+    slug: "cargo-pants",
+    blurb: "Utility pockets. Everyday function. All‑day comfort.",
+    image:
+      "/cargo-pants-streetwear-detail.png",
+  },
+  {
+    name: "Caps",
+    slug: "caps",
+    blurb: "Finish your fit with structured silhouettes.",
+    image:
+      "/streetwear-cap-minimal-studio.png",
+  },
+  {
+    name: "Accessories",
+    slug: "accessories",
+    blurb: "Necklaces, rings, and more to complete your look.",
+    image:
+      "/placeholder-1g8y2.png",
+  },
+]
+
+export const products: Product[] = [
+  {
+    id: "tee-001",
+    name: "DRIPZ Heavyweight Tee",
+    price: 39,
+    image:
+      "/heavyweight-oversized-black-tee.png",
+    category: "oversized-t-shirts",
+    tags: ["oversized", "cotton"],
+    colors: ["Black", "Bone", "Olive"],
+  },
+  {
+    id: "tee-002",
+    name: "Graphic Oversized Tee",
+    price: 45,
+    image:
+      "/placeholder-sll8i.png",
+    category: "oversized-t-shirts",
+    tags: ["graphic", "bold"],
+    colors: ["Charcoal", "White"],
+  },
+  {
+    id: "hood-001",
+    name: "Premium Fleece Hoodie",
+    price: 79,
+    image:
+      "/premium-fleece-hoodie.png",
+    category: "hoodies",
+    tags: ["cozy", "oversized"],
+    colors: ["Mocha", "Ash", "Onyx"],
+  },
+  {
+    id: "cargo-001",
+    name: "Tech Cargo Pants",
+    price: 69,
+    image:
+      "/tech-cargo-pants-streetwear.png",
+    category: "cargo-pants",
+    tags: ["utility", "tapered"],
+    colors: ["Olive", "Black"],
+  },
+  {
+    id: "cap-001",
+    name: "6‑Panel Logo Cap",
+    price: 29,
+    image:
+      "/minimal-streetwear-cap-logo.png",
+    category: "caps",
+    tags: ["logo", "adjustable"],
+    colors: ["Black", "Stone"],
+  },
+  {
+    id: "acc-001",
+    name: "Cuban Chain Necklace",
+    price: 35,
+    image:
+      "/placeholder.svg?height=720&width=720",
+    category: "accessories",
+    tags: ["accessory", "statement"],
+    colors: ["Silver"],
+  },
+]
+"use client"
+
+import { useState } from "react"
+import { Menu, ShoppingBag, Search, ShieldCheck } from 'lucide-react'
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { cn } from "@/lib/utils"
+
+type SiteHeaderProps = {
+  navItems?: { label: string; href: string }[]
+}
+
+const defaultNav: SiteHeaderProps["navItems"] = [
+  { label: "Shop", href: "/collections/oversized-t-shirts" },
+  { label: "Collections", href: "#collections" },
+  { label: "About", href: "#about" },
+  { label: "Support", href: "#support" },
+]
+
+export function SiteHeader({ navItems = defaultNav }: SiteHeaderProps) {
+  const pathname = usePathname()
+  const [open, setOpen] = useState(false)
+
+  return (
+    <header className="sticky top-0 z-50 border-b bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-amber-500 text-white">
+            <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <span className="text-xl font-extrabold tracking-tight">DRIPZ</span>
+        </Link>
+
+        <nav className="hidden items-center gap-6 md:flex" aria-label="Main">
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "text-sm font-medium text-neutral-700 transition hover:text-amber-600",
+                pathname === item.href && "text-amber-600"
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" aria-label="Search">
+            <Search className="h-5 w-5" />
+          </Button>
+          <Button variant="ghost" size="icon" aria-label="Open bag">
+            <ShoppingBag className="h-5 w-5" />
+          </Button>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+                <Menu className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-80">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <div className="mt-4 flex flex-col gap-3">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    className={cn(
+                      "rounded-md px-2 py-2 text-sm font-medium transition hover:bg-neutral-50",
+                      pathname === item.href && "bg-amber-50 text-amber-700"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  )
+}
+import Link from "next/link"
+
+export function SiteFooter() {
+  return (
+    <footer id="support" className="border-t">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div>
+            <h3 className="text-sm font-semibold">DRIPZ</h3>
+            <p className="mt-2 text-sm text-neutral-600">
+              Streetwear for those who set trends, not follow them.
+            </p>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold">Shop</h4>
+            <ul className="mt-2 space-y-2 text-sm text-neutral-600">
+              <li><Link href="/collections/oversized-t-shirts" className="hover:text-amber-600">Oversized T‑Shirts</Link></li>
+              <li><Link href="/collections/hoodies" className="hover:text-amber-600">Hoodies</Link></li>
+              <li><Link href="/collections/cargo-pants" className="hover:text-amber-600">Cargo Pants</Link></li>
+              <li><Link href="/collections/caps" className="hover:text-amber-600">Caps</Link></li>
+              <li><Link href="/collections/accessories" className="hover:text-amber-600">Accessories</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold">Company</h4>
+            <ul className="mt-2 space-y-2 text-sm text-neutral-600">
+              <li><a href="#about" className="hover:text-amber-600">About</a></li>
+              <li><a href="#support" className="hover:text-amber-600">Support</a></li>
+              <li><a href="#" className="hover:text-amber-600">Careers</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold">Help</h4>
+            <ul className="mt-2 space-y-2 text-sm text-neutral-600">
+              <li><a href="#" className="hover:text-amber-600">Shipping</a></li>
+              <li><a href="#" className="hover:text-amber-600">Returns</a></li>
+              <li><a href="#" className="hover:text-amber-600">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t pt-6 text-xs text-neutral-500 sm:flex-row">
+          <p>© {new Date().getFullYear()} DRIPZ. All rights reserved.</p>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-amber-600">Privacy</a>
+            <a href="#" className="hover:text-amber-600">Terms</a>
+            <a href="#" className="hover:text-amber-600">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+"use client"
+
+import { type Product } from "@/lib/data"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
+
+type ProductCardProps = {
+  product?: Product
+}
+
+export function ProductCard({
+  product = {
+    id: "demo",
+    name: "Demo Product",
+    price: 0,
+    image: "/placeholder.svg?height=720&width=720",
+    category: "oversized-t-shirts",
+    tags: ["demo"],
+    colors: ["Black"],
+  },
+}: ProductCardProps) {
+  const { toast } = useToast()
+
+  function addToBag() {
+    toast({
+      title: "Added to bag",
+      description: `${product.name} — $${product.price.toFixed(2)}`,
+    })
+  }
+
+  return (
+    <Card className="overflow-hidden">
+      <CardHeader className="p-0">
+        <img
+          src={product.image || "/placeholder.svg"}
+          alt={`${product.name} image`}
+          className="aspect-square w-full object-cover"
+        />
+      </CardHeader>
+      <CardContent className="pt-4">
+        <CardTitle className="line-clamp-1 text-base">{product.name}</CardTitle>
+        <div className="mt-1 flex items-center justify-between">
+          <p className="text-sm font-medium">${product.price.toFixed(2)}</p>
+          <div className="flex gap-1">
+            {product.tags?.slice(0, 2).map((t) => (
+              <Badge key={t} variant="secondary" className="text-[10px]">
+                {t}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full bg-amber-500 text-white hover:bg-amber-600" onClick={addToBag} aria-label="Add to bag">
+          Add to bag
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+}
+"use client"
+
+import { useActionState } from "react"
+import { subscribeNewsletter } from "@/actions/subscribe-newsletter"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+
+type NewsletterFormProps = {
+  heading?: string
+  subheading?: string
+  placeholder?: string
+  buttonLabel?: string
+}
+
+export function NewsletterForm({
+  heading = "Never miss a drop.",
+  subheading = "Join for early access to new releases, restocks, and exclusive offers.",
+  placeholder = "you@dripzmail.com",
+  buttonLabel = "Subscribe",
+}: NewsletterFormProps) {
+  const [state, formAction, isPending] = useActionState(subscribeNewsletter, null)
+
+  return (
+    <section aria-labelledby="newsletter-title" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="rounded-xl bg-neutral-950 p-8 sm:p-10">
+        <h2 id="newsletter-title" className="text-2xl font-bold text-white sm:text-3xl">
+          {heading}
+        </h2>
+        <p className="mt-1 max-w-2xl text-neutral-300">{subheading}</p>
+
+        <form action={formAction} className="mt-6 flex flex-col gap-3 sm:flex-row">
+          <Input
+            type="email"
+            name="email"
+            inputMode="email"
+            placeholder={placeholder}
+            className="bg-white"
+            aria-label="Email address"
+            required
+          />
+          <Button
+            type="submit"
+            className="bg-amber-500 text-white hover:bg-amber-600"
+            disabled={isPending}
+            aria-busy={isPending}
+          >
+            {isPending ? "Subscribing..." : buttonLabel}
+          </Button>
+        </form>
+
+        {state && (
+          <p
+            className={`mt-3 text-sm ${state.ok ? "text-emerald-400" : "text-rose-400"}`}
+            role="status"
+            aria-live="polite"
+          >
+            {state.message}
+          </p>
+        )}
+      </div>
+    </section>
+  )
+}
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+
+type HeroProps = {
+  title?: string
+  subtitle?: string
+  kicker?: string
+  ctaHref?: string
+  ctaLabel?: string
+}
+
+export function Hero({
+  title = "Oversized Done Right.",
+  subtitle = "Discover the perfect blend of comfort and style in our oversized collection.",
+  kicker = "DRIPZ — More Than Just Fashion.",
+  ctaHref = "#collections",
+  ctaLabel = "Shop the Drop",
+}: HeroProps) {
+  return (
+    <section aria-labelledby="hero-title" className="relative overflow-hidden">
+      <div className="absolute inset-0 -z-10 bg-neutral-950" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(600px_200px_at_50%_-50%,rgba(245,158,11,0.35),transparent)]" />
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:py-24 md:py-28">
+        <p className="text-amber-400">{kicker}</p>
+        <h1 id="hero-title" className="mt-3 text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+          {title}
+        </h1>
+        <p className="mt-4 max-w-2xl text-base text-neutral-300 sm:text-lg">{subtitle}</p>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <Button asChild className="bg-amber-500 text-white hover:bg-amber-600">
+            <Link href={ctaHref}>{ctaLabel}</Link>
+          </Button>
+          <Button asChild variant="outline" className="border-neutral-700 bg-transparent text-white hover:bg-neutral-900">
+            <Link href="#about">Why DRIPZ?</Link>
+          </Button>
+        </div>
+
+        <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+          <img
+            src="/placeholder.svg?height=300&width=300"
+            alt="Lookbook preview 1"
+            className="aspect-square w-full rounded-lg object-cover ring-1 ring-white/10"
+          />
+          <img
+            src="/placeholder.svg?height=300&width=300"
+            alt="Lookbook preview 2"
+            className="aspect-square w-full rounded-lg object-cover ring-1 ring-white/10"
+          />
+          <img
+            src="/placeholder.svg?height=300&width=300"
+            alt="Lookbook preview 3"
+            className="aspect-square w-full rounded-lg object-cover ring-1 ring-white/10"
+          />
+          <img
+            src="/placeholder.svg?height=300&width=300"
+            alt="Lookbook preview 4"
+            className="aspect-square w-full rounded-lg object-cover ring-1 ring-white/10"
+          />
+          <img
+            src="/placeholder.svg?height=300&width=300"
+            alt="Lookbook preview 5"
+            className="aspect-square w-full rounded-lg object-cover ring-1 ring-white/10"
+          />
+        </div>
+      </div>
+    </section>
+  )
+}
+import Link from "next/link"
+import { categories } from "@/lib/data"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+
+type CollectionsGridProps = {
+  heading?: string
+  subheading?: string
+}
+
+export function CollectionsGrid({
+  heading = "Explore Collections",
+  subheading = "Oversized T‑shirts, cozy hoodies, functional cargo pants, caps, and unique accessories.",
+}: CollectionsGridProps) {
+  return (
+    <section id="collections" aria-labelledby="collections-title" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mb-8 flex flex-col gap-2">
+        <h2 id="collections-title" className="text-2xl font-bold tracking-tight sm:text-3xl">
+          {heading}
+        </h2>
+        <p className="text-neutral-600">{subheading}</p>
+      </div>
+
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {categories.map((c) => (
+          <Card key={c.slug} className="group overflow-hidden">
+            <CardHeader>
+              <CardTitle className="text-lg">{c.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="relative">
+                <img
+                  src={c.image || "/placeholder.svg"}
+                  alt={`${c.name} preview`}
+                  className="aspect-[4/3] w-full rounded-md object-cover transition duration-300 group-hover:scale-[1.02]"
+                />
+              </div>
+              <p className="mt-3 text-sm text-neutral-600">{c.blurb}</p>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button asChild className="bg-amber-500 text-white hover:bg-amber-600">
+                <Link href={`/collections/${c.slug}`}>Shop {c.name}</Link>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href={`/collections/${c.slug}`}>View all</Link>
+              </Button>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </section>
+  )
+}
+import { Truck, Sparkles, Headphones, BadgeCheck } from 'lucide-react'
+
+type Benefit = {
+  title: string
+  description: string
+  icon: React.ElementType
+}
+
+const defaultBenefits: Benefit[] = [
+  {
+    title: "Premium Materials",
+    description: "Heavyweight fabrics and durable construction for everyday wear.",
+    icon: BadgeCheck,
+  },
+  {
+    title: "Exclusive Designs",
+    description: "Bold graphics and limited drops to keep your style unique.",
+    icon: Sparkles,
+  },
+  {
+    title: "Fast Shipping",
+    description: "Quick fulfillment so your fit arrives right on time.",
+    icon: Truck,
+  },
+  {
+    title: "24/7 Support",
+    description: "Friendly customer care whenever you need us.",
+    icon: Headphones,
+  },
+]
+
+type BenefitsProps = {
+  heading?: string
+  copy?: string
+  items?: Benefit[]
+}
+
+export function Benefits({
+  heading = "Why DRIPZ?",
+  copy = "For the trendsetters and the fearless — let your style speak before you do.",
+  items = defaultBenefits,
+}: BenefitsProps) {
+  return (
+    <section id="about" aria-labelledby="benefits-title" className="bg-neutral-50">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col gap-2">
+          <h2 id="benefits-title" className="text-2xl font-bold tracking-tight sm:text-3xl">
+            {heading}
+          </h2>
+          <p className="max-w-2xl text-neutral-600">{copy}</p>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {items.map((b) => (
+            <div key={b.title} className="rounded-lg border bg-white p-6">
+              <div className="mb-3 inline-flex rounded-md bg-amber-100 p-2 text-amber-700">
+                <b.icon className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <h3 className="text-base font-semibold">{b.title}</h3>
+              <p className="mt-1 text-sm text-neutral-600">{b.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+import { SiteHeader } from "@/components/site-header"
+import { Hero } from "@/components/hero"
+import { CollectionsGrid } from "@/components/collections-grid"
+import { Benefits } from "@/components/benefits"
+import { NewsletterForm } from "@/components/newsletter-form"
+import { SiteFooter } from "@/components/site-footer"
+
+export const metadata = {
+  title: "DRIPZ — Oversized Apparel Collection",
+  description:
+    "Oversized tees, hoodies, cargo pants, caps, and accessories. Premium materials, exclusive designs, fast shipping, and 24/7 support.",
+}
+
+export default function Page() {
+  return (
+    <main>
+      <SiteHeader />
+      <Hero
+        title="Welcome to Our Oversized Apparel Collection"
+        subtitle="Explore oversized T‑shirts, cozy hoodies, stylish cargo pants, fashionable caps, and unique accessories. Comfort or statement — we’ve got you."
+        kicker="DRIPZ — More Than Just Fashion."
+        ctaLabel="Shop Now"
+        ctaHref="#collections"
+      />
+      <CollectionsGrid />
+      <Benefits />
+      <NewsletterForm />
+      <SiteFooter />
+    </main>
+  )
+}
+"use server"
+
+export async function subscribeNewsletter(prevState: any, formData: FormData) {
+  // Simulate processing time
+  await new Promise((res) => setTimeout(res, 800))
+  const email = String(formData.get("email") || "").trim().toLowerCase()
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { ok: false, message: "Please enter a valid email address." }
+  }
+
+  // Here you could call your ESP API (e.g., Resend, Mailchimp)
+  // For now, return success.
+  return { ok: true, message: `You're in! Updates will hit ${email}.` }
+}
+"use client"
+
+import { type Product } from "@/lib/data"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { useToast } from "@/hooks/use-toast"
+
+type ProductCardProps = {
+  product?: Product
+}
+
+export function ProductCard({
+  product = {
+    id: "demo",
+    name: "Demo Product",
+    price: 0,
+    image: "/placeholder.svg?height=720&width=720",
+    category: "oversized-t-shirts",
+    tags: ["demo"],
+    colors: ["Black"],
+  },
+}: ProductCardProps) {
+  const { toast } = useToast()
+
+  function addToBag() {
+    toast({
+      title: "Added to bag",
+      description: `${product.name} — $${product.price.toFixed(2)}`,
+    })
+  }
+
+  return (
+    <Card className="overflow-hidden">
+      <CardHeader className="p-0">
+        <img
+          src={product.image || "/placeholder.svg"}
+          alt={`${product.name} image`}
+          className="aspect-square w-full object-cover"
+        />
+      </CardHeader>
+      <CardContent className="pt-4">
+        <CardTitle className="line-clamp-1 text-base">{product.name}</CardTitle>
+        <div className="mt-1 flex items-center justify-between">
+          <p className="text-sm font-medium">${product.price.toFixed(2)}</p>
+          <div className="flex gap-1">
+            {product.tags?.slice(0, 2).map((t) => (
+              <Badge key={t} variant="secondary" className="text-[10px]">
+                {t}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full bg-amber-500 text-white hover:bg-amber-600" onClick={addToBag} aria-label="Add to bag">
+          Add to bag
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+}
