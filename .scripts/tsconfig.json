@@ -2,9 +2,9 @@
 	"compilerOptions": {
 		"module": "ESNext",
 		"moduleResolution": "Node",
-		"target": "ES2022",
+		"target": "ES2024",
 		"lib": [
-			"ES2022"
+			"ES2024"
 		],
 		"noEmit": true,
 		"strict": true

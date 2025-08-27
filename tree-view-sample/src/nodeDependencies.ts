@@ -7,8 +7,10 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 	private _onDidChangeTreeData: vscode.EventEmitter<Dependency | undefined | void> = new vscode.EventEmitter<Dependency | undefined | void>();
 	readonly onDidChangeTreeData: vscode.Event<Dependency | undefined | void> = this._onDidChangeTreeData.event;
 
-	constructor(private workspaceRoot: string | undefined) {
-	}
+	constructor(
+		private readonly context: vscode.ExtensionContext,
+		private readonly workspaceRoot: string | undefined
+	) { }
 
 	refresh(): void {
 		this._onDidChangeTreeData.fire();
@@ -48,9 +50,9 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 
 			const toDep = (moduleName: string, version: string): Dependency => {
 				if (this.pathExists(path.join(workspaceRoot, 'node_modules', moduleName))) {
-					return new Dependency(moduleName, version, vscode.TreeItemCollapsibleState.Collapsed);
+					return new Dependency(this.context.extensionUri, moduleName, version, vscode.TreeItemCollapsibleState.Collapsed);
 				} else {
-					return new Dependency(moduleName, version, vscode.TreeItemCollapsibleState.None, {
+					return new Dependency(this.context.extensionUri, moduleName, version, vscode.TreeItemCollapsibleState.None, {
 						command: 'extension.openPackageOnNpm',
 						title: '',
 						arguments: [moduleName]
@@ -84,6 +86,7 @@ export class DepNodeProvider implements vscode.TreeDataProvider<Dependency> {
 export class Dependency extends vscode.TreeItem {
 
 	constructor(
+		extensionRoot: vscode.Uri,
 		public readonly label: string,
 		private readonly version: string,
 		public readonly collapsibleState: vscode.TreeItemCollapsibleState,
@@ -93,12 +96,12 @@ export class Dependency extends vscode.TreeItem {
 
 		this.tooltip = `${this.label}-${this.version}`;
 		this.description = this.version;
-	}
 
-	iconPath = {
-		light: path.join(__filename, '..', '..', 'resources', 'light', 'dependency.svg'),
-		dark: path.join(__filename, '..', '..', 'resources', 'dark', 'dependency.svg')
-	};
+		this.iconPath = {
+			light: vscode.Uri.joinPath(extensionRoot, 'resources', 'light', 'dependency.svg'),
+			dark: vscode.Uri.joinPath(extensionRoot, 'resources', 'dark', 'dependency.svg')
+		};
+	}
 
 	contextValue = 'dependency';
 }

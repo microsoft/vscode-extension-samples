@@ -1,15 +1,15 @@
 {
 	"compilerOptions": {
 		"module": "Node16",
-		"target": "ES2022",
+		"target": "ES2024",
 		"lib": [
-			"ES2022"
+			"ES2024"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
-		"strict": true,   /* enable all strict type-checking options */
+		"strict": true, /* enable all strict type-checking options */
 		"outDir": "out",
-		"skipLibCheck": true   /* Skip type checking of declaration files */
+		"skipLibCheck": true /* Skip type checking of declaration files */
 		/* Additional Checks */
 		// "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */

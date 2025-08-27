@@ -12,7 +12,7 @@
 	"categories": [],
 	"keywords": [],
 	"engines": {
-		"vscode": "^1.74.0"
+		"vscode": "^1.100.0"
 	},
 	"activationEvents": [
 		"onLanguage:html1"
@@ -46,9 +46,9 @@
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/mocha": "^5.2.7",
-		"@types/node": "^20",
+		"@types/node": "^22",
 		"eslint": "^9.13.0",
-		"typescript": "^5.8.2",
-		"typescript-eslint": "^8.26.0"
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
 	}
 }
