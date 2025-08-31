@@ -117,6 +117,24 @@ declare module 'vscode' {
 		readonly languageId: string;
 
 		/**
+		 * The file encoding of this document that will be used when the document is saved.
+		 *
+		 * Use the {@link workspace.onDidChangeTextDocument onDidChangeTextDocument}-event to
+		 * get notified when the document encoding changes.
+		 *
+		 * Note that the possible encoding values are currently defined as any of the following:
+		 * 'utf8', 'utf8bom', 'utf16le', 'utf16be', 'windows1252', 'iso88591', 'iso88593',
+		 * 'iso885915', 'macroman', 'cp437', 'windows1256', 'iso88596', 'windows1257',
+		 * 'iso88594', 'iso885914', 'windows1250', 'iso88592', 'cp852', 'windows1251',
+		 * 'cp866', 'cp1125', 'iso88595', 'koi8r', 'koi8u', 'iso885913', 'windows1253',
+		 * 'iso88597', 'windows1255', 'iso88598', 'iso885910', 'iso885916', 'windows1254',
+		 * 'iso88599', 'windows1258', 'gbk', 'gb18030', 'cp950', 'big5hkscs', 'shiftjis',
+		 * 'eucjp', 'euckr', 'windows874', 'iso885911', 'koi8ru', 'koi8t', 'gb2312',
+		 * 'cp865', 'cp850'.
+		 */
+		readonly encoding: string;
+
+		/**
 		 * The version number of this document (it will strictly increase after each
 		 * change, including undo/redo).
 		 */
@@ -182,14 +200,14 @@ declare module 'vscode' {
 		 * The position will be {@link TextDocument.validatePosition adjusted}.
 		 *
 		 * @param position A position.
-		 * @returns A valid zero-based offset.
+		 * @returns A valid zero-based offset in UTF-16 [code units](https://developer.mozilla.org/en-US/docs/Glossary/Code_unit).
 		 */
 		offsetAt(position: Position): number;
 
 		/**
 		 * Converts a zero-based offset to a position.
 		 *
-		 * @param offset A zero-based offset.
+		 * @param offset A zero-based offset into the document. This offset is in UTF-16 [code units](https://developer.mozilla.org/en-US/docs/Glossary/Code_unit).
 		 * @returns A valid {@link Position}.
 		 */
 		positionAt(offset: number): Position;
@@ -257,6 +275,8 @@ declare module 'vscode' {
 
 		/**
 		 * The zero-based character value.
+		 *
+		 * Character offsets are expressed using UTF-16 [code units](https://developer.mozilla.org/en-US/docs/Glossary/Code_unit).
 		 */
 		readonly character: number;
 
@@ -1875,6 +1895,9 @@ declare module 'vscode' {
 		/**
 		 * A human-readable string which is rendered prominent. Supports rendering of {@link ThemeIcon theme icons} via
 		 * the `$(<name>)`-syntax.
+		 *
+		 * Note: When {@link QuickPickItem.kind kind} is set to {@link QuickPickItemKind.Default} (so a regular item
+		 * instead of a separator), it supports rendering of {@link ThemeIcon theme icons} via the `$(<name>)`-syntax.
 		 */
 		label: string;
 
@@ -3110,12 +3133,12 @@ declare module 'vscode' {
 	 */
 	export class EvaluatableExpression {
 
-		/*
+		/**
 		 * The range is used to extract the evaluatable expression from the underlying document and to highlight it.
 		 */
 		readonly range: Range;
 
-		/*
+		/**
 		 * If specified the expression overrides the extracted expression.
 		 */
 		readonly expression?: string | undefined;
@@ -7731,6 +7754,18 @@ declare module 'vscode' {
 		 * https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
 		 */
 		readonly isInteractedWith: boolean;
+
+		/**
+		 * The detected shell type of the {@link Terminal}. This will be `undefined` when there is
+		 * not a clear signal as to what the shell is, or the shell is not supported yet. This
+		 * value should change to the shell type of a sub-shell when launched (for example, running
+		 * `bash` inside `zsh`).
+		 *
+		 * Note that the possible values are currently defined as any of the following:
+		 * 'bash', 'cmd', 'csh', 'fish', 'gitbash', 'julia', 'ksh', 'node', 'nu', 'pwsh', 'python',
+		 * 'sh', 'wsl', 'zsh'.
+		 */
+		readonly shell: string | undefined;
 	}
 
 	/**
@@ -11980,6 +12015,8 @@ declare module 'vscode' {
 		 * When the user starts dragging items from this `DragAndDropController`, `handleDrag` will be called.
 		 * Extensions can use `handleDrag` to add their {@link DataTransferItem `DataTransferItem`} items to the drag and drop.
 		 *
+		 * Mime types added in `handleDrag` won't be available outside the application.
+		 *
 		 * When the items are dropped on **another tree item** in **the same tree**, your `DataTransferItem` objects
 		 * will be preserved. Use the recommended mime type for the tree (`application/vnd.code.tree.<treeidlowercase>`) to add
 		 * tree objects in a data transfer. See the documentation for `DataTransferItem` for how best to take advantage of this.
@@ -12427,6 +12464,20 @@ declare module 'vscode' {
 		 * This will only take effect when `terminal.integrated.enablePersistentSessions` is enabled.
 		 */
 		isTransient?: boolean;
+
+		/**
+		 * The nonce to use to verify shell integration sequences are coming from a trusted source.
+		 * An example impact of UX of this is if the command line is reported with a nonce, it will
+		 * not need to verify with the user that the command line is correct before rerunning it
+		 * via the [shell integration command decoration](https://code.visualstudio.com/docs/terminal/shell-integration#_command-decorations-and-the-overview-ruler).
+		 *
+		 * This should be used if the terminal includes [custom shell integration support](https://code.visualstudio.com/docs/terminal/shell-integration#_supported-escape-sequences).
+		 * It should be set to a random GUID which will then set the `VSCODE_NONCE` environment
+		 * variable. Inside the shell, this should then be removed from the environment so as to
+		 * protect it from general access. Once that is done it can be passed through in the
+		 * relevant sequences to make them trusted.
+		 */
+		shellIntegrationNonce?: string;
 	}
 
 	/**
@@ -12466,6 +12517,18 @@ declare module 'vscode' {
 		 * This will only take effect when `terminal.integrated.enablePersistentSessions` is enabled.
 		 */
 		isTransient?: boolean;
+
+		/**
+		 * The nonce to use to verify shell integration sequences are coming from a trusted source.
+		 * An example impact of UX of this is if the command line is reported with a nonce, it will
+		 * not need to verify with the user that the command line is correct before rerunning it
+		 * via the [shell integration command decoration](https://code.visualstudio.com/docs/terminal/shell-integration#_command-decorations-and-the-overview-ruler).
+		 *
+		 * This should be used if the terminal includes [custom shell integration support](https://code.visualstudio.com/docs/terminal/shell-integration#_supported-escape-sequences).
+		 * It should be set to a random GUID. Inside the {@link Pseudoterminal} implementation, this value
+		 * can be passed through in the relevant sequences to make them trusted.
+		 */
+		shellIntegrationNonce?: string;
 	}
 
 	/**
@@ -13820,6 +13883,9 @@ declare module 'vscode' {
 		 * In the same way, symbolic links are preserved, i.e. the file event will report the path of the
 		 * symbolic link as it was provided for watching and not the target.
 		 *
+		 * *Note* that file events from deleting a folder may not include events for contained files. If possible
+		 * events will be aggregated to reduce the overal number of emitted events.
+		 *
 		 * ### Examples
 		 *
 		 * The basic anatomy of a file watcher is as follows:
@@ -13973,7 +14039,29 @@ declare module 'vscode' {
 		 * @param uri Identifies the resource to open.
 		 * @returns A promise that resolves to a {@link TextDocument document}.
 		 */
-		export function openTextDocument(uri: Uri): Thenable<TextDocument>;
+		export function openTextDocument(uri: Uri, options?: {
+			/**
+			 * The {@link TextDocument.encoding encoding} of the document to use
+			 * for decoding the underlying buffer to text. If omitted, the encoding
+			 * will be guessed based on the file content and/or the editor settings
+			 * unless the document is already opened.
+			 *
+			 * Opening a text document that was already opened with a different encoding
+			 * has the potential of changing the text contents of the text document.
+			 * Specifically, when the encoding results in a different set of characters
+			 * than the previous encoding. As such, an error is thrown for dirty documents
+			 * when the specified encoding is different from the encoding of the document.
+			 *
+			 * See {@link TextDocument.encoding} for more information about valid
+			 * values for encoding. Using an unsupported encoding will fallback to the
+			 * default encoding for the document.
+			 *
+			 * *Note* that if you open a document with an encoding that does not
+			 * support decoding the underlying bytes, content may be replaced with
+			 * substitution characters as appropriate.
+			 */
+			readonly encoding?: string;
+		}): Thenable<TextDocument>;
 
 		/**
 		 * A short-hand for `openTextDocument(Uri.file(path))`.
@@ -13982,7 +14070,29 @@ declare module 'vscode' {
 		 * @param path A path of a file on disk.
 		 * @returns A promise that resolves to a {@link TextDocument document}.
 		 */
-		export function openTextDocument(path: string): Thenable<TextDocument>;
+		export function openTextDocument(path: string, options?: {
+			/**
+			 * The {@link TextDocument.encoding encoding} of the document to use
+			 * for decoding the underlying buffer to text. If omitted, the encoding
+			 * will be guessed based on the file content and/or the editor settings
+			 * unless the document is already opened.
+			 *
+			 * Opening a text document that was already opened with a different encoding
+			 * has the potential of changing the text contents of the text document.
+			 * Specifically, when the encoding results in a different set of characters
+			 * than the previous encoding. As such, an error is thrown for dirty documents
+			 * when the specified encoding is different from the encoding of the document.
+			 *
+			 * See {@link TextDocument.encoding} for more information about valid
+			 * values for encoding. Using an unsupported encoding will fallback to the
+			 * default encoding for the document.
+			 *
+			 * *Note* that if you open a document with an encoding that does not
+			 * support decoding the underlying bytes, content may be replaced with
+			 * substitution characters as appropriate.
+			 */
+			readonly encoding?: string;
+		}): Thenable<TextDocument>;
 
 		/**
 		 * Opens an untitled text document. The editor will prompt the user for a file
@@ -14001,6 +14111,14 @@ declare module 'vscode' {
 			 * The initial contents of the document.
 			 */
 			content?: string;
+			/**
+			 * The {@link TextDocument.encoding encoding} of the document.
+			 *
+			 * See {@link TextDocument.encoding} for more information about valid
+			 * values for encoding. Using an unsupported encoding will fallback to the
+			 * default encoding for the document.
+			 */
+			readonly encoding?: string;
 		}): Thenable<TextDocument>;
 
 		/**
@@ -14284,6 +14402,129 @@ declare module 'vscode' {
 		 * Event that fires when the current workspace has been trusted.
 		 */
 		export const onDidGrantWorkspaceTrust: Event<void>;
+
+		/**
+		 * Decodes the content from a `Uint8Array` to a `string`. You MUST
+		 * provide the entire content at once to ensure that the encoding
+		 * can properly apply. Do not use this method to decode content
+		 * in chunks, as that may lead to incorrect results.
+		 *
+		 * Will pick an encoding based on settings and the content of the
+		 * buffer (for example byte order marks).
+		 *
+		 * *Note* that if you decode content that is unsupported by the
+		 * encoding, the result may contain substitution characters as
+		 * appropriate.
+		 *
+		 * @throws This method will throw an error when the content is binary.
+		 *
+		 * @param content The text content to decode as a `Uint8Array`.
+		 * @returns A thenable that resolves to the decoded `string`.
+		 */
+		export function decode(content: Uint8Array): Thenable<string>;
+
+		/**
+		 * Decodes the content from a `Uint8Array` to a `string` using the
+		 * provided encoding. You MUST provide the entire content at once
+		 * to ensure that the encoding can properly apply. Do not use this
+		 * method to decode content in chunks, as that may lead to incorrect
+		 * results.
+		 *
+		 * *Note* that if you decode content that is unsupported by the
+		 * encoding, the result may contain substitution characters as
+		 * appropriate.
+		 *
+		 * @throws This method will throw an error when the content is binary.
+		 *
+		 * @param content The text content to decode as a `Uint8Array`.
+		 * @param options Additional context for picking the encoding.
+		 * @returns A thenable that resolves to the decoded `string`.
+		 */
+		export function decode(content: Uint8Array, options: {
+			/**
+			 * Allows to explicitly pick the encoding to use.
+			 * See {@link TextDocument.encoding} for more information
+			 * about valid values for encoding.
+			 * Using an unsupported encoding will fallback to the
+			 * default configured encoding.
+			 */
+			readonly encoding: string;
+		}): Thenable<string>;
+
+		/**
+		 * Decodes the content from a `Uint8Array` to a `string`. You MUST
+		 * provide the entire content at once to ensure that the encoding
+		 * can properly apply. Do not use this method to decode content
+		 * in chunks, as that may lead to incorrect results.
+		 *
+		 * The encoding is picked based on settings and the content
+		 * of the buffer (for example byte order marks).
+		 *
+		 * *Note* that if you decode content that is unsupported by the
+		 * encoding, the result may contain substitution characters as
+		 * appropriate.
+		 *
+		 * @throws This method will throw an error when the content is binary.
+		 *
+		 * @param content The content to decode as a `Uint8Array`.
+		 * @param options Additional context for picking the encoding.
+		 * @returns A thenable that resolves to the decoded `string`.
+		 */
+		export function decode(content: Uint8Array, options: {
+			/**
+			 * The URI that represents the file if known. This information
+			 * is used to figure out the encoding related configuration
+			 * for the file if any.
+			 */
+			readonly uri: Uri;
+		}): Thenable<string>;
+
+		/**
+		 * Encodes the content of a `string` to a `Uint8Array`.
+		 *
+		 * Will pick an encoding based on settings.
+		 *
+		 * @param content The content to decode as a `string`.
+		 * @returns A thenable that resolves to the encoded `Uint8Array`.
+		 */
+		export function encode(content: string): Thenable<Uint8Array>;
+
+		/**
+		 * Encodes the content of a `string` to a `Uint8Array` using the
+		 * provided encoding.
+		 *
+		 * @param content The content to decode as a `string`.
+		 * @param options Additional context for picking the encoding.
+		 * @returns A thenable that resolves to the encoded `Uint8Array`.
+		 */
+		export function encode(content: string, options: {
+			/**
+			 * Allows to explicitly pick the encoding to use.
+			 * See {@link TextDocument.encoding} for more information
+			 * about valid values for encoding.
+			 * Using an unsupported encoding will fallback to the
+			 * default configured encoding.
+			 */
+			readonly encoding: string;
+		}): Thenable<Uint8Array>;
+
+		/**
+		 * Encodes the content of a `string` to a `Uint8Array`.
+		 *
+		 * The encoding is picked based on settings.
+		 *
+		 * @param content The content to decode as a `string`.
+		 * @param options Additional context for picking the encoding.
+		 * @returns A thenable that resolves to the encoded `Uint8Array`.
+		 */
+		export function encode(content: string, options: {
+			/**
+			 * The URI that represents the file if known. This information
+			 * is used to figure out the encoding related configuration
+			 * for the file if any.
+			 */
+			readonly uri: Uri;
+		}): Thenable<Uint8Array>;
 	}
 
 	/**
@@ -16278,7 +16519,7 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * Namespace for source control mangement.
+	 * Namespace for source control management.
 	 */
 	export namespace scm {
 
@@ -16592,7 +16833,7 @@ declare module 'vscode' {
 	export type DebugAdapterDescriptor = DebugAdapterExecutable | DebugAdapterServer | DebugAdapterNamedPipeServer | DebugAdapterInlineImplementation;
 
 	/**
-	 * A debug adaper factory that creates {@link DebugAdapterDescriptor debug adapter descriptors}.
+	 * A debug adapter factory that creates {@link DebugAdapterDescriptor debug adapter descriptors}.
 	 */
 	export interface DebugAdapterDescriptorFactory {
 		/**
@@ -16646,7 +16887,7 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * A debug adaper factory that creates {@link DebugAdapterTracker debug adapter trackers}.
+	 * A debug adapter factory that creates {@link DebugAdapterTracker debug adapter trackers}.
 	 */
 	export interface DebugAdapterTrackerFactory {
 		/**
@@ -17183,7 +17424,7 @@ declare module 'vscode' {
 		 * Whether the thread supports reply.
 		 * Defaults to true.
 		 */
-		canReply: boolean;
+		canReply: boolean | CommentAuthorInformation;
 
 		/**
 		 * Context value of the comment thread. This can be used to contribute thread specific actions.
@@ -18623,7 +18864,7 @@ declare module 'vscode' {
 		 * Creates a {@link FileCoverage} instance with counts filled in from
 		 * the coverage details.
 		 * @param uri Covered file URI
-		 * @param detailed Detailed coverage information
+		 * @param details Detailed coverage information
 		 */
 		static fromDetails(uri: Uri, details: readonly FileCoverageDetail[]): FileCoverage;
 
@@ -19045,7 +19286,7 @@ declare module 'vscode' {
 		readonly value: T;
 
 		/**
-		 * Creates a new telementry trusted value.
+		 * Creates a new telemetry trusted value.
 		 *
 		 * @param value A value to trust
 		 */
@@ -19053,7 +19294,7 @@ declare module 'vscode' {
 	}
 
 	/**
-	 * A telemetry logger which can be used by extensions to log usage and error telementry.
+	 * A telemetry logger which can be used by extensions to log usage and error telemetry.
 	 *
 	 * A logger wraps around an {@link TelemetrySender sender} but it guarantees that
 	 * - user settings to disable or tweak telemetry are respected, and that
@@ -19754,7 +19995,7 @@ declare module 'vscode' {
 		 * A string or heterogeneous array of things that a message can contain as content. Some parts may be message-type
 		 * specific for some models.
 		 */
-		content: Array<LanguageModelTextPart | LanguageModelToolResultPart | LanguageModelToolCallPart>;
+		content: Array<LanguageModelInputPart>;
 
 		/**
 		 * The optional name of a user for this message.
@@ -19768,7 +20009,7 @@ declare module 'vscode' {
 		 * @param content The content of the message.
 		 * @param name The optional name of a user for the message.
 		 */
-		constructor(role: LanguageModelChatMessageRole, content: string | Array<LanguageModelTextPart | LanguageModelToolResultPart | LanguageModelToolCallPart>, name?: string);
+		constructor(role: LanguageModelChatMessageRole, content: string | Array<LanguageModelInputPart>, name?: string);
 	}
 
 	/**
@@ -19978,7 +20219,7 @@ declare module 'vscode' {
 
 		/**
 		 * A set of options that control the behavior of the language model. These options are specific to the language model
-		 * and need to be lookup in the respective documentation.
+		 * and need to be looked up in the respective documentation.
 		 */
 		modelOptions?: { [name: string]: any };
 
@@ -19999,6 +20240,319 @@ declare module 'vscode' {
 		 * 	The tool-selecting mode to use. {@link LanguageModelChatToolMode.Auto} by default.
 		 */
 		toolMode?: LanguageModelChatToolMode;
+	}
+
+	/**
+	 * McpStdioServerDefinition represents an MCP server available by running
+	 * a local process and operating on its stdin and stdout streams. The process
+	 * will be spawned as a child process of the extension host and by default
+	 * will not run in a shell environment.
+	 */
+	export class McpStdioServerDefinition {
+		/**
+		 * The human-readable name of the server.
+		 */
+		readonly label: string;
+
+		/**
+		 * The working directory used to start the server.
+		 */
+		cwd?: Uri;
+
+		/**
+		 * The command used to start the server. Node.js-based servers may use
+		 * `process.execPath` to use the editor's version of Node.js to run the script.
+		 */
+		command: string;
+
+		/**
+		 * Additional command-line arguments passed to the server.
+		 */
+		args: string[];
+
+		/**
+		 * Optional additional environment information for the server. Variables
+		 * in this environment will overwrite or remove (if null) the default
+		 * environment variables of the editor's extension host.
+		 */
+		env: Record<string, string | number | null>;
+
+		/**
+		 * Optional version identification for the server. If this changes, the
+		 * editor will indicate that tools have changed and prompt to refresh them.
+		 */
+		version?: string;
+
+		/**
+		 * @param label The human-readable name of the server.
+		 * @param command The command used to start the server.
+		 * @param args Additional command-line arguments passed to the server.
+		 * @param env Optional additional environment information for the server.
+		 * @param version Optional version identification for the server.
+		 */
+		constructor(label: string, command: string, args?: string[], env?: Record<string, string | number | null>, version?: string);
+	}
+
+	/**
+	 * McpHttpServerDefinition represents an MCP server available using the
+	 * Streamable HTTP transport.
+	 */
+	export class McpHttpServerDefinition {
+		/**
+		 * The human-readable name of the server.
+		 */
+		readonly label: string;
+
+		/**
+		 * The URI of the server. The editor will make a POST request to this URI
+		 * to begin each session.
+		 */
+		uri: Uri;
+
+		/**
+		 * Optional additional heads included with each request to the server.
+		 */
+		headers: Record<string, string>;
+
+		/**
+		 * Optional version identification for the server. If this changes, the
+		 * editor will indicate that tools have changed and prompt to refresh them.
+		 */
+		version?: string;
+
+		/**
+		 * @param label The human-readable name of the server.
+		 * @param uri The URI of the server.
+		 * @param headers Optional additional heads included with each request to the server.
+		 */
+		constructor(label: string, uri: Uri, headers?: Record<string, string>, version?: string);
+	}
+
+	/**
+	 * Definitions that describe different types of Model Context Protocol servers,
+	 * which can be returned from the {@link McpServerDefinitionProvider}.
+	 */
+	export type McpServerDefinition = McpStdioServerDefinition | McpHttpServerDefinition;
+
+	/**
+	 * A type that can provide Model Context Protocol server definitions. This
+	 * should be registered using {@link lm.registerMcpServerDefinitionProvider}
+	 * during extension activation.
+	 */
+	export interface McpServerDefinitionProvider<T extends McpServerDefinition = McpServerDefinition> {
+		/**
+		 * Optional event fired to signal that the set of available servers has changed.
+		 */
+		readonly onDidChangeMcpServerDefinitions?: Event<void>;
+
+		/**
+		 * Provides available MCP servers. The editor will call this method eagerly
+		 * to ensure the availability of servers for the language model, and so
+		 * extensions should not take actions which would require user
+		 * interaction, such as authentication.
+		 *
+		 * @param token A cancellation token.
+		 * @returns An array of MCP available MCP servers
+		 */
+		provideMcpServerDefinitions(token: CancellationToken): ProviderResult<T[]>;
+
+		/**
+		 * This function will be called when the editor needs to start a MCP server.
+		 * At this point, the extension may take any actions which may require user
+		 * interaction, such as authentication. Any non-`readonly` property of the
+		 * server may be modified, and the extension should return the resolved server.
+		 *
+		 * The extension may return undefined to indicate that the server
+		 * should not be started, or throw an error. If there is a pending tool
+		 * call, the editor will cancel it and return an error message to the
+		 * language model.
+		 *
+		 * @param server The MCP server to resolve
+		 * @param token A cancellation token.
+		 * @returns The resolved server or thenable that resolves to such. This may
+		 * be the given `server` definition with non-readonly properties filled in.
+		 */
+		resolveMcpServerDefinition?(server: T, token: CancellationToken): ProviderResult<T>;
+	}
+
+	/**
+	 * The provider version of {@linkcode LanguageModelChatRequestOptions}
+	 */
+	export interface LanguageModelChatRequestHandleOptions {
+		/**
+		 * A set of options that control the behavior of the language model. These options are specific to the language model
+		 * and need to be looked up in the respective documentation.
+		 */
+		readonly modelOptions?: { readonly [name: string]: any };
+
+		/**
+		 * An optional list of tools that are available to the language model. These could be registered tools available via
+		 * {@link lm.tools}, or private tools that are just implemented within the calling extension.
+		 *
+		 * If the LLM requests to call one of these tools, it will return a {@link LanguageModelToolCallPart} in
+		 * {@link LanguageModelChatResponse.stream}. It's the caller's responsibility to invoke the tool. If it's a tool
+		 * registered in {@link lm.tools}, that means calling {@link lm.invokeTool}.
+		 *
+		 * Then, the tool result can be provided to the LLM by creating an Assistant-type {@link LanguageModelChatMessage} with a
+		 * {@link LanguageModelToolCallPart}, followed by a User-type message with a {@link LanguageModelToolResultPart}.
+		 */
+		readonly tools?: readonly LanguageModelChatTool[];
+
+		/**
+		 * 	The tool-selecting mode to use. {@link LanguageModelChatToolMode.Auto} by default.
+		 */
+		readonly toolMode?: LanguageModelChatToolMode;
+	}
+
+	/**
+	 * All the information representing a single language model contributed by a {@linkcode LanguageModelChatProvider}.
+	 */
+	export interface LanguageModelChatInformation {
+
+		/**
+		 * Unique identifier for the language model. Must be unique per provider, but not required to be globally unique.
+		 */
+		readonly id: string;
+
+		/**
+		 * Human-readable name of the language model.
+		 */
+		readonly name: string;
+
+		/**
+		 * Opaque family-name of the language model. Values might be `gpt-3.5-turbo`, `gpt4`, `phi2`, or `llama`
+		 * but they are defined by extensions contributing languages and subject to change.
+		 */
+		readonly family: string;
+
+		/**
+		 * The tooltip to render when hovering the model
+		 */
+		readonly tooltip?: string;
+
+		/**
+		 * An optional, human-readable string which will be rendered alongside the model.
+		 */
+		readonly detail?: string;
+
+		/**
+		 * Opaque version string of the model. This is defined by the extension contributing the language model
+		 * and subject to change while the identifier is stable.
+		 * This is used as a lookup value in {@linkcode LanguageModelChatSelector.version}
+		 * An example is how GPT 4o has multiple versions like 2024-11-20 and 2024-08-06
+		 */
+		readonly version: string;
+
+		/**
+		 * The maximum number of tokens the model can accept as input.
+		 */
+		readonly maxInputTokens: number;
+
+		/**
+		 * The maximum number of tokens the model is capable of producing.
+		 */
+		readonly maxOutputTokens: number;
+
+		/**
+		 * Various features that the model supports such as tool calling or image input.
+		 */
+		readonly capabilities: {
+
+			/**
+			 * Whether image input is supported by the model.
+			 * Common supported images are jpg and png, but each model will vary in supported mimetypes.
+			 */
+			readonly imageInput?: boolean;
+
+			/**
+			 * Whether tool calling is supported by the model.
+			 * If a number is provided, that is the maximum number of tools a model can call.
+			 */
+			readonly toolCalling?: boolean | number;
+		};
+	}
+
+	/**
+	 * The provider version of {@linkcode LanguageModelChatMessage}.
+	 */
+	export interface LanguageModelChatRequestMessage {
+		/**
+		 * The role of this message.
+		 */
+		readonly role: LanguageModelChatMessageRole;
+
+		/**
+		 * A string or heterogeneous array of things that a message can contain as content. Some parts may be message-type
+		 * specific for some models.
+		 */
+		readonly content: ReadonlyArray<LanguageModelInputPart | unknown>;
+
+		/**
+		 * The optional name of a user for this message.
+		 */
+		readonly name: string | undefined;
+	}
+
+	/**
+	 * The various message types which a {@linkcode LanguageModelChatProvider} can emit in the chat response stream
+	 */
+	export type LanguageModelResponsePart = LanguageModelTextPart | LanguageModelToolResultPart | LanguageModelToolCallPart;
+
+	/**
+	 * The various message types which can be sent via {@linkcode LanguageModelChat.sendRequest } and processed by a {@linkcode LanguageModelChatProvider}
+	 */
+	export type LanguageModelInputPart = LanguageModelTextPart | LanguageModelToolResultPart | LanguageModelToolCallPart;
+
+	/**
+	 * Represents a Language model chat provider. This provider provides multiple models in a 1 provider to many model relationship
+	 * An example of this would be how an OpenAI provider would provide models like gpt-5, o3, etc.
+	 */
+	export interface LanguageModelChatProvider<T extends LanguageModelChatInformation = LanguageModelChatInformation> {
+
+		/**
+		 * Signals a change from the provider to the editor so that {@linkcode prepareLanguageModelChatInformation} is called again
+		 */
+		readonly onDidChangeLanguageModelInformation?: Event<void>;
+
+		/**
+		 * Get the list of available language models contributed by this provider
+		 * @param options Options which specify the calling context of this function
+		 * @param token A cancellation token which signals if the user cancelled the request or not
+		 * @returns A promise that resolves to the list of available language models
+		 */
+		prepareLanguageModelChatInformation(options: PrepareLanguageModelChatModelOptions, token: CancellationToken): ProviderResult<T[]>;
+
+		/**
+		 * Returns the response for a chat request, passing the results to the progress callback.
+		 * The {@linkcode LanguageModelChatProvider} must emit the response parts to the progress callback as they are received from the language model.
+		 * @param model The language model to use
+		 * @param messages The messages to include in the request
+		 * @param options Options for the request
+		 * @param progress The progress to emit the streamed response chunks to
+		 * @param token A cancellation token for the request
+		 * @returns A promise that resolves when the response is complete. Results are actually passed to the progress callback.
+		 */
+		provideLanguageModelChatResponse(model: T, messages: readonly LanguageModelChatRequestMessage[], options: LanguageModelChatRequestHandleOptions, progress: Progress<LanguageModelResponsePart>, token: CancellationToken): Thenable<void>;
+
+		/**
+		 * Returns the number of tokens for a given text using the model specific tokenizer logic
+		 * @param model The language model to use
+		 * @param text The text to count tokens for
+		 * @param token A cancellation token for the request
+		 * @returns A promise that resolves to the number of tokens
+		 */
+		provideTokenCount(model: T, text: string | LanguageModelChatRequestMessage, token: CancellationToken): Thenable<number>;
+	}
+
+	/**
+	 * The list of options passed into {@linkcode LanguageModelChatProvider.prepareLanguageModelChatInformation}
+	 */
+	export interface PrepareLanguageModelChatModelOptions {
+		/**
+		 * Whether or not the user should be prompted via some UI flow, or if models should be attempted to be resolved silently.
+		 * If silent is true, all models may not be resolved due to lack of info such as API keys.
+		 */
+		readonly silent: boolean;
 	}
 
 	/**
@@ -20060,7 +20614,7 @@ declare module 'vscode' {
 		 * any custom flow.
 		 *
 		 * In the former case, the caller shall pass the
-		 * {@link LanguageModelToolInvocationOptions.toolInvocationToken toolInvocationToken}, which comes with the a
+		 * {@link LanguageModelToolInvocationOptions.toolInvocationToken toolInvocationToken}, which comes from a
 		 * {@link ChatRequest.toolInvocationToken chat request}. This makes sure the chat UI shows the tool invocation for the
 		 * correct conversation.
 		 *
@@ -20079,6 +20633,43 @@ declare module 'vscode' {
 		 * @returns The result of the tool invocation.
 		 */
 		export function invokeTool(name: string, options: LanguageModelToolInvocationOptions<object>, token?: CancellationToken): Thenable<LanguageModelToolResult>;
+
+		/**
+		 * Registers a provider that publishes Model Context Protocol servers for the editor to
+		 * consume. This allows MCP servers to be dynamically provided to the editor in
+		 * addition to those the user creates in their configuration files.
+		 *
+		 * Before calling this method, extensions must register the `contributes.mcpServerDefinitionProviders`
+		 * extension point with the corresponding {@link id}, for example:
+		 *
+		 * ```js
+		 * 	"contributes": {
+		 * 		"mcpServerDefinitionProviders": [
+		 * 			{
+		 * 				"id": "cool-cloud-registry.mcp-servers",
+		 * 				"label": "Cool Cloud Registry",
+		 * 			}
+		 * 		]
+		 * 	}
+		 * ```
+		 *
+		 * When a new McpServerDefinitionProvider is available, the editor will present a 'refresh'
+		 * action to the user to discover new servers. To enable this flow, extensions should
+		 * call `registerMcpServerDefinitionProvider` during activation.
+		 * @param id The ID of the provider, which is unique to the extension.
+		 * @param provider The provider to register
+		 * @returns A disposable that unregisters the provider when disposed.
+		 */
+		export function registerMcpServerDefinitionProvider(id: string, provider: McpServerDefinitionProvider): Disposable;
+
+		/**
+		 * Registers a {@linkcode LanguageModelChatProvider}
+		 * Note: You must also define the language model chat provider via the `languageModelChatProviders` contribution point in package.json
+		 * @param vendor The vendor for this provider. Must be globally unique. An example is `copilot` or `openai`.
+		 * @param provider The provider to register
+		 * @returns A disposable that unregisters the provider when disposed
+		*/
+		export function registerLanguageModelChatProvider(vendor: string, provider: LanguageModelChatProvider): Disposable;
 	}
 
 	/**
@@ -20222,7 +20813,7 @@ declare module 'vscode' {
 
 		/**
 		 * Construct a prompt-tsx part with the given content.
-		 * @param value The value of the part, the result of `renderPromptElementJSON` from `@vscode/prompt-tsx`.
+		 * @param value The value of the part, the result of `renderElementJSON` from `@vscode/prompt-tsx`.
 		 */
 		constructor(value: unknown);
 	}
@@ -20232,7 +20823,7 @@ declare module 'vscode' {
 	 */
 	export class LanguageModelToolResult {
 		/**
-		 * A list of tool result content parts. Includes `unknown` becauses this list may be extended with new content types in
+		 * A list of tool result content parts. Includes `unknown` because this list may be extended with new content types in
 		 * the future.
 		 * @see {@link lm.invokeTool}.
 		 */

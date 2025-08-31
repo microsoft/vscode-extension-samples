@@ -1,0 +1,90 @@
+{
+	"name": "chat-output-renderer-sample",
+	"displayName": "chat-output-renderer-sample",
+	"description": "Sample chat output renderer extension that renders Mermaid diagrams.",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-sample",
+	"engines": {
+		"vscode": "^1.103.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"enabledApiProposals": [
+		"chatOutputRenderer"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"languageModelTools": [
+			{
+				"name": "renderMermaidDiagram",
+				"displayName": "Mermaid Renderer",
+				"toolReferenceName": "renderMermaidDiagram",
+				"canBeReferencedInPrompt": true,
+				"modelDescription": "Renders a Mermaid diagram from Mermaid.js markup.",
+				"userDescription": "Render a Mermaid.js diagrams from markup.",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"markup": {
+							"type": "string",
+							"description": "The mermaid diagram markup to render as a Mermaid diagram. This should only be the markup of the diagram. Do not include a wrapping code block."
+						}
+					}
+				}
+			},
+			{
+				"name": "createMermaidDiagram",
+				"displayName": "Mermaid Creator",
+				"toolReferenceName": "createMermaidDiagram",
+				"canBeReferencedInPrompt": true,
+				"modelDescription": "Creates a Mermaid diagram from a description and renders for the user.",
+				"userDescription": "Creates and renders Mermaid.js diagrams.",
+				"inputSchema": {
+					"type": "object",
+					"properties": {
+						"description": {
+							"type": "string",
+							"description": "A plain text description of the Mermaid diagram to create. The description should be detailed enough for the model to generate a valid Mermaid diagram markup."
+						}
+					}
+				}
+			}
+		],
+		"chatOutputRenderers": [
+			{
+				"viewType": "vscode-samples.mermaid",
+				"mimeTypes": [
+					"application/vnd.chat-output-renderer.mermaid"
+				]
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"lint": "eslint",
+		"watch": "tsc -watch -p ./",
+		"download-api": "dts dev",
+		"postdownload-api": "dts main",
+		"postinstall": "npm run download-api"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/jsdom": "^21.1.7",
+		"@types/node": "^22",
+		"@types/vscode": "^1.100.0",
+		"@vscode/dts": "^0.4.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	},
+	"dependencies": {
+		"dompurify": "^3.2.6",
+		"jsdom": "^26.1.0",
+		"mermaid": "^11.9.0"
+	}
+}

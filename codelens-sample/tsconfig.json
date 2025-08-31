@@ -1,13 +1,15 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es2020",
-		"lib": ["es2020"],
+        "target": "ES2024",
+        "lib": [
+            "ES2024"
+        ],
         "outDir": "out",
         "sourceMap": true,
         "rootDir": "src",
         /* Strict Type-Checking Option */
-        "strict": true,   /* enable all strict type-checking options */
+        "strict": true, /* enable all strict type-checking options */
         /* Additional Checks */
         "noUnusedLocals": true /* Report errors on unused locals. */
     },

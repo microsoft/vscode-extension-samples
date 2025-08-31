@@ -2,13 +2,15 @@ name: CI
 
 on:
   pull_request:
-    branches: [ $default-branch ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-    - run: npm run validate
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - run: npm ci --workspaces=false
+      - run: npm run validate

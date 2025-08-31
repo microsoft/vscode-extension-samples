@@ -1,54 +1,51 @@
 {
-  "name": "notebook-serializer-sample",
-  "displayName": "notebook-serializer-sample",
-  "description": "Notebook using Serializer API sample",
-  "publisher": "vscode-samples",
-  "version": "0.0.1",
-  "engines": {
-    "vscode": "^1.74.0"
-  },
-  "categories": [
-    "Other"
-  ],
-  "activationEvents": [
-    "onNotebook:test-notebook-serializer",
-    "onCommand:notebook-serializer-sample.createJsonNotebook"
-  ],
-  "main": "./out/extension.js",
-  "contributes": {
-    "commands": [
-      {
-        "command": "notebook-serializer-sample.createJsonNotebook",
-        "title": "Create JSON Notebook"
-      }
-    ],
-    "notebooks": [
-      {
-        "type": "test-notebook-serializer",
-        "displayName": "Sample Notebook",
-        "selector": [
-          {
-            "filenamePattern": "*.sample-json-notebook"
-          }
-        ]
-      }
-    ]
-  },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -b",
-    "lint": "eslint",
-    "watch": "tsc -b --watch"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.13.0",
-    "@stylistic/eslint-plugin": "^2.9.0",
-    "@types/mocha": "^8.2.2",
-    "@types/node": "^20",
-    "@types/vscode": "^1.74.0",
-    "eslint": "^9.13.0",
-    "mocha": "^10.2.0",
-    "typescript": "^5.8.2",
-    "typescript-eslint": "^8.26.0"
-  }
+	"name": "notebook-serializer-sample",
+	"displayName": "notebook-serializer-sample",
+	"description": "Notebook using Serializer API sample",
+	"publisher": "vscode-samples",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onNotebook:test-notebook-serializer",
+		"onCommand:notebook-serializer-sample.createJsonNotebook"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "notebook-serializer-sample.createJsonNotebook",
+				"title": "Create JSON Notebook"
+			}
+		],
+		"notebooks": [
+			{
+				"type": "test-notebook-serializer",
+				"displayName": "Sample Notebook",
+				"selector": [
+					{
+						"filenamePattern": "*.sample-json-notebook"
+					}
+				]
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -b",
+		"lint": "eslint",
+		"watch": "tsc -b --watch"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/vscode": "^1.100.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	}
 }

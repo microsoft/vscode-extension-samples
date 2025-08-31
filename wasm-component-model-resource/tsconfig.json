@@ -3,7 +3,7 @@
         "rootDir": "./src",
         "skipLibCheck": true,
         "lib": [
-            "es2022",
+            "ES2024",
             "webworker"
         ],
         "types": [
