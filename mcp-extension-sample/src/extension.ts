@@ -30,8 +30,8 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}));
 
-	context.subscriptions.push(vscode.lm.registerMcpConfigurationProvider('exampleGist', {
-		onDidChange: didChangeEmitter.event,
+	context.subscriptions.push(vscode.lm.registerMcpServerDefinitionProvider('exampleGist', {
+		onDidChangeMcpServerDefinitions: didChangeEmitter.event,
 		provideMcpServerDefinitions: async () => {
 			let output: vscode.McpServerDefinition[] = [];
 			await Promise.all(gists.map(g => fetchGistContents(g).then(content => {
@@ -40,7 +40,9 @@ export function activate(context: vscode.ExtensionContext) {
 					throw new Error(`Gist content is not an MCP server array: ${g}`);
 				}
 
-				output.push(...s);
+				for (const server of s) {
+					output.push(new vscode.McpStdioServerDefinition(server.label, server.command, server.args, server.env));
+				}
 			})));
 
 			return output;

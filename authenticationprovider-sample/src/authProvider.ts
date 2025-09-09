@@ -1,5 +1,6 @@
 import {
 	authentication,
+	AuthenticationGetSessionOptions,
 	AuthenticationProvider,
 	AuthenticationProviderAuthenticationSessionsChangeEvent,
 	AuthenticationSession,
@@ -75,7 +76,7 @@ export class AzureDevOpsAuthenticationProvider implements AuthenticationProvider
 		const changed: AuthenticationSession[] = [];
 
 		const previousToken = await this.currentToken;
-		const session = (await this.getSessions())[0];
+		const session = (await this.getSessions(undefined))[0];
 
 		if (session?.accessToken && !previousToken) {
 			added.push(session);
@@ -97,7 +98,7 @@ export class AzureDevOpsAuthenticationProvider implements AuthenticationProvider
 	}
 
 	// This function is called first when `vscode.authentication.getSessions` is called.
-	async getSessions(_scopes?: string[]): Promise<readonly AuthenticationSession[]> {
+	async getSessions(_scopes: string[] | undefined, _options?: AuthenticationGetSessionOptions): Promise<AuthenticationSession[]> {
 		this.ensureInitialized();
 		const token = await this.cacheTokenFromStorage();
 		return token ? [new AzureDevOpsPatSession(token)] : [];
@@ -137,6 +138,10 @@ export class AzureDevOpsAuthenticationProvider implements AuthenticationProvider
 			return;
 		}
 		await this.secretStorage.delete(AzureDevOpsAuthenticationProvider.secretKey);
-		this._onDidChangeSessions.fire({ removed: [new AzureDevOpsPatSession(token)] });
+		this._onDidChangeSessions.fire({
+			removed: [new AzureDevOpsPatSession(token)],
+			added: [],
+			changed: [],
+		});
 	}
 }

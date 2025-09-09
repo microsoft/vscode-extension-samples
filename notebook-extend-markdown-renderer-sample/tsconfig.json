@@ -3,9 +3,9 @@
     "rootDir": "src",
     "outDir": "out",
     "module": "esnext",
-    "target": "es2020",
+    "target": "ES2024",
     "lib": [
-      "es2020",
+      "ES2024",
       "dom"
     ],
     "moduleResolution": "node",

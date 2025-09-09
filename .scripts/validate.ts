@@ -16,6 +16,9 @@ function validateSamplesAreListed() {
 		samplesByPath.set(sample.path, sample);
 	}
 
+
+	const errors: Error[] = [];
+
 	for (const fileName of fs.readdirSync(root)) {
 		if (fileName === 'node_modules'
 			|| fileName.startsWith('.')
@@ -26,7 +29,15 @@ function validateSamplesAreListed() {
 
 		const sampleEntry = samplesByPath.get(fileName);
 		if (!sampleEntry) {
-			throw new Error(`Sample '${fileName}' is not listed in samples.js`);
+			errors.push(new Error(`Sample '${fileName}' is not listed in samples.js`));
+		}
+	}
+
+	if (errors.length > 0) {
+		if (errors.length === 1) {
+			throw errors[0];
+		} else {
+			throw new AggregateError(errors, 'Multiple samples are not listed in samples.js');
 		}
 	}
 }
