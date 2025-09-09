@@ -174,7 +174,7 @@
 					"properties": {
 						"screenshot": {
 							"type": "string",
-							"description": "Take a screenshot of a simulator."
+							"description": "Take a screenshot of the current window or screen or whatever is available."
 						}
 					}
 				}
@@ -196,7 +196,7 @@
 	},
 	"dependencies": {
 		"@vscode/chat-extension-utils": "^0.0.0-alpha.1",
-		"@vscode/prompt-tsx": "file:vscode-prompt-tsx-0.3.0-alpha.23.tgz",
+		"@vscode/prompt-tsx": "^0.3.0-alpha.7",
 		"screenshot-desktop": "^1.15.1"
 	},
 	"devDependencies": {

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { captureScreenshot, listSimulators } from './listSimulators';
+import screenshot from 'screenshot-desktop';
 
 export function registerChatTools(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_tabCount', new TabCountTool()));
@@ -168,22 +168,18 @@ interface CaptureToolOptions {
 class CaptureTool implements vscode.LanguageModelTool<CaptureToolOptions> {
 	async invoke(_options: vscode.LanguageModelToolInvocationOptions<CaptureToolOptions>, _token: vscode.CancellationToken): Promise<vscode.LanguageModelToolResult2> {
 		try {
-			// List available simulators
-			const simulators = await listSimulators();
+			const imageBuffer = await screenshot({ format: 'png' });
+			const imageData = Uint8Array.from(imageBuffer);
+			// const messages = [
+			// 	vscode.LanguageModelChatMessage2.User([new vscode.LanguageModelDataPart(imageData, vscode.ChatImageMimeType.PNG)]),
+			// 	vscode.LanguageModelChatMessage2.User('tell me about this image. make sure to be very detailed and start the sentence with "meow i am a cat"'),
+			// ];
 
-			if (simulators.length === 0) {
-				throw new Error('No iOS simulators found. Please make sure Xcode is installed and iOS simulators are set up.');
-			}
-
-			// Use the first available simulator
-			const simulator = simulators[0];
-			const screenshot = await captureScreenshot(simulator.udid);
-
-			if (!screenshot) {
+			if (!imageBuffer) {
 				throw new Error('Failed to capture simulator screenshot.');
 			}
 
-			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelDataPart({ mimeType: vscode.ChatImageMimeType.PNG, data: screenshot})]);
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelDataPart(imageData, 'image/png')]);
 		} catch (error) {
 			throw error instanceof Error ? error : new Error(String(error));
 		}

@@ -108,7 +108,7 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
                     { modelMaxPromptTokens: model.maxInputTokens },
                     model));
                 messages = result.messages;
-                const toolResultMetadata = result.metadatas.getAll(ToolResultMetadata);
+                const toolResultMetadata = result.metadata.getAll(ToolResultMetadata);
                 if (toolResultMetadata?.length) {
                     // Cache tool results for later, so they can be incorporated into later prompts without calling the tool again
                     toolResultMetadata.forEach(meta => accumulatedToolResults[meta.toolCallId] = meta.result);
