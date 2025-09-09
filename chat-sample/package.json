@@ -196,7 +196,7 @@
 	},
 	"dependencies": {
 		"@vscode/chat-extension-utils": "^0.0.0-alpha.1",
-		"@vscode/prompt-tsx": "^0.3.0-alpha.7",
+		"@vscode/prompt-tsx": "^0.3.0-alpha.12",
 		"screenshot-desktop": "^1.15.1"
 	},
 	"devDependencies": {
