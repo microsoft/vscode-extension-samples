@@ -1,9 +1,11 @@
 import * as vscode from 'vscode';
+import screenshot from 'screenshot-desktop';
 
 export function registerChatTools(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_tabCount', new TabCountTool()));
 	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_findFiles', new FindFilesTool()));
 	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_runInTerminal', new RunInTerminalTool()));
+	context.subscriptions.push(vscode.lm.registerTool('chat-tools-sample_capture', new CaptureTool()));
 }
 
 interface ITabCountParameters {
@@ -26,10 +28,10 @@ export class TabCountTool implements vscode.LanguageModelTool<ITabCountParameter
 						: params.tabGroup === 3
 							? '3rd'
 							: `${params.tabGroup}th`;
-			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open in the ${nth} tab group.`)]);
 		} else {
 			const group = vscode.window.tabGroups.activeTabGroup;
-			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open.`)]);
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(`There are ${group.tabs.length} tabs open.`)]);
 		}
 	}
 
@@ -72,7 +74,7 @@ export class FindFilesTool implements vscode.LanguageModelTool<IFindFilesParamet
 		);
 
 		const strFiles = files.map((f) => f.fsPath).join('\n');
-		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(`Found ${files.length} files matching "${params.pattern}":\n${strFiles}`)]);
+		return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(`Found ${files.length} files matching "${params.pattern}":\n${strFiles}`)]);
 	}
 
 	async prepareInvocation(
@@ -126,7 +128,7 @@ export class RunInTerminalTool
 		try {
 			await waitForShellIntegration(terminal, 5000);
 		} catch (e) {
-			return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart((e as Error).message)]);
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart((e as Error).message)]);
 		}
 
 		const execution = terminal.shellIntegration!.executeCommand(params.command);
@@ -137,7 +139,7 @@ export class RunInTerminalTool
 			terminalResult += chunk;
 		}
 
-		return new vscode.LanguageModelToolResult([new vscode.LanguageModelTextPart(terminalResult)]);
+		return new vscode.LanguageModelToolResult2([new vscode.LanguageModelTextPart(terminalResult)]);
 	}
 
 	async prepareInvocation(
@@ -158,3 +160,31 @@ export class RunInTerminalTool
 		};
 	}
 }
+
+interface CaptureToolOptions {
+	prompt?: string;
+}
+
+class CaptureTool implements vscode.LanguageModelTool<CaptureToolOptions> {
+	async invoke(_options: vscode.LanguageModelToolInvocationOptions<CaptureToolOptions>, _token: vscode.CancellationToken): Promise<vscode.LanguageModelToolResult2> {
+		try {
+			const imageBuffer = await screenshot({ format: 'png' });
+			const imageData = Uint8Array.from(imageBuffer);
+			// const messages = [
+			// 	vscode.LanguageModelChatMessage2.User([new vscode.LanguageModelDataPart(imageData, vscode.ChatImageMimeType.PNG)]),
+			// 	vscode.LanguageModelChatMessage2.User('tell me about this image. make sure to be very detailed and start the sentence with "meow i am a cat"'),
+			// ];
+
+			if (!imageBuffer) {
+				throw new Error('Failed to capture simulator screenshot.');
+			}
+
+			return new vscode.LanguageModelToolResult2([new vscode.LanguageModelDataPart(imageData, 'image/png')]);
+		} catch (error) {
+			throw error instanceof Error ? error : new Error(String(error));
+		}
+	}
+}
+
+
+export function deactivate() { }
