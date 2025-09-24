@@ -25,9 +25,9 @@ export class SampleChatModelProvider implements LanguageModelChatProvider2 {
 	}
 	async provideLanguageModelChatResponse(model: LanguageModelChatInformation, _messages: Array<LanguageModelChatMessage>, _options: LanguageModelChatRequestHandleOptions, progress: Progress<ChatResponseFragment2>, _token: CancellationToken): Promise<void> {
 		if (model.id === "sample-dog-model") {
-			progress.report({index: 0, part: new LanguageModelTextPart("Woof! This is a dog model response.") });
+			progress.report({ index: 0, part: new LanguageModelTextPart("Woof! This is a dog model response.") });
 		} else if (model.id === "sample-cat-model") {
-			progress.report({index: 0, part: new LanguageModelTextPart("Meow! This is a cat model response.") });
+			progress.report({ index: 0, part: new LanguageModelTextPart("Meow! This is a cat model response.") });
 		} else {
 			progress.report({ index: 0, part: new LanguageModelTextPart("Unknown model.") });
 		}
