@@ -1,0 +1,17 @@
+
+# App Full Live
+تشغيل المشروع:
+1. استخرج الملفات:
+   unzip app_full_live.zip -d app_full_live
+   cd app_full_live
+2. تنصيب المتطلبات:
+   pip install -r requirements.txt
+3. ضبط ملف .env (أو استخدام المتغيرات):
+   export SECRET_KEY='قيمة_قوية_لسر'
+   export ADMIN_2FA_CODE='رمز_2fa_قوي'
+   export LIVE_TRADING=true
+   export EXCHANGE_ID='binance'
+   export EXCHANGE_API_KEY='مفتاح_API'
+   export EXCHANGE_API_SECRET='سر_API'
+4. تشغيل:
+   python app_full_live.py
