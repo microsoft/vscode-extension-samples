@@ -170,11 +170,13 @@ export function activate(_context: vscode.ExtensionContext) {
 	providerDisposable = vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, patternBasedProvider);
 	
 	// Add a disposable that will clean up the current provider when the extension is deactivated
-	_context.subscriptions.push({
-		dispose: () => {
-			if (providerDisposable) {
-				providerDisposable.dispose();
+	_context.subscriptions.push(
+		vscode.Disposable.from({
+			dispose: () => {
+				if (providerDisposable) {
+					providerDisposable.dispose();
+				}
 			}
-		}
-	});
+		})
+	);
 }
