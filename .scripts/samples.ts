@@ -291,6 +291,13 @@ export const samples: Sample[] = [
 		apis: [],
 		contributions: []
 	},
+	{
+		description: 'User Profile Sample',
+		path: 'user-profile-sample',
+		guide: null,
+		apis: ['ExtensionContext.workspaceState', 'ExtensionContext.globalState', 'Memento', 'workspace.getConfiguration', 'window.showInputBox', 'window.showInformationMessage'],
+		contributions: ['commands', 'configuration']
+	},
 	{ description: 'authenticationprovider-sample', excludeFromReadme: true, path: 'authenticationprovider-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'chat-model-provider-sample', excludeFromReadme: true, path: 'chat-model-provider-sample', guide: null, apis: [], contributions: [] },

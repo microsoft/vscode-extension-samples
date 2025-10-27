@@ -69,6 +69,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [Chat Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-sample) | N/A |  |
 | [Chat Tutorial](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-tutorial) | N/A |  |
 | [Notifications Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/notifications-sample) | N/A |  |
+| [User Profile Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/user-profile-sample) | N/A | [ExtensionContext.workspaceState](https://code.visualstudio.com/api/references/vscode-api#ExtensionContext.workspaceState)<br>[ExtensionContext.globalState](https://code.visualstudio.com/api/references/vscode-api#ExtensionContext.globalState)<br>[Memento](https://code.visualstudio.com/api/references/vscode-api#Memento)<br>[workspace.getConfiguration](https://code.visualstudio.com/api/references/vscode-api#workspace.getConfiguration)<br>[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)<br>[window.showInformationMessage](https://code.visualstudio.com/api/references/vscode-api#window.showInformationMessage)<br>[contributes.commands](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)<br>[contributes.configuration](https://code.visualstudio.com/api/references/contribution-points#contributes.configuration) |
 <!-- SAMPLES_END -->
 
 ### Language Server Protocol Samples
