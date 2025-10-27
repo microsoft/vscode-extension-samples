@@ -141,7 +141,7 @@ export function activate(_context: vscode.ExtensionContext) {
 		})
 	);
 
-	// Register command to switch between providers
+	// Track the current provider and its state
 	let currentProvider: 'pattern' | 'simple' = 'pattern';
 	let providerDisposable: vscode.Disposable;
 
@@ -160,9 +160,6 @@ export function activate(_context: vscode.ExtensionContext) {
 			providerDisposable = vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, patternBasedProvider);
 			vscode.window.showInformationMessage('Switched to Pattern-Based Provider');
 		}
-		
-		// Add the new provider to subscriptions for proper cleanup
-		_context.subscriptions.push(providerDisposable);
 	};
 
 	_context.subscriptions.push(
@@ -171,5 +168,13 @@ export function activate(_context: vscode.ExtensionContext) {
 
 	// Register the pattern-based provider by default
 	providerDisposable = vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, patternBasedProvider);
-	_context.subscriptions.push(providerDisposable);
+	
+	// Add a disposable that will clean up the current provider when the extension is deactivated
+	_context.subscriptions.push({
+		dispose: () => {
+			if (providerDisposable) {
+				providerDisposable.dispose();
+			}
+		}
+	});
 }
