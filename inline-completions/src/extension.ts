@@ -135,33 +135,39 @@ export function activate(_context: vscode.ExtensionContext) {
 	console.log('inline-completions demo started with TWO variations');
 	
 	// Register command used by the pattern-based provider
-	vscode.commands.registerCommand('demo-ext.command1', async (...args) => {
-		vscode.window.showInformationMessage('command1: ' + JSON.stringify(args));
-	});
+	_context.subscriptions.push(
+		vscode.commands.registerCommand('demo-ext.command1', async (...args) => {
+			vscode.window.showInformationMessage('command1: ' + JSON.stringify(args));
+		})
+	);
 
 	// Register command to switch between providers
 	let currentProvider: 'pattern' | 'simple' = 'pattern';
 	let providerDisposable: vscode.Disposable;
 
 	const switchProvider = () => {
+		// Dispose the current provider
+		if (providerDisposable) {
+			providerDisposable.dispose();
+		}
+
 		if (currentProvider === 'pattern') {
 			currentProvider = 'simple';
-			if (providerDisposable) {
-				providerDisposable.dispose();
-			}
 			providerDisposable = vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, simpleProvider);
 			vscode.window.showInformationMessage('Switched to Simple Provider');
 		} else {
 			currentProvider = 'pattern';
-			if (providerDisposable) {
-				providerDisposable.dispose();
-			}
 			providerDisposable = vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, patternBasedProvider);
 			vscode.window.showInformationMessage('Switched to Pattern-Based Provider');
 		}
+		
+		// Add the new provider to subscriptions for proper cleanup
+		_context.subscriptions.push(providerDisposable);
 	};
 
-	vscode.commands.registerCommand('extension.switch-inline-completion-provider', switchProvider);
+	_context.subscriptions.push(
+		vscode.commands.registerCommand('extension.switch-inline-completion-provider', switchProvider)
+	);
 
 	// Register the pattern-based provider by default
 	providerDisposable = vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, patternBasedProvider);
