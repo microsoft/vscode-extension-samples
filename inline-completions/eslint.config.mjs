@@ -13,6 +13,7 @@ export default tseslint.config(
 		ignores: [
 			'out',
 			'playground.js',
+			'playground-simple.js',
 			'**/vscode*.d.ts'
 		]
 	},

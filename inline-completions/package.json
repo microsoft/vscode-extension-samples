@@ -23,6 +23,10 @@
 			{
 				"command": "extension.inline-completion-settings",
 				"title": "My Inline Completion Demo Settings"
+			},
+			{
+				"command": "extension.switch-inline-completion-provider",
+				"title": "Inline Completion: Switch Provider (Pattern-Based ↔ Simple)"
 			}
 		],
 		"menus": {

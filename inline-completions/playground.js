@@ -1,3 +1,5 @@
+// Pattern-Based Provider Playground
+// This file demonstrates the Pattern-Based Provider (default)
 // Trigger inline completions after each line
 
 // [0,*):// Trigger inline completions in this line, they work!
