@@ -321,6 +321,8 @@ export const samples: Sample[] = [
 	{ description: 'tabs-api-sample', excludeFromReadme: true, path: 'tabs-api-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'telemetry-sample', excludeFromReadme: true, path: 'telemetry-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'uri-handler-sample', excludeFromReadme: true, path: 'uri-handler-sample', guide: null, apis: [], contributions: [] },
+	{ description: 'user-info-minimal-sample', excludeFromReadme: true, path: 'user-info-minimal-sample', guide: null, apis: [], contributions: [] },
+	{ description: 'user-info-sample', excludeFromReadme: true, path: 'user-info-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'virtual-document-sample', excludeFromReadme: true, path: 'virtual-document-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'wasm-component-model-async', excludeFromReadme: true, path: 'wasm-component-model-async', guide: null, apis: [], contributions: [] },
 	{ description: 'wasm-component-model-resource', excludeFromReadme: true, path: 'wasm-component-model-resource', guide: null, apis: [], contributions: [] },
