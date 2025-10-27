@@ -17,7 +17,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const activeFile = activeEditor?.document.fileName || 'No file opened';
 		const userName = os.userInfo().username;
 		const platform = os.platform();
-		
+
 		// Create information message
 		const info = [
 			`Username: ${userName}`,
