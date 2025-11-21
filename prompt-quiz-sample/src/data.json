@@ -1,0 +1,251 @@
+{
+  "title": "vs-code-extension",
+  "quiz": [
+    {
+      "id": 1,
+      "question": "What are the two main functions exported by an extension entry file?",
+      "answer": [
+        "activate and deactivate",
+        "deactivate and activate",
+        "activate, deactivate",
+        "deactivate, activate"
+      ],
+      "hints": [
+        "One is called when the extension is activated",
+        "One is called when the extension is deactivated"
+      ],
+      "category": "Extension Anatomy",
+      "multipleChoice": false
+    },
+    {
+      "id": 2,
+      "question": "What is the name of the VS Code extension manifest file?",
+      "answer": [
+        "package.json",
+        "extension.json",
+        "manifest.json",
+        "config.json",
+        "vscode.json"
+      ],
+      "hints": [
+        "It's a JSON file",
+        "It contains Node.js fields and VS Code specific fields"
+      ],
+      "category": "Extension Anatomy",
+      "multipleChoice": true
+    },
+    {
+      "id": 3,
+      "question": "What two fields in package.json are combined to create a unique extension ID?",
+      "answer": [
+        "publisher and name",
+        "name and publisher",
+        "publisher, name",
+        "name, publisher"
+      ],
+      "hints": [
+        "Format is <publisher>.<name>",
+        "Both are required fields in package.json"
+      ],
+      "category": "Extension Manifest",
+      "multipleChoice": false
+    },
+    {
+      "id": 4,
+      "question": "What contribution point is used to make a command available in the Command Palette?",
+      "answer": [
+        "contributes.commands",
+        "contributes.menus",
+        "activationEvents",
+        "contributes.keybindings",
+        "commands.register"
+      ],
+      "hints": [
+        "It's defined in package.json",
+        "It binds a command ID to a title"
+      ],
+      "category": "Contribution Points",
+      "multipleChoice": true
+    },
+    {
+      "id": 5,
+      "question": "What VS Code API method is used to bind a function to a command ID?",
+      "answer": [
+        "commands.registerCommand",
+        "registerCommand",
+        "vscode.commands.registerCommand",
+        "register command"
+      ],
+      "hints": [
+        "It's a method on the vscode.commands namespace",
+        "It takes a command ID and a callback function"
+      ],
+      "category": "VS Code API",
+      "multipleChoice": false
+    },
+    {
+      "id": 6,
+      "question": "What field in package.json specifies the minimum version of VS Code API that the extension depends on?",
+      "answer": [
+        "engines.vscode",
+        "engines vscode",
+        "vscode",
+        "engines.vscode field"
+      ],
+      "hints": [
+        "It's under the 'engines' object",
+        "It uses semver notation like ^1.51.0"
+      ],
+      "category": "Extension Manifest",
+      "multipleChoice": false
+    },
+    {
+      "id": 7,
+      "question": "What are the three key concepts for writing VS Code extensions?",
+      "answer": [
+        "Activation Events, Contribution Points, and VS Code API",
+        "Commands, Events, and Configuration",
+        "Themes, Languages, and Debuggers",
+        "Menus, Keybindings, and Views",
+        "Package.json, TypeScript, and Node.js"
+      ],
+      "hints": [
+        "Events when extension becomes active",
+        "Static declarations in package.json",
+        "JavaScript APIs you can invoke"
+      ],
+      "category": "Extension Concepts",
+      "multipleChoice": true
+    },
+    {
+      "id": 8,
+      "question": "Starting with VS Code 1.74, do you need to explicitly list commands in activationEvents?",
+      "answer": [
+        "no",
+        "No",
+        "NO",
+        "nope"
+      ],
+      "hints": [
+        "Commands are now automatically activated",
+        "This is implicit for commands declared in package.json"
+      ],
+      "category": "Activation Events",
+      "multipleChoice": false
+    },
+    {
+      "id": 9,
+      "question": "What is the main entry point field in package.json that points to the compiled extension code?",
+      "answer": [
+        "main",
+        "Main",
+        "main field",
+        "the main field"
+      ],
+      "hints": [
+        "It typically points to ./out/extension.js",
+        "It's the extension entry point"
+      ],
+      "category": "Extension Manifest",
+      "multipleChoice": false
+    },
+    {
+      "id": 10,
+      "question": "What npm package contains the VS Code extension API type definitions?",
+      "answer": [
+        "@types/vscode",
+        "@vscode/types",
+        "vscode-types",
+        "@types/vscode-api",
+        "vscode-api-types"
+      ],
+      "hints": [
+        "It provides TypeScript IntelliSense",
+        "It's a types package"
+      ],
+      "category": "Development Setup",
+      "multipleChoice": true
+    },
+    {
+      "id": 11,
+      "question": "What keyboard shortcut opens the Command Palette in VS Code?",
+      "answer": [
+        "Ctrl+Shift+P",
+        "Ctrl Shift P",
+        "Control+Shift+P",
+        "Control Shift P"
+      ],
+      "hints": [
+        "It's Ctrl+Shift plus one more key",
+        "P is for Palette"
+      ],
+      "category": "VS Code Basics",
+      "multipleChoice": false
+    },
+    {
+      "id": 12,
+      "question": "What method would you use to display an information message to the user?",
+      "answer": [
+        "vscode.window.showInformationMessage",
+        "vscode.window.showMessage",
+        "window.displayMessage",
+        "vscode.showInfoMessage",
+        "window.alert"
+      ],
+      "hints": [
+        "It's under vscode.window namespace",
+        "It shows information to the user"
+      ],
+      "category": "VS Code API",
+      "multipleChoice": true
+    },
+    {
+      "id": 13,
+      "question": "What tool is used to scaffold a new VS Code extension project?",
+      "answer": [
+        "Yeoman",
+        "yeoman",
+        "yo",
+        "Yeoman generator"
+      ],
+      "hints": [
+        "It uses generator-code",
+        "Can be run with npx or npm install --global"
+      ],
+      "category": "Development Setup",
+      "multipleChoice": false
+    },
+    {
+      "id": 14,
+      "question": "What is the name of the VS Code extension marketplace where extensions are published?",
+      "answer": [
+        "Visual Studio Code Marketplace",
+        "VS Code Marketplace",
+        "VSCode Marketplace",
+        "the marketplace"
+      ],
+      "hints": [
+        "It's at marketplace.visualstudio.com",
+        "Extensions are published here"
+      ],
+      "category": "Publishing",
+      "multipleChoice": false
+    },
+    {
+      "id": 15,
+      "question": "What key should you press to start debugging an extension in VS Code?",
+      "answer": [
+        "F5",
+        "f5",
+        "the F5 key",
+        "function key 5"
+      ],
+      "hints": [
+        "It's a function key",
+        "It starts the debugger"
+      ],
+      "category": "Debugging",
+      "multipleChoice": false
+    }
+  ]
+}

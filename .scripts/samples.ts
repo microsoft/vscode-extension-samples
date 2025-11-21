@@ -291,6 +291,19 @@ export const samples: Sample[] = [
 		apis: [],
 		contributions: []
 	},
+	{
+		description: 'Prompt Quiz Sample',
+		path: 'prompt-quiz-sample',
+		guide: '/api/extension-guides/task-provider',
+		apis: [
+			'window.showQuickPick',
+			'window.showInputBox',
+			'tasks.registerTaskProvider',
+			'Task',
+			'Pseudoterminal'
+		],
+		contributions: ['commands', 'configuration', 'taskDefinitions']
+	},
 	{ description: 'authenticationprovider-sample', excludeFromReadme: true, path: 'authenticationprovider-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'chat-model-provider-sample', excludeFromReadme: true, path: 'chat-model-provider-sample', guide: null, apis: [], contributions: [] },

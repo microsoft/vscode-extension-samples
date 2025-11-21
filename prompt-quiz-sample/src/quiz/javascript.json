@@ -1,0 +1,80 @@
+{
+  "title": "javascript",
+  "quiz": [
+    {
+      "id": 1,
+      "question": "What keyword is used to declare a variable that can be reassigned?",
+      "answer": [
+        "let",
+        "Let"
+      ],
+      "hints": [
+        "It's not 'var' or 'const'",
+        "Introduced in ES6"
+      ],
+      "category": "Variables",
+      "multipleChoice": false
+    },
+    {
+      "id": 2,
+      "question": "Which keyword declares a constant variable?",
+      "answer": [
+        "const",
+        "Const",
+        "CONST"
+      ],
+      "hints": [
+        "It cannot be reassigned",
+        "Also introduced in ES6"
+      ],
+      "category": "Variables",
+      "multipleChoice": false
+    },
+    {
+      "id": 3,
+      "question": "What method adds an element to the end of an array?",
+      "answer": [
+        "push",
+        "push()",
+        ".push()",
+        "array.push()"
+      ],
+      "hints": [
+        "It modifies the original array",
+        "Returns the new length of the array"
+      ],
+      "category": "Arrays",
+      "multipleChoice": false
+    },
+    {
+      "id": 4,
+      "question": "Which operator is used for strict equality comparison?",
+      "answer": [
+        "===",
+        "strict equal",
+        "triple equals"
+      ],
+      "hints": [
+        "It checks both value and type",
+        "Uses three equal signs"
+      ],
+      "category": "Operators",
+      "multipleChoice": false
+    },
+    {
+      "id": 5,
+      "question": "What does JSON stand for?",
+      "answer": [
+        "JavaScript Object Notation",
+        "Javascript Object Notation",
+        "javascript object notation"
+      ],
+      "hints": [
+        "It's a data format",
+        "Starts with JavaScript"
+      ],
+      "category": "Data Formats",
+      "multipleChoice": false
+    }
+  ]
+}

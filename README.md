@@ -69,6 +69,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [Chat Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-sample) | N/A |  |
 | [Chat Tutorial](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-tutorial) | N/A |  |
 | [Notifications Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/notifications-sample) | N/A |  |
+| [Prompt Quiz Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/prompt-quiz-sample) | [/api/extension-guides/task-provider](https://code.visualstudio.com/api/extension-guides/task-provider) | [window.showQuickPick](https://code.visualstudio.com/api/references/vscode-api#window.showQuickPick)<br>[window.showInputBox](https://code.visualstudio.com/api/references/vscode-api#window.showInputBox)<br>[tasks.registerTaskProvider](https://code.visualstudio.com/api/references/vscode-api#tasks.registerTaskProvider)<br>[Task](https://code.visualstudio.com/api/references/vscode-api#Task)<br>[Pseudoterminal](https://code.visualstudio.com/api/references/vscode-api#Pseudoterminal)<br>[contributes.commands](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)<br>[contributes.configuration](https://code.visualstudio.com/api/references/contribution-points#contributes.configuration)<br>[contributes.taskDefinitions](https://code.visualstudio.com/api/references/contribution-points#contributes.taskDefinitions) |
 <!-- SAMPLES_END -->
 
 ### Language Server Protocol Samples

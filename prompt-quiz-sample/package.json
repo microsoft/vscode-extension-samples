@@ -1,0 +1,127 @@
+{
+	"name": "prompt-quiz-sample",
+	"displayName": "prompt-quiz-sample",
+	"description": "Extension that works as a customizable learning exercise.",
+	"version": "0.0.1",
+	"publisher": "vscode-samples",
+	"private": true,
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "prompt-quiz-sample.quiz",
+				"title": "quiz"
+			}
+		],
+		"taskDefinitions": [
+			{
+				"type": "quiz",
+				"required": [
+					"action"
+				],
+				"properties": {
+					"action": {
+						"type": "string",
+						"enum": [
+							"make",
+							"load"
+						],
+						"description": "The action to perform: 'make' to create a new quiz, 'load' to load a saved quiz"
+					}
+				}
+			}
+		],
+		"configuration": {
+			"title": "Prompt Quiz Sample",
+			"properties": {
+				"prompt-quiz-sample.randomize": {
+					"type": "boolean",
+					"default": false,
+					"description": "Randomize the order of quiz questions. When enabled, questions are presented in random order regardless of the 'order' setting."
+				},
+				"prompt-quiz-sample.order": {
+					"type": "string",
+					"default": "order",
+					"enum": [
+						"order",
+						"reverse"
+					],
+					"enumDescriptions": [
+						"Present questions in their original order (1, 2, 3...)",
+						"Present questions in reverse order (last to first)"
+					],
+					"description": "Controls the order in which questions are presented. Ignored when 'randomize' is enabled."
+				},
+				"prompt-quiz-sample.range": {
+					"type": "string",
+					"default": "0",
+					"description": "Specify which questions to include. Examples: '0' for all questions, '5' for first 5 questions, '3-6' for questions 3 through 6. Range is applied after ordering."
+				},
+				"prompt-quiz-sample.startPrompt": {
+					"type": "boolean",
+					"default": true,
+					"description": "Show a confirmation prompt before starting the quiz. When disabled, the quiz starts immediately when the command is invoked."
+				},
+				"prompt-quiz-sample.category": {
+					"type": "string",
+					"default": "All Categories",
+					"enum": [
+						"All Categories",
+						"Activation Events",
+						"Contribution Points",
+						"Debugging",
+						"Development Setup",
+						"Extension Anatomy",
+						"Extension Concepts",
+						"Extension Manifest",
+						"Publishing",
+						"VS Code API",
+						"VS Code Basics"
+					],
+					"enumDescriptions": [
+						"Include questions from all categories",
+						"Questions about extension activation",
+						"Questions about contribution points in VS Code extensions",
+						"Questions about debugging extensions",
+						"Questions about development tools and setup",
+						"Questions about extension structure and entry points",
+						"Questions about core extension development concepts",
+						"Questions about package.json and extension configuration",
+						"Questions about publishing extensions to the marketplace",
+						"Questions about the VS Code Extension API",
+						"Questions about basic VS Code usage"
+					],
+					"description": "Filter quiz questions by category. Select a specific category to focus on particular topics, or choose 'All Categories' to include all questions."
+				}
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "npm run sync-categories && tsc -p ./",
+		"sync-categories": "node scripts/sync-categories.js",
+		"lint": "eslint",
+		"watch": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^22",
+		"@types/vscode": "^1.100.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.8.2",
+		"typescript-eslint": "^8.26.0"
+	}
+}
