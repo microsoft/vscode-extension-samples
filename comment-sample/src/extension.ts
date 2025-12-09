@@ -1,5 +1,3 @@
-'use strict';
-
 import * as vscode from 'vscode';
 
 let commentId = 1;
@@ -27,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// A `CommentingRangeProvider` controls where gutter decorations that allow adding comments are shown
 	commentController.commentingRangeProvider = {
-		provideCommentingRanges: (document: vscode.TextDocument, token: vscode.CancellationToken) => {
+		provideCommentingRanges: (document: vscode.TextDocument, _token: vscode.CancellationToken) => {
 			const lineCount = document.lineCount;
 			return [new vscode.Range(0, 0, lineCount - 1, 0)];
 		}

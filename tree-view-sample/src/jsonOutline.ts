@@ -12,7 +12,9 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 	private editor: vscode.TextEditor | undefined;
 	private autoRefresh = true;
 
-	constructor(private context: vscode.ExtensionContext) {
+	constructor(
+		private readonly context: vscode.ExtensionContext
+	) {
 		vscode.window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
 		vscode.workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
 		this.autoRefresh = vscode.workspace.getConfiguration('jsonOutline').get('autorefresh', false);
@@ -179,8 +181,7 @@ export class JsonOutlineProvider implements vscode.TreeDataProvider<number> {
 				return prefix + ':[ ]';
 			}
 			return prefix + ':' + node.value.toString();
-		}
-		else {
+		} else {
 			const property = node.parent?.children ? node.parent.children[0].value.toString() : '';
 			if (node.type === 'array' || node.type === 'object') {
 				if (node.type === 'object') {

@@ -19,7 +19,7 @@ const connection = createConnection(messageReader, messageWriter);
 
 /* from here on, all code is non-browser specific and could be shared with a regular extension */
 
-connection.onInitialize((params: InitializeParams): InitializeResult => {
+connection.onInitialize((_params: InitializeParams): InitializeResult => {
 	const capabilities: ServerCapabilities = {
 		colorProvider: {} // provide a color provider
 	};

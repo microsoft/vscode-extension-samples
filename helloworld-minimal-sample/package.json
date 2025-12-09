@@ -5,7 +5,7 @@
 	"publisher": "vscode-samples",
 	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-minimal-sample",
 	"engines": {
-		"vscode": "^1.74.0"
+		"vscode": "^1.100.0"
 	},
 	"activationEvents": [],
 	"main": "./extension.js",
@@ -19,6 +19,11 @@
 	},
 	"scripts": {},
 	"devDependencies": {
-		"@types/vscode": "^1.73.0"
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/vscode": "^1.100.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
 	}
 }

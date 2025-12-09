@@ -1,0 +1,57 @@
+{
+	"name": "wasm-language-server",
+	"description": "An example demonstrating how to implement a language server as a WebAssembly module.",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"publisher": "vscode-samples",
+	"categories": [],
+	"keywords": [
+		"WASM",
+		"Component Model",
+		"LSP",
+		"Language Server"
+	],
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"main": "./client/out/extension",
+	"browser": "./client/dist/web/extension",
+	"activationEvents": [
+		"onLanguage:plaintext"
+	],
+	"extensionDependencies": [
+		"ms-vscode.wasm-wasi-core"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "vscode-samples.wasm-language-server.countFiles",
+				"category": "Samples",
+				"title": "Count Files"
+			}
+		]
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^22",
+		"esbuild": "^0.25.0",
+		"eslint": "^9.13.0",
+		"serve": "^14.2.3",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	},
+	"scripts": {
+		"postinstall": "cd client && npm install && cd ..",
+		"vscode:prepublish": "npm run build",
+		"build": "cd client && npm run compile && cd ../server && npm run build && cd ..",
+		"lint": "cd client && npm run lint && cd ..",
+		"esbuild": "node ./bin/esbuild.js",
+		"serve": "serve --cors -l 5000 --ssl-cert $HOME/certs/localhost.pem --ssl-key $HOME/certs/localhost-key.pem"
+	}
+}

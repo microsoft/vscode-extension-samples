@@ -1,0 +1,54 @@
+{
+	"name": "jupyter-kernel-execution-sample",
+	"displayName": "Jupyter Kernel Execution Sample",
+	"description": "Sample extension using Jupyter API to execute code against the Python Kernel",
+	"publisher": "vscode-samples",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"onNotebook:jupyter-notebook",
+		"onNotebook:interactive"
+	],
+	"extensionDependencies": [
+		"ms-toolsai.jupyter"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "jupyterKernelExecution.listKernels",
+				"title": "Execute code against a Python Kernel",
+				"category": "Jupyter Kernel API"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "jupyterKernelExecution.listKernels",
+					"title": "Execute code against a Python Kernel"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -b",
+		"lint": "eslint",
+		"watch": "tsc -b --watch"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^22",
+		"@types/vscode": "^1.100.0",
+		"@vscode/jupyter-extension": "^1.1.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	}
+}

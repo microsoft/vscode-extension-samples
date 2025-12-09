@@ -1,0 +1,54 @@
+{
+	"name": "wasm-component-model-async",
+	"description": "An example demonstrating how to use the component model to integrate WebAssembly modules into VS Code.",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Microsoft/vscode-extension-samples"
+	},
+	"publisher": "vscode-samples",
+	"categories": [],
+	"keywords": [
+		"WASM",
+		"Component Model"
+	],
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"main": "./out/extension",
+	"browser": "./dist/web/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "vscode-samples.wasm-component-model-async.run",
+				"category": "Samples",
+				"title": "Run Calc Service"
+			}
+		]
+	},
+	"dependencies": {
+		"@vscode/wasm-component-model": "1.0.0"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^22",
+		"@types/vscode": "^1.100.0",
+		"esbuild": "^0.25.0",
+		"eslint": "^9.13.0",
+		"serve": "^14.2.1",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"build": "npm run compile && cargo build --target wasm32-unknown-unknown",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"lint": "eslint",
+		"generate:model": "wit2ts --outDir ./src ./wit",
+		"serve": "serve --cors -l 5000 --ssl-cert $HOME/certs/localhost.pem --ssl-key $HOME/certs/localhost-key.pem"
+	}
+}

@@ -55,7 +55,7 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 
 	// Drag and drop controller
 
-	public async handleDrop(target: Node | undefined, sources: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
+	public async handleDrop(target: Node | undefined, sources: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 		const transferItem = sources.get('application/vnd.code.tree.testViewDragAndDrop');
 		if (!transferItem) {
 			return;
@@ -72,7 +72,7 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		}
 	}
 
-	public async handleDrag(source: Node[], treeDataTransfer: vscode.DataTransfer, token: vscode.CancellationToken): Promise<void> {
+	public async handleDrag(source: Node[], treeDataTransfer: vscode.DataTransfer, _token: vscode.CancellationToken): Promise<void> {
 		treeDataTransfer.set('application/vnd.code.tree.testViewDragAndDrop', new vscode.DataTransferItem(source));
 	}
 
@@ -98,15 +98,15 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	// From the given nodes, filter out all nodes who's parent is already in the the array of Nodes.
 	_getLocalRoots(nodes: Node[]): Node[] {
 		const localRoots = [];
-		for (let i = 0; i < nodes.length; i++) {
-			const parent = this.getParent(nodes[i]);
+		for (const node of nodes) {
+			const parent = this.getParent(node);
 			if (parent) {
 				const isInList = nodes.find(n => n.key === parent.key);
 				if (isInList === undefined) {
-					localRoots.push(nodes[i]);
+					localRoots.push(node);
 				}
 			} else {
-				localRoots.push(nodes[i]);
+				localRoots.push(node);
 			}
 		}
 		return localRoots;
@@ -160,7 +160,7 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 		// An example of how to use codicons in a MarkdownString in a tree item tooltip.
 		const tooltip = new vscode.MarkdownString(`$(zap) Tooltip for ${key}`, true);
 		return {
-			label: /**vscode.TreeItemLabel**/<any>{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0 },
+			label: /**vscode.TreeItemLabel**/{ label: key, highlights: key.length > 1 ? [[key.length - 2, key.length - 1]] : void 0 } as any,
 			tooltip,
 			collapsibleState: treeElement && Object.keys(treeElement).length ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None,
 			resourceUri: vscode.Uri.parse(`/tmp/${key}`),
@@ -206,7 +206,9 @@ export class TestViewDragAndDrop implements vscode.TreeDataProvider<Node>, vscod
 	}
 }
 
-type Node = { key: string };
+interface Node {
+	key: string;
+}
 
 class Key {
 	constructor(readonly key: string) { }

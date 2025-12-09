@@ -5,7 +5,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	console.log('decorator sample is activated');
 
-	let timeout: NodeJS.Timer | undefined = undefined;
+	let timeout: NodeJS.Timeout | undefined = undefined;
 
 	// create a decorator type that we use to decorate small numbers
 	const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({

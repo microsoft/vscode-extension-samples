@@ -3,7 +3,6 @@ import errorOverlay from 'vscode-notebook-error-overlay';
 import type { ActivationFunction } from 'vscode-notebook-renderer';
 
 // Fix the public path so that any async import()'s work as expected.
-// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const __webpack_relative_entrypoint_to_root__: string;
 declare const scriptUrl: string;
 
@@ -35,6 +34,7 @@ export const activate: ActivationFunction = context => {
 				render({ container: node, mime: outputItem.mime, value: outputItem.json(), context });
 			});
 		},
+		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		disposeOutputItem(outputId) {
 			// Do any teardown here. outputId is the cell output being deleted, or
 			// undefined if we're clearing all outputs.

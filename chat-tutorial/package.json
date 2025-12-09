@@ -1,0 +1,47 @@
+{
+	"name": "code-tutor",
+	"displayName": "Code Tutor",
+	"description": "",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"categories": [
+		"AI",
+		"Chat"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"chatParticipants": [
+			{
+				"id": "chat-tutorial.code-tutor",
+				"fullName": "Code Tutor",
+				"name": "tutor",
+				"description": "What can I teach you?",
+				"isSticky": true,
+				"commands": [
+					{
+						"name": "exercise",
+						"description": "Provide exercises to practice a concept."
+					}
+				]
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^22.17.0",
+		"@types/vscode": "^1.100.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	}
+}

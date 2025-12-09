@@ -1,0 +1,12 @@
+{
+	"private": true,
+	"name": "server",
+	"displayName": "WASM Language Server",
+	"version": "0.1.0",
+	"author": "Microsoft Corporation",
+	"license": "MIT",
+	"scripts": {
+		"build": "cargo rustc --release --target wasm32-wasip1-threads -- -Clink-arg=--initial-memory=10485760 -Clink-arg=--max-memory=10485760",
+		"test:wasm": "node ./bin/send.js | wasmtime --wasm-features=threads --wasi-modules=experimental-wasi-threads target/wasm32-wasi-preview1-threads/release/server.wasm"
+	}
+}

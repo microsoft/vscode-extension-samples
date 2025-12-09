@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import JSFiddle = require("jsfiddle");
 import { QuickDiffProvider, Uri, CancellationToken, ProviderResult, WorkspaceFolder, workspace, window, env } from "vscode";
 import * as path from 'path';
@@ -26,7 +27,7 @@ export class FiddleRepository implements QuickDiffProvider {
 
 	constructor(private workspaceFolder: WorkspaceFolder, private fiddleSlug: string) { }
 
-	provideOriginalResource?(uri: Uri, token: CancellationToken): ProviderResult<Uri> {
+	provideOriginalResource?(uri: Uri, _token: CancellationToken): ProviderResult<Uri> {
 		// converts the local file uri to jsfiddle:file.ext
 		const relativePath = workspace.asRelativePath(uri.fsPath);
 		return Uri.parse(`${JSFIDDLE_SCHEME}:${relativePath}`);
@@ -117,6 +118,7 @@ export async function uploadFiddle(slug: string, version: number, html: string, 
 			return undefined;
 		}
 
+		// eslint-disable-next-line no-constant-condition
 		if (false) {
 			// this, sadly, does not work as advertised
 			const data = {

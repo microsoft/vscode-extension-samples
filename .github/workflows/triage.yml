@@ -1,0 +1,50 @@
+name: Triage Opened Issues
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  assign_triage_label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Triage Label
+        if: ${{ join(github.event.issue.labels) == '' && join(github.event.issue.assignees) == '' }}
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: triage-needed
+          number: ${{ github.event.issue.number }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  assign_random_user:
+    needs: assign_triage_label
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign Random User
+        run: |
+          echo "Waiting a few seconds before assigning..."
+          sleep 30
+          assignees=$(gh issue view ${{ github.event.issue.number }} --repo ${{ github.repository }} --json assignees)
+          if echo "$assignees" | grep -q '"login"'; then
+            echo "The issue has assignees. "
+            exit 0
+          else
+            echo "The issue has no assignee(s)."
+            if ! gh issue view ${{ github.event.issue.number }} --repo ${{ github.event.repository.full_name }} --json labels | grep "triage-needed"; then
+              echo "Skipping triage assignment since triage-needed label is not present"
+            exit 0
+            fi
+            users=("isidorn" "jrieken" "roblourens" "aeschli" "mjbvz" "connor4312" "Tyriar" "Yoyokrazy" "andreamah" "joyceerhl" "alexr00" "bpasero" "rebornix" "chrmarti" "lramos15" "hediet" "alexdima" "rzhao271" "bhavyaus")
+            if [[ " ${users[@]} " =~ " ${{ github.event.issue.user.login }} " ]]; then
+              echo "Issue author is in the users list, skipping random assignment."
+              exit 0
+            else
+              random_user=${users[$RANDOM % ${#users[@]}]}
+              echo "Assigning issue to $random_user"
+              gh issue edit ${{ github.event.issue.number }} --add-assignee $random_user --repo ${{ github.repository }}
+            fi
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

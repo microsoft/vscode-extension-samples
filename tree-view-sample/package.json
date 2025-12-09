@@ -11,7 +11,7 @@
 		"url": "https://github.com/Microsoft/vscode-extension-samples"
 	},
 	"engines": {
-		"vscode": "^1.74.0"
+		"vscode": "^1.100.0"
 	},
 	"categories": [
 		"Other"
@@ -209,6 +209,7 @@
 				"properties": {
 					"jsonOutline.autorefresh": {
 						"type": "boolean",
+						"description": "Auto refresh the JSON outline view when the contents of the json file change.",
 						"default": false
 					}
 				}
@@ -219,18 +220,19 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
-		"lint": "eslint \"src/**/*.ts\""
+		"lint": "eslint"
 	},
 	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/ftp": "^0.3.33",
 		"@types/mkdirp": "^0.5.2",
-		"@types/node": "^16.18.34",
+		"@types/node": "^22",
 		"@types/rimraf": "^2.0.2",
-		"@types/vscode": "^1.73.0",
-		"@typescript-eslint/eslint-plugin": "^5.42.0",
-		"@typescript-eslint/parser": "^5.42.0",
-		"eslint": "^8.26.0",
-		"typescript": "^5.1.3"
+		"@types/vscode": "^1.100.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
 	},
 	"dependencies": {
 		"ftp": "^0.3.10",

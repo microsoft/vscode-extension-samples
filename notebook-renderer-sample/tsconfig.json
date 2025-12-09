@@ -3,10 +3,13 @@
     "rootDir": "src",
     "outDir": "out",
     "module": "esnext",
-    "target": "es2020",
-    "lib": ["es2020", "dom"],
+    "target": "ES2024",
+    "lib": [
+      "ES2024",
+      "dom"
+    ],
     "moduleResolution": "node",
     "sourceMap": true,
-    "strict": true   /* enable all strict type-checking options */
+    "strict": true /* enable all strict type-checking options */
   }
 }

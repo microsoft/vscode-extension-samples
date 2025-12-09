@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"target": "ES2024",
+		"lib": [
+			"ES2024"
+		],
+		"noEmit": true,
+		"strict": true
+	},
+	"ts-node": {
+		"esm": true
+	}
+}

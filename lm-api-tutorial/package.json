@@ -1,0 +1,45 @@
+{
+	"name": "code-tutor",
+	"displayName": "Code Tutor",
+	"description": "Your personal AI code tutor",
+	"version": "0.0.1",
+	"engines": {
+		"vscode": "^1.100.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "code-tutor.annotate",
+				"title": "Toggle Tutor Annotations",
+				"icon": "$(comment)"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "code-tutor.annotate",
+					"group": "navigation"
+				}
+			]
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"lint": "eslint"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/vscode": "^1.100.0",
+		"eslint": "^9.13.0",
+		"typescript": "^5.9.2",
+		"typescript-eslint": "^8.39.0"
+	}
+}

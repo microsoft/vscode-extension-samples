@@ -18,7 +18,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
 		});
 	}
 
-	public provideCodeLenses(document: vscode.TextDocument, token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
+	public provideCodeLenses(document: vscode.TextDocument, _token: vscode.CancellationToken): vscode.CodeLens[] | Thenable<vscode.CodeLens[]> {
 
 		if (vscode.workspace.getConfiguration("codelens-sample").get("enableCodeLens", true)) {
 			this.codeLenses = [];
@@ -39,7 +39,7 @@ export class CodelensProvider implements vscode.CodeLensProvider {
 		return [];
 	}
 
-	public resolveCodeLens(codeLens: vscode.CodeLens, token: vscode.CancellationToken) {
+	public resolveCodeLens(codeLens: vscode.CodeLens, _token: vscode.CancellationToken) {
 		if (vscode.workspace.getConfiguration("codelens-sample").get("enableCodeLens", true)) {
 			codeLens.command = {
 				title: "Codelens provided by sample extension",

@@ -3,20 +3,16 @@ import * as vscode from 'vscode';
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "telemetry-sample" is now active!');
 
-
-	const appender: vscode.TelemetryAppender = {
-		ignoreBuiltInCommonProperties: false,
-		logEvent: (eventName, data) => {
+	const logger = vscode.env.createTelemetryLogger({
+		sendErrorData(error, data) {
+			console.error(`Exception: ${error}`);
+			console.error(`Data: ${JSON.stringify(data)}`);
+		},
+		sendEventData(eventName, data) {
 			console.log(`Event: ${eventName}`);
 			console.log(`Data: ${JSON.stringify(data)}`);
 		},
-		logException: (exception, data) => {
-			console.log(`Exception: ${exception}`);
-			console.log(`Data: ${JSON.stringify(data)}`);
-		}
-	};
-
-	const logger = vscode.env.createTelemetryLogger(appender);
+	});
 
 	/**
 	 * You can use proposed API here. `vscode.` should start auto complete
