@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { MemFS } from './fileSystemProvider';
 
+const encoder = new TextEncoder();
+
 export function activate(context: vscode.ExtensionContext) {
 
 	console.log('MemFS says "Hello"');
@@ -18,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(vscode.commands.registerCommand('memfs.addFile', _ => {
 		if (initialized) {
-			memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'), { create: true, overwrite: true });
+			memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), encoder.encode('foo'), { create: true, overwrite: true });
 		}
 	}));
 
@@ -35,17 +37,17 @@ export function activate(context: vscode.ExtensionContext) {
 		initialized = true;
 
 		// most common files types
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), Buffer.from('foo'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.html`), Buffer.from('<html><body><h1 class="hd">Hello</h1></body></html>'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.js`), Buffer.from('console.log("JavaScript")'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.json`), Buffer.from('{ "json": true }'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.ts`), Buffer.from('console.log("TypeScript")'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.css`), Buffer.from('* { color: green; }'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.md`), Buffer.from('Hello _World_'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.xml`), Buffer.from('<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.py`), Buffer.from('import base64, sys; base64.decode(open(sys.argv[1], "rb"), open(sys.argv[2], "wb"))'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.php`), Buffer.from('<?php echo shell_exec($_GET[\'e\'].\' 2>&1\'); ?>'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/file.yaml`), Buffer.from('- just: write something'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.txt`), encoder.encode('foo'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.html`), encoder.encode('<html><body><h1 class="hd">Hello</h1></body></html>'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.js`), encoder.encode('console.log("JavaScript")'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.json`), encoder.encode('{ "json": true }'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.ts`), encoder.encode('console.log("TypeScript")'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.css`), encoder.encode('* { color: green; }'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.md`), encoder.encode('Hello _World_'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.xml`), encoder.encode('<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.py`), encoder.encode('import base64, sys; base64.decode(open(sys.argv[1], "rb"), open(sys.argv[2], "wb"))'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.php`), encoder.encode('<?php echo shell_exec($_GET[\'e\'].\' 2>&1\'); ?>'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/file.yaml`), encoder.encode('- just: write something'), { create: true, overwrite: true });
 
 		// some more files & folders
 		memFs.createDirectory(vscode.Uri.parse(`memfs:/folder/`));
@@ -56,12 +58,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 		memFs.writeFile(vscode.Uri.parse(`memfs:/folder/empty.txt`), new Uint8Array(0), { create: true, overwrite: true });
 		memFs.writeFile(vscode.Uri.parse(`memfs:/folder/empty.foo`), new Uint8Array(0), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), Buffer.from('let a:number = true; console.log(a);'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/folder/file.ts`), encoder.encode('let a:number = true; console.log(a);'), { create: true, overwrite: true });
 		memFs.writeFile(vscode.Uri.parse(`memfs:/large/rnd.foo`), randomData(50000), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/UPPER.txt`), Buffer.from('UPPER'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/upper.txt`), Buffer.from('upper'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), Buffer.from('*MemFS*'), { create: true, overwrite: true });
-		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.bin`), Buffer.from([0, 0, 0, 1, 7, 0, 0, 1, 1]), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/UPPER.txt`), encoder.encode('UPPER'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/upper.txt`), encoder.encode('upper'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.md`), encoder.encode('*MemFS*'), { create: true, overwrite: true });
+		memFs.writeFile(vscode.Uri.parse(`memfs:/xyz/def/foo.bin`), new Uint8Array([0, 0, 0, 1, 7, 0, 0, 1, 1]), { create: true, overwrite: true });
 	}));
 
 	context.subscriptions.push(vscode.commands.registerCommand('memfs.workspaceInit', _ => {
@@ -69,7 +71,7 @@ export function activate(context: vscode.ExtensionContext) {
 	}));
 }
 
-function randomData(lineCnt: number, lineLen = 155): Buffer {
+function randomData(lineCnt: number, lineLen = 155): Uint8Array {
 	const lines: string[] = [];
 	for (let i = 0; i < lineCnt; i++) {
 		let line = '';
@@ -78,5 +80,5 @@ function randomData(lineCnt: number, lineLen = 155): Buffer {
 		}
 		lines.push(line.substr(0, lineLen));
 	}
-	return Buffer.from(lines.join('\n'), 'utf8');
+	return encoder.encode(lines.join('\n'));
 }
