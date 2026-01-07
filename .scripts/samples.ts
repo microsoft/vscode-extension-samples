@@ -295,6 +295,7 @@ export const samples: Sample[] = [
 	{ description: 'configuration-sample', excludeFromReadme: true, path: 'configuration-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'chat-model-provider-sample', excludeFromReadme: true, path: 'chat-model-provider-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'chat-output-renderer-sample', excludeFromReadme: true, path: 'chat-output-renderer-sample', guide: null, apis: [], contributions: [] },
+	{ description: 'chat-prompt-files-sample', excludeFromReadme: true, path: 'chat-prompt-files-sample', guide: null, apis: [], contributions: ['chatPromptFiles', 'chatInstructions', 'chatAgents'] },
 	{ description: 'contentprovider-sample', excludeFromReadme: true, path: 'contentprovider-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'diagnostic-related-information-sample', excludeFromReadme: true, path: 'diagnostic-related-information-sample', guide: null, apis: [], contributions: [] },
 	{ description: 'document-paste', excludeFromReadme: true, path: 'document-paste', guide: null, apis: [], contributions: [] },
