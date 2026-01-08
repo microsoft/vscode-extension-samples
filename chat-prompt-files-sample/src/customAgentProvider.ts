@@ -10,8 +10,14 @@ export function createCustomAgentProvider(_context: vscode.ExtensionContext): vs
 
 			agents.push(new vscode.CustomAgentChatResource(
 				'workspace-helper',
-				'Dynamic agent with workspace statistics',
-				{ body: dynamicContent },
+				{
+					header: {
+						name: 'Workspace Helper Agent',
+						description: 'An agent that provides assistance based on the current workspace context',
+						infer: false
+					},
+					body: dynamicContent
+				},
 				{ isEditable: false }
 			));
 

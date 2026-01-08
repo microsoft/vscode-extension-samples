@@ -11,8 +11,14 @@ export function createPromptFileProvider(_context: vscode.ExtensionContext): vsc
 			prompts.push(
 				new vscode.PromptFileChatResource(
 					'time-aware',
-					'Dynamic prompt with current timestamp',
-					{ body: dynamicContent },
+					{
+						header: {
+							name: 'Time-Aware Assistant Prompt',
+							description: 'A prompt that changes based on the current time and session context',
+							model: 'gpt-5.1'
+						},
+						body: dynamicContent
+					},
 					{ isEditable: false }
 				)
 			);
