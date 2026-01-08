@@ -8,12 +8,12 @@ export function createCustomAgentProvider(_context: vscode.ExtensionContext): vs
 			// Dynamic agent with generated content
 			const dynamicContent = generateDynamicAgentContent();
 
-			agents.push(new vscode.CustomAgentChatResource({
-				name: 'workspace-helper',
-				description: 'Dynamic agent with workspace statistics',
-				body: dynamicContent,
-				isEditable: false
-			}));
+			agents.push(new vscode.CustomAgentChatResource(
+				'workspace-helper',
+				'Dynamic agent with workspace statistics',
+				{ body: dynamicContent },
+				{ isEditable: false }
+			));
 
 			return agents;
 		}

@@ -23,8 +23,7 @@
 	],
 	"main": "./out/extension.js",
 	"enabledApiProposals": [
-		"chatPromptFiles",
-		"chatParticipantPrivate"
+		"chatPromptFiles"
 	],
 	"contributes": {
 		"chatPromptFiles": [

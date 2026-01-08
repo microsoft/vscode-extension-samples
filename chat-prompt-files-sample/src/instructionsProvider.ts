@@ -8,12 +8,12 @@ export function createInstructionsProvider(_context: vscode.ExtensionContext): v
 			// Dynamic instructions with current workspace info
 			const dynamicContent = generateDynamicInstructions();
 
-			instructions.push(new vscode.InstructionsChatResource({
-				name: 'workspace-context',
-				description: 'Dynamic workspace context and guidelines',
-				body: dynamicContent,
-				isEditable: false
-			}));
+			instructions.push(new vscode.InstructionsChatResource(
+				'workspace-context',
+				'Dynamic workspace context and guidelines',
+				{ body: dynamicContent },
+				{ isEditable: false }
+			));
 
 			return instructions;
 		}

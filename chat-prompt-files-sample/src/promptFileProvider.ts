@@ -8,12 +8,14 @@ export function createPromptFileProvider(_context: vscode.ExtensionContext): vsc
 			// Dynamic prompt with time-based content
 			const dynamicContent = generateDynamicPrompt();
 
-			prompts.push(new vscode.PromptFileChatResource({
-				name: 'time-aware',
-				description: 'Dynamic prompt with current timestamp',
-				body: dynamicContent,
-				isEditable: false
-			}));
+			prompts.push(
+				new vscode.PromptFileChatResource(
+					'time-aware',
+					'Dynamic prompt with current timestamp',
+					{ body: dynamicContent },
+					{ isEditable: false }
+				)
+			);
 
 			return prompts;
 		}
