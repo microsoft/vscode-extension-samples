@@ -22,6 +22,10 @@
 		"onPromptFileProvider"
 	],
 	"main": "./out/extension.js",
+	"enabledApiProposals": [
+		"chatPromptFiles",
+		"chatParticipantPrivate"
+	],
 	"contributes": {
 		"chatPromptFiles": [
 			{

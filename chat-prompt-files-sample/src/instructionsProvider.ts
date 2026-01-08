@@ -3,25 +3,18 @@ import * as vscode from 'vscode';
 export function createInstructionsProvider(_context: vscode.ExtensionContext): vscode.InstructionsProvider {
 	return {
 		async provideInstructions(_options, _token) {
-			const instructions: vscode.InstructionsResource[] = [];
-			
+			const instructions: vscode.InstructionsChatResource[] = [];
+
 			// Dynamic instructions with current workspace info
 			const dynamicContent = generateDynamicInstructions();
-			
-			// Create an untitled document with the dynamic content
-			const doc = await vscode.workspace.openTextDocument({
-				content: dynamicContent,
-				language: 'markdown'
-			});
-			
-			instructions.push({
+
+			instructions.push(new vscode.InstructionsChatResource({
 				name: 'workspace-context',
 				description: 'Dynamic workspace context and guidelines',
-				uri: doc.uri,
-				isEditable: false,
-				isCacheable: false
-			});
-			
+				body: dynamicContent,
+				isEditable: false
+			}));
+
 			return instructions;
 		}
 	};
@@ -32,7 +25,7 @@ function generateDynamicInstructions(): string {
 	const activeEditor = vscode.window.activeTextEditor;
 	const currentFile = activeEditor?.document.fileName || 'none';
 	const languageId = activeEditor?.document.languageId || 'none';
-	
+
 	return `# Workspace Context Instructions
 
 These instructions are dynamically generated based on your current workspace state.
