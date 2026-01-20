@@ -3,7 +3,7 @@
 	"displayName": "chat-prompt-files-sample",
 	"description": "Sample demonstrating how to contribute chat prompt files, instructions, and agents in a VS Code extension.",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
+	"publisher": "vscode-sam2ples",
 	"private": true,
 	"license": "MIT",
 	"repository": {
@@ -19,7 +19,8 @@
 	"activationEvents": [
 		"onCustomAgentProvider",
 		"onInstructionsProvider",
-		"onPromptFileProvider"
+		"onPromptFileProvider",
+		"onSkillProvider"
 	],
 	"main": "./out/extension.js",
 	"enabledApiProposals": [
@@ -40,13 +41,19 @@
 			{
 				"path": "./resources/vscode-extension.agent.md"
 			}
+		],
+		"chatSkills": [
+			{
+				"path": "./resources/code-review/SKILL.md"
+			}
 		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint",
-		"watch": "tsc -watch -p ./"
+		"watch": "tsc -watch -p ./",
+		"package": "vsce package"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",

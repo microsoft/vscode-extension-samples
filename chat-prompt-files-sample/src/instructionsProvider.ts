@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 export function createInstructionsProvider(_context: vscode.ExtensionContext): vscode.InstructionsProvider {
 	return {
+		label: 'Dynamic Workspace Instructions Provider',
 		async provideInstructions(_options, _token) {
 			const instructions: vscode.InstructionsChatResource[] = [];
 
@@ -9,17 +10,10 @@ export function createInstructionsProvider(_context: vscode.ExtensionContext): v
 			const dynamicContent = generateDynamicInstructions();
 
 			instructions.push(
-				new vscode.InstructionsChatResource('workspace-context',
-					{
-						header: {
-							name: 'Workspace Context Instructions',
-							description: 'Instructions tailored to the current workspace context',
-							applyTo: '**'
-						},
-						body: dynamicContent
-					},
-					{ isEditable: false }
-				));
+				new vscode.InstructionsChatResource({
+					id: 'workspace-context',
+					content: dynamicContent
+				}));
 
 			return instructions;
 		}

@@ -2,24 +2,17 @@ import * as vscode from 'vscode';
 
 export function createCustomAgentProvider(_context: vscode.ExtensionContext): vscode.CustomAgentProvider {
 	return {
+		label: 'Dynamic Workspace Agent Provider',
 		async provideCustomAgents(_options, _token) {
 			const agents: vscode.CustomAgentChatResource[] = [];
 
 			// Dynamic agent with generated content
 			const dynamicContent = generateDynamicAgentContent();
 
-			agents.push(new vscode.CustomAgentChatResource(
-				'workspace-helper',
-				{
-					header: {
-						name: 'Workspace Helper Agent',
-						description: 'An agent that provides assistance based on the current workspace context',
-						infer: false
-					},
-					body: dynamicContent
-				},
-				{ isEditable: false }
-			));
+			agents.push(new vscode.CustomAgentChatResource({
+				id: 'workspace-helper',
+				content: dynamicContent
+			}));
 
 			return agents;
 		}

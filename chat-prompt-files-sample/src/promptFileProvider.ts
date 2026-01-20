@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 
 export function createPromptFileProvider(_context: vscode.ExtensionContext): vscode.PromptFileProvider {
 	return {
+		label: 'Dynamic Time-Aware Prompt File Provider',
 		async providePromptFiles(_options, _token) {
 			const prompts: vscode.PromptFileChatResource[] = [];
 
@@ -9,18 +10,10 @@ export function createPromptFileProvider(_context: vscode.ExtensionContext): vsc
 			const dynamicContent = generateDynamicPrompt();
 
 			prompts.push(
-				new vscode.PromptFileChatResource(
-					'time-aware',
-					{
-						header: {
-							name: 'Time-Aware Assistant Prompt',
-							description: 'A prompt that changes based on the current time and session context',
-							model: 'gpt-5.1'
-						},
-						body: dynamicContent
-					},
-					{ isEditable: false }
-				)
+				new vscode.PromptFileChatResource({
+					id: 'time-aware',
+					content: dynamicContent
+				})
 			);
 
 			return prompts;
