@@ -3,7 +3,7 @@
 	"displayName": "chat-prompt-files-sample",
 	"description": "Sample demonstrating how to contribute chat prompt files, instructions, and agents in a VS Code extension.",
 	"version": "0.0.1",
-	"publisher": "vscode-sam2ples",
+	"publisher": "vscode-samples",
 	"private": true,
 	"license": "MIT",
 	"repository": {
