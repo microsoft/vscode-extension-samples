@@ -1,20 +1,15 @@
 import * as vscode from 'vscode';
+import { getChatResourceFileSystem } from './chatResourceFileSystem';
 
-export function createSkillProvider(_context: vscode.ExtensionContext): vscode.SkillProvider {
+const SKILL_PATH = 'skills/workspace-analysis/SKILL.md';
+
+export function createSkillProvider(context: vscode.ExtensionContext): vscode.ChatSkillProvider {
+	const fs = getChatResourceFileSystem(context);
+	const skillUri = fs.registerResource(SKILL_PATH, generateDynamicSkillContent);
+
 	return {
-		label: 'Dynamic Workspace Skills Provider',
-		async provideSkills(_options, _token) {
-			const skills: vscode.SkillChatResource[] = [];
-
-			// Dynamic skill with generated content
-			const dynamicContent = generateDynamicSkillContent();
-
-			skills.push(new vscode.SkillChatResource({
-				id: 'workspace-analysis',
-				content: dynamicContent
-			}));
-
-			return skills;
+		async provideSkills(_context, _token): Promise<vscode.ChatResource[]> {
+			return [{ uri: skillUri }];
 		}
 	};
 }

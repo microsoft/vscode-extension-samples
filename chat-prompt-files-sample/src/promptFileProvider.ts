@@ -1,22 +1,15 @@
 import * as vscode from 'vscode';
+import { getChatResourceFileSystem } from './chatResourceFileSystem';
 
-export function createPromptFileProvider(_context: vscode.ExtensionContext): vscode.PromptFileProvider {
+const PROMPT_PATH = 'prompts/time-aware.prompt.md';
+
+export function createPromptFileProvider(context: vscode.ExtensionContext): vscode.ChatPromptFileProvider {
+	const fs = getChatResourceFileSystem(context);
+	const promptUri = fs.registerResource(PROMPT_PATH, generateDynamicPrompt);
+
 	return {
-		label: 'Dynamic Time-Aware Prompt File Provider',
-		async providePromptFiles(_options, _token) {
-			const prompts: vscode.PromptFileChatResource[] = [];
-
-			// Dynamic prompt with time-based content
-			const dynamicContent = generateDynamicPrompt();
-
-			prompts.push(
-				new vscode.PromptFileChatResource({
-					id: 'time-aware',
-					content: dynamicContent
-				})
-			);
-
-			return prompts;
+		async providePromptFiles(_context, _token): Promise<vscode.ChatResource[]> {
+			return [{ uri: promptUri }];
 		}
 	};
 }

@@ -1,21 +1,15 @@
 import * as vscode from 'vscode';
+import { getChatResourceFileSystem } from './chatResourceFileSystem';
 
-export function createInstructionsProvider(_context: vscode.ExtensionContext): vscode.InstructionsProvider {
+const INSTRUCTIONS_PATH = 'instructions/workspace-context.instructions.md';
+
+export function createInstructionsProvider(context: vscode.ExtensionContext): vscode.ChatInstructionsProvider {
+	const fs = getChatResourceFileSystem(context);
+	const instructionsUri = fs.registerResource(INSTRUCTIONS_PATH, generateDynamicInstructions);
+
 	return {
-		label: 'Dynamic Workspace Instructions Provider',
-		async provideInstructions(_options, _token) {
-			const instructions: vscode.InstructionsChatResource[] = [];
-
-			// Dynamic instructions with current workspace info
-			const dynamicContent = generateDynamicInstructions();
-
-			instructions.push(
-				new vscode.InstructionsChatResource({
-					id: 'workspace-context',
-					content: dynamicContent
-				}));
-
-			return instructions;
+		async provideInstructions(_context, _token): Promise<vscode.ChatResource[]> {
+			return [{ uri: instructionsUri }];
 		}
 	};
 }

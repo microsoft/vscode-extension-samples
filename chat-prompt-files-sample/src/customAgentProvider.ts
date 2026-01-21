@@ -1,20 +1,15 @@
 import * as vscode from 'vscode';
+import { getChatResourceFileSystem } from './chatResourceFileSystem';
 
-export function createCustomAgentProvider(_context: vscode.ExtensionContext): vscode.CustomAgentProvider {
+const AGENT_PATH = 'agents/workspace-helper.agent.md';
+
+export function createCustomAgentProvider(context: vscode.ExtensionContext): vscode.ChatCustomAgentProvider {
+	const fs = getChatResourceFileSystem(context);
+	const agentUri = fs.registerResource(AGENT_PATH, generateDynamicAgentContent);
+
 	return {
-		label: 'Dynamic Workspace Agent Provider',
-		async provideCustomAgents(_options, _token) {
-			const agents: vscode.CustomAgentChatResource[] = [];
-
-			// Dynamic agent with generated content
-			const dynamicContent = generateDynamicAgentContent();
-
-			agents.push(new vscode.CustomAgentChatResource({
-				id: 'workspace-helper',
-				content: dynamicContent
-			}));
-
-			return agents;
+		async provideCustomAgents(_context, _token): Promise<vscode.ChatResource[]> {
+			return [{ uri: agentUri }];
 		}
 	};
 }
