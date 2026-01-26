@@ -5,6 +5,11 @@
 	"tasks": [
 		{
 			"type": "npm",
+			"script": "compile",
+			"problemMatcher": "$tsc"
+		},
+		{
+			"type": "npm",
 			"script": "watch",
 			"problemMatcher": "$tsc-watch",
 			"isBackground": true,
