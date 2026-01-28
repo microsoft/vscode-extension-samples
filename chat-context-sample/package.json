@@ -14,7 +14,8 @@
   ],
   "activationEvents": [
     "onChatContextProvider:chat-context-sample.jsonLineCount",
-    "onLanguage:json"
+    "onLanguage:json",
+    "onLanguage:jsonc"
   ],
   "main": "./out/extension.js",
   "contributes": {

@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// Register with a document selector for JSON files
 	const disposable = vscode.chat.registerChatContextProvider(
-		{ language: 'json' },
+		[{ language: 'json' }, { language: 'jsonc' }],
 		PROVIDER_ID,
 		provider
 	);
