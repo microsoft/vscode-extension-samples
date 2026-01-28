@@ -1,118 +1,145 @@
-# Configuration Sample Extension
+# Configuration Sample
 
-This sample shows
+This VS Code extension sample demonstrates how to add and manage different types of configuration settings in your extension.
 
-- How to define a `window`, `resource` and `language-overridable` scoped configurations.
-- How to read and update a `window` scoped configuration
-- How to read a `resource` scoped configuration of a resource
-- How to update a value for `resource` scoped configuration of a resource
-- How to read a `language-overridable` scoped configuration
-- How to override a `language-overridable` scoped configuration under a language
-- How to listen to configuration changes
-- How to test it
+## 📖 What This Sample Demonstrates
 
-See [extension.ts](./src/extension.ts)
+- **Window-scoped configurations**: Settings that apply to the entire VS Code window
+- **Resource-scoped configurations**: Settings that apply to specific files
+- **Language-overridable configurations**: Settings that can be customized for different programming languages
+- How to read, update, and listen to configuration changes
 
-# Testing
+## 🚀 Quick Start
 
-## Empty Workspace
+### Prerequisites
+- [Visual Studio Code](https://code.visualstudio.com/) version 1.74.0 or higher
+- [Node.js](https://nodejs.org/) (version 14 or higher)
 
-Explains how to test this extension in an Empty workspace
+### Installation & Running
+1. **Open this folder** in VS Code:
+   ```bash
+   cd configuration-sample
+   code .
+Install dependencies:
 
-### Testing Window configuration
+bash
+npm install
+Run the extension:
 
-- Open User Settings and set `"conf.view.showOnWindowOpen": "scm"`
-- Refresh the Window. SCM view will be shown always, even if you refresh from a view other than SCM.
-- Run the command `Configure view to show on window open` and Select the value (View to show when opening a window)
-- Value should be updated in `User Settings`
+Press F5 or go to Run > Start Debugging
 
-### Testing Resource configuration
+This will open a new VS Code window with your extension loaded
 
-- Open User Settings and set `"conf.resource.insertEmptyLastLine": {"${absolute_path_to_file}": true}`
-- Open the above configured file in the empty window. A message about adding empty line from the extension is shown.
-- Open a different file. No message is shown.
-- Run the command `Configure empty last line for current file`
-- Value in User settings is updated. Message is shown now
-- Run the command `Configure empty last line for files` and provide absolute path of another file
-- Value should be updated in User Settings
+🧪 Testing the Configuration
+Test 1: Window Configuration
+Open Settings (Ctrl+, or Cmd+,)
 
-### Testing Language Specific configuration
+Search for conf.view.showOnWindowOpen
 
-- Set `"conf.language.showSize": true` in user settings
-- Open a file and you should see the size of the file in the status
-- Unset `conf.language.showSize`
-- Run the command `Configuration Sample: Configure show size for language`
-- Enter the language for which you want to configure this feature and press Enter.
-- Open a file with above configured language and size of the file is shown in status
-- Open a file with a different language and no status is shown.
+Set value to "scm"
 
+Reload VS Code window - the Source Control view should open automatically
 
-## Folder Workspace
+Run command Configure view to show on window open to change this setting
 
-Explains how to test this extension in a Folder workspace
+Test 2: Resource Configuration
+Open Settings and set:
 
-### Testing Window configuration
+json
+"conf.resource.insertEmptyLastLine": {
+  "/absolute/path/to/your/file.txt": true
+}
+Open that specific file - you'll see a message about adding empty lines
 
-- Open User or Workspace Settings and set `"conf.view.showOnWindowOpen": "scm"`
-- Refresh the Window. SCM view will be shown always, even if you refresh from a view other than SCM.
-- Run the command `Configure view to show on window open`. Select the value (View to show when opening a window)
-- Pick the target `User Settings` or `Workspace Settings` into which the value should be updated
-- Value should be updated in selected target
+Run command Configure empty last line for current file to apply to current file
 
-### Testing Resource configuration
+Test 3: Language Configuration
+Open Settings and set "conf.language.showSize": true
 
-- Open User Settings and set `"conf.resource.insertEmptyLastLine": {"${absolute_path_to_file}": true}`
-- Open the above configured file in the empty window. A message about adding empty line from the extension is shown.
-- Open a different file from the opened folder. No message is shown.
-- Run the command `Configure empty last line for current file`
-- Value in Workspace settings is updated. Message is shown now.
-- Run the command `Configure empty last line for files` and provide absolute path of another file.
-- Pick the target `User Settings` or `Workspace Settings` into which the value should be updated
-- Value should be updated in selected target
+Open any file - file size appears in status bar
 
-### Testing Language Specific configuration
+Run command Configuration Sample: Configure show size for language to set for specific languages
 
-- Set `"conf.language.showSize": true` in any settings (user, workspace)
-- Open a file and you should see the size of the file in the status
-- Unset `conf.language.showSize`
-- Run the command `Configuration Sample: Configure show size for language`
-- Enter the language for which you want to configure this feature and press Enter.
-- Open a file with above configured language and size of the file is shown in status
-- Open a file with a different language and no status is shown.
+🔧 Key Code Examples
+Reading Configuration
+typescript
+// Get window-scoped configuration
+const config = vscode.workspace.getConfiguration('conf.view');
+const showView = config.get('showOnWindowOpen');
 
+// Get resource-scoped configuration  
+const resourceConfig = vscode.workspace.getConfiguration('conf.resource', document.uri);
+const insertEmptyLine = resourceConfig.get('insertEmptyLastLine');
+Updating Configuration
+typescript
+// Update window configuration
+await vscode.workspace.getConfiguration('conf.view')
+  .update('showOnWindowOpen', 'explorer', vscode.ConfigurationTarget.Global);
 
-### Multiroot Workspace
+// Update resource configuration
+await vscode.workspace.getConfiguration('conf.resource')
+  .update('insertEmptyLastLine', { [filePath]: true }, vscode.ConfigurationTarget.Global);
+Listening to Changes
+typescript
+vscode.workspace.onDidChangeConfiguration(event => {
+  if (event.affectsConfiguration('conf.view.showOnWindowOpen')) {
+    // React to configuration changes
+  }
+});
+🛠️ Configuration Scopes Explained
+Window-Scoped
+Applies to entire VS Code instance
 
-Explains how to test this extension in a Multiroot workspace
+Stored in User/Workspace settings
 
-### Testing Window configuration
+Example: Which view to show on startup
 
-- Open User or Workspace Settings and set `"conf.view.showOnWindowOpen": "scm"`
-- Refresh the Window. SCM view will be shown always, even if you refresh from a view other than SCM.
-- *NOTE*: This setting cannot be applied under Folder settings, doing so will show a warning and value is not respected.
-- Run the command `Configure view to show on window open`. Select the value (View to show when opening a window)
-- Pick the target `User Settings` or `Workspace Settings` into which the value should be updated
-- Value should be updated in selected target
+Resource-Scoped
+Applies to specific files/folders
 
-### Testing Resource configuration
+Uses file paths in configuration
 
-- Open User Settings and set `"conf.resource.insertEmptyLastLine": {"${absolute_path_to_file}": true}`
-- Open the above configured file in the empty window. A message about adding empty line from the extension is shown.
-- Open a different file from one of the root folders. No message is shown.
-- Run the command `Configure empty last line for current file`
-- Value in Folder Settings of the root folder of the current file is updated. Message is shown now.
-- Run the command `Configure empty last line for files` and provide absolute path of another file.
-- Pick the target `User Settings` or `Workspace Settings` or `Workspace Folder Settings` into which the value should be updated
-- Selecting User or Workspace Settings should update the value in respective targets.
-- Selecting Workspace Folder Settings will show a Workspace Folder Picker
-- Picking a workspace folder should update the value in the respective folder settings file.
+Example: File-specific formatting rules
 
-### Testing Language Specific configuration
+Language-Overridable
+Can be customized per programming language
 
-- Set `"conf.language.showSize": true` in any settings (user, workspace or workspace folder)
-- Open a file and you should see the size of the file in the status
-- Unset `conf.language.showSize`
-- Run the command `Configuration Sample: Configure show size for language`
-- Enter the language for which you want to configure this feature and press Enter.
-- Open a file with above configured language and size of the file is shown in status
-- Open a file with a different language and no status is shown.
+Example: Show file size for JavaScript files only
+
+❓ Troubleshooting
+Extension not loading? Check Debug Console (View > Debug Console)
+
+Settings not appearing? Reload window (Ctrl+Shift+P > "Developer: Reload Window")
+
+Changes not detected? Ensure you're editing the correct settings scope
+
+Command not found? Make sure extension is properly installed and activated
+
+📚 Learn More
+VS Code Extension API
+
+Configuration Reference
+
+Other Extension Samples
+
+Detailed Testing Scenarios
+Empty Workspace
+Window Config: Set in User Settings only
+
+Resource Config: Requires absolute file paths
+
+Language Config: Applies globally
+
+Folder Workspace
+Window Config: Can set in User or Workspace Settings
+
+Resource Config: Works with files in the opened folder
+
+Language Config: Can be set at workspace level
+
+Multiroot Workspace
+Window Config: Cannot be set per folder
+
+Resource Config: Can target specific workspace folders
+
+Language Config: Can be configured per workspace folder
