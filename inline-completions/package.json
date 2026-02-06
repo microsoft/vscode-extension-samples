@@ -1,7 +1,4 @@
 {
-	"enabledApiProposals": [
-		"inlineCompletionsAdditions"
-	],
 	"name": "inline-completion-sample",
 	"displayName": "Inline Completion Sample",
 	"description": "Sample showing how to implement an inline completion provider",
@@ -24,14 +21,7 @@
 				"command": "extension.inline-completion-settings",
 				"title": "My Inline Completion Demo Settings"
 			}
-		],
-		"menus": {
-			"editor/inlineCompletions/actions": [
-				{
-					"command": "extension.inline-completion-settings"
-				}
-			]
-		}
+		]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
