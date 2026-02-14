@@ -15,10 +15,20 @@ export default class Provider implements vscode.TextDocumentContentProvider, vsc
 	private _subscriptions: vscode.Disposable;
 
 	constructor() {
-
-		// Listen to the `closeTextDocument`-event which means we must
-		// clear the corresponding model object - `ReferencesDocument`
-		this._subscriptions = vscode.workspace.onDidCloseTextDocument(doc => this._documents.delete(doc.uri.toString()));
+		this._subscriptions = vscode.Disposable.from(
+			// Listen to the `closeTextDocument`-event which means we must
+			// clear the corresponding model object - `ReferencesDocument`
+			vscode.workspace.onDidCloseTextDocument(doc => this._documents.delete(doc.uri.toString())),
+			
+			// This is necessary due to a race in ExtHostDocumentContentProvider where 
+			// the onDidChange event may be triggered before the new document has been
+			// registered with ExtHostDocumentsAndEditors
+			vscode.workspace.onDidOpenTextDocument(doc => {
+				if (doc.uri.scheme === Provider.scheme) {
+					this._onDidChange.fire(doc.uri);
+				}
+			})
+		);
 	}
 
 	dispose() {
