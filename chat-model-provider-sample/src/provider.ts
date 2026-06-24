@@ -1,4 +1,4 @@
-import { CancellationToken, LanguageModelChatInformation, LanguageModelChatMessage, LanguageModelChatProvider, LanguageModelChatRequestHandleOptions, LanguageModelResponsePart, LanguageModelTextPart, Progress, ProviderResult } from "vscode";
+import { CancellationToken, LanguageModelChatInformation, LanguageModelChatMessage, LanguageModelChatProvider, LanguageModelResponsePart, LanguageModelTextPart, Progress, ProvideLanguageModelChatResponseOptions, ProviderResult } from "vscode";
 
 function getChatModelInfo(id: string, name: string): LanguageModelChatInformation {
 	return {
@@ -17,13 +17,13 @@ function getChatModelInfo(id: string, name: string): LanguageModelChatInformatio
 }
 
 export class SampleChatModelProvider implements LanguageModelChatProvider {
-	prepareLanguageModelChatInformation(_options: { silent: boolean; }, _token: CancellationToken): ProviderResult<LanguageModelChatInformation[]> {
+	provideLanguageModelChatInformation(_options: { silent: boolean; }, _token: CancellationToken): ProviderResult<LanguageModelChatInformation[]> {
 		return [
 			getChatModelInfo("sample-dog-model", "Dog Model"),
 			getChatModelInfo("sample-cat-model", "Cat Model"),
 		];
 	}
-	async provideLanguageModelChatResponse(model: LanguageModelChatInformation, _messages: Array<LanguageModelChatMessage>, _options: LanguageModelChatRequestHandleOptions, progress: Progress<LanguageModelResponsePart>, _token: CancellationToken): Promise<void> {
+	async provideLanguageModelChatResponse(model: LanguageModelChatInformation, _messages: Array<LanguageModelChatMessage>, _options: ProvideLanguageModelChatResponseOptions, progress: Progress<LanguageModelResponsePart>, _token: CancellationToken): Promise<void> {
 		if (model.id === "sample-dog-model") {
 			progress.report(new LanguageModelTextPart("Woof! This is a dog model response."));
 		} else if (model.id === "sample-cat-model") {

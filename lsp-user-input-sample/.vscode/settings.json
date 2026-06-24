@@ -11,7 +11,7 @@
 	"editor.insertSpaces": false,
 	"editor.tabSize": 4,
 	"typescript.tsdk": "./node_modules/typescript/lib",
-	"typescript.tsc.autoDetect": "off",
+	"js/ts.tsc.autoDetect": "off",
 	"eslint.enable": true,
 	"eslint.validate": [
 		"typescript"

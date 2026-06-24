@@ -24,7 +24,7 @@ In `extension.ts` and `command/sayBye.ts` you'll notice the usages of `vscode.l1
 ```ts
 function t(message: string, ...args: Array<string | number>): string;
 function t(message: string, args: Record<string, any>): string;
-function t(options: { message: string; args?: Array<string | number> | Record<string, any>; comment: string[] }): string;
+function t(options: { message: string; args?: Array<string | number> | Record<string, any>; comment: string | string[] }): string;
 ```
 
 These strings support arguments and comments. The arguments are used to replace placeholders in the string which look like `Hello {0}` where `{0}` is a placeholder and will be filled in with the argument at the specified index or `Hello {name}` where `{name}` is a placeholder and will be filled in with the `name` property of the specified args object. The comments are used to provide context for the translators. For example, if you have a string that says `Hello {0}`, the translators might not know what `{0}` is. So you can provide a comment to explain what `{0}` is.

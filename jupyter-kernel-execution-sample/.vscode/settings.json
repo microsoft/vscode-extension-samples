@@ -2,5 +2,5 @@
   "search.exclude": {
     "out": true
   },
-  "typescript.tsc.autoDetect": "off"
+  "js/ts.tsc.autoDetect": "off"
 }

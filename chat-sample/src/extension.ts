@@ -5,11 +5,11 @@ import { registerToolUserChatParticipant } from './toolParticipant';
 import { registerChatTools } from './tools';
 
 export function activate(context: vscode.ExtensionContext) {
-    registerSimpleParticipant(context);
-    registerToolUserChatParticipant(context);
-    registerChatLibChatParticipant(context);
+	registerSimpleParticipant(context);
+	registerToolUserChatParticipant(context);
+	registerChatLibChatParticipant(context);
 
-    registerChatTools(context);
+	registerChatTools(context);
 }
 
 export function deactivate() { }

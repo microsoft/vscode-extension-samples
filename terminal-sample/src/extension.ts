@@ -177,7 +177,7 @@ export function activate(context: vscode.ExtensionContext) {
 					}
 				];
 			}
-			
+
 			handleTerminalLink(link: CustomTerminalLink) {
 				vscode.window.showInformationMessage(`Link activated (data = ${link.data})`);
 			}

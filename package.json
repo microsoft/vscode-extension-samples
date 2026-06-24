@@ -9,6 +9,7 @@
 		"lint-all": "tsx .scripts/run-script.ts lint",
 		"install-all": "tsx .scripts/run-command.ts npm install",
 		"audit-fix-all": "tsx .scripts/run-command.ts npm audit fix",
+		"format-all": "tsx .scripts/format",
 		"update-readme": "tsx .scripts/update-readme.ts",
 		"update-lsif": "tsx .scripts/update-lsif.ts",
 		"validate": "tsx .scripts/validate.ts"

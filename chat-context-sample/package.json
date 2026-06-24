@@ -1,0 +1,48 @@
+{
+  "name": "chat-context-sample",
+  "displayName": "chat-context-sample",
+  "description": "Sample extension demonstrating the Chat Context Provider API",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.109.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "enabledApiProposals": [
+    "chatContextProvider"
+  ],
+  "activationEvents": [
+    "onChatContextProvider:chat-context-sample.jsonLineCount",
+    "onLanguage:json",
+    "onLanguage:jsonc"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "chatContext": [
+      {
+        "id": "chat-context-sample.jsonLineCount",
+        "icon": "$(json)",
+        "displayName": "JSON Line Count"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src",
+    "postinstall": "npx @vscode/dts dev"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.108.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
