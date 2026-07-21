@@ -18,8 +18,8 @@ Guide for this sample: https://code.visualstudio.com/api/get-started/your-first-
 ### Contribution Points
 
 - [`contributes.commands`](https://code.visualstudio.com/api/references/contribution-points#contributes.commands)
-
-## Running the Sample
+- pathum2583@gmail.com
+- pathum25## Running the Sample
 
 - Run `npm install` in terminal to install dependencies
 - Run the `Run Extension` target in the Debug View. This will:
