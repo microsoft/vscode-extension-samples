@@ -29,9 +29,9 @@
 		"@types/node": "^22"
 	},
 	"scripts": {
-		"compile": "tsc -b",
+		"compile": "npm run esbuild",
 		"watch": "tsc -b -w",
 		"lint": "eslint",
-		"esbuild": "^0.25.0"
+		"esbuild": "node ./bin/esbuild.js"
 	}
 }

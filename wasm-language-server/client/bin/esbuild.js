@@ -16,6 +16,9 @@ const sharedWebOptions = {
 	target: 'es2020',
 	platform: 'browser',
 	sourcemap: true,
+	define: {
+        'IS_DESKTOP': 'false'
+	}
 };
 
 /** @type BuildOptions */
@@ -33,12 +36,15 @@ const sharedDesktopOptions = {
 	target: 'es2020',
 	platform: 'node',
 	sourcemap: true,
+	define: {
+        'IS_DESKTOP': 'true'
+	}
 };
 
 /** @type BuildOptions */
 const desktopOptions = {
 	entryPoints: ['src/extension.ts'],
-	outfile: 'dist/desktop/extension.js',
+	outfile: 'out/extension.js',
 	format: 'cjs',
 	...sharedDesktopOptions,
 };
