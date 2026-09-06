@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as chatUtils from '@vscode/chat-extension-utils';
+import { getToolsForRequest, toLanguageModelChatTools } from './lmTools';
 
 export function registerChatLibChatParticipant(context: vscode.ExtensionContext) {
 	const handler: vscode.ChatRequestHandler = async (request: vscode.ChatRequest, chatContext: vscode.ChatContext, stream: vscode.ChatResponseStream, token: vscode.CancellationToken) => {
@@ -8,15 +9,15 @@ export function registerChatLibChatParticipant(context: vscode.ExtensionContext)
 			return;
 		}
 
-		const tools = request.command === 'all' ?
-			vscode.lm.tools :
-			vscode.lm.tools.filter(tool => tool.tags.includes('chat-tools-sample'));
+		const tools = toLanguageModelChatTools(getToolsForRequest(request.command));
 
 		const libResult = chatUtils.sendChatParticipantRequest(
 			request,
 			chatContext,
 			{
 				prompt: 'You are a cat! Answer as a cat.',
+				requestJustification: 'Cat (Tools) chat participant uses workspace tools to answer your question.',
+				extensionMode: context.extensionMode,
 				responseStreamOptions: {
 					stream,
 					references: true,
