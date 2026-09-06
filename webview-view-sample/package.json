@@ -22,12 +22,49 @@
 	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "calicoColors",
+					"title": "Calico Colors",
+					"icon": "$(symbol-color)"
+				}
+			],
+			"panel": [
+				{
+					"id": "calicoColorsPanel",
+					"title": "Calico Panel",
+					"icon": "$(layout-panel)"
+				}
+			],
+			"secondarySidebar": [
+				{
+					"id": "calicoColorsSecondary",
+					"title": "Calico Secondary",
+					"icon": "$(layout-sidebar-right)"
+				}
+			]
+		},
 		"views": {
-			"explorer": [
+			"calicoColors": [
 				{
 					"type": "webview",
 					"id": "calicoColors.colorsView",
 					"name": "Calico Colors"
+				}
+			],
+			"calicoColorsPanel": [
+				{
+					"type": "webview",
+					"id": "calicoColors.panelView",
+					"name": "Panel Colors"
+				}
+			],
+			"calicoColorsSecondary": [
+				{
+					"type": "webview",
+					"id": "calicoColors.secondaryView",
+					"name": "Secondary Colors"
 				}
 			]
 		},
