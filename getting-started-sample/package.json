@@ -17,7 +17,6 @@
 		"onCommand:getting-started-sample.runCommand",
 		"onCommand:getting-started-sample.changeSetting",
 		"onCommand:getting-started-sample.setContext",
-		"onCommand:getting-started-sample.sayHello",
 		"onCommand:getting-started-sample.viewSources"
 	],
 	"main": "./out/extension.js",

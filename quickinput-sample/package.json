@@ -16,9 +16,6 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-		"onCommand:samples.quickInput"
-	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
