@@ -4,6 +4,8 @@ This extension creates a `DiagnosticCollection` and reports diagnostics for mark
 
 The sample demonstrates `DiagnosticCollection.set`, `get`, `has`, `forEach`, `delete`, and `clear`. Diagnostics for the demo document are removed from the collection when it closes.
 
+New to the API? Read the [beginner's guide to Diagnostic Collections](DIAGNOSTIC-COLLECTION-GUIDE.md) for a step-by-step explanation of diagnostics, collections, and their lifecycle.
+
 ## Set up & Test
 
 - Run `npm install` in this folder.
