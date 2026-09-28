@@ -8,7 +8,10 @@
 		"outDir": "out",
 		"sourceMap": true,
 		"strict": true,
-		"rootDir": "src"
+		"rootDir": "src",
+		"types": [
+			"node"
+		]
 	},
 	"exclude": [
 		"node_modules",
