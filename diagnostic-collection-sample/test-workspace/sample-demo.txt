@@ -1,0 +1,7 @@
+The extension scans these marker lines and publishes them in the Problems view.
+
+ERROR: This is an error diagnostic.
+WARNING: This is a warning diagnostic.
+INFO: This is an informational diagnostic.
+
+Change the marker or message to watch the collection update.

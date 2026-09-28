@@ -69,6 +69,7 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 | [Chat Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-sample) | N/A |  |
 | [Chat Tutorial](https://github.com/Microsoft/vscode-extension-samples/tree/main/chat-tutorial) | N/A |  |
 | [Notifications Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/notifications-sample) | N/A |  |
+| [Diagnostic Collection Sample](https://github.com/Microsoft/vscode-extension-samples/tree/main/diagnostic-collection-sample) | N/A | [languages.createDiagnosticCollection](https://code.visualstudio.com/api/references/vscode-api#languages.createDiagnosticCollection)<br>[DiagnosticCollection](https://code.visualstudio.com/api/references/vscode-api#DiagnosticCollection) |
 <!-- SAMPLES_END -->
 
 ### Language Server Protocol Samples
