@@ -14,3 +14,7 @@ jobs:
       - uses: actions/setup-node@v4
       - run: npm ci --workspaces=false
       - run: npm run validate
+      - run: npm ci
+        working-directory: diagnostic-collection-sample
+      - run: xvfb-run -a npm test
+        working-directory: diagnostic-collection-sample

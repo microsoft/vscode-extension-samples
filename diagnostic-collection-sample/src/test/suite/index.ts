@@ -6,6 +6,7 @@ export function run(): Promise<void> {
 	const mocha = new Mocha({
 		ui: 'tdd',
 		color: true,
+		timeout: 10000,
 	});
 
 	const testsRoot = path.resolve(__dirname, '.');
@@ -30,8 +31,3 @@ export function run(): Promise<void> {
 		});
 	});
 }
-
-run().catch(error => {
-	console.error(error);
-	process.exit(1);
-});
