@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 
-const demoFileName = 'diagnostic-test.txt';
+const demoFileName = 'sample-demo.txt';
 const markerPattern = /\b(ERROR|WARNING|INFO):\s*(.*)$/;
 
 export function activate(context: vscode.ExtensionContext): void {
