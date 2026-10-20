@@ -326,6 +326,7 @@ export const samples: Sample[] = [
 	{ description: 'wasm-component-model-resource', excludeFromReadme: true, path: 'wasm-component-model-resource', guide: null, apis: [], contributions: [] },
 	{ description: 'wasm-component-model', excludeFromReadme: true, path: 'wasm-component-model', guide: null, apis: [], contributions: [] },
 	{ description: 'welcome-view-content-sample', excludeFromReadme: true, path: 'welcome-view-content-sample', guide: null, apis: [], contributions: [] },
+	{ description: 'chat-context-sample', excludeFromReadme: true, path: 'chat-context-sample', guide: null, apis: ['chatContextProvider'], contributions: [] },
 ]
 
 /**
