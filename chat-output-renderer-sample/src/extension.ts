@@ -1,4 +1,4 @@
-import * as DOMPurify from 'dompurify';
+import DOMPurify from 'dompurify';
 import { JSDOM } from 'jsdom';
 import * as vscode from 'vscode';
 
@@ -20,7 +20,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// The first tool takes mermaid markup as input
 	context.subscriptions.push(
-		vscode.lm.registerTool<{ markup: string }>('renderMermaidDiagram', {
+		vscode.lm.registerTool<{ markup: string }>('extSample_renderMermaidDiagram', {
 			invoke: async (options, token) => {
 				let sourceCode = options.input.markup;
 				sourceCode = await runMermaidMarkupFixLoop(sourceCode, token);
@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	// The second tool generates mermaid markup based on a description
 	context.subscriptions.push(
-		vscode.lm.registerTool<{ description: string }>('createMermaidDiagram', {
+		vscode.lm.registerTool<{ description: string }>('extSample_createMermaidDiagram', {
 			invoke: async (options, token) => {
 				const description = options.input.description;
 
@@ -52,12 +52,12 @@ export function activate(context: vscode.ExtensionContext) {
 	// It can also be invoked when rendering old Mermaid diagrams in the chat history.
 	context.subscriptions.push(
 		vscode.chat.registerChatOutputRenderer(viewType, {
-			async renderChatOutput({ value }, webview, _ctx, _token) {
+			async renderChatOutput({ value }, chatOutputWebview, _ctx, _token) {
 				const mermaidSource = new TextDecoder().decode(value);
 
 				// Set the options for the webview
 				const mermaidDist = vscode.Uri.joinPath(context.extensionUri, 'node_modules', 'mermaid', 'dist');
-				webview.options = {
+				chatOutputWebview.webview.options = {
 					enableScripts: true,
 					localResourceRoots: [mermaidDist],
 				};
@@ -66,7 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
 				const nonce = getNonce();
 				const mermaidEsmUri = vscode.Uri.joinPath(mermaidDist, 'mermaid.esm.mjs');
 
-				webview.html = `
+				chatOutputWebview.webview.html = `
 					<!DOCTYPE html>
 					<html lang="en">
 
@@ -74,7 +74,7 @@ export function activate(context: vscode.ExtensionContext) {
 						<meta charset="UTF-8">
 						<meta name="viewport" content="width=device-width, initial-scale=1.0">
 						<title>Mermaid Diagram</title>
-						<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src ${webview.cspSource} 'nonce-${nonce}'; style-src 'self' 'unsafe-inline';" />
+						<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src ${chatOutputWebview.webview.cspSource} 'nonce-${nonce}'; style-src 'self' 'unsafe-inline';" />
 					</head>
 
 					<body>
@@ -83,7 +83,7 @@ export function activate(context: vscode.ExtensionContext) {
 						</pre>
 						
 						<script type="module" nonce="${nonce}">
-							import mermaid from '${escapeForScriptBlock(webview.asWebviewUri(mermaidEsmUri).toString())}';
+							import mermaid from '${escapeForScriptBlock(chatOutputWebview.webview.asWebviewUri(mermaidEsmUri).toString())}';
 							mermaid.initialize({ startOnLoad: true });
 						</script>
 					</body>
