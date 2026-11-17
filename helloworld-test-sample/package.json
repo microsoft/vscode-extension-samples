@@ -4,7 +4,7 @@
 	"description": "HelloWorld example for VS Code",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
-	"repository": "https://github.com/Microsoft/vscode-extension-samples/helloworld-sample",
+	"repository": "https://github.com/Microsoft/vscode-extension-samples",
 	"engines": {
 		"vscode": "^1.100.0"
 	},
