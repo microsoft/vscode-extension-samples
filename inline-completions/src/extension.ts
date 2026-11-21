@@ -17,7 +17,6 @@ export function activate(_context: vscode.ExtensionContext) {
 
 			const result: vscode.InlineCompletionList = {
 				items: [],
-				commands: [],
 			};
 
 			let offset = 1;
@@ -41,40 +40,20 @@ export function activate(_context: vscode.ExtensionContext) {
 						? document.lineAt(position.line).text.length
 						: parseInt(end, 10);
 				const flags = matches[3];
-				const completeBracketPairs = flags.includes('b');
 				const isSnippet = flags.includes('s');
 				const text = matches[4].replace(/\\n/g, '\n');
 
 				result.items.push({
 					insertText: isSnippet ? new vscode.SnippetString(text) : text,
 					range: new Range(position.line, startInt, position.line, endInt),
-					completeBracketPairs,
-				});
-			}
-
-			if (result.items.length > 0) {
-				result.commands!.push({
-					command: 'demo-ext.command1',
-					title: 'My Inline Completion Demo Command',
-					arguments: [1, 2],
+					command:{
+						command: 'demo-ext.command1',
+						title: 'My Inline Completion Demo Command',
+						arguments: [1, 2],
+					}
 				});
 			}
 			return result;
-		},
-
-		handleDidShowCompletionItem(_completionItem: vscode.InlineCompletionItem): void {
-			console.log('handleDidShowCompletionItem');
-		},
-
-		/**
-		 * Is called when an inline completion item was accepted partially.
-		 * @param acceptedLength The length of the substring of the inline completion that was accepted already.
-		 */
-		handleDidPartiallyAcceptCompletionItem(
-			_completionItem: vscode.InlineCompletionItem,
-			_info: vscode.PartialAcceptInfo | number
-		): void {
-			console.log('handleDidPartiallyAcceptCompletionItem');
 		},
 	};
 	vscode.languages.registerInlineCompletionItemProvider({ pattern: '**' }, provider);
