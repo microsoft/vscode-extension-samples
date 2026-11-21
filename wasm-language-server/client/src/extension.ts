@@ -3,8 +3,17 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
+// declared in esbuild.js
+declare const IS_DESKTOP: boolean;
+
 import { ExtensionContext, Uri, window, workspace, commands } from 'vscode';
-import { LanguageClient, LanguageClientOptions, ServerOptions, RequestType } from 'vscode-languageclient/node';
+import { LanguageClient, LanguageClientOptions, ServerOptions, RequestType } from 'vscode-languageclient';
+if (IS_DESKTOP) {
+	require('vscode-languageclient/node');
+} else {
+	require('vscode-languageclient/browser');
+}
+
 import { Wasm, ProcessOptions } from '@vscode/wasm-wasi/v1';
 import { createStdioOptions, createUriConverters, startServer } from '@vscode/wasm-wasi-lsp';
 
