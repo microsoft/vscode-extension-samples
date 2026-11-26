@@ -27,6 +27,7 @@ export interface ToolUserProps extends BasePromptElementProps {
 	context: vscode.ChatContext;
 	toolCallRounds: ToolCallRound[];
 	toolCallResults: Record<string, vscode.LanguageModelToolResult>;
+	additionalInstructions?: string;
 }
 
 export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
@@ -47,6 +48,12 @@ export class ToolUserPrompt extends PromptElement<ToolUserProps, void> {
 					- Don't make assumptions about the situation- gather context first, then
 					perform the task or answer the question. <br />
 					- Don't ask the user for confirmation to use tools, just use them.
+					{this.props.additionalInstructions ? (
+						<>
+							<br />
+							{this.props.additionalInstructions}
+						</>
+					) : undefined}
 				</UserMessage>
 				<History context={this.props.context} priority={10} />
 				<PromptReferences
