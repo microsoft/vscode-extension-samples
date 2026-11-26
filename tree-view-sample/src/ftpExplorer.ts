@@ -42,7 +42,7 @@ export class FtpModel {
 
 					client.end();
 
-					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`ftp://${this.host}///${entry.name}`), isDirectory: entry.type === 'd' }))));
+					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`ftp://${this.host}//${entry.name}`), isDirectory: entry.type === 'd' }))));
 				});
 			});
 		});
@@ -58,7 +58,12 @@ export class FtpModel {
 
 					client.end();
 
-					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`${node.resource.fsPath}/${entry.name}`), isDirectory: entry.type === 'd' }))));
+					return c(this.sort(list.map(entry => {
+						const path = node.resource.path.endsWith('/')
+							? `${node.resource.path}${entry.name}`
+							: `${node.resource.path}/${entry.name}`;
+						return { resource: node.resource.with({ path }), isDirectory: entry.type === 'd' };
+					})));
 				});
 			});
 		});
@@ -81,7 +86,7 @@ export class FtpModel {
 	public getContent(resource: vscode.Uri): Thenable<string> {
 		return this.connect().then(client => {
 			return new Promise((c, e) => {
-				client.get(resource.path.substr(2), (err, stream) => {
+				client.get(resource.path.substr(1), (err, stream) => {
 					if (err) {
 						return e(err);
 					}
@@ -148,7 +153,7 @@ export class FtpExplorer {
 
 	constructor(context: vscode.ExtensionContext) {
 		/* Please note that login information is hardcoded only for this example purpose and recommended not to do it in general. */
-		const ftpModel = new FtpModel('mirror.switch.ch', 'anonymous', 'anonymous@anonymous.de');
+		const ftpModel = new FtpModel('test.rebex.net', 'anonymous', 'anonymous@anonymous.de');
 		const treeDataProvider = new FtpTreeDataProvider(ftpModel);
 		context.subscriptions.push(vscode.workspace.registerTextDocumentContentProvider('ftp', treeDataProvider));
 
