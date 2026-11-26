@@ -11,8 +11,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onNotebook:test-notebook-serializer",
-		"onCommand:notebook-serializer-sample.createJsonNotebook"
+		"onNotebook:test-notebook-serializer"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
