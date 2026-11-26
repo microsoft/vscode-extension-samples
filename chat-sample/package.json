@@ -81,6 +81,10 @@
 				"isSticky": true,
 				"commands": [
 					{
+						"name": "list",
+						"description": "List all available tools"
+					},
+					{
 						"name": "all",
 						"description": "Use all registered tools. By default, only this extension's tools are used."
 					}
@@ -169,18 +173,26 @@
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"lint": "eslint",
-		"watch": "tsc -watch -p ./"
+		"verify": "node scripts/verify-claude-fix.mjs",
+		"watch": "tsc -watch -p ./",
+		"watch-tests": "tsc -p ./ -w",
+		"pretest": "npm run compile",
+		"test": "vscode-test"
 	},
 	"dependencies": {
-		"@vscode/chat-extension-utils": "^0.0.0-alpha.1",
-		"@vscode/prompt-tsx": "^0.3.0-alpha.12"
+		"@vscode/chat-extension-utils": "^0.0.0-alpha.5",
+		"@vscode/prompt-tsx": "^0.3.0-alpha.14"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/mocha": "^10.0.10",
 		"@types/node": "^22",
 		"@types/vscode": "^1.100.0",
+		"@vscode/test-cli": "^0.0.11",
+		"@vscode/test-electron": "^2.4.1",
 		"eslint": "^9.13.0",
+		"mocha": "^10.8.2",
 		"typescript": "^5.9.2",
 		"typescript-eslint": "^8.39.0"
 	}

@@ -21,15 +21,14 @@
 			"name": "Extension Tests",
 			"type": "extensionHost",
 			"request": "launch",
+			"testConfiguration": "${workspaceFolder}/.vscode-test.mjs",
 			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}",
-				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
 			"outFiles": [
-				"${workspaceFolder}/out/**/*.js",
-				"${workspaceFolder}/dist/**/*.js"
+				"${workspaceFolder}/out/**/*.js"
 			],
-			"preLaunchTask": "tasks: watch-tests"
+			"preLaunchTask": "${defaultBuildTask}"
 		}
 	]
 }

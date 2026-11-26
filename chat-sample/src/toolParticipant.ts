@@ -1,5 +1,6 @@
 import { renderPrompt } from '@vscode/prompt-tsx';
 import * as vscode from 'vscode';
+import { getToolsForRequest, resolveReferencedChatTools, toLanguageModelChatTools } from './lmTools';
 import { ToolCallRound, ToolResultMetadata, ToolUserPrompt } from './toolsPrompt';
 
 export interface TsxToolUserMetadata {
@@ -35,12 +36,9 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
 			model = models[0];
 		}
 
-		// Use all tools, or tools with the tags that are relevant.
-		const tools = request.command === 'all' ?
-			vscode.lm.tools :
-			vscode.lm.tools.filter(tool => tool.tags.includes('chat-tools-sample'));
+		const tools = toLanguageModelChatTools(getToolsForRequest(request.command));
 		const options: vscode.LanguageModelChatRequestOptions = {
-			justification: 'To make a request to @toolsTSX',
+			justification: 'To make a request to @tools',
 		};
 
 		// Render the initial prompt
@@ -69,7 +67,7 @@ export function registerToolUserChatParticipant(context: vscode.ExtensionContext
 			const requestedTool = toolReferences.shift();
 			if (requestedTool) {
 				options.toolMode = vscode.LanguageModelChatToolMode.Required;
-				options.tools = vscode.lm.tools.filter(tool => tool.name === requestedTool.name);
+				options.tools = resolveReferencedChatTools(requestedTool);
 			} else {
 				options.toolMode = undefined;
 				options.tools = [...tools];
