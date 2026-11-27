@@ -35,7 +35,6 @@
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/mkdirp": "^0.5.2",
 		"@types/node": "^22",
-		"@types/promisify-node": "^0.4.0",
 		"@types/rimraf": "^2.0.2",
 		"@types/vscode": "^1.100.0",
 		"eslint": "^9.13.0",

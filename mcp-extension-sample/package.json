@@ -43,7 +43,6 @@
 	"devDependencies": {
 		"@types/node": "^22",
 		"@vscode/dts": "^0.4.1",
-		"typescript": "^5.9.2",
-		"typescript-eslint": "^8.39.0"
+		"typescript": "^5.9.2"
 	}
 }
