@@ -42,7 +42,7 @@ export class FtpModel {
 
 					client.end();
 
-					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`ftp://${this.host}///${entry.name}`), isDirectory: entry.type === 'd' }))));
+					return c(this.sort(list.map(entry => ({ resource: vscode.Uri.parse(`ftp://${this.host}//${entry.name}`), isDirectory: entry.type === 'd' }))));
 				});
 			});
 		});
@@ -81,7 +81,7 @@ export class FtpModel {
 	public getContent(resource: vscode.Uri): Thenable<string> {
 		return this.connect().then(client => {
 			return new Promise((c, e) => {
-				client.get(resource.path.substr(2), (err, stream) => {
+				client.get(resource.path.substr(1), (err, stream) => {
 					if (err) {
 						return e(err);
 					}
