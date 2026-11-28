@@ -1,8 +1,14 @@
 <h1 align="center">
 VS Code Extension Samples
 </h1>
+</h1>{
+  "chat.editor.localAgent.enabled": true,
+  "chat.defaultToCopilotHarness": false,
+  "chat.editor.preferCopilotHarness": false
+}
 
-This repository contains sample code illustrating the VS Code extension API. Each sample is a self-contained extension that explains one topic in [VS Code API](https://code.visualstudio.com/api/references/vscode-api) or VS Code's [Contribution Points](https://code.visualstudio.com/api/references/contribution-points). You can read, play with or adapt from these samples to create your own extensions.
+
+This repository contains sample code illustrating the VS Code extension API. Each sample is a self-contained extension that explains one topic in [VS Code API](https://code.visualstudio.com/api/references/vscode-api) or VS Code's [Contribution Points][dc]. You can read, play with or adapt from these samples to create your own extensions.
 
 You can expect from each sample:
 - An explanation of its functionality
@@ -93,3 +99,6 @@ You need to have [node](https://nodejs.org/en/) and [npm](https://nodejs.org/en/
 Copyright (c) Microsoft Corporation. All rights reserved.
 
 Licensed under the [MIT](https://github.com/microsoft/vscode-extension-samples/blob/main/LICENSE) License.
+
+
+[dc]: https://code.visualstudio.com/api/references/contribution-points
