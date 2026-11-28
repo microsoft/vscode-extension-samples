@@ -6,7 +6,7 @@
 	"publisher": "vscode-samples",
 	"private": true,
 	"license": "MIT",
-	"repository": "https://github.com/microsoft/vscode-extension-samples/helloworld-web-sample",
+	"repository": "https://github.com/microsoft/vscode-extension-samples",
 	"engines": {
 		"vscode": "^1.100.0"
 	},
