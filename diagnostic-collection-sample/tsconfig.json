@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"module": "node16",
+		"moduleResolution": "node16",
+		"target": "ES2024",
+		"lib": [
+			"ES2024"
+		],
+		"outDir": "out",
+		"sourceMap": true,
+		"strict": true,
+		"rootDir": "src",
+		"types": [
+			"node",
+			"mocha"
+		]
+	},
+	"exclude": [
+		"node_modules",
+		".vscode-test"
+	]
+}

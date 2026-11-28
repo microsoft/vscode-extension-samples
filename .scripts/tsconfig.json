@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"module": "ESNext",
-		"moduleResolution": "Node",
+		"moduleResolution": "Bundler",
 		"target": "ES2024",
 		"lib": [
 			"ES2024"
