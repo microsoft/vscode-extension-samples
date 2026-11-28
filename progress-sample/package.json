@@ -20,7 +20,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"*"
+		"onCommand:extension.startTask"
 	],
 	"contributes": {
 		"commands": [
